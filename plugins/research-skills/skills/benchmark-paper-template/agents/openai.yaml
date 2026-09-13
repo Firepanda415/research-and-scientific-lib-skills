@@ -1,0 +1,4 @@
+interface:
+  display_name: "Benchmark Paper Template"
+  short_description: "Structure rigorous benchmark papers"
+  default_prompt: "Use $benchmark-paper-template to clarify the evaluation question, measurement validity, fair comparison, and supported findings."

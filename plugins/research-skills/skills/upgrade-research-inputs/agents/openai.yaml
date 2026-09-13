@@ -1,0 +1,4 @@
+interface:
+  display_name: "Upgrade Research Inputs"
+  short_description: "Build current evidence, lineage, and literature maps."
+  default_prompt: "Use $upgrade-research-inputs to find the sources or expert input needed for this research question and distinguish evidence from inference."

@@ -1,0 +1,36 @@
+{
+  "name": "research-skills",
+  "version": "0.1.0+codex.6fd80879bc00d392",
+  "description": "Personal research and scientific software skills, with customized Ponytail lifecycle hooks.",
+  "author": {
+    "name": "Firepanda415"
+  },
+  "homepage": "https://github.com/Firepanda415/research-and-scientific-lib-skills",
+  "repository": "https://github.com/Firepanda415/research-and-scientific-lib-skills",
+  "keywords": [
+    "research",
+    "scientific-computing",
+    "writing",
+    "code-review",
+    "ponytail"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Research & Scientific Library Skills",
+    "shortDescription": "Research workflows and careful scientific software",
+    "longDescription": "An evolving personal research toolkit: writing, evidence, figures, scientific software, and customized Ponytail coding modes. See README and LICENSE.md for per-component provenance and licenses.",
+    "developerName": "Firepanda415",
+    "category": "Productivity",
+    "capabilities": [
+      "Instructions",
+      "Lifecycle hooks"
+    ],
+    "websiteURL": "https://github.com/Firepanda415/research-and-scientific-lib-skills",
+    "defaultPrompt": [
+      "Help me assess this research direction.",
+      "Review this scientific library with independent evidence.",
+      "Use Ponytail mode for this coding task."
+    ],
+    "brandColor": "#111111"
+  }
+}

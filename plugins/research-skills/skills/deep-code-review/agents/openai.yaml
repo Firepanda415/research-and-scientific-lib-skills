@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deep Code Review"
+  short_description: "Verified scientific and engineering review in one pass."
+  default_prompt: "Use $deep-code-review for one integrated review of the requested endpoint, verify actionable scientific and engineering issues regardless of age, and summarize them by impact without a finding-count cap."

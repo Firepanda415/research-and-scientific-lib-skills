@@ -1,0 +1,4 @@
+interface:
+  display_name: "Stress Test Baselines"
+  short_description: "Test claims against strong baselines and ablations."
+  default_prompt: "Use $stress-test-baselines to check whether this claimed improvement survives fair baselines."

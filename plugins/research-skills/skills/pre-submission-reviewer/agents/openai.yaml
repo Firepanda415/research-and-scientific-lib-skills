@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pre-Submission Reviewer"
+  short_description: "Run a final paper integration audit"
+  default_prompt: "Use $pre-submission-reviewer to run a severity-ranked final integration audit and route any specialist prose or figure work."

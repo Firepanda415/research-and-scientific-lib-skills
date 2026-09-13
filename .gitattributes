@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Markdown uses two trailing spaces for intentional line breaks.
+*.md whitespace=-blank-at-eol

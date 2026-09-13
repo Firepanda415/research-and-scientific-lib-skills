@@ -1,0 +1,4 @@
+interface:
+  display_name: "Journal Cover Letter"
+  short_description: "Draft policy-checked journal cover letters"
+  default_prompt: "Use $journal-cover-letter to draft a concise cover letter after verifying current journal policy and author-confirmed declarations."

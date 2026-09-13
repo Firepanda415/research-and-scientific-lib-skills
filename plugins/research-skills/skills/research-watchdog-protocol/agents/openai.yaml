@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Watchdog Protocol"
+  short_description: "Monitor long-running research within safe bounds"
+  default_prompt: "Use $research-watchdog-protocol to support this requested monitoring, continuity, or unattended task using native state and meaningful progress signals."

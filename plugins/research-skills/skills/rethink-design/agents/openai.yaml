@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rethink Design"
+  short_description: "Reconsider limiting choices in research and design"
+  default_prompt: "Use $rethink-design to assess a more ambitious alternative for this research or software design."

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Scientific Computing Correctness"
+  short_description: "Guard scientific code against semantic drift."
+  default_prompt: "Use $scientific-computing-correctness to audit this numerical-code change from mathematical meaning through reported results."
+
+policy:
+  allow_implicit_invocation: true

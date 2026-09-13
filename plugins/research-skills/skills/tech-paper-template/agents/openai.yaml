@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tech Paper Template"
+  short_description: "Build technical paper logic skeletons"
+  default_prompt: "Use $tech-paper-template to organize this paper around its actual question, result, and supporting evidence."

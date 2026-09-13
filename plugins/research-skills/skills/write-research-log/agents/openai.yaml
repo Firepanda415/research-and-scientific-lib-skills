@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Research Log"
+  short_description: "Draft append-only hypothesis and experiment records."
+  default_prompt: "Use $write-research-log to draft this research note or requested forecast/resolution, saving it only when persistence is requested."

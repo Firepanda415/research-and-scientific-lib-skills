@@ -1,0 +1,4 @@
+interface:
+  display_name: "Physics from Math Explainer"
+  short_description: "Bridge physics intuition and mathematical structure"
+  default_prompt: "Use $physics-from-math-explainer to explain this physics derivation from a mathematical perspective."

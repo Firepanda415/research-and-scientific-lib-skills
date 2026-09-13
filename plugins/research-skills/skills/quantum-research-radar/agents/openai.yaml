@@ -1,0 +1,4 @@
+interface:
+  display_name: "Quantum Research Radar"
+  short_description: "Find high-value quantum research without feed bias"
+  default_prompt: "Use $quantum-research-radar to produce a selective Chinese quantum research briefing with fresh and rolling coverage."

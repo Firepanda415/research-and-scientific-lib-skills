@@ -1,0 +1,4 @@
+interface:
+  display_name: "Figure Designer"
+  short_description: "Design and audit research paper figures"
+  default_prompt: "Use $figure-designer to design or audit this research paper figure and provide an implementation-ready specification."

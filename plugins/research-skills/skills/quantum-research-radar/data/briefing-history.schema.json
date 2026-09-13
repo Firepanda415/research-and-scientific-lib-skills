@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/quantum-research-radar/briefing-history.schema.json",
+  "title": "Quantum Research Radar briefing-history record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "paper_id",
+    "title",
+    "canonical_url",
+    "first_public_date",
+    "first_seen_on",
+    "last_seen_on",
+    "status",
+    "covered_on",
+    "coverage_level",
+    "coverage_contexts",
+    "tags",
+    "selection_reason",
+    "revisit_triggers",
+    "notes"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "paper_id": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "canonical_url": {"type": "string", "format": "uri", "pattern": "^https?://"},
+    "first_public_date": {
+      "type": "string",
+      "anyOf": [
+        {"pattern": "^$"},
+        {"pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"}
+      ]
+    },
+    "first_seen_on": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "last_seen_on": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "status": {
+      "enum": ["candidate", "deferred", "covered", "rejected", "superseded", "retracted"]
+    },
+    "covered_on": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+      "uniqueItems": true
+    },
+    "coverage_level": {"enum": ["mention", "brief", "detailed", "deep-dive"]},
+    "coverage_contexts": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "tags": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "selection_reason": {"type": "string"},
+    "revisit_triggers": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": true
+}
