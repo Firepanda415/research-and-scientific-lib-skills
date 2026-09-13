@@ -37,6 +37,13 @@ Do not infer support from generic coercibility or demand every Cartesian input.
 Some automatic decisions need a workload census; require rejection before work
 only when the necessary facts are already available.
 
+When a repair affects executable caches, prepared artifacts, or lazy restoration,
+exercise the restored object at its actual downstream consumer. Choose a save or
+interruption boundary that requires reuse of that object, and check result
+association and duplicate work. Successful loading or equal serialized fields
+alone do not establish executable restoration. Use the smallest authorized
+workflow; this acceptance check does not add execution to the load path.
+
 Record separately whether the original counterexample is resolved, the scoped
 relation is supported by source reasoning and these checks, and a sibling or
 wider guarantee remains open. An unchanged example corpus proves that corpus,
@@ -118,9 +125,13 @@ explaining why the merge cannot change the relation. A final docs-only commit
 with no changed consumer needs no replay. Preserve the original compute scope.
 
 Before deleting a test, mutation probe, or policy check, name its protected
-invariant and replacement falsifier. An implementation-shape check may be
-deleted, but a current scientific or public-contract obligation keeps one
-behavioral witness.
+invariant and replacement falsifier. Apply the same evidence review when changing
+an assertion, its oracle dependencies, or its selected execution path: identify
+what the old and new checks establish and where independent evidence remains.
+An implementation-derived oracle may establish consistency without preserving
+the former accuracy claim. Obsolete literals and implementation-shape checks
+may be retired, but a current scientific or public-contract obligation keeps a
+behavioral witness; disclose any narrowed evidence scope.
 
 Record and verify the interpreter, installed dependency versions against the
 supported range, import origin, source revision, and source hashes before

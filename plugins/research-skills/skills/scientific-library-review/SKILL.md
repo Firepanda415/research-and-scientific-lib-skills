@@ -43,6 +43,8 @@ Every substantive review must assess these families and complete necessary check
 | Convergence / sensitivity | Approximation, precision, estimator and stopping changes need the method's justified control-to-error or uncertainty relation at the requested quantity. Reuse a valid derivation or convergence witness, otherwise select a bounded discriminating refinement. Do not impose a universal monotonicity rule. |
 | Ablation / controlled comparisons | Claims of improvement from a component, heuristic, fallback or optimization require valid controls and matched workload, accuracy and total cost. Use an ablation study when the contribution is empirical. An independently justified operation-count reduction may need only event-count evidence. Ordinary correctness fixes do not automatically require a study. |
 
+Qualify detector evidence against the specific claim: establish that the witness exercises the affected execution path and that the falsifier fails its relevant assertion. A failure elsewhere in the selected suite does not establish that a numerical or lifecycle witness detects the defect. Reuse a demonstrated pre-fix failure or applicable mutation; add instrumentation only when the exercised path remains uncertain.
+
 Use lint, type and dependency checks as the applicable engineering baseline. Investigate actionable dead code, duplicated ownership or accidental complexity using actual callers and reachability, not stylistic preference. Formal verification is selective for stable, important and precisely stated properties. None of these replaces the scientific relation.
 
 ### Transformation premises
