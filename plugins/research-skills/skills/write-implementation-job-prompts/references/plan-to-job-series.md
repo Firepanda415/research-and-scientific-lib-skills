@@ -4,6 +4,26 @@ Use for a requested implementer job series. Preserve the plan's required outcome
 and split work where there is a real dependency or an independently reviewable
 change. Do not create a series merely because a task has several steps.
 
+## Principal responsibility and consultation
+
+The principal owns the integrated design and acceptance. User goals and explicit
+constraints govern the work; provisional plans, APIs and worker READY judgments
+remain revisable when evidence shows they fail the intended relation. Carry a
+correction to affected jobs rather than leaving conflicting instructions active.
+
+Distinguish consultation on a consequential, sufficiently developed plan before
+implementation, diagnosis of a persistent unresolved problem, and independent
+acceptance of the actual implementation at a fixed revision. They answer different
+questions. For consultation, provide the concrete uncertainty, relevant evidence,
+attempted remedies when applicable, and the decision another perspective could
+change. The principal adjudicates the answer and proceeds; do not seek repeated
+agreement or READY tokens, or consult on every ordinary prompt revision.
+
+Choose expertise by the task and unresolved failure modes, not permanent model
+brand roles. Model agreement is not independent scientific evidence. Consultation
+and delegation still require current authorization and available capabilities;
+writing a job series does not authorize external messages, extra agents or compute.
+
 ## Dependencies and scope
 
 Identify what each job produces and what another job consumes. Independent jobs
