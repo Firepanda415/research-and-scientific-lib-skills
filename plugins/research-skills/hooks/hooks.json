@@ -6,6 +6,12 @@
         "hooks": [
           {
             "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/writing-style-routing.js\" SessionStart",
+            "timeout": 5,
+            "statusMessage": "Loading writing requirements..."
+          },
+          {
+            "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/ponytail-activate.js\"",
             "timeout": 5,
             "statusMessage": "Loading ponytail mode..."
@@ -16,6 +22,12 @@
     "SubagentStart": [
       {
         "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/writing-style-routing.js\" SubagentStart",
+            "timeout": 5,
+            "statusMessage": "Loading writing requirements..."
+          },
           {
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/ponytail-subagent.js\"",

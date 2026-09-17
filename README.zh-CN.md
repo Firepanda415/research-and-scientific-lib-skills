@@ -4,7 +4,7 @@
 
 这是我日常科研和科学软件开发中使用的 Codex 技能集，覆盖研究选题、论文阅读与写作、绘图、科学计算和代码审查，也包含按个人习惯修改的 Ponytail。我会根据实际使用持续更新，欢迎按自己的研究需要使用和调整。
 
-**27 个技能和 Ponytail 钩子，通过一个 Codex 插件整套安装。**
+**27 个技能，以及写作和 Ponytail 钩子，通过一个 Codex 插件整套安装。**
 
 ## 安装
 
@@ -27,6 +27,10 @@ codex plugin add research-skills@research-skills
 
 可以在 Codex 中选择指定技能，也可以让 Codex 根据任务自动选择。Ponytail 默认使用 `full` 模式，可说 `stop ponytail` 在当前会话中关闭，或设置 `PONYTAIL_DEFAULT_MODE=off` 关闭默认启用。
 
+凡是供人保存、反复阅读、分享、发布、发送或粘贴到其他地方的文字，写作钩子都要求 Codex 在起草、编辑或审阅前读取并应用 `research-writing-style` 和其中的 durable-prose reference。普通文档、邮件、网页正文、聊天窗口中交付的可直接粘贴文本均在范围内，不分语言和篇幅。仅用于当前聊天的总结与进度说明除外。路由会在会话启动、压缩后和子代理启动时注入，独立于 Ponytail 开关。更新后的钩子须经过 Codex 正常信任检查。钩子提供加载指令，不能机械保证每份文字的质量。
+
+同一 skill 分为两个阶段。生成或修改完成后，完整成稿必须经过[对抗性审阅](plugins/research-skills/skills/research-writing-style/references/prose-review.md)才能交付。审阅检查证据、推理、读者理解障碍，以及混入正文的对话和 prompt。用户要求“不要讨论 X”，不能变成对写作对象缺乏依据的断言。只要求 review 时，直接检查现有文字并报告有依据的问题，不自动重写。[来源采纳审计](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md)记录完整覆盖范围、限定采用及未采用的建议。
+
 | 技能 | 用途 | Credits |
 |---|---|---|
 | [develop-research-ideas](plugins/research-skills/skills/develop-research-ideas/SKILL.md) | 探索研究方向，评估研究方案，寻找可以借鉴的跨领域方法。 | [1](#credit-1) |
@@ -40,7 +44,7 @@ codex plugin add research-skills@research-skills
 | [physics-from-math-explainer](plugins/research-skills/skills/physics-from-math-explainer/SKILL.md) | 从数学出发解释物理，补充物理直觉，讲清符号和约定。 | — |
 | [tech-paper-template](plugins/research-skills/skills/tech-paper-template/SKILL.md) | 组织技术论文的论点、引言和章节结构。 | [1](#credit-1) |
 | [benchmark-paper-template](plugins/research-skills/skills/benchmark-paper-template/SKILL.md) | 规划基准测试的构建、评估方法与论文结构。 | [1](#credit-1) |
-| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) | 统一研究写作风格，处理文字编辑、源文件排版和修改建议。 | [3](#credit-3) |
+| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) | 起草、编辑和对抗性审阅长期使用及可直接粘贴的文字，交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10) |
 | [figure-designer](plugins/research-skills/skills/figure-designer/SKILL.md) | 设计论文插图、方法示意图和可复现的数据图表。 | [1](#credit-1) |
 | [pre-submission-reviewer](plugins/research-skills/skills/pre-submission-reviewer/SKILL.md) | 投稿前检查论文的科学主张、证据、写作、LaTeX 排版和图表。 | [1](#credit-1) |
 | [journal-cover-letter](plugins/research-skills/skills/journal-cover-letter/SKILL.md) | 起草和修改期刊投稿附信。 | — |
@@ -69,13 +73,18 @@ codex plugin add research-skills@research-skills
 6. <a id="credit-6"></a>Meathill。[什么样的工作流，让我觉得 Fable 也不过如此](https://meathill.com/posts/tech/my-great-ai-workflow-with-different-ai-models)（2026-09-13）。为 `maintain-project-memory` 提供思路；文章仅作为 reference，未随包分发，也不将 [7](#credit-7) 的 repository license 套用于文章。
 7. <a id="credit-7"></a>Meathill。[meathill-coding-skills](https://github.com/meathill/meathill/tree/64cb92770189195c574ced31db7012ce5712f46b/skills/meathill-coding-skills)，revision `64cb927`。**MIT**。`maintain-project-memory` 借鉴 `code-maintenance` 的知识维护方法；`scientific-library-review` 的 user-workflow reference 借鉴 `website-operator-qa` 与 `product-content-audit`，并按 scientific users、现有 project owners、evidence 范围和已授权 workload 调整。
 
+8. <a id="credit-8"></a>Siqi Chen。[Humanizer v3.0.0](https://github.com/blader/humanizer/tree/9862685f575c65a8247f90369951df1b3416e3d6)。**MIT**（2025）。其 25 个写作模式及编辑流程用于 `research-writing-style` 的 durable-prose reference。改编时保全事实、技术含义、必要的不确定性和用户要求的文体。
+9. <a id="credit-9"></a>Wikipedia contributors。[Signs of AI writing，修订 1374941330](https://en.wikipedia.org/w/index.php?title=Wikipedia:Signs_of_AI_writing&oldid=1374941330)。**CC BY-SA 4.0**。durable-prose reference 和[中文采纳审计](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md)吸收其内容、排版、引用及草稿残留检查，按 CC BY-SA 4.0 分发。审计逐项说明限定采纳和未采纳内容的理由，不把检测线索当成通用写作禁令。
+
+10. <a id="credit-10"></a>Joseph M. Williams 与 Joseph Bizup。*Style: Lessons in Clarity and Grace*，第 11 版，Pearson，版权年份 2014，ISBN 978-0-321-89868-5。完整阅读本书后，将读者诊断方法用于本项目原创的 prose-review 流程。不随包分发原书章节、练习、示例或 PDF，原书版权独立于本项目许可证。
+
 各部分的条款见 [LICENSE.md](LICENSE.md)，来源与修改说明见 [NOTICE.md](plugins/research-skills/NOTICE.md)。
 
 ## 更新
 
 ### 修改本地仓库
 
-技能位于 `plugins/research-skills/skills/<skill-name>/`，Ponytail 钩子位于 `plugins/research-skills/hooks/`。修改后，在仓库根目录运行：
+技能位于 `plugins/research-skills/skills/<skill-name>/`，钩子位于 `plugins/research-skills/hooks/`。修改后，在仓库根目录运行：
 
 ```bash
 python3 scripts/install-local.py

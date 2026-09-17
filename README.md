@@ -4,7 +4,7 @@
 
 A collection of Codex skills I use for research and scientific software development. It covers research planning, literature searches, manuscript writing, figures, scientific computing, and code review. I update it as my work and needs evolve.
 
-The collection includes **27 skills and a customized Ponytail coding mode**, with its hooks, in a single Codex plugin.
+The collection includes **27 skills and a customized Ponytail coding mode**, with writing and coding hooks, in a single Codex plugin.
 
 ## Install
 
@@ -29,6 +29,10 @@ If you already have the standalone Ponytail plugin, remove it through Codex’s 
 
 Select a skill in Codex, or let Codex choose one that matches your request. Ponytail activates automatically once its hooks are trusted, with `full` as the default coding mode. Say `stop ponytail` to turn it off for the current session. Set `PONYTAIL_DEFAULT_MODE=off` to disable automatic activation.
 
+For text people will keep, revisit, share, publish, send, or paste elsewhere, the writing hook requires Codex to read and apply `research-writing-style` and its durable-prose reference before drafting, editing, or reviewing. This covers ordinary documents, emails, website copy, and paste-ready text in chat, in any language and at any length. Temporary chat summaries and progress updates are excluded. The route is injected at session start, after compaction, and for subagents, independently of Ponytail mode. Updated hooks need the normal Codex trust review. The hook supplies an instruction to load the skill, not a mechanical guarantee of prose quality.
+
+The skill has two stages. Generation or editing is followed by a required [adversarial review](plugins/research-skills/skills/research-writing-style/references/prose-review.md) of the complete draft before delivery. Review challenges evidence, reasoning, reader comprehension, and conversation or prompt leakage. A writing instruction such as “do not discuss X” must not become an unsupported statement about the subject. Review-only requests start from the existing text and report substantiated findings without automatically rewriting it. The [adoption audit](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md) records the source coverage, qualified recommendations, and exclusions.
+
 | Skill | Purpose | Credits |
 |---|---|---|
 | [develop-research-ideas](plugins/research-skills/skills/develop-research-ideas/SKILL.md) | Develop and assess research directions, proposals, and ideas from other fields. | [1](#credit-1) |
@@ -42,7 +46,7 @@ Select a skill in Codex, or let Codex choose one that matches your request. Pony
 | [physics-from-math-explainer](plugins/research-skills/skills/physics-from-math-explainer/SKILL.md) | Explain physics-heavy mathematics with physical intuition and explicit conventions. | — |
 | [tech-paper-template](plugins/research-skills/skills/tech-paper-template/SKILL.md) | Build a technical paper’s argument, Introduction, and section structure. | [1](#credit-1) |
 | [benchmark-paper-template](plugins/research-skills/skills/benchmark-paper-template/SKILL.md) | Plan benchmark construction, evaluation, evidence, and paper structure. | [1](#credit-1) |
-| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) | Apply research writing, copyediting, source layout, and revision conventions. | [3](#credit-3) |
+| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) | Draft, edit, and adversarially review lasting prose and paste-ready text, with mandatory review before delivery and a review-only entry. | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10) |
 | [figure-designer](plugins/research-skills/skills/figure-designer/SKILL.md) | Design and assess scientific figures, diagrams, and reproducible plots. | [1](#credit-1) |
 | [pre-submission-reviewer](plugins/research-skills/skills/pre-submission-reviewer/SKILL.md) | Check your manuscript’s scientific claims, consistency, and presentation before submission. | [1](#credit-1) |
 | [journal-cover-letter](plugins/research-skills/skills/journal-cover-letter/SKILL.md) | Draft and revise journal submission cover letters. | — |
@@ -61,7 +65,7 @@ Select a skill in Codex, or let Codex choose one that matches your request. Pony
 
 ## Credits and licenses
 
-Numbers in the Credits column link to the sources below. Adaptations and historical inspiration are distinguished; each component retains its applicable license.
+Numbers in the Credits column link to the sources below. Adaptations and historical inspiration are distinguished. Each component keeps its applicable license.
 
 1. <a id="credit-1"></a>Yuyu Luo and contributors. [Supervisor-Skills](https://github.com/HKUSTDial/Supervisor-Skills) (2026). **CC BY-NC-SA 4.0**. Adapted in four paper/figure skills and the proposal-evaluation reference of `develop-research-ideas`; these adaptations require noncommercial use and ShareAlike.
 2. <a id="credit-2"></a>hylarucoder. [Geju in hai-stack](https://github.com/hylarucoder/hai-stack). Historical inspiration for `rethink-design`, which was written for this collection and uses the collection's **MIT** license.
@@ -71,11 +75,16 @@ Numbers in the Credits column link to the sources below. Adaptations and histori
 6. <a id="credit-6"></a>Meathill. [什么样的工作流，让我觉得 Fable 也不过如此](https://meathill.com/posts/tech/my-great-ai-workflow-with-different-ai-models) (2026-09-13). Conceptual inspiration for `maintain-project-memory`; the article is a reference, not bundled content or material covered by the repository license in [7](#credit-7).
 7. <a id="credit-7"></a>Meathill. [meathill-coding-skills](https://github.com/meathill/meathill/tree/64cb92770189195c574ced31db7012ce5712f46b/skills/meathill-coding-skills), revision `64cb927`. **MIT**. The knowledge-maintenance ideas in `code-maintenance` inform `maintain-project-memory`; `website-operator-qa` and `product-content-audit` inform the user-workflow reference in `scientific-library-review`. Adapted to scientific users, existing project owners, evidence limits and authorized workloads.
 
+8. <a id="credit-8"></a>Siqi Chen. [Humanizer v3.0.0](https://github.com/blader/humanizer/tree/9862685f575c65a8247f90369951df1b3416e3d6). **MIT** (2025). Its 25 patterns and editing workflow inform the durable-prose reference in `research-writing-style`. Adaptations preserve facts, technical meaning, necessary uncertainty, and the requested genre.
+9. <a id="credit-9"></a>Wikipedia contributors. [Signs of AI writing, revision 1374941330](https://en.wikipedia.org/w/index.php?title=Wikipedia:Signs_of_AI_writing&oldid=1374941330). **CC BY-SA 4.0**. The durable-prose reference and its [Chinese adoption audit](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md) adapt writing, formatting, citation, and drafting-residue checks under CC BY-SA 4.0. The audit records every scoped or omitted recommendation and its reason. Detection signals are not treated as universal writing bans.
+
+10. <a id="credit-10"></a>Joseph M. Williams and Joseph Bizup. *Style: Lessons in Clarity and Grace*, 11th edition, Pearson, copyright 2014, ISBN 978-0-321-89868-5. The full book informed the reader diagnostics in the original prose-review procedure. Its lessons, exercises, examples, and PDF are not bundled. The book's copyright is separate from this collection's licenses.
+
 See [LICENSE.md](LICENSE.md) for component terms and [NOTICE.md](plugins/research-skills/NOTICE.md) for attribution and modifications.
 
 ## Update
 
-Edit the skill folders under `plugins/research-skills/skills/` and Ponytail hooks under `plugins/research-skills/hooks/`. To install or refresh the full collection from a local checkout, run:
+Edit the skill folders under `plugins/research-skills/skills/` and hooks under `plugins/research-skills/hooks/`. To install or refresh the full collection from a local checkout, run:
 
 ```bash
 python3 scripts/install-local.py

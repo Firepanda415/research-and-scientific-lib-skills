@@ -1,0 +1,35 @@
+Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+
+Applies to:
+  skills/research-writing-style/references/durable-prose.md
+  skills/research-writing-style/references/source-integration-audit.zh-CN.md
+
+These adaptations are distributed under CC BY-SA 4.0.
+License: https://creativecommons.org/licenses/by-sa/4.0/
+Full legal code: https://creativecommons.org/licenses/by-sa/4.0/legalcode.en
+
+Sources:
+
+Wikipedia contributors, "Wikipedia:Signs of AI writing", revision 1374941330,
+last edited 2026-09-14, consulted 2026-09-17, CC BY-SA 4.0.
+https://en.wikipedia.org/w/index.php?title=Wikipedia:Signs_of_AI_writing&oldid=1374941330
+Contributor history:
+https://en.wikipedia.org/w/index.php?title=Wikipedia:Signs_of_AI_writing&action=history
+
+Humanizer v3.0.0, Copyright (c) 2025 Siqi Chen, MIT.
+https://github.com/blader/humanizer/tree/9862685f575c65a8247f90369951df1b3416e3d6
+Its copyright and permission notice is in HUMANIZER-MIT.txt alongside this file.
+
+Adaptations and original additions: Copyright (c) 2026 Firepanda415.
+Changes reorganize the guidance for durable human-facing prose, add Chinese
+examples and scientific-meaning safeguards, and document adoption decisions.
+Upstream before/after examples and quoted Wikipedia article passages are not
+reproduced. Attribution does not imply endorsement.
+
+You may share and adapt these files, including commercially, provided you give
+appropriate credit, link the license, indicate changes, and distribute adapted
+material under the same license. Do not impose additional legal or technical
+restrictions. This summary does not replace the linked legal code.
+
+This license does not relicense unrelated files in the collection. Consult the
+plugin's LICENSE.md for the other component boundaries.

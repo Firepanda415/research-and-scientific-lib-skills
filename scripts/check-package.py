@@ -60,12 +60,16 @@ def main():
         assert (package / notice).is_file(), f"missing installed notice: {notice}"
     hooks = json.loads((package / "hooks/hooks.json").read_text())["hooks"]
     assert set(hooks) == {"SessionStart", "SubagentStart", "UserPromptSubmit"}
-    for groups in hooks.values():
+    for event, groups in hooks.items():
         for group in groups:
             for hook in group["hooks"]:
                 command = hook["command"]
-                match = re.fullmatch(r'node "\$\{(?:CLAUDE_)?PLUGIN_ROOT\}/(hooks/[\w.-]+\.js)"', command)
+                match = re.fullmatch(r'node "\$\{(?:CLAUDE_)?PLUGIN_ROOT\}/(hooks/[\w.-]+\.js)"(?: (SessionStart|SubagentStart))?', command)
                 assert match and (package / match[1]).is_file(), f"invalid hook target: {command}"
+                if match[1] == "hooks/writing-style-routing.js":
+                    assert match[2] == event, f"writing hook event mismatch: {command}"
+                else:
+                    assert match[2] is None, f"unexpected hook argument: {command}"
     print(f"Package OK: {len(names)} skills, both README catalogues, relative links, notices, 3 hook events")
 
 
