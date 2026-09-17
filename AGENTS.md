@@ -1,12 +1,14 @@
 # Maintaining this collection
 
-This repository is the source for the `research-skills` Codex plugin. Keep its
+This repository is the source for the `research-skills` Codex and Claude Code plugin. Keep its
 skills, references, scripts, and Ponytail hooks together under
 `plugins/research-skills/`. Do not edit installed plugin caches as source.
 
-When asked to install this repository, follow README.md's standard Codex plugin
-installation. Install the single `research-skills@research-skills` plugin, which
-contains the full collection. Do not copy only SKILL.md files or install a second
+When asked to install this repository, follow README.md's plugin installation
+for the requested host. Install the single `research-skills@research-skills` plugin.
+Codex receives the full collection. The Claude installer excludes Ponytail skills
+and hooks while retaining the research skills and writing hook.
+Do not copy only SKILL.md files or install a second
 Ponytail plugin. Let Codex handle hook trust; do not bypass or manufacture it.
 
 Preserve upstream notices and the component license boundaries in LICENSE.md.

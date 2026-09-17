@@ -2,11 +2,13 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-这是我日常科研和科学软件开发中使用的 Codex 技能集，覆盖研究选题、论文阅读与写作、绘图、科学计算和代码审查，也包含按个人习惯修改的 Ponytail。我会根据实际使用持续更新，欢迎按自己的研究需要使用和调整。
+这是我日常科研和科学软件开发中使用的 Codex 与 Claude Code skills 集合，覆盖研究选题、论文阅读与写作、绘图、科学计算和代码审查，也包含按个人习惯修改的 Ponytail。我会根据实际使用持续更新，欢迎按自己的研究需要使用和调整。
 
-**27 个技能，以及写作和 Ponytail 钩子，通过一个 Codex 插件整套安装。**
+**Codex plugin 包含 27 个 skills，以及写作和 Ponytail hooks。Claude Code installer 提供 21 个 research skills 和写作 hook，不包含 Ponytail。**
 
 ## 安装
+
+### Codex
 
 直接把仓库地址交给 Codex：
 
@@ -22,6 +24,20 @@ codex plugin add research-skills@research-skills
 需要支持插件市场的 Codex，以及已安装并加入 PATH 的 Node.js。使用附带的 Python 脚本时还需要 Python 3。
 
 首次安装后，在 Codex CLI 打开 `/hooks`，检查并信任这些钩子，然后新建会话。详情见 [Codex 钩子信任说明](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks)。如果已安装独立的 Ponytail 插件，请停用它，避免重复加载。
+
+### Claude Code
+
+使用当前版本的 Claude Code，并确保 Python 3 和 Node.js 已加入 `PATH`。在本地仓库根目录运行：
+
+```bash
+python3 scripts/install-claude.py
+```
+
+脚本在 `~/.local/share/research-skills/claude-marketplace/` 创建 local marketplace，并通过 Claude CLI 将 `research-skills@research-skills` 安装到 user scope。安装内容包括全部 21 个 research skills、配套文件和写作 hook，排除全部 6 个 Ponytail skills 和 Ponytail hooks。如果当前 executable 不在 `PATH` 中，可用 `--claude-bin /path/to/claude` 指定。Local marketplace 的加载方式见 [Claude Code marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces)。
+
+修改源文件后，重新运行该脚本并新建 Claude Code session。例如，可用 `/research-skills:scientific-library-review` 调用指定 skill。
+
+确认安装成功后，删除 `~/.claude/skills/` 中同名的手动副本，防止重复加载。备份应放在该目录之外，并保留其他 skills。迁移后新建 Claude Code session。
 
 ## 技能一览
 

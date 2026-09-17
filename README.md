@@ -2,11 +2,13 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-A collection of Codex skills I use for research and scientific software development. It covers research planning, literature searches, manuscript writing, figures, scientific computing, and code review. I update it as my work and needs evolve.
+A collection of skills for Codex and Claude Code that I use for research and scientific software development. It covers research planning, literature searches, manuscript writing, figures, scientific computing, and code review. I update it as my work and needs evolve.
 
-The collection includes **27 skills and a customized Ponytail coding mode**, with writing and coding hooks, in a single Codex plugin.
+The Codex plugin includes **27 skills and a customized Ponytail coding mode**, with writing and coding hooks. The Claude Code installer provides **21 research skills and the writing hook**, excluding Ponytail.
 
 ## Install
+
+### Codex
 
 Give Codex this request:
 
@@ -24,6 +26,20 @@ You need a Codex version with plugin marketplace support and Node.js on your `PA
 After installation, open `/hooks` in the Codex CLI to review and trust the hooks, then start a new task. Restart the app if it has not refreshed. See the [Codex hook setup guide](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks) for details.
 
 If you already have the standalone Ponytail plugin, remove it through Codex’s plugin manager to avoid duplicate hooks.
+
+### Claude Code
+
+With a current Claude Code version, Python 3, and Node.js on your `PATH`, run this command from the checkout's root:
+
+```bash
+python3 scripts/install-claude.py
+```
+
+The script builds a local marketplace under `~/.local/share/research-skills/claude-marketplace/` and installs `research-skills@research-skills` at user scope through the Claude CLI. It includes all 21 research skills, their supporting files, and the writing hook. All six Ponytail skills and the Ponytail hooks are excluded. Use `--claude-bin /path/to/claude` if the current executable is not on your `PATH`. See the [Claude Code marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces) for local marketplace behavior.
+
+Rerun the script after changing the source, then start a new Claude Code session. For example, invoke `/research-skills:scientific-library-review`.
+
+After verifying the installation, remove matching manually copied skill folders from `~/.claude/skills/` to prevent duplicate discovery. Keep any backup outside that directory and preserve unrelated skills. Start a new Claude Code session after migration.
 
 ## Skills
 
