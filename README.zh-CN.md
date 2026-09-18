@@ -45,7 +45,7 @@ python3 scripts/install-claude.py
 
 凡是供人保存、反复阅读、分享、发布、发送或粘贴到其他地方的文字，写作钩子都要求 Codex 在起草、编辑或审阅前读取并应用 `research-writing-style` 和其中的 durable-prose reference。普通文档、邮件、网页正文、聊天窗口中交付的可直接粘贴文本均在范围内，不分语言和篇幅。仅用于当前聊天的总结与进度说明除外。路由会在会话启动、压缩后和子代理启动时注入，独立于 Ponytail 开关。更新后的钩子须经过 Codex 正常信任检查。钩子提供加载指令，不能机械保证每份文字的质量。
 
-同一 skill 分为两个阶段。生成或修改完成后，完整成稿必须经过[对抗性审阅](plugins/research-skills/skills/research-writing-style/references/prose-review.md)才能交付。审阅检查证据、推理、读者理解障碍，以及混入正文的对话和 prompt。用户要求“不要讨论 X”，不能变成对写作对象缺乏依据的断言。只要求 review 时，直接检查现有文字并报告有依据的问题，不自动重写。[来源采纳审计](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md)记录完整覆盖范围、限定采用及未采用的建议。
+同一 skill 分为两个阶段。生成和编辑阶段在写作时落实句子结构与用词要求，完整成稿随后必须经过[对抗性审阅](plugins/research-skills/skills/research-writing-style/references/prose-review.md)才能交付。审阅重点检查全文结构、段落功能、上下文和推理。先确认提取材料的来源与文档角色，再结合上下文核对证据、读者理解障碍，以及混入正文的对话和 prompt。用户要求“不要讨论 X”，不能变成对写作对象缺乏依据的断言。只要求 review 时，直接检查现有文字并报告有依据的问题，不自动重写。检测器标签本身不要求修改。用户明确要求按检测结果改写时，启用可选的[检测实验流程](plugins/research-skills/skills/research-writing-style/references/detector-evaluation.md)，保全含义并记录实测对比。普通写作不要求检测。复测中关于选择依据、能力与操作的联系、限定归属及上下文衔接的写作经验，已纳入默认生成和审阅规则。[来源采纳审计](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md)记录完整覆盖范围、限定采用及未采用的建议。
 
 | 技能 | 用途 | Credits |
 |---|---|---|
@@ -92,7 +92,7 @@ python3 scripts/install-claude.py
 8. <a id="credit-8"></a>Siqi Chen。[Humanizer v3.0.0](https://github.com/blader/humanizer/tree/9862685f575c65a8247f90369951df1b3416e3d6)。**MIT**（2025）。其 25 个写作模式及编辑流程用于 `research-writing-style` 的 durable-prose reference。改编时保全事实、技术含义、必要的不确定性和用户要求的文体。
 9. <a id="credit-9"></a>Wikipedia contributors。[Signs of AI writing，修订 1374941330](https://en.wikipedia.org/w/index.php?title=Wikipedia:Signs_of_AI_writing&oldid=1374941330)。**CC BY-SA 4.0**。durable-prose reference 和[中文采纳审计](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md)吸收其内容、排版、引用及草稿残留检查，按 CC BY-SA 4.0 分发。审计逐项说明限定采纳和未采纳内容的理由，不把检测线索当成通用写作禁令。
 
-10. <a id="credit-10"></a>Joseph M. Williams 与 Joseph Bizup。*Style: Lessons in Clarity and Grace*，第 11 版，Pearson，版权年份 2014，ISBN 978-0-321-89868-5。完整阅读本书后，将读者诊断方法用于本项目原创的 prose-review 流程。不随包分发原书章节、练习、示例或 PDF，原书版权独立于本项目许可证。
+10. <a id="credit-10"></a>Joseph M. Williams 与 Joseph Bizup。*Style: Lessons in Clarity and Grace*，第 11 版，Pearson，版权年份 2014，ISBN 978-0-321-89868-5。完整阅读本书后，将其思想用于 durable-prose 中原创的句子生成指引和 prose-review 中基于上下文的读者诊断。不随包分发原书章节、练习、示例或 PDF，原书版权独立于本项目许可证。
 
 各部分的条款见 [LICENSE.md](LICENSE.md)，来源与修改说明见 [NOTICE.md](plugins/research-skills/NOTICE.md)。
 
