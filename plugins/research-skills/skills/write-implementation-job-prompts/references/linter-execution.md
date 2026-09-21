@@ -8,8 +8,4 @@ running the linter. A command template is:
   "${job_prompt_file:?set the actual prompt path}" --kind job
 ```
 
-Use `--kind correction` for a correction. For NWQLib-related execution, use the
-checked-command form from its live environment rules instead of invoking the
-interpreter directly. Errors block use; warnings are review cues, not automatic
-failures. Fill the template's `{{...}}` fields before dispatch; the linter does
-not replace the pre-dispatch evidence check above.
+Use `--kind correction` for a correction. When the project requires a checked runner, invoke the linter through it. Errors block use. Warnings are review cues, not automatic failures. Fill the template's `{{...}}` fields before dispatch. The linter does not replace the parent skill's [pre-dispatch evidence check](../SKILL.md#pre-dispatch-check).

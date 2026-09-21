@@ -31,6 +31,8 @@ Not **[Q×AI]**: deterministic formalization, SAT solving, and proof checking do
 
 ## Example ledger record
 
+The coverage dates and context below are illustrative. An actual `covered` record requires evidence that the user received that coverage.
+
 ```json
-{"schema_version":"1.0","paper_id":"arxiv:2605.16523","title":"End-to-End Formalization of Quantum Error Correction","canonical_url":"https://arxiv.org/abs/2605.16523","first_public_date":"2026-05-15","first_seen_on":"2026-06-18","last_seen_on":"2026-06-18","status":"covered","covered_on":["2026-06-18"],"coverage_level":"detailed","coverage_contexts":["manual_recovery_discussion"],"tags":["E×U","Recovery","QEC","formal-verification"],"selection_reason":"Machine-checked QEC distance certification recovered through a formal-methods search lane.","revisit_triggers":["journal publication","public code or proof-artifact release","major extension to additional code families","integration into end-to-end FTQC verification"],"notes":"Recovered manually after it was absent from earlier daily briefs."}
+{"schema_version":"1.0","paper_id":"arxiv:2605.16523","title":"End-to-End Formalization of Quantum Error Correction","canonical_url":"https://arxiv.org/abs/2605.16523","first_public_date":"2026-05-15","first_seen_on":"2026-06-18","last_seen_on":"2026-06-18","status":"covered","covered_on":["2026-06-18"],"coverage_level":"detailed","coverage_contexts":["calibration_example"],"tags":["E×U","Recovery","QEC","formal-verification"],"selection_reason":"Machine-checked QEC distance certification recovered through a formal-methods search lane.","revisit_triggers":["journal publication","public code or proof-artifact release","major extension to additional code families","integration into end-to-end FTQC verification"],"notes":"Illustrative coverage events for calibration, not a user's actual history."}
 ```

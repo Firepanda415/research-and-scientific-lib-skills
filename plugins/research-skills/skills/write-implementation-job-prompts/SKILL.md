@@ -62,13 +62,7 @@ For a correction, state what supersedes the old instruction and why, using
 helpful. Preserve dispositions of relevant findings without making a new
 permanent test for each review comment. Existing evidence may cover several fixes.
 
-When the project maintains implementer-safe standing notes, put a read-only
-directive near the start of the prompt, in the order the current project rules
-require. Name the actual artifact; keep reviewer-only records out of the
-implementer's reading list and the repository. Carry required workspace setup,
-import binding, integration, and delivery instructions into the handoff. If the
-current workflow requires an implementer recommendation, give it outside the
-prompt with the reason based on which failure modes its gates can detect.
+Use the current project's supplied guidance to identify required reading and its actual paths. Give the implementer only material relevant to the assigned role and task, following the project's access and storage rules. Carry applicable workspace setup, import binding, integration, and delivery requirements into the handoff. Do not require a project to adopt another project's document layout or workflow.
 
 ## Proportional acceptance
 
@@ -89,7 +83,7 @@ Distinguish byte-stable artifacts, intentional semantic changes, and numeric
 tolerance checks. Specify new values only after obtaining them from the intended
 reference. Do not regenerate unrelated expensive artifacts for appearance.
 
-Use the actual project toolchain and ensure checks import the target checkout when shadowed installations are possible. For NWQLib handoffs, read [NWQLib execution and onboarding](references/nwqlib-execution.md) and carry its mandatory BASELINE/ENVIRONMENT, exact full ref/SHA and per-command checked runner into the prompt. Do not impose those project-specific commands on unrelated work.
+Use the project's supported toolchain and ensure checks import the target checkout when shadowed installations are possible. When project instructions require a checked runner or revision checks, carry the actual checkout, revision, and invocation into the handoff. Resolve required guidance and executable paths from current project instructions before dispatch, rather than copying historical commands or inventing missing environment rules.
 
 Do not game a scan by hiding its matches. Reuse the project's existing gates and
 show their actual results. Mutation/restore checks, if required, run separately
@@ -130,9 +124,7 @@ Apply these checks to the clauses that the job actually contains:
   Reuse still-valid run evidence for unchanged expensive checks; use a bounded
   check for new uncertainty and mark any remaining run unverified. Do not repeat
   production work merely to fill a prompt or call an unrun command validated.
-- Carry the current project's required onboarding, workspace/import, action,
-  and delivery rules, including standing notes or implementer recommendations
-  when required. Resolve a material conflict before treating the job as ready.
+- Carry the current project's required reading, workspace/import, action, and delivery rules. Resolve a material conflict before treating the job as ready.
 
 Once authority, starting state, owner, outcome, and sufficient acceptance evidence
 are clear, dispatch if authorized. Revise again only for new evidence, baseline
@@ -145,4 +137,4 @@ contract-style handoffs; use it only when that format is selected. Its formattin
 rules do not define scientific validity or require adding absent machinery to an
 otherwise sufficient short handoff.
 
-When the detailed handoff format calls for the bundled linter, read [linter execution](references/linter-execution.md). The live project environment and NWQLib checked runner still govern applicable commands.
+When the detailed handoff format calls for the bundled linter, read [linter execution](references/linter-execution.md). Apply the current project's environment and runner requirements to that command.

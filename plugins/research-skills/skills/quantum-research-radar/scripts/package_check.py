@@ -98,10 +98,29 @@ def main() -> int:
     run_checked([sys.executable, str(ledger_tool), "validate", "--ledger", str(seed)])
 
     with tempfile.TemporaryDirectory() as temp:
+        for name, options in (("default", []), ("empty", ["--empty"])):
+            fresh = Path(temp) / name / "briefing-history.jsonl"
+            run_checked([sys.executable, str(ledger_tool), "init", "--ledger", str(fresh), *options])
+            if fresh.read_bytes() != b"":
+                fail(f"{name} initialization must create an empty coverage history")
+
         runtime = Path(temp) / "state" / "briefing-history.jsonl"
         run_checked(
             [sys.executable, str(ledger_tool), "init", "--ledger", str(runtime), "--seed", str(seed)]
         )
+        expected = [json.loads(line) for line in seed.read_text(encoding="utf-8").splitlines() if line.strip()]
+        imported = [json.loads(line) for line in runtime.read_text(encoding="utf-8").splitlines() if line.strip()]
+        if {record["paper_id"]: record for record in imported} != {record["paper_id"]: record for record in expected}:
+            fail("explicit seed import changed the supplied coverage records")
+        before_reinit = runtime.read_bytes()
+        rejected = subprocess.run(
+            [sys.executable, str(ledger_tool), "init", "--ledger", str(runtime)],
+            text=True, capture_output=True, check=False,
+        )
+        if rejected.returncode != 1 or "ledger already exists" not in rejected.stderr:
+            fail("initialization must reject an existing ledger without --force")
+        if runtime.read_bytes() != before_reinit:
+            fail("rejected initialization changed existing coverage history")
         run_checked(
             [
                 sys.executable,
@@ -136,6 +155,9 @@ def main() -> int:
         backups = list((runtime.parent / ".backups").glob("*.bak"))
         if len(backups) != 1:
             fail(f"lifecycle expected one external backup, found {len(backups)}")
+        run_checked([sys.executable, str(ledger_tool), "init", "--ledger", str(runtime), "--force"])
+        if runtime.read_bytes() != b"":
+            fail("forced default initialization must replace the ledger with empty history")
 
     after = package_files(root)
     if before != after:

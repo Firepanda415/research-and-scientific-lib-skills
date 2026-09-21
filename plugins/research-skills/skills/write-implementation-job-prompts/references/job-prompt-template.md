@@ -26,11 +26,7 @@ Delivery:
 {{REQUESTED_ARTIFACTS_VALIDATION_EVIDENCE_DEVIATIONS_AND_ACTION_BOUNDARY}}
 ```
 
-Add exact starting SHA, closed file surface, owner counts, forbidden-work checks,
-mutation/restoration gates, cumulative baseline, or plan-clause coverage when the
-project or failure mechanism needs them. Do not require these fields for an
-ordinary handoff. In NWQLib, carry the live external baseline/environment and
-checked-command requirements into the prompt.
+Add exact starting SHA, closed file surface, owner counts, forbidden-work checks, mutation/restoration gates, cumulative baseline, or plan-clause coverage when the project or failure mechanism needs them. Do not require these fields for an ordinary handoff.
 
 An unfinished placeholder draft is not dispatchable. A short complete prompt
 does not need to pass the optional contract-style linter's larger format.

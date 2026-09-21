@@ -13,21 +13,20 @@ The external runtime `briefing-history.jsonl` prevents repeated coverage, suppor
 
 The ledger is a **current-state JSONL store**: one JSON object per canonical paper ID. The helper script rewrites the affected record while preserving a compact coverage history.
 
-The installed `data/briefing-history.seed.jsonl` is immutable calibration data.
-Resolve the permitted absolute Python interpreter and this installed skill's
-absolute directory before running the helper; use a project-required checked
-runner when applicable. Replace both placeholders in these command templates:
+New ledgers start empty. The installed `data/briefing-history.seed.jsonl` is an immutable calibration example whose coverage events are illustrative. Do not use it as evidence of a user's previous coverage.
+
+Resolve the permitted absolute Python interpreter and this installed skill's absolute directory before running the helper. Use a project-required checked runner when applicable. Replace both placeholders in these command templates:
 
 ```sh
 "<absolute-interpreter>" "<absolute-skill-dir>/scripts/ledger_tool.py" path
 "<absolute-interpreter>" "<absolute-skill-dir>/scripts/ledger_tool.py" init
 ```
 
-Initialize only after tracking is authorized. Override the path with
-`QUANTUM_RESEARCH_RADAR_LEDGER`, `XDG_STATE_HOME`, or `--ledger PATH`.
-Runtime backups are written under `.backups/` beside the ledger.
+Initialize only after tracking is authorized. `init --empty` also creates an empty ledger. Use `init --seed PATH` only to import the existing JSONL history requested by the user. Initialization refuses to overwrite an existing ledger unless `--force` is supplied. Override the runtime path with `QUANTUM_RESEARCH_RADAR_LEDGER`, `XDG_STATE_HOME`, or `--ledger PATH`. Runtime backups are written under `.backups/` beside the ledger.
 
 ## Required fields
+
+This illustrative record shows the field format. An actual `covered` record requires evidence that the user received that coverage.
 
 ```json
 {
@@ -41,11 +40,11 @@ Runtime backups are written under `.backups/` beside the ledger.
   "status": "covered",
   "covered_on": ["2026-06-18"],
   "coverage_level": "detailed",
-  "coverage_contexts": ["manual_recovery_discussion"],
+  "coverage_contexts": ["calibration_example"],
   "tags": ["E×U", "Recovery", "QEC", "formal-verification"],
   "selection_reason": "Machine-checked QEC distance certification recovered from a cross-disciplinary lane.",
   "revisit_triggers": ["journal publication", "public code release"],
-  "notes": "Not part of an earlier scheduled brief; recovered manually."
+  "notes": "Illustrative coverage events for calibration, not a user's actual history."
 }
 ```
 

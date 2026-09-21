@@ -20,6 +20,4 @@ acceptance condition can be legitimate without a theorem; do not present its
 particular retry count as proven effective when that benefit is unmeasured.
 Catch only failures the recovery can address, state acceptance and termination,
 and account for nested dependency work and repetition at the intended scale.
-In authorized remediation, remove unsupported automatic retries and work with
-no required result or evidence consumer. Apply the resource approval rules below
-before extra costly validation; do not run a benchmark merely to justify a retry.
+In authorized remediation, remove unsupported automatic retries and work with no required result or evidence consumer. Before extra costly validation, read and apply the [resource approval rules](../SKILL.md#resource-proportionality-and-retention). Do not run a benchmark merely to justify a retry.

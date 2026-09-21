@@ -4,6 +4,8 @@ This repository is the source for the `research-skills` Codex and Claude Code pl
 skills, references, scripts, and Ponytail hooks together under
 `plugins/research-skills/`. Do not edit installed plugin caches as source.
 
+Keep reusable skills independent of individual projects. Abstract transferable decision rules into skills, and keep a user's project-specific paths, document layout, environment commands, and work-in-progress state in that project's own guidance. Skills consume that guidance when the current task requires it.
+
 When asked to install this repository, follow README.md's plugin installation
 for the requested host. Install the single `research-skills@research-skills` plugin.
 Codex receives the full collection. The Claude installer excludes Ponytail skills

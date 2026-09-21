@@ -19,8 +19,6 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
-PACKAGE_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SEED = PACKAGE_ROOT / "data" / "briefing-history.seed.jsonl"
 ALLOWED_STATUS = {"candidate", "deferred", "covered", "rejected", "superseded", "retracted"}
 LEVEL_ORDER = {"mention": 0, "brief": 1, "detailed": 2, "deep-dive": 3}
 REQUIRED_FIELDS = {
@@ -251,10 +249,9 @@ def cmd_init(args: argparse.Namespace) -> int:
     path = ledger_arg(args)
     if path.exists() and not args.force:
         raise ValueError(f"ledger already exists: {path}; use --force only when replacement is intended")
-    if args.empty:
-        records: dict[str, dict[str, Any]] = {}
-    else:
-        seed = Path(args.seed or DEFAULT_SEED).expanduser()
+    records: dict[str, dict[str, Any]] = {}
+    if args.seed:
+        seed = Path(args.seed).expanduser()
         records = read_ledger(seed)
         failures = validate_records(records)
         if failures:
@@ -366,10 +363,10 @@ def build_parser() -> argparse.ArgumentParser:
     path_cmd = sub.add_parser("path", help="print the default runtime ledger path")
     path_cmd.set_defaults(func=cmd_path)
 
-    init = sub.add_parser("init", help="initialize a runtime ledger from the packaged seed")
+    init = sub.add_parser("init", help="initialize an empty runtime ledger or import an explicit seed")
     add_ledger_option(init)
-    init.add_argument("--seed")
-    init.add_argument("--empty", action="store_true")
+    init.add_argument("--seed", help="import records from this JSONL ledger")
+    init.add_argument("--empty", action="store_true", help="initialize empty (the default)")
     init.add_argument("--force", action="store_true")
     init.add_argument("--no-backup", action="store_true")
     init.set_defaults(func=cmd_init)

@@ -65,13 +65,9 @@ Never infer that a paper was previously covered from memory alone. Revisit for a
 material result, revision, artifact release, correction, or newly useful connection,
 not merely a repost.
 
-Persistent tracking remains opt-in. Ordinary briefing requests do not require
-creating a ledger, writing state, or emitting a ledger delta. For an authorized
-tracking workflow, read `references/coverage-ledger-schema.md` and use
-`scripts/ledger_tool.py` for path resolution, initialization, lookup, validation,
-and updates. The packaged `data/briefing-history.seed.jsonl` is immutable seed
-material; runtime state and backups stay outside the installed skill. Generate a
-ledger delta only when requested or needed by an established tracking workflow.
+Persistent tracking remains opt-in. Ordinary briefing requests do not require creating a ledger, writing state, or emitting a ledger delta. For an authorized tracking workflow, read `references/coverage-ledger-schema.md` and use `scripts/ledger_tool.py` for path resolution, initialization, lookup, validation, and updates.
+
+New ledgers start empty. Import existing coverage with `init --seed PATH` only when the user requests that history. The packaged `data/briefing-history.seed.jsonl` is an immutable calibration example, not evidence of anyone's previous coverage. Runtime state and backups stay outside the installed skill. Generate a ledger delta only when requested or needed by an established tracking workflow.
 
 The runtime path follows `QUANTUM_RESEARCH_RADAR_LEDGER`, otherwise
 `${XDG_STATE_HOME:-~/.local/state}/quantum-research-radar/briefing-history.jsonl`.
