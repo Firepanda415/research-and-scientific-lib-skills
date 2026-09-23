@@ -8,19 +8,24 @@ description: >
 
 # Ponytail Help
 
-Display this reference card when invoked. One-shot, do NOT change mode,
-write flag files, or persist anything.
+Display this reference card when invoked. One-shot, do NOT change the level or
+persist anything.
 
 ## Levels
 
 | Level | Trigger | What change |
 |-------|---------|-------------|
-| **Lite** | `/ponytail lite` | Prefer a straightforward solution; mention alternatives when the tradeoff matters. |
-| **Full** | `/ponytail` | Use the simplest implementation meeting correctness and resource requirements. Default. |
-| **Ultra** | `/ponytail ultra` | Challenge accidental complexity more aggressively while completing requested behavior. |
+| **Lite** | `$ponytail lite` | Prefer a straightforward solution. Mention alternatives when the tradeoff matters. |
+| **Full** | `$ponytail full` | Use the simplest implementation meeting correctness and resource requirements. Default. |
+| **Ultra** | `$ponytail ultra` | Challenge accidental complexity more aggressively while completing requested behavior. |
 
-Level sticks until changed or session end and governs coding decisions, not the
-length or structure of paper reviews and research explanations.
+The agent loads Ponytail when it judges that a task involves writing or
+changing code, or when you ask for Ponytail. Name a level with a trigger above
+or in plain words, such as "use ponytail ultra". The level lasts until you name
+another or turn Ponytail off, and `full` applies when no level is named. It
+governs coding decisions, not the length or structure of paper reviews and
+research explanations. A subagent does not see the conversation, so the agent
+states the level in a coding subagent's brief.
 
 The ladder: establish behavior and data flow; avoid speculative work; reuse
 existing code and optimized numerical kernels; use stdlib/native facilities for
@@ -32,47 +37,29 @@ follows changed failure modes rather than a fixed test count.
 
 | Skill | Trigger | What it does |
 |-------|---------|--------------|
-| **ponytail** | `/ponytail` | Lazy mode itself. Simplest solution that works. |
-| **ponytail-review** | `/ponytail-review` | Review a diff for justified simplifications that preserve its contracts. |
-| **ponytail-audit** | `/ponytail-audit` | Whole-repo audit of removable complexity and its consequences. |
-| **ponytail-debt** | `/ponytail-debt` | Harvest `ponytail:` shortcut comments into a tracked ledger. |
-| **ponytail-gain** | `/ponytail-gain` | Historical upstream benchmark scoreboard; not validation of this customized fork. |
-| **ponytail-help** | `/ponytail-help` | This card. |
+| **ponytail** | `$ponytail` | Lazy mode itself. Simplest solution that works. |
+| **ponytail-review** | `$ponytail-review` | Review a diff for justified simplifications that preserve its contracts. |
+| **ponytail-audit** | `$ponytail-audit` | Whole-repo audit of removable complexity and its consequences. |
+| **ponytail-debt** | `$ponytail-debt` | Harvest `ponytail:` shortcut comments into a tracked ledger. |
+| **ponytail-gain** | `$ponytail-gain` | Historical upstream benchmark scoreboard, not validation of this customized fork. |
+| **ponytail-help** | `$ponytail-help` | This card. |
 
-Codex uses `@ponytail`, `@ponytail-review`, and `@ponytail-help`; Claude Code
-and OpenCode use the slash-command forms above (OpenCode ships all six as
-slash commands).
+In Codex, mention a skill with its `$` form from the table. Where the app
+mentions skills with `@`, the `@` forms such as `@ponytail lite` also work. In
+Claude Code, invoke a skill as `/research-skills:<skill>`, for example
+`/research-skills:ponytail lite`. A plain-language request works on both hosts.
 
 ## Deactivate
 
-Say "stop ponytail" or "normal mode". Resume anytime with `/ponytail`.
-`/ponytail off` also works.
-
-## Configure Default Mode
-
-Default mode = `full`, auto-active every session. Change it:
-
-**Environment variable** (highest priority):
-```bash
-export PONYTAIL_DEFAULT_MODE=ultra
-```
-
-**Config file** (`~/.config/ponytail/config.json`, Windows: `%APPDATA%\ponytail\config.json`):
-```json
-{ "defaultMode": "lite" }
-```
-
-Set `"off"` to disable auto-activation on session start, activate manually
-with `/ponytail` when wanted.
-
-Resolution: env var > config file > `full`.
+Say "stop ponytail" or "normal mode", or use `$ponytail off`. Ponytail then
+stays off until you ask for it again in this conversation, which turns it back
+on at `full` unless you name another level.
 
 ## Update
 
-For this fork's local Codex installation, edit the configured checkout, then run
-`codex plugin add research-skills@research-skills` and start a new task. Check the configured
-marketplace source before updating; an upstream source will not include local
-customizations. Other hosts use their own installation flow.
+To update, follow the repository README. A local checkout reinstalls with
+scripts/install-local.py for Codex and scripts/install-claude.py for Claude
+Code. Start a new task or session afterwards.
 
 ## More
 

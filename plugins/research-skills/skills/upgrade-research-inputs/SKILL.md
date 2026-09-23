@@ -6,13 +6,15 @@ description: Investigate a research question, literature gap, closest prior work
 # Upgrade Research Inputs
 
 Answer the user's question from inspected sources and identify what the evidence
-supports, what is inferred, and what remains unresolved. Search by mechanism and
-mathematical structure as well as current terminology.
+supports, what is inferred, and what remains unresolved.
+Search by mechanism and mathematical structure as well as current terminology.
 
 ## Evidence that matters
 
 - Inspect the primary source behind load-bearing claims, including the relevant
   appendix, theorem assumptions, figure, configuration, or code when necessary.
+  If only an abstract is accessible, mark detailed method, proof, resource, or
+  experiment claims unverified.
 - Record an exact location and source version when the detail affects the
   conclusion or must be reusable. A citation beside the claim is often enough.
 - Match the claim's scope, conditions, magnitude, and comparison to the source.
@@ -60,11 +62,13 @@ Do not create durable files unless requested or needed for the ongoing work.
 
 Optional references:
 
-- [source-protocol.md](references/source-protocol.md): source and lineage checks.
+- [source-protocol.md](references/source-protocol.md): lineage or novelty
+  inquiries, query planning, or deciding which kind of source can support a claim.
 - [evidence-ledger.md](references/evidence-ledger.md): compact reusable records.
 - [expert-inputs.md](references/expert-inputs.md): requested collaboration or
   outside critique focused on a specific knowledge gap.
 
 Problem choice, idea generation, evidence gathering, and evaluation can interact
 in either order. Use other research skills when their specific job is needed,
-not as prerequisites for this one.
+not as prerequisites for this one. For a date-bounded scan of what is new in
+quantum research, use `quantum-research-radar`.

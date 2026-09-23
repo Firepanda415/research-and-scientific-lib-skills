@@ -121,10 +121,8 @@ arrows show data flow.
 - **Hierarchy visible**: colour, size, or position distinguishes
   levels (primary components larger; auxiliary components smaller
   or grey).
-- **Names match prose**: every component's name in the figure
-  appears verbatim in a methodology subsection title. If the figure
-  says "Hotspot Detector", the paper says "Section 3.2 Hotspot
-  Detector".
+- **Names match prose**: use the same component names in the figure
+  and the prose so a reader can trace each box to its explanation.
 - **Inputs and outputs explicit**: the figure shows the overall
   input and output of the method at its boundary.
 

@@ -71,16 +71,36 @@ def parse_iso_date(value: Any, field: str, allow_empty: bool = False) -> date | 
         raise ValueError(f"{field} must be YYYY-MM-DD, got {value!r}") from exc
 
 
+ARXIV_NEW_STYLE = r"(\d{4}\.\d{4,5})(?:v\d+)?"
+DOI_FORMS = (
+    re.compile(r"^doi:\s*(.*)$", re.I),
+    re.compile(r"^(?:https?://)?(?:[\w-]+\.)*doi\.org/(.*)$", re.I),
+    re.compile(r"^(10\.\d{4,9}/.*)$"),
+)
+ARXIV_DOI = re.compile(rf"^10\.48550/arxiv\.{ARXIV_NEW_STYLE}$")
+ARXIV_ID = re.compile(rf"^(?:arxiv:\s*)?{ARXIV_NEW_STYLE}(?:\s*\[[^\]]*\])?$", re.I)
+ARXIV_URL = re.compile(
+    rf"^(?:https?://)?(?:www\.|export\.)?arxiv\.org/(?:abs|pdf|html)/{ARXIV_NEW_STYLE}(?:\.pdf)?/?(?:[?#].*)?$", re.I
+)
+
+
 def canonicalize_paper_id(value: str) -> str:
     raw = value.strip()
-    arxiv = re.search(r"(?:arxiv:|arxiv\.org/(?:abs|pdf)/)?(\d{4}\.\d{4,5})(?:v\d+)?", raw, re.I)
+    # DOI suffixes such as 3597503.3639187 or 2024.3364512 look like arXiv IDs.
+    # The arXiv patterns are anchored so that such suffixes never match them.
+    for pattern in DOI_FORMS:
+        doi = pattern.match(raw)
+        if doi:
+            body = doi.group(1).strip().lower()
+            arxiv_doi = ARXIV_DOI.match(body)
+            return f"arxiv:{arxiv_doi.group(1)}" if arxiv_doi else f"doi:{body}"
+    arxiv = ARXIV_ID.match(raw) or ARXIV_URL.match(raw)
     if arxiv:
         return f"arxiv:{arxiv.group(1)}"
-    if raw.lower().startswith("doi:"):
-        return "doi:" + raw[4:].strip().lower()
-    if "doi.org/" in raw.lower():
-        return "doi:" + re.split(r"doi\.org/", raw, flags=re.I, maxsplit=1)[1].strip().lower()
-    return raw.lower()
+    lowered = raw.lower()
+    if lowered.startswith("title:"):
+        return "title:" + " ".join(lowered[len("title:"):].split())
+    return lowered
 
 
 def validate_string_list(value: Any, field: str, errors: list[str]) -> list[str]:
@@ -298,6 +318,8 @@ def cmd_upsert(args: argparse.Namespace) -> int:
     if existing is None:
         if not args.title or not args.canonical_url:
             raise ValueError("new records require --title and --canonical-url")
+        if args.status is None:
+            raise ValueError("new records require --status")
         record: dict[str, Any] = {
             "schema_version": "1.0",
             "paper_id": paper_id,
@@ -308,7 +330,7 @@ def cmd_upsert(args: argparse.Namespace) -> int:
             "last_seen_on": args.date,
             "status": args.status,
             "covered_on": [],
-            "coverage_level": args.coverage_level,
+            "coverage_level": args.coverage_level or "brief",
             "coverage_contexts": [],
             "tags": [],
             "selection_reason": (args.selection_reason or "").strip(),
@@ -322,14 +344,17 @@ def cmd_upsert(args: argparse.Namespace) -> int:
             raise ValueError("date must not be earlier than the existing last_seen_on")
         record["paper_id"] = paper_id
         record["last_seen_on"] = args.date
-        record["status"] = args.status
+        if args.status is not None:
+            record["status"] = args.status
         if args.title:
             record["title"] = args.title.strip()
         if args.canonical_url:
             record["canonical_url"] = args.canonical_url.strip()
         if args.first_public_date:
             record["first_public_date"] = args.first_public_date
-        if LEVEL_ORDER[args.coverage_level] > LEVEL_ORDER.get(record.get("coverage_level", "mention"), 0):
+        if args.coverage_level is not None and LEVEL_ORDER[args.coverage_level] > LEVEL_ORDER.get(
+            record.get("coverage_level", "mention"), 0
+        ):
             record["coverage_level"] = args.coverage_level
         if args.selection_reason:
             record["selection_reason"] = args.selection_reason.strip()
@@ -387,8 +412,16 @@ def build_parser() -> argparse.ArgumentParser:
     upsert.add_argument("--canonical-url")
     upsert.add_argument("--first-public-date")
     upsert.add_argument("--date", required=True)
-    upsert.add_argument("--status", default="covered", choices=sorted(ALLOWED_STATUS))
-    upsert.add_argument("--coverage-level", default="brief", choices=sorted(LEVEL_ORDER, key=LEVEL_ORDER.get))
+    upsert.add_argument(
+        "--status",
+        choices=sorted(ALLOWED_STATUS),
+        help="required for a new record; an existing record keeps its stored status when omitted",
+    )
+    upsert.add_argument(
+        "--coverage-level",
+        choices=sorted(LEVEL_ORDER, key=LEVEL_ORDER.get),
+        help="defaults to brief for a new record; raises an existing record's level only when given",
+    )
     upsert.add_argument("--context", action="append", default=[])
     upsert.add_argument("--tag", action="append", default=[])
     upsert.add_argument("--revisit-trigger", action="append", default=[])

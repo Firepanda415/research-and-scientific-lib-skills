@@ -4,25 +4,34 @@ const path = require('node:path');
 const { spawn, spawnSync } = require('node:child_process');
 const test = require('node:test');
 
-test('writing routing reaches sessions and subagents with Ponytail off and stdin open', async () => {
-  const root = path.join(__dirname, '..');
-  const script = path.join(root, 'hooks', 'writing-style-routing.js');
-  const hooks = JSON.parse(fs.readFileSync(path.join(root, 'hooks', 'hooks.json'), 'utf8')).hooks;
+const root = path.join(__dirname, '..');
+const script = path.join(root, 'hooks', 'writing-style-routing.js');
+
+// Codex keys hook trust by handler position and these registration fields. The plain
+// `node` command also runs unchanged when a host starts it through PowerShell.
+const writingHandler = event => ({
+  type: 'command',
+  command: `node "\${CLAUDE_PLUGIN_ROOT}/hooks/writing-style-routing.js" ${event}`,
+  timeout: 5,
+  statusMessage: 'Loading writing requirements...',
+});
+
+test('hooks.json registers only the writing route, at its trusted positions', () => {
+  const config = JSON.parse(fs.readFileSync(path.join(root, 'hooks', 'hooks.json'), 'utf8'));
+  assert.deepEqual(config, {
+    hooks: {
+      SessionStart: [{ matcher: 'startup|resume|clear|compact', hooks: [writingHandler('SessionStart')] }],
+      SubagentStart: [{ hooks: [writingHandler('SubagentStart')] }],
+    },
+  });
+  // Codex finds hooks/hooks.json by default when the manifest names no hooks file.
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, '.codex-plugin', 'plugin.json'), 'utf8'));
+  assert.equal(manifest.hooks, undefined);
+});
+
+test('writing routing reaches sessions and subagents with stdin open', async () => {
   for (const event of ['SessionStart', 'SubagentStart']) {
-    const routes = hooks[event].flatMap(group => group.hooks)
-      .filter(hook => hook.command.includes('/writing-style-routing.js'));
-    assert.equal(routes.length, 1);
-    assert.ok(routes[0].command.endsWith(`" ${event}`));
-    if (event === 'SessionStart') {
-      for (const source of ['startup', 'resume', 'clear', 'compact']) {
-        assert.ok(hooks[event].some(group => new RegExp(group.matcher).test(source)
-          && group.hooks.includes(routes[0])), `missing ${source} routing`);
-      }
-    }
-    const child = spawn(process.execPath, [script, event], {
-      env: { ...process.env, PONYTAIL_DEFAULT_MODE: 'off' },
-      stdio: ['pipe', 'pipe', 'pipe'],
-    });
+    const child = spawn(process.execPath, [script, event], { stdio: ['pipe', 'pipe', 'pipe'] });
     let stdout = '';
     child.stdout.on('data', chunk => { stdout += chunk; });
     const code = await new Promise((resolve, reject) => {
@@ -43,7 +52,8 @@ test('writing routing reaches sessions and subagents with Ponytail off and stdin
     }
     assert.match(context, /Temporary chat summaries and progress updates alone do not trigger it/);
     assert.match(context, /paste-ready text delivered in chat/);
-    assert.match(context, /remains active when Ponytail is off/);
+    assert.match(context, /returned to another agent or a program/);
+    assert.doesNotMatch(context.split(root).join(''), /ponytail/i);
   }
   const invalid = spawnSync(process.execPath, [script, 'InvalidEvent'], { encoding: 'utf8' });
   assert.equal(invalid.status, 1);

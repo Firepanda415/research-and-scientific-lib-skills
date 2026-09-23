@@ -2,7 +2,7 @@
 
 ## House style
 
-The user avoids em dashes in authored research prose. Preserve verbatim quotations, code identifiers, old-text anchors, and bibliographic titles. Apply the other explicit vocabulary and punctuation preferences in `research-writing-style` when producing or revising text.
+The collection's default house style in `research-writing-style` excludes em dashes and semicolons from authored research prose, and an explicit user instruction or the destination's style guide overrides it. Preserve verbatim quotations, code identifiers, old-text anchors, and bibliographic titles. Apply the other vocabulary and punctuation rules in `research-writing-style` when producing or revising text.
 
 These are editorial requirements. An em dash or a repeated word is not automatically a Major scientific finding. Do not infer AI authorship from vocabulary, sentence shape, or a detector score.
 

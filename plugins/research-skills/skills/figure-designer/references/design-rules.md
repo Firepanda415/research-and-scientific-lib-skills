@@ -22,6 +22,16 @@ Label axes with quantity and unit where applicable. A bar encodes magnitude by l
 
 Use error bars, intervals, or distributions when uncertainty matters to the claim. State what the interval represents, the sampling unit, and the number of independent runs. Standard deviation, standard error, confidence intervals, and a box plot's quartiles are different summaries. Do not invent uncertainty or request expensive repeated runs solely to add error bars.
 
+## Circuit and schematic diagrams
+
+Draw circuits with a tool that produces vector output, such as quantikz in LaTeX or a framework's circuit drawer exported as PDF or SVG. Check the drawing against the text as well as against the code that generated it.
+
+- Order the wires so that the qubit order and endianness match the kets and indices in the text, and state the convention when it could be misread. Framework conventions differ. Qiskit, for example, writes bitstrings with qubit 0 as the rightmost bit.
+- Show measurements explicitly, together with the classical wires or registers that receive their outcomes and any classically controlled operations.
+- Use the gate names, parameters, and angle conventions of the equations, including sign and factor-of-two conventions for rotations.
+- Mark ancillas, resets, mid-circuit measurements, and postselection, and state the postselected outcome.
+- In other schematics, keep component names and signal directions consistent with the prose and equations.
+
 ## Decoration and severity
 
 Remove decoration that obscures data, such as unnecessary perspective, gradients, or heavy grids. Three-dimensional encoding is useful when the scientific object is actually three-dimensional. Patterns can support accessibility.

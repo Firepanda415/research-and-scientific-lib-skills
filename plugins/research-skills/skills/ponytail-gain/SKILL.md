@@ -11,11 +11,11 @@ description: >
 
 # Ponytail Gain
 
-Display this scoreboard when invoked. One-shot: do NOT change mode, write flag
-files, or persist anything.
+Display this scoreboard when invoked. One-shot: do NOT change the level or
+persist anything.
 
 The figures below are historical upstream results from
-`benchmarks/results/2026-06-18-agentic.md`: 12 feature tasks on a FastAPI + React
+`../../benchmarks/results/2026-06-18-agentic.md`: 12 feature tasks on a FastAPI + React
 repository, Haiku 4.5, four runs per task and arm, means relative to a no-skill
 baseline. They predate this fork's customized instructions. Display the card
 without rerunning benchmarks.
@@ -30,7 +30,7 @@ without rerunning benchmarks.
 | Agent session cost | −20% |
 | Agent session elapsed time | −27% |
 
-12 feature tasks · Haiku 4.5 · 4 runs per task/arm · means.
+12 feature tasks · Claude Code 2.1.177 + Haiku 4.5 · 4 runs per task/arm · means. No Codex measurement exists.
 This measures code generation sessions, not the runtime or memory of the
 produced software. It is not validation of this customized fork.
 
@@ -50,4 +50,3 @@ Neither measures realized savings.
 ## Boundaries
 
 One-shot display. Edits nothing, changes no mode.
-"stop ponytail" or "normal mode": revert.

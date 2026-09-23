@@ -21,8 +21,8 @@ class Finding:
 
 
 FENCE_RE = re.compile(r"^\s*(`{3,}|~{3,})")
-PLACEHOLDER_RE = re.compile(r"\{\{[^{}\n]+\}\}")
-ANGLE_PLACEHOLDER_RE = re.compile(r"<(?:your-)?[A-Za-z][A-Za-z0-9_-]*>")
+PLACEHOLDER_RE = re.compile(r"\{\{[A-Z0-9_]+\}\}")
+ANGLE_PLACEHOLDER_RE = re.compile(r"(?<![\w:])<(?:your-)?[A-Za-z][A-Za-z0-9_-]*>")
 INLINE_CODE_RE = re.compile(r"(?<!`)`([^`\n]+)`(?!`)")
 BARE_PYTHON_RE = re.compile(
     r"(?:^|[;&|]\s*)\s*(?:\$\s+)?python3?\s+\S"
@@ -49,7 +49,11 @@ AGENT_NAME_RE = re.compile(r"\b(?:Claude|Codex|Anthropic|ChatGPT|Copilot|GPT-\d)
 SHELL_FENCE_LANGUAGES = {"", "bash", "console", "sh", "shell", "zsh"}
 
 
-def _outside_fences(text: str) -> tuple[str, bool]:
+def _outside_fences(
+    text: str,
+    *,
+    include_blockquotes: bool = False,
+) -> tuple[str, bool]:
     """Return prose outside Markdown fences and whether fences are balanced."""
     output: list[str] = []
     marker: str | None = None
@@ -63,7 +67,9 @@ def _outside_fences(text: str) -> tuple[str, bool]:
                 marker = None
             output.append("")
             continue
-        if marker is None and not line.lstrip().startswith(">"):
+        if marker is None and (
+            include_blockquotes or not line.lstrip().startswith(">")
+        ):
             output.append(line)
         else:
             output.append("")
@@ -130,6 +136,7 @@ def lint_prompt(
 ) -> list[Finding]:
     findings: list[Finding] = []
     prose, fences_balanced = _outside_fences(text)
+    quoted_prose, _ = _outside_fences(text, include_blockquotes=True)
 
     if not text.strip():
         return [Finding("ERROR", "prompt is empty")]
@@ -162,7 +169,7 @@ def lint_prompt(
         )
 
     if kind == "correction" and not re.search(
-        r"\b(supersedes|replaces)\b", prose, flags=re.IGNORECASE
+        r"\b(supersedes|replaces)\b", quoted_prose, flags=re.IGNORECASE
     ):
         findings.append(
             Finding("ERROR", "correction must identify what it supersedes or replaces")
@@ -315,7 +322,7 @@ def lint_prompt(
             )
 
     series_marker = re.search(
-        r"\b(?:job[- ]series|serial jobs?|change set\s+[A-Za-z0-9]+)\b",
+        r"\b(?:job[- ]series|serial jobs?|(?-i:Change Set[ \t]+(?:[A-Z]|\d+)))\b",
         prose,
         flags=re.IGNORECASE,
     )
@@ -355,7 +362,8 @@ def lint_prompt(
             findings.append(
                 Finding(
                     "WARNING",
-                    "plan-derived series prompt has no plan-clause coverage record",
+                    "if this project uses a clause ledger, the plan-derived series "
+                    "prompt has no plan-clause coverage record",
                 )
             )
 
@@ -369,7 +377,8 @@ def lint_prompt(
             findings.append(
                 Finding(
                     "WARNING",
-                    "targeted battery has no named closure job or full-battery owner",
+                    "if this project requires a closure owner, the targeted battery "
+                    "has no named closure job or full-battery owner",
                 )
             )
 
@@ -389,12 +398,12 @@ def lint_prompt(
             Finding(
                 "WARNING",
                 f"line {_line_number(prose, agent_match.start())}: agent or "
-                "process name in prompt prose; contracts never name agents, "
-                "sessions, or the review process",
+                "process name in prompt prose; avoid naming agents or sessions "
+                "unless the job depends on a specific host's tools",
             )
         )
 
-    if not re.search(r"\bdeviations?\b", prose, flags=re.IGNORECASE):
+    if not re.search(r"\bdeviations?\b", quoted_prose, flags=re.IGNORECASE):
         findings.append(
             Finding(
                 "WARNING",
@@ -444,9 +453,9 @@ def lint_prompt(
         findings.append(
             Finding(
                 "WARNING",
-                f"line {_line_number(prose, open_test_surface.start())}: replace "
-                "'new test modules' with a frozen current-tree list or the "
-                "surface-conflict protocol",
+                f"line {_line_number(prose, open_test_surface.start())}: if this "
+                "project uses a closed test surface, replace 'new test modules' "
+                "with a frozen current-tree list or name the permitted test paths",
             )
         )
 
@@ -455,7 +464,7 @@ def lint_prompt(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("prompt", type=Path)
+    parser.add_argument("prompt", help="prompt file path, or '-' to read stdin")
     parser.add_argument("--kind", choices=("job", "correction"), required=True)
     token_mode = parser.add_mutually_exclusive_group()
     token_mode.add_argument(
@@ -470,7 +479,14 @@ def main() -> int:
     parser.add_argument("--strict", action="store_true", help="treat warnings as errors")
     args = parser.parse_args()
 
-    text = args.prompt.read_text(encoding="utf-8")
+    try:
+        if args.prompt == "-":
+            text = sys.stdin.buffer.read().decode("utf-8")
+        else:
+            text = Path(args.prompt).read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError) as error:
+        print(f"lint_job_prompt: cannot read {args.prompt}: {error}", file=sys.stderr)
+        return 2
     findings = lint_prompt(
         text,
         kind=args.kind,

@@ -1,0 +1,40 @@
+schema_version: "1.1"
+name: handoff-agent-prompt
+description: >-
+  A verified fix handed to another coding agent for a later session. Resume state,
+  memory and a notebook entry are near misses. The user will send this prompt, so the
+  writing route may also apply and is not checked.
+tags: [routing, handoff]
+execution:
+  max_turns: 8
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    I've verified a bug in our time-evolution code. The second-order Trotter step applies the half step to the wrong term, so the error scales like dt instead of dt^2. I confirmed the scaling on a two-qubit Heisenberg model. Another coding agent will make the fix tomorrow while I'm away. Write the prompt I should give it so it can finish without asking me anything.
+graders:
+  - name: calls-write-implementation-job-prompts
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?write-implementation-job-prompts"'
+    min: 1
+  - name: skips-research-watchdog-protocol
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-watchdog-protocol"'
+    min: 0
+    max: 0
+    arm: both
+  - name: skips-maintain-project-memory
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?maintain-project-memory"'
+    min: 0
+    max: 0
+    arm: both
+  - name: skips-write-research-log
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?write-research-log"'
+    min: 0
+    max: 0
+    arm: both

@@ -63,7 +63,7 @@ For example:
 ```markdown
 ## 1. 结论
 
-在 static single-mode、无 pump、以 \(H_0=\omega N\) 为 rotating frame 的情况下，RWA 的简化规则是：
+在 static single-mode、无 pump、以 $H_0=\omega N$ 为 rotating frame 的情况下，RWA 的简化规则是：
 
 $$
 (a^\dagger)^r a^s \mapsto \text{keep only if } r=s.
@@ -73,7 +73,7 @@ $$
 Then immediately state the limitation:
 
 ```markdown
-更一般的标准不是 \(r=s\)，而是 term 在 chosen rotating frame 中是否 slow / resonant。
+更一般的标准不是 $r=s$，而是 term 在 chosen rotating frame 中是否 slow / resonant。
 ```
 
 ---
@@ -87,10 +87,10 @@ Use compact tables:
 ```markdown
 | 符号 | 含义 |
 |---|---|
-| \(a\) | annihilation operator |
-| \(a^\dagger\) | creation operator |
-| \(N=a^\dagger a\) | Fock number operator |
-| \(\omega\) | oscillator angular frequency |
+| $a$ | annihilation operator |
+| $a^\dagger$ | creation operator |
+| $N=a^\dagger a$ | Fock number operator |
+| $\omega$ | oscillator angular frequency |
 ```
 
 For formulas involving advanced concepts, add one sentence explaining the role of the concept.
@@ -139,13 +139,13 @@ For physics approximations, explicitly list assumptions:
 3. low excitation
 4. no strong pump
 5. no unintended resonance
-6. \(\hbar=1\) unless otherwise stated
+6. $\hbar=1$ unless otherwise stated
 ```
 
 For RWA, state the actual scale condition:
 
 ```markdown
-如果 dropped term 的 rotating frequency 是 \(\Omega\)，term strength 是 \(g\)，需要：
+如果 dropped term 的 rotating frequency 是 $\Omega$，term strength 是 $g$，需要：
 
 $$
 \lvert g\rvert \ll \lvert \Omega\rvert.
@@ -171,39 +171,75 @@ Use the pattern:
 11. State final effective Hamiltonian
 12. State validity conditions
 
-For Josephson-to-Kerr explanations, use this chain:
+For Josephson-to-Kerr explanations, use this chain. It keeps $H$ in energy units until the explicit division by $\hbar$, and each step names its role or its status label from section 3.
 
 ```markdown
+Raw Hamiltonian (energy units, Josephson energy $E_J$, charging energy $E_C=e^2/(2C_\Sigma)$ for elementary charge $e$ and total capacitance $C_\Sigma$, Cooper-pair number $n_q$ conjugate to the phase $\varphi$ with $[\varphi,n_q]=i$):
+
 $$
 H=4E_Cn_q^2-E_J\cos\varphi.
 $$
 
-$$
--E_J\cos\varphi
-\approx
--E_J+\frac{E_J}{2}\varphi^2-\frac{E_J}{24}\varphi^4.
-$$
+Low-energy expansion (valid for small phase fluctuations, terms of order $\varphi^6$ and higher dropped):
 
 $$
-H_2=4E_Cn_q^2+\frac{E_J}{2}\varphi^2
-=\hbar\omega_p\left(N+\frac{1}{2}\right).
+-E_J\cos\varphi\approx-E_J+\frac{E_J}{2}\varphi^2-\frac{E_J}{24}\varphi^4.
 $$
 
-$$
-H_4=-\frac{E_C}{12}(a+a^\dagger)^4.
-$$
+Definition (ladder operators and plasma frequency, chosen so that $[a,a^\dagger]=1$ and the quadratic part of $H$ is diagonal):
 
 $$
-(a+a^\dagger)^4
-\overset{\mathrm{RWA}}{\longrightarrow}
-6N(N-1)+12N+3.
+\varphi=\left(\frac{2E_C}{E_J}\right)^{1/4}(a+a^\dagger),\qquad n_q=\frac{i}{2}\left(\frac{E_J}{2E_C}\right)^{1/4}(a^\dagger-a),\qquad \hbar\omega_p=\sqrt{8E_JE_C}.
 $$
 
+Exact identity (given the definition, with $N=a^\dagger a$):
+
 $$
-\frac{H_{\mathrm{eff}}}{\hbar}
-\approx
-\omega_{01}N+\frac{K}{2}N(N-1).
+H_2=4E_Cn_q^2+\frac{E_J}{2}\varphi^2=\hbar\omega_p\left(N+\frac{1}{2}\right).
 $$
+
+Exact identity (since $\varphi^4=\frac{2E_C}{E_J}(a+a^\dagger)^4$):
+
+$$
+H_4=-\frac{E_J}{24}\varphi^4=-\frac{E_C}{12}(a+a^\dagger)^4.
+$$
+
+RWA effective replacement (frame rotating at $\omega_p$, keep terms with equal numbers of $a$ and $a^\dagger$, requires $E_C\ll\hbar\omega_p$):
+
+$$
+(a+a^\dagger)^4\overset{\mathrm{RWA}}{\longrightarrow}6a^{\dagger2}a^2+12a^\dagger a+3=6N(N-1)+12N+3.
+$$
+
+RWA effective quartic term (constant $-E_C/4$ dropped):
+
+$$
+H_4\overset{\mathrm{RWA}}{\longrightarrow}-\frac{E_C}{2}N(N-1)-E_CN.
+$$
+
+Effective Hamiltonian after frequency renormalization (constants $-E_J$ and $\hbar\omega_p/2$ dropped, linear term $-E_CN$ absorbed into the frequency):
+
+$$
+H_{\mathrm{eff}}=(\hbar\omega_p-E_C)N-\frac{E_C}{2}N(N-1).
+$$
+
+Units (divide by $\hbar$, so every coefficient becomes an angular frequency):
+
+$$
+\frac{H_{\mathrm{eff}}}{\hbar}=\left(\omega_p-\frac{E_C}{\hbar}\right)N-\frac{E_C}{2\hbar}N(N-1).
+$$
+
+Coefficient matching (convention $\frac{H_{\mathrm{eff}}}{\hbar}=\omega_{01}N+\frac{K}{2}N(N-1)$, which defines $\omega_{01}$ and $K$, with $\hbar\omega_{01}=E_1-E_0$ and $\hbar\omega_{12}=E_2-E_1$ for the Fock-state eigenvalues $E_n$ of $H_{\mathrm{eff}}$):
+
+$$
+\omega_{01}=\omega_p-\frac{E_C}{\hbar},\qquad K=-\frac{E_C}{\hbar}<0,\qquad \alpha=\omega_{12}-\omega_{01}=K.
+$$
+
+Validity conditions:
+
+- $E_J/E_C\gg1$, which gives $E_C\ll\hbar\omega_p$ and small phase fluctuations.
+- Low excitation, $\langle n\rvert\varphi^2\lvert n\rangle=\sqrt{2E_C/E_J}\,(2n+1)\ll1$ for every occupied Fock level $n$.
+- First order in the $\varphi^4$ term. The $\varphi^6$ term and second-order effects of the discarded quartic terms change $K$ at relative order $\sqrt{E_C/E_J}$.
+- Noncompact $\varphi$. This ignores the offset-charge dispersion, which is exponentially small in $\sqrt{8E_J/E_C}$.
 ```
 
 ---
@@ -215,17 +251,17 @@ After deriving an equation, add a short interpretation.
 Example:
 
 ```markdown
-数学上，这是 \(N\) 的 eigenvalue 被 \(a\) 降低 1。
+数学上，这是 $N$ 的 eigenvalue 被 $a$ 降低 1。
 
-物理上，\(a\) removes one excitation, so \(N\) counts one fewer excitation after \(a\) acts.
+物理上，$a$ removes one excitation, so $N$ counts one fewer excitation after $a$ acts.
 ```
 
 For circuit variables:
 
 ```markdown
-\(\varphi\) 是 coordinate-like / position-like variable。
-\(n_q\) 是 momentum-like / charge-like variable。
-这里的 \(n_q\) 不是 Fock number operator \(N=a^\dagger a\)。
+$\varphi$ 是 coordinate-like / position-like variable。
+$n_q$ 是 momentum-like / charge-like variable。
+这里的 $n_q$ 不是 Fock number operator $N=a^\dagger a$。
 ```
 
 ---
@@ -243,11 +279,11 @@ Then state the correction.
 Examples:
 
 ```markdown
-\(4E_Cn_q^2\) 不是不重要。它和 \(\frac{E_J}{2}\varphi^2\) 一起构成 harmonic oscillator。
+$4E_Cn_q^2$ 不是不重要。它和 $\frac{E_J}{2}\varphi^2$ 一起构成 harmonic oscillator。
 ```
 
 ```markdown
-\(r=s\) 不是 RWA 的根本定义，只是 static single-mode 情况下的简化规则。
+$r=s$ 不是 RWA 的根本定义，只是 static single-mode 情况下的简化规则。
 ```
 
 ---
@@ -279,6 +315,10 @@ The minimal memory version should contain only equations and rules the user shou
 ## Markdown formatting rules
 
 The user prefers Markdown notes that can be copied into VS Code.
+
+### Inline math
+
+Use `$...$` for inline math. Do not use `\(...\)`.
 
 ### Display math
 
@@ -540,8 +580,9 @@ Before finalizing an answer, check:
 4. Is RWA described as a frame-dependent effective approximation?
 5. Are advanced terms kept in English?
 6. Are display equations using `$$...$$`?
-7. Is ket notation written with `\lvert ...\rangle`?
-8. Is there no standalone `=` line?
-9. Is there no raw `|n\rangle` inside Markdown tables?
-10. Is there a minimal memory version?
-11. If the user asks for Markdown notes, is the output copy-paste safe for VS Code?
+7. Is inline math written with `$...$`?
+8. Is ket notation written with `\lvert ...\rangle`?
+9. Is there no standalone `=` line?
+10. Is there no raw `|n\rangle` inside Markdown tables?
+11. Is there a minimal memory version?
+12. If the user asks for Markdown notes, is the output copy-paste safe for VS Code?

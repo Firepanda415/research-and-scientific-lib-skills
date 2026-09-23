@@ -1,6 +1,6 @@
 ---
 name: benchmark-paper-template
-description: Plan, draft, or assess a benchmark paper's evaluation gap, construction, measurement design, and findings. Use for benchmark contributions and their paper structure. Adapt the evaluation to the scientific question; an LLM dataset, companion method, human baseline, or fixed paper skeleton is not required.
+description: Plan, draft, or assess the evaluation gap, construction, measurement design, and findings of the user's benchmark paper, in any field including numerical and quantum benchmarks. An LLM dataset, companion method, human baseline, or fixed paper skeleton is not required. Not for refereeing another author's manuscript.
 ---
 
 # Benchmark Paper Template
@@ -40,7 +40,8 @@ evaluation; absence of such a method is not a missing contribution.
 Answer the requested stage: an idea assessment, experiment plan, outline, draft,
 or review. Infer available inputs from the supplied artifacts and ask only for
 missing information that changes the work. Do not run all stages or a
-pre-submission checklist merely because one stage was requested.
+pre-submission checklist merely because one stage was requested. When drafting
+or revising manuscript prose, follow `research-writing-style`.
 
 A common narrative is evaluation need → benchmark design → measurements →
 findings → implications. Choose sections, figures, research questions, and

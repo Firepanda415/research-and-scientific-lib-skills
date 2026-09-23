@@ -4,9 +4,11 @@ Use these rules when authoring prose or math in a LaTeX, Markdown, or other sour
 
 ## Prose and captions
 
-One paragraph is one physical source line. Apply the same rule to figure and table captions. Hard wraps inside a paragraph interfere with the user's paragraph-by-paragraph Overleaf workflow. Display math and table rows keep their own line structure.
+Follow the target file's existing paragraph wrapping and equation-row layout. When the file sets no convention, as in an Overleaf manuscript edited paragraph by paragraph, write one paragraph per physical source line and apply the same rule to figure and table captions. Display math and table rows keep their own line structure. These rules govern new or replaced text, so leave untouched paragraphs in their current layout.
 
 ## Display math
+
+Use these defaults when the file has no equation-row convention of its own.
 
 - Keep a short display equation (`\[...\]` or a one-row environment) on one source line, delimiters included.
 - In an `align`-family environment, use one source line per equation row (one `\\` group) whenever it reasonably fits.

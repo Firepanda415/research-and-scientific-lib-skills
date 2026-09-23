@@ -102,9 +102,7 @@ Before delivering a reusable document:
 
 ## Hand the draft to review
 
-After composing or editing, enter the parent's mandatory [adversarial review stage](prose-review.md). Review-only tasks enter it directly. Check the full deliverable after assembling sections or delegated contributions. Look for repeated contrasts, canned openings, empty endings, decorative triads, generic importance claims, borrowed authority, and chat residue. Compare the revised claims with the input, including quantities and qualifications. Repair a clumsy paragraph around its actual point rather than exchanging one stock phrase for another.
-
-Keep this review internal unless the user requests an audit or review-only work. Do not automatically return a draft, a list of AI tells, and a second rewrite. Deliver the requested finished text, with only necessary notes outside it. For authorized file editing, edit the file and report the result. A review-only request does not authorize file changes. Apply the parent's final lexical and meaning checks to every new paste-ready block.
+After composing or editing, enter the parent's mandatory [adversarial review stage](prose-review.md), which checks the assembled deliverable and governs its delivery. Review-only tasks enter it directly.
 
 ## Examples of edits that keep the information
 

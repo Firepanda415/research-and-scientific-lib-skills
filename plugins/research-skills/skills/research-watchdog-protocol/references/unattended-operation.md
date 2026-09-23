@@ -5,6 +5,13 @@ actual persistent task, scheduler, cluster, or supervisor; a skill cannot create
 background execution by itself. If persistence is unavailable, state the limit
 and complete useful foreground work without promising an unattended run.
 
+Treat a mechanism as persistent only if it survives the end of the current
+session or app, lasts long enough for the expected run, and can reach the job's
+state (scheduler, logs, and any network or ssh path it needs). For example, an
+in-session loop stops with the session, and a cloud routine may not see local
+files. Tell the user which mechanism was chosen, when it stops, and what it
+cannot see.
+
 Establish the objective, completion condition, allowed work, resource budget,
 and relevant retry/stop conditions from existing authorization. Ask only for a
 missing decision that prevents launch or exceeds that authority. A bounded
@@ -26,10 +33,8 @@ failure diagnosis with bounded retention. Do not add full simulations, repeated
 test suites, dense diagnostics, or duplicate checkpoints solely for monitoring.
 
 Validate affected behavior at meaningful milestones and reuse evidence that
-remains valid for the code, inputs, environment, and claim. Before restarting
-after an uncertain response, inspect the task or scheduler/job ID to avoid
-duplicate submission. Do not restart intentional pauses or exceed the approved
-scope, budget, or retry conditions.
+remains valid for the code, inputs, environment, and claim. Restarts follow the
+limits in the skill's [Actions](../SKILL.md#actions) section.
 
 Set cadence, delay thresholds, and notifications from expected runtime, normal
 artifact cadence, costs, and user preference. Stay quiet during unchanged healthy

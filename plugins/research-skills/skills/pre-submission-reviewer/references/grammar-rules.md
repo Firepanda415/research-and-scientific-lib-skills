@@ -37,8 +37,8 @@ singular verbs.
 - we propose, we show, we introduce.
 - they demonstrate, they report.
 
-The ICML or VLDB paper (singular) uses the third-person singular
-verb form:
+A singular subject such as "the method" takes the third-person
+singular verb form:
 
 - The method predicts accurately.
 - Not: The method predict accurately.
@@ -63,9 +63,10 @@ Correct unexplained shifts, not meaningful changes in tense.
 
 ## 4. Sentence complexity
 
-Rule G4: one sentence, one main idea. Two verbs in one sentence
-require a connector. Avoid sentences with two independent clauses
-joined only by a comma (comma splice).
+Rule G4: one sentence, one main idea. Two finite clauses need a
+conjunction, a relative pronoun, or separate sentences. Avoid
+sentences with two independent clauses joined only by a comma
+(comma splice).
 
 | Bad | Good |
 |---|---|
@@ -118,23 +119,23 @@ Common Chinglish patterns to flag:
   avoid repetition; terminology consistency takes precedence.
 - Over-hedged statements ("it may be the case that perhaps the
   method possibly") when a direct statement is clearer.
-- Translating a Chinese draft with a machine translator. Never do
-  this; the output accumulates un-idiomatic phrasing that
-  reviewers notice immediately. Write in English from the start.
+- Idioms, collocations, and word order typical of literal
+  translation from a Chinese draft. Flag the specific phrase and
+  give an idiomatic English wording with the same meaning.
 
 ## 8. Punctuation in quotations
 
 Rule G8: this is a venue-dependent style rule, not a grammar
-rule. Default to logical punctuation (punctuation inside
-quotation marks only if part of the quoted material), but if the
-target venue's template mandates American typography (as most
-ACM/IEEE templates do), follow the venue and skip this check.
+rule. Follow the venue or journal style. When it specifies none,
+keep the manuscript's existing convention consistent. American
+style places a trailing comma or period inside the quotation
+marks. Logical style places it inside only when it belongs to the
+quoted material.
 
-| American (avoid) | Logical (use) |
+| American | Logical |
 |---|---|
 | approach is called "data-centric AI," which emphasises | approach is called "data-centric AI", which emphasises |
 | outputs what it calls "semantic summaries." | outputs what it calls "semantic summaries". |
 
-Also: use backticks and single or double quotation marks per
-LaTeX convention: `` `` `` for open and `'' '` for close, not the
-straight typewriter character.
+For LaTeX quotation marks, see Rule L12 in
+[latex-rules.md](latex-rules.md).

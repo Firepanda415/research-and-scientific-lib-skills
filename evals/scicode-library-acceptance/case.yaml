@@ -1,0 +1,32 @@
+schema_version: "1.1"
+name: scicode-library-acceptance
+description: >-
+  A merge decision on a change to a numerical library. Library review applies, general
+  code review and single-computation work do not.
+tags: [routing, scientific-code]
+execution:
+  max_turns: 8
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    A contributor opened a pull request that replaces the dense eigensolver in our open-source quantum-chemistry package with a sparse Lanczos routine. CI passes. As the maintainer I have to decide whether to merge it. What would you check first to be sure the energies, degeneracies and convergence behaviour are still right? I'll send the diff after you answer.
+graders:
+  - name: calls-scientific-library-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?scientific-library-review"'
+    min: 1
+  - name: skips-deep-code-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?deep-code-review"'
+    min: 0
+    max: 0
+    arm: both
+  - name: skips-scientific-computing-correctness
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?scientific-computing-correctness"'
+    min: 0
+    max: 0
+    arm: both

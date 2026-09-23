@@ -7,8 +7,7 @@ Use this reference when a cleanup can change numerical claims, validation or
 certificate semantics, resource estimates, experiment records, tests, mutation
 probes, reports, examples, notebooks, documentation promises, CI gates, or the
 dependency environment in which results are interpreted. Respect explicit
-scope exclusions; do not reopen PDFs, release policy, hardware claims, or other
-areas the user excluded.
+scope exclusions and do not reopen areas the user excluded.
 
 ## Separate three questions
 
@@ -35,7 +34,7 @@ For every affected scientific claim, trace all applicable surfaces:
 | --- | --- |
 | Numerical implementation | Is there a closed-form, dense, hand-derived, published, or otherwise independent oracle? |
 | Validation and certificates | What was evaluated, under which scope and tolerance, and what remains unresolved? |
-| Resource accounting | What physical or logical quantity is counted, over which circuit population and lifecycle event? |
+| Resource accounting | What physical or logical quantity is counted, over which input (for example, circuit) population and lifecycle event? |
 | Structured records | Are value, provenance, units, scope, and `not evaluated` states retained? |
 | Rendered reports | Can a reader see the same caveats and quantities without inspecting `to_dict()`? |
 | Serialization and replay | Can persisted evidence be reconstructed without silently strengthening its status? |

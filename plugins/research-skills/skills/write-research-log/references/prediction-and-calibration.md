@@ -6,6 +6,11 @@ time horizon, or resolution rule when it helps evaluate that prediction; no full
 set of fields is compulsory. Leave unknown outcomes pending. This is a complete
 forecast, not an unfinished report.
 
+For a prospective prediction, record the date it was made, and the commit or
+revision when it is saved under version control. When a requested
+preregistration is returned only in chat, say that showing it preceded the
+outcome depends on the user saving or committing it.
+
 For a requested paper-result-masking exercise, inspect the supplied problem and
 method without opening the held-out results, then record the prediction before
 revealing those results. Do not call the exercise blinded if the relevant results

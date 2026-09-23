@@ -36,9 +36,9 @@ successful process into an operational failure.
 
 ## Existing file-based records
 
-These notes interpret existing version 1.0 records; they do not require a new
-monitor to create them. Prefer [native state](#native-state-first) and preserve
-historical data without migration.
+These notes interpret records written by earlier file-based deployments of this
+watchdog workflow (format version 1.0). A new monitor need not create them. Prefer
+[native state](#native-state-first) and preserve historical data without migration.
 
 - `watchdog_config.json` records task paths, the heartbeat path, expected
   artifacts, freshness/progress thresholds, nudge limits, and documented actions

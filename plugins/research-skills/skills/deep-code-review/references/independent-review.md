@@ -30,9 +30,10 @@ required.
   deduplication, severity, and the final verdict. Continue useful local review
   while agents run.
 
-Source-mutating probes must run in an isolated worktree or after all read-only
-review has finished and the exact restoration check is defined. Do not let
-finders, tests, and mutation tools share mutable source state.
+Source-mutating probes run only in an isolated disposable checkout (a temporary
+worktree or copy). Confirm that the tests import from that copy rather than an
+editable install of the original, and leave the user's checkout untouched. Do
+not let finders, tests, and mutation tools share mutable source state.
 
 Before classifying a mutation as killed, deduplicate its selected tests and
 require them to pass with zero skips on the unmodified tree. Count a kill only

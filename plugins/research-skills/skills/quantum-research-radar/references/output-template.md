@@ -86,6 +86,8 @@ Do not paraphrase three abstracts.
 
 Select by expected research value to the user, not popularity. List fewer items when appropriate; no section must contain three entries.
 
+Close every briefing, including compact mode, with the one-line coverage note described in `SKILL.md`.
+
 ---
 
 ## Tags

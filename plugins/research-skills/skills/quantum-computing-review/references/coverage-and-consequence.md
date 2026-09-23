@@ -6,7 +6,8 @@ mode, focus on the original concerns, changed sections, and new claims. A reques
 comprehensive audit must not stop simply because the recommendation is already apparent.
 
 1. **Claim and attribution pass.** Check the title-level novelty, every load-bearing claim,
-   quantum-specific contribution, strongest alternative explanation, baseline fairness,
+   the contribution of the credited component (the quantum-specific contribution, for a
+   quantum manuscript), strongest alternative explanation, baseline fairness, platform or
    hardware interpretation, scalability, and novelty boundary.
 2. **Numerical algorithm and evidence pass.** Check equations, algorithm semantics,
    convergence or failure behavior, hyperparameters, stopping rules, metrics, statistics,
@@ -37,4 +38,6 @@ Use these checks when the corresponding mechanism carries a claim:
 - **Embedded local-objective gate.** When a local or block subroutine is embedded in a global
   objective, distinguish the objective induced by dropping cross-boundary terms from the
   conditional global objective obtained by fixing the outside variables. Check whether this
-  distinction changes local rankings, updates, or the quantum-contribution ablation.
+  distinction changes local rankings, updates, or the contribution ablation.
+
+The [reviewer handbook](reviewer-handbook.md) gives the full procedures under `#### 3.3 Metric Validity`, `#### 3.4 Finite-Shot Decoder and Product-Distribution Scaling: Hard Gate`, and the embedded local-objective paragraph of `### Step 4: Isolate the Claimed Contribution`. Load them when a gate applies to a central claim.

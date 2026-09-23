@@ -41,6 +41,11 @@ shows it is stale. Do not promote an AI-authored plan or a file name to immutabl
 authority. Preserve explicit user requirements and identify a real conflict if
 one prevents execution.
 
+A handoff the user will send, keep, or reuse is paste-ready text and follows
+`research-writing-style`. A brief that an orchestrator passes directly to a
+subagent is intermediate material for that agent and is outside the writing
+route.
+
 ## Write the smallest sufficient handoff
 
 Usually include:
@@ -48,7 +53,8 @@ Usually include:
 - the concrete problem, desired behavior, and relevant baseline or artifact;
 - the existing owner and affected paths, with genuine scope limits;
 - the scoped relation, relevant representation/operation distinctions, and material exclusions;
-- separating counterexample, legal-preservation or forbidden-work evidence and project-required checks;
+- for new behavior as well as fixes, the property each requested test checks and the independent source of its expected result, such as a specification, derivation, reference implementation, or known-good case;
+- separating counterexample (for a fix, a regression check that fails on the pre-change code and passes after the fix), legal-preservation evidence (inputs that must keep working) or forbidden-work evidence, and project-required checks;
 - expected deliverables and the actual action boundary.
 
 Specify outcomes before helpers or architecture. Preserve the relation when
@@ -62,15 +68,33 @@ For a correction, state what supersedes the old instruction and why, using
 helpful. Preserve dispositions of relevant findings without making a new
 permanent test for each review comment. Existing evidence may cover several fixes.
 
-Use the current project's supplied guidance to identify required reading and its actual paths. Give the implementer only material relevant to the assigned role and task, following the project's access and storage rules. Carry applicable workspace setup, import binding, integration, and delivery requirements into the handoff. Do not require a project to adopt another project's document layout or workflow.
+Use the current project's supplied guidance to identify required reading and its actual paths. Give the implementer only material relevant to the assigned role and task, following the project's access and storage rules. Carry applicable workspace setup, import binding, integration, and delivery requirements into the handoff. Do not require a project to adopt another project's document layout or workflow. A brief for another implementer belongs to this skill. Resume state for continuing the same work in a later session belongs to `research-watchdog-protocol`.
 
 ## Proportional acceptance
 
-Choose checks that could detect the plausible defect. Use the concrete public
-path, input, relation, and tolerance when those determine correctness. An
-independent oracle, owner-call count, forbidden-work sentinel, or mutation probe
-is useful when output equality could conceal a wrong algorithm or hidden cost;
-it is not a field required on every acceptance row.
+Choose checks that could detect the plausible defect. A fix's regression test
+must fail on the pre-change code and pass after the fix. An earlier reproduction
+of that failure can be reused while it still applies to the current code. For
+other checks, request a new deliberate small breakage only when a plausible
+defect could still pass the checks unnoticed and the cost is justified. The
+number of changed tests does not decide this. Evidence still valid for the
+current code and behavior can be reused, and one breakage can support several
+tests when the report names the property it covers. A rename or reorganization
+that leaves what every assertion checks unchanged needs no new failure
+demonstration. An import or missing-symbol failure on the pre-change code is
+valid evidence when importability or that public export is the contract.
+Otherwise a failure caused only by the feature's absence, or by deleting text
+that is not itself the contract, does not show that a behavior check works. A
+labeled characterization test written before a refactor may record its expected
+values from the pre-change code. When a test is expensive, demonstrate its
+failure on a small instance, and extra expensive computation still needs the
+approval described above. Use the concrete public path, input, relation, and
+tolerance when those determine correctness. A separate independent oracle
+computation, owner-call count (how many times the owning routine runs),
+forbidden-work sentinel (a check that detects disallowed extra computation, such
+as an extra solver call), or additional mutation probe is useful when output
+equality could conceal a wrong algorithm or hidden cost. It is not a field
+required on every acceptance row.
 
 For scientific changes, state which assumptions, numeric conventions, error
 criteria, and output semantics must hold. Test small analytical or trusted
@@ -86,8 +110,9 @@ reference. Do not regenerate unrelated expensive artifacts for appearance.
 Use the project's supported toolchain and ensure checks import the target checkout when shadowed installations are possible. When project instructions require a checked runner or revision checks, carry the actual checkout, revision, and invocation into the handoff. Resolve required guidance and executable paths from current project instructions before dispatch, rather than copying historical commands or inventing missing environment rules.
 
 Do not game a scan by hiding its matches. Reuse the project's existing gates and
-show their actual results. Mutation/restore checks, if required, run separately
-from affected tests and establish restoration before later evidence is accepted.
+show their actual results. Run deliberate breakages and any required mutation
+checks apart from the acceptance run, and establish restoration before later
+evidence is accepted.
 
 ## Multi-job work and dispatch
 
@@ -124,12 +149,16 @@ Apply these checks to the clauses that the job actually contains:
   Reuse still-valid run evidence for unchanged expensive checks; use a bounded
   check for new uncertainty and mark any remaining run unverified. Do not repeat
   production work merely to fill a prompt or call an unrun command validated.
-- Carry the current project's required reading, workspace/import, action, and delivery rules. Resolve a material conflict before treating the job as ready.
+- Carry the user's standing rules that the implementer may not inherit and the job could violate, such as authorship or commit, integration, or push authority. An implementer on another host, in a fresh session, or in a subagent may not load the user's global instructions. Carry the current project's required reading, workspace/import, action, and delivery rules as well. Resolve a material conflict before treating the job as ready.
+
+For a review-only request, apply these checks to the existing prompt and report
+each failing clause, quoted, with the specific fix. Do not rewrite or dispatch
+the prompt unless asked.
 
 Once authority, starting state, owner, outcome, and sufficient acceptance evidence
 are clear, dispatch if authorized. Revise again only for new evidence, baseline
-drift, or a real scope change. A green handoff token is not acceptance: inspect
-the live change and relevant evidence.
+drift, or a real scope change. A worker's completion token or READY claim is not
+acceptance. Inspect the live change and relevant evidence.
 
 Return the prompt in chat unless a durable file is requested or needed by the
 established workflow. The bundled `scripts/lint_job_prompt.py` targets detailed

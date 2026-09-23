@@ -1,0 +1,25 @@
+schema_version: "1.1"
+name: review-referee-report
+description: >-
+  Refereeing another group's paper outside quantum computing. The referee skill covers
+  any technical manuscript, and the self-audit skill must stay out.
+tags: [routing, review]
+execution:
+  max_turns: 8
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    A computational physics journal has asked me to referee a submitted manuscript. It presents a GPU lattice Boltzmann solver for flow through porous media and claims a 40x speedup over established CPU codes. I'm not one of the authors. Before I paste the paper in, what do you need to know about the journal and its rules, and what will you do first?
+graders:
+  - name: calls-quantum-computing-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?quantum-computing-review"'
+    min: 1
+  - name: skips-pre-submission-reviewer
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?pre-submission-reviewer"'
+    min: 0
+    max: 0
+    arm: both

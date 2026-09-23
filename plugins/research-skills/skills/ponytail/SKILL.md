@@ -1,9 +1,10 @@
 ---
 name: ponytail
 description: >
-  Keep implementation, debugging, refactoring, and code review simple within
-  correctness, accuracy, runtime, memory, and scaling requirements. Use for
-  coding decisions or explicit Ponytail requests; exclude non-coding prose.
+  Keep code simple within correctness, accuracy, runtime, memory, and scaling
+  requirements. Use when implementing, fixing, or refactoring code, or for
+  Ponytail requests. If deep-code-review, scientific-library-review, or
+  scientific-computing-correctness applies, load it first. Ponytail may follow.
 license: MIT
 ---
 
@@ -15,10 +16,20 @@ code is the code never written.
 
 ## Persistence
 
-The selected mode persists, but these rules apply to coding decisions only.
-They do not impose code-first answers or minimal-length explanations on other tasks.
-Off: "stop ponytail" / "normal mode". Default: **full**.
-Switch: `/ponytail lite|full|ultra`.
+These rules apply to coding decisions only. They do not impose code-first
+answers or minimal-length explanations on other tasks.
+
+The user can name a level (lite, full or ultra) anywhere in the session, for
+example `$ponytail lite` or "use ponytail ultra". A named level lasts until the
+user names another or turns Ponytail off. Full applies when no level is named.
+
+"stop ponytail", "normal mode" or `$ponytail off` in the conversation turns
+Ponytail off. A later request for Ponytail turns it back on at full unless the
+user names another level. If the user turned Ponytail off in this session, do
+not apply these rules unless they turn it back on.
+
+A subagent does not see the conversation. In the brief for a coding subagent,
+state the named level, or that Ponytail is off.
 
 ## The ladder
 
@@ -69,10 +80,10 @@ the depth it needs. Do not add a list of unrequested features you omitted.
 | **full** | Apply the ladder within correctness and resource constraints. Default. |
 | **ultra** | Challenge accidental complexity more aggressively, while completing all requested behavior. |
 
-Example: "Cache this deterministic calculation with immutable inputs and small outputs."
-- lite: "Done, using the existing cache mechanism and its current size limit."
-- full: "`@lru_cache(maxsize=1000)` fits this calculation and its memory budget."
-- ultra: "No cache class is needed here; the existing bounded cache completes the request."
+Example: a deterministic calculation with immutable inputs is called repeatedly and takes about 5% of a profiled run. No cache exists or was requested, and the memory budget allows 1,000 stored results.
+- lite: "Added a cache bounded at 1,000 results. Precomputing every result would avoid computing on a cache miss but exceed the memory budget."
+- full: "`@functools.lru_cache(maxsize=1000)` caches the repeated calls within the 1,000-result memory budget."
+- ultra: "No cache added, because the calculation's 5% share of the profiled run does not justify one."
 
 ## When NOT to be lazy
 
@@ -92,8 +103,13 @@ reads off, a PCA9685 runs a few percent fast. Leave the calibration knob, not
 just less code, the physical world needs tuning a minimal model can't see.
 
 Use the existing test system. Add only the smallest independent checks needed
-for changed failure modes; existing coverage may already suffice. A one-line
+for changed failure modes. Existing coverage may already suffice. A one-line
 formula can need verification, and a large edit does not justify a test quota.
+Before coding, decide what each check asserts and take its expected result from
+a spec, derivation, reference, or known-good case, not from the new code. Each
+check should be able to fail when the behavior it covers is wrong. For a fix,
+show or reuse a failure on the old code that the defect causes. Check behavior
+rather than the presence of text unless that text is the contract.
 
 For scientific code, preserve equations, signs, conventions, parameters, and
 the meaning of reported results. Distinguish empirical checks from certified
@@ -111,5 +127,6 @@ performance is uncertain.
 ## Boundaries
 
 Ponytail supports the user's task and project constraints. It does not replace
-scientific judgment, permission rules, or the requested deliverable. Mode
-persists until changed or session end.
+scientific judgment, permission rules, or the requested deliverable. When a
+review or scientific-computing skill also applies, that skill sets the task and
+its requirements, and these rules apply within them.

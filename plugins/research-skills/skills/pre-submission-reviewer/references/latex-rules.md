@@ -34,11 +34,13 @@ Reuse existing macros. Add a macro when repeated mathematical notation or stylin
 Example in `commands.tex`:
 
 ```latex
-\newcommand{\sys}{\texttt{Alpha-SQL}\xspace}
+\newcommand{\method}{\texttt{MethodName}\xspace}
 \newcommand{\hi}[1]{\vspace{.25em}\noindent \textbf{#1}}
-\newcommand{\lgl}[1]{\textcolor{blue}{LGL: #1}}
+\newcommand{\authornote}[1]{\textcolor{blue}{Note: #1}}
 \newcommand{\revision}[1]{\textcolor{blue}{#1}}
 ```
+
+Comment and revision macros must render to nothing, or to plain text, in the submitted build. The one exception is a marked-up version that the venue requests, where the revision macro keeps its highlighting.
 
 Renaming becomes a one-line change rather than a find-and-replace
 across dozens of sections. When a system name changes mid-
@@ -60,10 +62,7 @@ Multiple citations go inside one command:
 Artificial Intelligence~\cite{xxxx, yyyy, zzzz}
 ```
 
-Rule L2: follow the venue's citation style. ACL uses natbib with
-`\citep` for parenthetical and `\citet` for textual. Data
-management venues (SIGMOD, VLDB) use IEEE or ACM numeric styles.
-Convert before submission.
+Rule L2: follow the venue's citation package and style.
 
 Rule L3: verify bibliographic fields against the source and the venue requirements. Journal, preprint, software, and conference entries need different metadata; DBLP is one possible source, not an authority for every field.
 
@@ -91,9 +90,8 @@ Rule L6: figures and tables need captions that explain what they show and the co
 needed to interpret them. Results captions may lead with a finding; setup and circuit
 diagrams need not invent an experimental conclusion.
 
-Rule L7: default placement is top of page (`[t!]`). If the figure
-does not fit at the top, `[b!]` (bottom) is acceptable. Inline
-`[h]` placement rarely works; let LaTeX decide.
+Rule L7: let float placement follow the template, and avoid
+forcing `[h]`.
 
 Rule L8: use vector-native formats (PDF, EPS, SVG) for charts,
 diagrams, text, and line art. Raster is appropriate for inherently
@@ -107,11 +105,7 @@ appears. "Figure 2 shows..." is the canonical pattern.
 
 ## 6. Equations
 
-Rule L10: use equation numbers when they help citation or navigation. An unreferenced numbered equation is not automatically an error; do not add redundant prose merely to cite it.
-
-Rule L11: equation numbering should be contiguous within a
-section. Use `\label` on each numbered equation to allow
-rearranging without renumbering manually.
+Rule L10: use equation numbers when they help citation or navigation, and give each numbered equation a `\label` so that rearranging needs no manual renumbering. An unreferenced numbered equation is not automatically an error. Do not add redundant prose merely to cite it.
 
 ## 7. Quotation marks and dashes
 
@@ -121,13 +115,13 @@ Rule L12: use the LaTeX convention for quotation marks.
 - Single quotes: use `` ` `` for open, `` ' `` for close.
 - Never use the straight ASCII typewriter `"` character.
 
-Rule L13: distinguish the three dash types. The project forbids em
-dashes in authored body prose.
+Rule L13: distinguish the three dash types. Whether authored prose
+uses em dashes, and what replaces them, follows the punctuation rules
+in `research-writing-style`.
 
 - Hyphen `-`: compound adjectives (high-efficiency, zero-shot).
 - En-dash `--`: number ranges (pages 10--15, 2024--2026).
-- Em-dash `---`: semantic break. Project rule: do not use em-
-  dashes in the body. Use commas, colons, or periods instead.
+- Em-dash `---`: semantic break.
 
 ## 8. Revision conventions
 
@@ -147,5 +141,7 @@ When change highlighting is requested, reuse the existing revision macro or venu
 \marginpar[]{\revision{R1.W1}}{\revision{text}}
 \marginpar[\revision{R3.W2}]{}{\revision{text}}
 ```
+
+Highlighting belongs only in the marked-up version. When the venue also asks for a clean version, build it from the same source with `\revision` rendering plain text and the margin labels removed.
 
 A summary table can help a long response letter. Do not add it when the venue format or a short point-by-point response already supplies adequate navigation.

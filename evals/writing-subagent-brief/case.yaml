@@ -1,0 +1,25 @@
+schema_version: "1.1"
+name: writing-subagent-brief
+description: >-
+  A brief passed from this session to its own subagent. No person will keep or send
+  it, so the writing route for human text should stay out.
+tags: [routing, handoff-writing]
+execution:
+  max_turns: 8
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    Our tight-binding Hamiltonian builder adds the wrap-around hopping term twice when periodic boundaries are on. I confirmed it on a 4-site ring against the analytic spectrum. I want you to delegate the fix to a subagent in this session. Write the brief you'll give that subagent. It is only for the subagent, so nobody will reuse or send it. Stop before launching the subagent.
+graders:
+  - name: calls-write-implementation-job-prompts
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?write-implementation-job-prompts"'
+    min: 1
+  - name: skips-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 0
+    max: 0
+    arm: both

@@ -1,0 +1,25 @@
+schema_version: "1.1"
+name: review-own-paper-audit
+description: >-
+  The user's own quantum paper before submission. The quantum topic pulls toward the
+  referee skill, but the user is an author.
+tags: [routing, review]
+execution:
+  max_turns: 8
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    My coauthors and I are submitting our paper on zero-noise extrapolation for variational quantum eigensolvers next week. I'm worried the abstract promises more than the results in Section 4 support. Before I paste the draft, tell me what you need from me and how you'll check it.
+graders:
+  - name: calls-pre-submission-reviewer
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?pre-submission-reviewer"'
+    min: 1
+  - name: skips-quantum-computing-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?quantum-computing-review"'
+    min: 0
+    max: 0
+    arm: both

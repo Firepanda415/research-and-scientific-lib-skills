@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import importlib.util
+import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -63,8 +65,14 @@ DONE
     def test_template_placeholder_is_error(self) -> None:
         result = messages("# Job\n\n## Scope\n{{CLOSED_LIST}}\n")
         self.assertTrue(any("unresolved template" in item for item in result))
-        result = messages("# Job\n\n## Scope\n{{closed_list}}\n")
-        self.assertTrue(any("unresolved template" in item for item in result))
+
+    def test_ci_and_jinja_braces_in_fences_are_not_template_fields(self) -> None:
+        text = (
+            "# Job\n\nReport deviations.\n\n```yaml\n"
+            "python-version: ${{ matrix.python }}\n"
+            "name: {{ closed_list }}\n```\n"
+        )
+        self.assertFalse(any("unresolved template" in m for m in messages(text)))
 
     def test_bundled_templates_cannot_pass_unrendered(self) -> None:
         reference_dir = SCRIPT.parent.parent / "references"
@@ -129,6 +137,11 @@ DONE
         result = messages("# Correction\n\n## Authority\nAuthorized.\n", kind="correction")
         self.assertTrue(any("supersedes or replaces" in item for item in result))
 
+    def test_blockquoted_precedence_marker_satisfies_correction(self) -> None:
+        text = "# Correction\n\n> This supersedes job 3.\n\nReport deviations.\n"
+        result = messages(text, kind="correction")
+        self.assertFalse(any("supersedes or replaces" in item for item in result))
+
     def test_duplicate_h2_is_error(self) -> None:
         result = messages("# Job\n\n## Gates\na\n\n## Gates\nb\n")
         self.assertTrue(any("duplicate H2" in item for item in result))
@@ -170,6 +183,18 @@ class NewHygieneChecks(unittest.TestCase):
 
         lowercase = "# T\n\nReport deviations.\n\n```bash\nrun <name>\n```\n"
         self.assertTrue(any("angle-bracket" in m for m in messages(lowercase)))
+
+    def test_option_value_placeholder_in_fenced_command_is_error(self) -> None:
+        text = "# T\n\nReport deviations.\n\n```bash\nbuild --out=<path>\n```\n"
+        self.assertTrue(any("angle-bracket" in m for m in messages(text)))
+
+    def test_cpp_generics_in_untagged_fence_are_not_placeholders(self) -> None:
+        text = (
+            "# T\n\nReport deviations.\n\n```\n"
+            "std::vector<double> x;\n"
+            "std::map<std::string, int> index;\n```\n"
+        )
+        self.assertFalse(any("angle-bracket" in m for m in messages(text)))
 
     def test_uppercase_xml_tag_is_not_a_command_placeholder(self) -> None:
         text = "# T\n\nReport deviations.\n\n```xml\n<STEP>build</STEP>\n```\n"
@@ -226,6 +251,10 @@ class NewHygieneChecks(unittest.TestCase):
         text = "# T\n\nReturn a handoff.\n"
         self.assertTrue(any("deviations" in m for m in messages(text)))
 
+    def test_blockquoted_deviations_requirement_is_found(self) -> None:
+        text = "# T\n\n> Report deviations in the handoff.\n"
+        self.assertFalse(any("deviations" in m for m in messages(text)))
+
     def test_blanket_ignore_warns(self) -> None:
         text = "# T\n\nReport deviations; compare ignoring any volatile output.\n"
         self.assertTrue(any("nondeterminism" in m for m in messages(text)))
@@ -235,7 +264,13 @@ class NewHygieneChecks(unittest.TestCase):
         result = messages(text)
         self.assertTrue(any("source plan version or digest" in m for m in result))
         self.assertTrue(any("accepted prerequisite" in m for m in result))
-        self.assertTrue(any("plan-clause coverage" in m for m in result))
+        self.assertTrue(
+            any(
+                m.startswith("if this project uses a clause ledger")
+                and "plan-clause coverage" in m
+                for m in result
+            )
+        )
 
     def test_complete_series_metadata_avoids_series_warnings(self) -> None:
         text = """# Change Set A
@@ -265,6 +300,29 @@ Plan clause coverage ledger: clause P1 is owned here.
         result = messages(text)
         self.assertFalse(any("plan-derived series" in m for m in result))
 
+    def test_change_set_identifier_alone_triggers_series_warnings(self) -> None:
+        for heading in ("# Change Set A", "# Change Set 2"):
+            with self.subTest(heading=heading):
+                text = f"{heading}\n\nFix the parser. Report deviations.\n"
+                result = messages(text)
+                self.assertTrue(any("source plan version or digest" in m for m in result))
+
+    def test_change_set_prose_does_not_trigger_series_warnings(self) -> None:
+        text = "# Fix parser\n\nThe change set touches src/a.py only. Report deviations.\n"
+        self.assertFalse(any("plan-derived series" in m for m in messages(text)))
+
+    def test_change_set_heading_before_capitalized_paragraph_does_not_warn(self) -> None:
+        text = "# Fix parser\n\n## Change Set\n\nA single file changes. Report deviations.\n"
+        self.assertFalse(any("plan-derived series" in m for m in messages(text)))
+
+    def test_unowned_targeted_battery_warns_conditionally(self) -> None:
+        text = "# T\n\nRun the targeted test battery. Report deviations.\n"
+        self.assertIn(
+            "if this project requires a closure owner, the targeted battery "
+            "has no named closure job or full-battery owner",
+            messages(text),
+        )
+
     def test_targeted_battery_closed_in_same_job_does_not_warn(self) -> None:
         text = (
             "# T\n\nRun the targeted test battery, then the full suite in this job. "
@@ -279,7 +337,14 @@ Report deviations.
 Allowed: new test modules and callers your overlap audit lists.
 """
         result = messages(text)
-        self.assertTrue(any("frozen current-tree list" in m for m in result))
+        self.assertTrue(
+            any(
+                "if this project uses a closed test surface" in m
+                and "name the permitted test paths" in m
+                for m in result
+            )
+        )
+        self.assertFalse(any("surface-conflict" in m for m in result))
         self.assertTrue(any("authorized surface" in m for m in result))
 
     def test_explicit_no_new_test_modules_does_not_warn(self) -> None:
@@ -310,11 +375,42 @@ Allowed: new test modules and callers your overlap audit lists.
 
     def test_agent_name_in_prose_warns(self) -> None:
         text = "# T\n\nCodex should patch the parser. Report deviations.\n"
-        self.assertTrue(any("never name agents" in m for m in messages(text)))
+        self.assertTrue(
+            any("unless the job depends on a specific host's tools" in m for m in messages(text))
+        )
 
     def test_lowercase_tool_path_is_not_an_agent_name(self) -> None:
         text = "# T\n\nDo not edit `.claude/settings.json`. Report deviations.\n"
-        self.assertFalse(any("never name agents" in m for m in messages(text)))
+        self.assertFalse(
+            any("unless the job depends on a specific host's tools" in m for m in messages(text))
+        )
+
+
+class CommandLineTests(unittest.TestCase):
+    def run_linter(self, *args: str, stdin: str = "") -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            [sys.executable, "-B", str(SCRIPT), *args],
+            input=stdin,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+    def test_dash_reads_prompt_from_stdin(self) -> None:
+        result = self.run_linter("-", "--kind", "job", stdin="# Job\n\nRun {{TASK_NAME}}.\n")
+        # The placeholder error proves the stdin text itself was linted.
+        self.assertIn("unresolved template placeholders", result.stdout)
+        self.assertIn("SUMMARY errors=", result.stdout)
+        self.assertEqual(result.stderr, "")
+
+    def test_unreadable_path_reports_one_line_and_exits_2(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            missing = Path(directory) / "missing.md"
+            result = self.run_linter(str(missing), "--kind", "job")
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.stdout, "")
+        self.assertEqual(len(result.stderr.splitlines()), 1)
+        self.assertNotIn("Traceback", result.stderr)
 
 
 if __name__ == "__main__":

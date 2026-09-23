@@ -52,5 +52,4 @@ be routed to a normal review. Preserve numerical conventions, optimized kernels,
 required boundary validation, and sufficient independent evidence. A test's
 value depends on the failure it detects, not its count or syntax; recommend
 removal only when its obligation is obsolete or adequately covered elsewhere.
-Does not apply the fixes, only lists them.
-"stop ponytail-review" or "normal mode": revert to verbose review style.
+Does not apply the fixes, only lists them. One-shot.

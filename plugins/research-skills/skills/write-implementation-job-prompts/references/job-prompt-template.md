@@ -20,13 +20,13 @@ Implementation:
 {{EXISTING_OWNER_AND_NECESSARY_SOLUTION_BOUNDARY}}
 
 Acceptance:
-{{BEHAVIOR_OR_NUMERIC_RELATION_CHECKED_COMMANDS_ENVIRONMENT_AND_REQUIRED_GATES}}
+{{BEHAVIOR_OR_NUMERIC_RELATION_CHECKED_EXPECTED_RESULT_SOURCE_DETECTION_EVIDENCE_COMMANDS_ENVIRONMENT_AND_REQUIRED_GATES}}
 
 Delivery:
 {{REQUESTED_ARTIFACTS_VALIDATION_EVIDENCE_DEVIATIONS_AND_ACTION_BOUNDARY}}
 ```
 
-Add exact starting SHA, closed file surface, owner counts, forbidden-work checks, mutation/restoration gates, cumulative baseline, or plan-clause coverage when the project or failure mechanism needs them. Do not require these fields for an ordinary handoff.
+Add exact starting SHA, closed file surface, owner counts, forbidden-work checks, additional mutation probes and their restoration, cumulative baseline, or plan-clause coverage when the project or failure mechanism needs them. Do not require these fields for an ordinary handoff.
 
 An unfinished placeholder draft is not dispatchable. A short complete prompt
 does not need to pass the optional contract-style linter's larger format.

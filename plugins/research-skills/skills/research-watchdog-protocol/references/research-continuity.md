@@ -5,6 +5,11 @@ branches, or linked deliverables. Reuse native task state, scheduler IDs,
 repository state, and existing research records. Add a compact note only when
 they do not preserve information needed to continue.
 
+This guide owns the minimal resume state for continuing a specific monitored,
+theory, or manuscript task. Record durable project decisions and reusable
+lessons with `maintain-project-memory`, and observations or predictions with
+`write-research-log`.
+
 Retain the objective and scope, current result or unresolved uncertainty,
 evidence/configuration locations, next action, actual blocker, and remaining
 limits where relevant. Do not create a fixed family of state files or duplicate
@@ -16,9 +21,9 @@ preregistration. Preserve observations and material failed attempts; a current
 summary can be updated without rewriting the underlying scientific record.
 
 Judge progress from the task: normal runtime and scheduler state for an HPC job,
-a proof obstacle for theory, or resolved claims for manuscript work. No new output
-during a long kernel or a fixed number of unchanged checks does not establish
-a scientific dead end. Change direction when evidence or actual stalled work
+a proof obstacle for theory, or resolved claims for manuscript work. Apply the
+stall rules in the skill's [Checks](../SKILL.md#checks) before treating quiet work
+as a dead end. Change direction when evidence or actual stalled work
 justifies it, not merely to make successive iterations different.
 
 On resumption, verify the target task/revision, relevant action limits, and the

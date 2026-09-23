@@ -1,6 +1,6 @@
 ---
 name: deep-code-review
-description: "Review code read-only for domain correctness, engineering, tests and resource costs. Use for substantive code or remediation reviews; include verified current issues unless the user limits scope to introduced defects. Exclude implementation and style-only review."
+description: "Review code read-only for domain correctness, engineering, tests and resource costs. Use for substantive code or remediation reviews. Include verified current issues unless the user limits scope to introduced defects. Exclude implementation and style-only review. Review or acceptance of scientific libraries and numerical software uses scientific-library-review."
 ---
 
 # Deep Code Review
@@ -27,6 +27,8 @@ tracked or untracked file as user-owned unless the current task created it.
 Read-only does not prohibit normal tests, builds, or analyses that create
 documented disposable caches or temporary outputs. Prefer a temporary directory,
 inspect the status delta afterward, and never remove a pre-existing user file.
+Mutation and fault-injection probes follow the isolation rule in
+[independent review](references/independent-review.md).
 
 This skill authorizes read-only subagent delegation within the user's review
 scope when delegation is available. It does not authorize implementation or any
@@ -48,9 +50,12 @@ Before delegation:
    each in-scope prior item resolved, partial, open, deferred, rejected, or
    unverified using current evidence. A documented deferral is still open work,
    while an obsolete or disproved prescription is not a required fix.
-5. For scientific code, also use `scientific-computing-correctness`. When the
-   task closes prior scientific findings, read its
-   `references/remediation-closure.md` protocol.
+5. For review of a scientific library or numerical software, or acceptance of a
+   scientific change, use `scientific-library-review` as the entry instead of
+   this workflow unless the user selected this one. For other scientific code
+   reviewed here, also apply `scientific-computing-correctness` as the
+   correctness layer. When this review closes prior scientific findings, read
+   [remediation closure](../scientific-computing-correctness/references/remediation-closure.md).
 
 ## Use coverage-driven parallel review
 
@@ -65,11 +70,21 @@ For every candidate:
    semantic owner.
 2. Demonstrate the affected scenario with evidence suited to the claim:
    - correctness or API behavior: derive the expected relation from the public
-     contract before adopting the reporter's examples. Use an independent oracle
-     and separating accepted-representation/consumer-lifecycle cases where they
-     can change that relation, including the actual transform and legal preservation;
+     contract before adopting the reporter's examples. Check it with an
+     independent oracle and with cases that separate correct from plausibly
+     wrong behavior, such as alternate accepted input representations and
+     downstream consumers that transform the value. Include a
+     legal preservation case: a valid input that a proposed fix or restriction
+     must still accept;
    - test or harness gaps: a passing baseline plus an injected relevant failure
-     or missing-evidence case that the claimed guard fails to catch;
+     or missing-evidence case that the claimed guard fails to catch. Report a
+     test that cannot fail for a plausible defect in the behavior it claims to
+     cover as a test gap, and give it no weight as evidence for that behavior.
+     Examples are tautologies, tests whose expected values come from the code
+     path under test, and checks that a string, symbol, file or key exists when
+     that text or artifact is not itself the contract. A labeled
+     characterization test with expected values recorded from the pre-change
+     code is not such a gap;
    - resource cost: actual call/lifetime/size counts or a justified operation
      bound at a matched workload, after tracing consumers of the data;
    - maintainability: complete relevant def-use/caller/reachability evidence
@@ -105,8 +120,14 @@ record, without asking it merely to confirm accepted findings. Look for:
 
 - changed files, callers, consumers, or interaction cells no lane actually
   covered;
-- deleted tests, guards, negative guarantees, and cleanup commits that removed
-  evidence;
+- evidence removed or weakened anywhere in the diff, including deleted, renamed,
+  skipped or xfailed tests, tolerances or thresholds loosened without a
+  derivation, oracles replaced by implementation-derived values, removed guards
+  and negative guarantees, and cleanup commits that removed evidence. Cheap
+  inventories, such as before/after test-name sets or a
+  documentation-insensitive syntax comparison, can bound this sweep;
+- new expensive calls, caps or changed defaults on the runtime path, including
+  valid work that a new or unchanged cap now rejects;
 - one fact represented differently across code, schema, report, documentation,
   example, generated artifact, or CI;
 - unchecked semantic equivalents or lifecycle distinctions hidden by defaults,
@@ -138,7 +159,8 @@ Do not stop because findings already look substantial. Stop only when:
 ## Deliver the review
 
 Lead with the most consequential verified findings. When findings span multiple
-categories, include a compact impact table using the matrix categories. Highlight
+categories, include a compact impact table using the impact categories in
+[review-angle-matrix.md](references/review-angle-matrix.md#impact-summary). Highlight
 direct scientific/semantic errors before the total count, distinguishing them
 from validation gaps, API failures, resource costs, and maintenance debt. State
 when no direct mathematical error was verified. Origin counts and P1/P2/P3 labels

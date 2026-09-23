@@ -13,16 +13,18 @@ Map the closest relevant existing work. Use a comparison table when the distinct
 | Evaluation dimensions | | | | | |
 | Granularity level | | | | | |
 | Real-world alignment | | | | | |
-| [Key differentiator] | ✗ | ✗ | ✗ | | **Ours** |
+| [Key differentiator] | | | | | |
 
-Guide the user with these questions:
+Fill each cell from the cited source. Use ✓, partial, or ✗ as the evidence supports, and never pre-fill a column.
+
+Answer these questions from the available sources. Ask the user only for what the sources cannot determine:
 - What mainstream benchmarks already exist in this area, and what does each one evaluate?
 - What implicit assumption do they share, and does that assumption hold in realistic scenarios?
 - If a model scored perfectly on every existing benchmark, would it really have mastered the underlying capability?
 
 ## Step 2: Identify the Blind Spot
 
-Explain the scientific consequence of the gap. More data or larger instances can be valuable when they resolve a coverage, precision, or scaling question. Useful example patterns include:
+Explain the scientific consequence of the gap. More data or larger instances can be valuable when they resolve a coverage, precision, or scaling question. The example summaries are illustrative, so verify each one in its paper before citing it. Useful example patterns include:
 
 ### Pattern A: Dimension Blindness
 Existing benchmarks measure capability X but completely ignore related capability Y.
@@ -32,7 +34,7 @@ Existing benchmarks measure capability X but completely ignore related capabilit
 ### Pattern B: Assumption Violation
 Existing benchmarks share an implicit assumption that does not hold in real-world scenarios.
 
-> **nvBench 2.0 example**: All Text-to-Visualization benchmarks assume each natural language query maps to exactly one correct visualization. In practice, real queries are inherently ambiguous, "show sales trends" could reasonably produce a line chart, bar chart, or area chart. Current benchmarks penalize valid alternative interpretations.
+> **nvBench 2.0 example**: The benchmarks examined assume each natural language query maps to exactly one correct visualization. In practice, real queries are inherently ambiguous, "show sales trends" could reasonably produce a line chart, bar chart, or area chart. Current benchmarks penalize valid alternative interpretations.
 
 ### Pattern C: Evaluation Granularity Mismatch
 Existing evaluation is too coarse to diagnose specific failure modes.
@@ -58,7 +60,7 @@ Investigate a missing answer when it affects the claimed value or validity; an i
 
 Draft a concise gap statement. For an assumption-violation contribution, this structure may help:
 
-> **Existing benchmarks for [TASK] focus on [WHAT THEY MEASURE], operating under the assumption that [IMPLICIT ASSUMPTION]. However, in real-world scenarios, [WHY THE ASSUMPTION FAILS]. This creates a critical evaluation blind spot: [SPECIFIC CAPABILITY THAT CANNOT BE EVALUATED], meaning that [CONSEQUENCE, what can go wrong with models that appear to perform well].**
+> **The closest benchmarks for [TASK], [CITED SET], focus on [WHAT THEY MEASURE], operating under the assumption that [IMPLICIT ASSUMPTION]. However, in real-world scenarios, [WHY THE ASSUMPTION FAILS]. This creates a critical evaluation blind spot: [SPECIFIC CAPABILITY THAT CANNOT BE EVALUATED], meaning that [CONSEQUENCE, what can go wrong with models that appear to perform well].**
 
 The useful properties are:
 - **Specific**, names the exact blind spot, not a vague "limitation"
@@ -83,4 +85,4 @@ Typical RQ examples:
 | RQ2 | What specific sub-capabilities differentiate strong vs. weak models in [this dimension]? | Experiments, Fine-grained Analysis subsection |
 | RQ3 | How does [factor: model scale / prompting / domain knowledge] affect performance, and how do models compare with human experts? | Experiments, factor analysis and Human vs. Model subsections |
 
-Choose analyses that answer the actual question (see `references/experiments.md`). Several questions may share an analysis, and a human comparison is relevant only in settings that need it.
+Choose analyses that answer the actual question (see [experiments.md](experiments.md)). Several questions may share an analysis, and a human comparison is relevant only in settings that need it.

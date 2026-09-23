@@ -1,6 +1,6 @@
 ---
 name: scientific-computing-correctness
-description: "Implement, debug or independently validate scientific computations while preserving mathematical meaning, numerical accuracy and resource bounds. Use for scientific IV&V and executable research results; exclude manuscript-only review and ordinary application code."
+description: "Implement, debug, optimize or independently validate scientific computations and executable research results while preserving mathematical meaning, numerical accuracy and resource bounds. Use for scientific IV&V of a specified computation or result. Library reviews, including review-and-fix requests, and scientific-change acceptance use scientific-library-review. Other code reviews use deep-code-review. Exclude manuscript-only review and ordinary application code."
 ---
 
 # Scientific Computing Correctness
@@ -37,6 +37,12 @@ from the intended quantity and first principles whether the code, the record,
 or both must change. Ask the user only when the classification or amendment
 authority would materially change the result and has not already been recorded.
 
+The same authority may designate an implementation of record or frozen
+evidence. Produce results of record with the designated implementation, and use
+an independent implementation only to validate them. Write regenerated evidence
+beside frozen evidence rather than over it. Replacing either requires the
+user's decision.
+
 ## Scientific contract
 
 State only the dimensions relevant to the task, but make them explicit before
@@ -64,7 +70,7 @@ diagnostic, or passing regression into an exact theorem or certified bound.
 
 ## Source-to-code fidelity
 
-For paper-derived implementations or equation/representation changes, read [source-to-code fidelity](references/source-fidelity.md) before accepting the transformation.
+For paper-derived implementations, proof-assistant formalizations, or equation/representation changes, read [source-to-code fidelity](references/source-fidelity.md) before accepting the transformation.
 
 ## Approximation and decision safety
 
@@ -95,8 +101,16 @@ For paper-derived implementations or equation/representation changes, read [sour
   variance-like estimate is negative; clipping it to zero does not establish
   zero uncertainty or certified success.
 - If evidence cannot support the advertised guarantee, leave that guarantee
-  unresolved or narrow the claim. Reject inputs when the method's required
-  premises fail, not merely because the result is experimental. Never convert unknown,
+  unresolved or narrow the claim. Reject an input or value at the first owner
+  that knows the violated method premise or quantity definition. A value
+  outside the quantity's defined domain is invalid, not unknown or
+  inconclusive. A signed estimator's raw value can legitimately fall outside
+  that domain. Assess evidence sufficiency only for admissible values, and do
+  not reject merely because a result is experimental. A roundoff-to-zero
+  adjustment needs a stated scale-aware tolerance and keeps the raw value. Such
+  an adjustment is limited to roundoff, and
+  sampling or model inconsistency is not roundoff.
+  Never convert unknown,
   `not_run`, `not_evaluated`, `not_applicable`, or suppressed evidence into zero,
   false, or passed.
 
@@ -109,13 +123,22 @@ For paper-derived implementations or equation/representation changes, read [sour
   population, event, or cross-field relations needed to interpret it. Do not
   introduce a new status schema or bookkeeping layer for an unchanged contract.
 - Validate semantic relations, not only type conversion. Defaults must not
-  overwrite observed facts. If the contract defines nested circuit populations,
-  check relations such as `0 <= executed <= realized <= represented` together.
+  overwrite observed facts. If the contract defines nested populations, check
+  relations such as `0 <= completed <= submitted <= planned` together.
   Derive the relation from the actual populations; retries or different counting
   units may require a different relation.
 - Identify interactions that can violate the changed invariant. Use separating
   cases or equivalence classes; enumerate a full Cartesian product only when
   the contract and cost justify it. Independent one-axis checks can miss coupling.
+- Define each reuse key, memo, cache, or equality check by the identity its
+  consumer depends on when that consumer reuses the result instead of
+  recomputing or treats it as scientific identity. Include every input that
+  consumer reads, such as arguments, parameters, ordering and payload. Exclude
+  incidental handles. When a key uses an object address or a transient wrapper
+  id, hold that object for the key's lifetime or key on a stable value instead.
+  Test a distinct input that could share the key alongside a legitimate reuse.
+  An identity or manifest label does not verify contents it did not check.
+  Report those contents as unverified rather than implying a check.
 - Treat code, equations, documentation, structured results, human reports, and
   generated artifacts as representations of the same scoped claim. A contract
   change migrates all of them together.
@@ -177,17 +200,23 @@ evidence. Small coefficients or large raw outputs alone do not justify deletion.
 
 ## Verification
 
-- For a "scientific IV&V" request, apply this skill as independent verification
+- For a scientific IV&V request about a specified computation or research
+  result, apply this skill as independent verification
   and validation of the specified computation and claims. Independently assess
   the mathematical premises and expected behavior, not just agreement with the
   implementation or its tests. Trace representative ordinary public workflows
   through actual execution and raw evidence; include material resource behavior.
-- Define the falsifier before accepting the implementation: ask what
-  ordinary, adversarial, boundary, mixed-interaction, or cross-layer case could make every
-  local check pass while the scientific conclusion is wrong.
-- Use an independent oracle or equivalent first-principles derivation with a
-  different failure mode. Two consumers of the same builder prove consistency,
-  not correctness.
+- Before implementing a behavior or accepting an existing implementation, state
+  the property a test must check and the independent source of the expected
+  result. At the same time, define the falsifier by asking what ordinary,
+  adversarial, boundary, mixed-interaction, or cross-layer case could make
+  every local check pass while the scientific conclusion is wrong.
+- Use an independent oracle with a different failure mode, such as a
+  specification, a first-principles derivation, a reference implementation, or
+  a known-good case. Two consumers of the same builder prove consistency,
+  not correctness. When a change alters an assertion or expected value, name
+  the independent relation that justifies the new expectation. Output of the
+  changed implementation records consistency at most, not correctness.
 - Keep acceptance oracles in development verification unless their production
   role is explicitly justified and authorized. An agreement test does not
   authorize full reference recomputation or exact-decision equality in a hot
@@ -197,13 +226,43 @@ evidence. Small coefficients or large raw outputs alone do not justify deletion.
   not by itself require stopping a usable experimental computation.
 - Leave the smallest test set that protects a current scientific, resource,
   provenance, lifecycle, public-input, or serialization obligation. Temporary
-  migration and implementation-shape checks do not become permanent tests.
+  migration and implementation-shape checks do not become permanent tests. Each
+  test that the current work adds or changes must observe the promised property,
+  for example that pilot information changed an allocation, not only that the
+  pilot ran. It must also be able to fail for a plausible defect in that
+  property. A fix's regression test shows this by failing on the pre-change
+  code, in a new run or an earlier one that still applies. For other tests, run
+  a new deliberate small breakage only when a plausible defect could still
+  escape the checks and the cost is justified, whatever the number of changed
+  tests. Use a small instance when the test is expensive. Evidence still valid
+  for the current code and behavior can be reused, and one breakage can support
+  several tests when the report names the property it covers. A rename or
+  reorganization that leaves what every assertion checks unchanged needs no new
+  failure demonstration. An import, attribute, or missing-symbol failure on the
+  pre-change code is valid evidence when importability or that public export is
+  the contract. Otherwise such an error, caused only by the feature's absence,
+  does not show that a behavior check works. No added or changed test may
+  restate the implementation, take the expected value from the same code path,
+  or only check that a string, symbol, file, or key exists when that text or
+  artifact is not itself the contract. A characterization test that pins current
+  behavior before a refactor is acceptable when labeled as such, with expected
+  values recorded from the pre-change code. When a fixed discriminating
+  counterexample separates the defect, prefer it to a repeated random-seed scan.
 - Classify numeric assertions before writing them. Compare floating-point values
   numerically with a tolerance derived from the method and with explicit margin
   from decision boundaries. For APIs that combine absolute and relative
   tolerances, set both explicitly; an omitted library default must not define or
   dominate the effective acceptance window. Require exact text only when
   byte-level serialization or formatting is itself the contract.
+- When a floating-point boundary decision varies with platform, dependency
+  version or rounding direction, make its regression deterministic. Construct
+  the adjacent representable value (for example with `nextafter`) at the owner
+  that makes the decision, and keep the natural case as supplementary evidence.
+  A passing retry does not resolve a deterministic counterexample. Attribute
+  the variation to a dependency only after isolating it.
+- Before classifying a failure or reporting a measured result, confirm the
+  interpreter, dependency versions and import origin the project declares (or
+  those actually used when none is declared), and state them with the result.
 - A green build, regenerated notebook, mutation kill, or full test suite proves
   only the invariants that its checks can falsify. Use an additional independent
   pass when unresolved scientific risk warrants it; do not rerun settled checks
@@ -223,6 +282,12 @@ Report the invariant preserved, the first divergence fixed, the independent
 evidence used, and anything still approximate, unvalidated, unresolved, or out
 of scope. Do not claim formal proof, universal scalability, or end-to-end error
 control unless those are actually established.
+
+When a result carries a status label such as PASS, FAIL, or INCONCLUSIVE, report
+the quantities, diagnostics, and bounds that determine it, each with its
+quantity and scope, and keep the label visible. The label summarizes that
+evidence and does not replace it. Mark which values the implementation under
+test produced and which come from independent checks.
 
 When Ponytail or other minimal-change guidance also applies, this skill defines
 the correctness constraints first. Minimize only within them. For unexpected

@@ -9,7 +9,8 @@ Record what was known or expected, what was done or observed, and what the evide
 changes, at the level useful for later understanding. An observation-only note,
 retrospective failed-run record, or unresolved question is valid without a prior
 hypothesis or prediction. Do not invent expectations or ask for one merely to
-complete a template.
+complete a template. Durable project decisions and reusable lessons belong to
+`maintain-project-memory`.
 
 ## Record the relevant evidence
 
@@ -37,7 +38,8 @@ the user asks for persistence or an established authorized logging workflow
 already supplies that scope. Use a supplied or established destination; do not
 silently create a research log during ordinary consultation.
 
-When saving, append newest last and preserve prior observations and predictions.
+When saving, follow the log's existing order (newest last if none), and preserve
+prior observations and predictions.
 Use an entry ID only when linking or resolving entries needs it. A correction to
 a prior error should identify the correction without disguising when it was
 learned. No fixed field set, confidence label, public-sharing suggestion, or

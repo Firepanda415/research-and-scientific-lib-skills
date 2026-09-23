@@ -1,7 +1,7 @@
 {
   "name": "research-skills",
-  "version": "0.1.0+codex.7342347d5f918040",
-  "description": "Personal research and scientific software skills, with customized Ponytail lifecycle hooks.",
+  "version": "0.1.0+codex.d4142857a23d7c87",
+  "description": "Personal research and scientific software skills, with a customized Ponytail coding mode and a writing-route hook.",
   "author": {
     "name": "Firepanda415"
   },

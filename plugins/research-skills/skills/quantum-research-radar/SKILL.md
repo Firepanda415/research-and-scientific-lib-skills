@@ -1,6 +1,6 @@
 ---
 name: quantum-research-radar
-description: Produce selective Chinese quantum research briefings with current primary sources, user-specific relevance, missed-paper recovery, and substantive Quantum × AI. Use for quantum research radar, 量子早报, daily or weekly briefs, or focused paper discovery. A single-paper explanation does not require this workflow.
+description: Produce selective Chinese quantum research briefings with current primary sources, user-specific relevance, missed-paper recovery, and substantive Quantum × AI. Use for quantum research radar, 量子早报, daily or weekly briefs, or a focused scan of recent work on a topic. A single-paper explanation does not require this workflow.
 ---
 
 # Quantum Research Radar
@@ -11,10 +11,15 @@ prestige, or novelty language. Keep important technical terms in English.
 
 ## Scope and sources
 
-Respect the requested topic, period, and depth. Read
-`references/user-research-profile.md` for personal relevance unless the user asks
+Respect the requested topic, period, and depth. For personal relevance, read the
+bundled author profile (default), `references/user-research-profile.md`, unless the user asks
 for an untailored scan. Consult `references/source-and-query-map.md` when query
-expansion or overlooked venues would improve coverage.
+expansion or overlooked venues would improve coverage. For a question-driven
+literature review or a prior-work or novelty check, use `upgrade-research-inputs`.
+
+Preferences the user states in the request or in project guidance take precedence
+over the bundled profile. When only the bundled profile shaped relevance for a user
+who is not its author, do not phrase that relevance as the user's own connection.
 
 For the usual daily or weekly brief, search both fresh work (today through the
 previous 3 calendar days) and rolling recovery (4–60 days). These are defaults,
@@ -57,8 +62,12 @@ is adequate or further search is unlikely to change the selection within budget.
 Default to a concise prioritized briefing with direct primary links, the useful
 mechanism or finding, its evidence and scope, and the user's connection when
 relevant. Do not fill weak sections, impose paper counts, or repeat full summaries.
+End with a one-line coverage note: listings or queries actually fetched, date windows,
+lanes skipped, and retrieval limits.
 Use `references/output-template.md` for a requested full briefing, adapting its
-optional sections to the evidence. Preserve the user's authored-prose style.
+optional sections to the evidence. Briefings are kept and reread, so their prose
+follows `research-writing-style`, including its review before delivery. The concise
+default above and `references/output-template.md` still set the structure.
 
 Use an existing coverage ledger only when prior coverage is relevant and available.
 Never infer that a paper was previously covered from memory alone. Revisit for a
@@ -76,4 +85,5 @@ The helper supports an explicit `--ledger` path. Initialize only after opt-in.
 `prompts/` contains optional full, compact, focused, and scheduled request examples.
 `scripts/package_check.py` validates packaging and a temporary ledger lifecycle;
 it is not part of producing each briefing. Schedules use the host's actual
-scheduler and require a scheduling request.
+scheduler and require a scheduling request. Cross-run deduplication requires
+opted-in tracking with a ledger path that the scheduled run can read.

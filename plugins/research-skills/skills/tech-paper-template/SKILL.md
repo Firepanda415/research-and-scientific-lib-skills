@@ -17,9 +17,10 @@ paper, challenges and method components can expose gaps in the argument. For a
 theory, impossibility, explanatory, replication, or resource-estimation paper,
 use definitions, assumptions, results, and their implications as appropriate.
 
-Technique and New Problem/Setting are useful narrative examples, not exhaustive
-paper types. A benchmark contribution can use `benchmark-paper-template` when
-its measurement-specific guidance is helpful.
+The "New method or mechanism" and "New problem or setting" rows of
+[paper-types.md](references/paper-types.md) are useful narrative examples, not
+exhaustive paper types. A benchmark contribution can use
+`benchmark-paper-template` when its measurement-specific guidance is helpful.
 
 Check the connections that bear the claim:
 
@@ -45,7 +46,8 @@ format preference as a submission-blocking scientific problem.
 
 For Introduction drafting, use [introduction.md](references/introduction.md) with
 the available claims and evidence. Draft prose when that is the user's request;
-do not stop after an outline or require a separate handoff artifact.
+do not stop after an outline or require a separate handoff artifact. When
+drafting or revising manuscript prose, follow `research-writing-style`.
 
 ## Optional references
 

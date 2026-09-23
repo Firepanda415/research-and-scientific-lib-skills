@@ -159,7 +159,7 @@ Use relevant fields of this optional template only when a design document is req
 
 ```
 Benchmark Name: [Name]
-Gap Statement: [From references/gap-analysis.md]
+Gap Statement: [From the gap statement in gap-analysis.md]
 Research Questions: [RQ1, RQ2, RQ3]
 
 Design Goals:

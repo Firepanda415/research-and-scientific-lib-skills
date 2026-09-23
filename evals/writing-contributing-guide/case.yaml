@@ -1,0 +1,26 @@
+schema_version: "1.1"
+name: writing-contributing-guide
+description: >-
+  Instructions for human implementers that stay in the repository. They resemble an
+  implementer handoff, but the readers are people. Likely the most expensive case,
+  because the writing route loads about 13k tokens of guidance.
+tags: [routing, handoff-writing]
+execution:
+  max_turns: 8
+  timeout_seconds: 360
+  allowed_tools: [Skill]
+  prompt: |
+    Two new master's students join our group on Monday and will start by fixing small bugs in our simulation package. Write the "Fixing a bug" section of our CONTRIBUTING.md: how to reproduce the bug, add a failing test first, and what must pass before they open a pull request. Plain Markdown, about 150 words.
+graders:
+  - name: calls-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: skips-write-implementation-job-prompts
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?write-implementation-job-prompts"'
+    min: 0
+    max: 0
+    arm: both

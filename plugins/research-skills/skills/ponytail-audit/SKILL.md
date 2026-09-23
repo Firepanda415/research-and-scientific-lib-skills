@@ -1,10 +1,12 @@
 ---
 name: ponytail-audit
 description: >
-  Audit a repository for over-engineering and justified deletions or
-  simplifications while preserving behavior, scientific meaning, and resource
-  constraints. Use for repo-wide simplification audits or /ponytail-audit.
-  Return a compact read-only report.
+  Compact Ponytail-format audit of over-engineering and justified deletions
+  across a repository, preserving behavior, scientific meaning and resource
+  constraints. Use for $ponytail-audit, /ponytail-audit or an explicitly
+  requested Ponytail audit. Returns a compact read-only report. For an
+  evidence-backed simplification survey or authorized cleanup, use
+  simplify-codebase.
 ---
 
 ponytail-review, repo-wide. Cover the requested repository scope instead of a
@@ -13,7 +15,7 @@ not deletion volume. Account for important uninspected surfaces.
 
 This is the compact read-only audit route. Reuse relevant evidence from an
 existing simplification review; do not start a second full audit merely because
-another installed skill covers the same outcome.
+simplify-codebase covers the same outcome.
 
 ## Tags
 
@@ -54,4 +56,3 @@ behavior, scientific accuracy, security, and resource constraints; route unrelat
 defects to a normal review. Keep the smallest independent evidence protecting
 current obligations, without a fixed test count. Lists findings, applies nothing.
 One-shot.
-"stop ponytail-audit" or "normal mode" to revert.

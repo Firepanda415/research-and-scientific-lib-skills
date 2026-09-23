@@ -6,6 +6,8 @@ Identify the problem, claimed contribution, assumptions, and evidence chain. An 
 
 Check whether conclusions follow under the stated assumptions and whether the scope changes between the abstract, main text, figures, and conclusion. A central unsupported claim can block submission. A missing roadmap sentence usually cannot.
 
+A cited mechanized proof supports only its formal statement. When the proof sources are available, check that the paper states the same result, names any computation trusted beyond kernel checking, and cites theorems that exist in the current sources. The paper must also present assumed predicates beyond the stated model, proof placeholders and extra domain axioms as premises of a conditional result.
+
 ## Self-containment
 
 Define the symbols and terminology needed to understand the contribution. State assumptions and result-affecting conventions even when they are standard in another field. A paper may rely on clearly identified established theorems or methods; it need not reproduce an entire cited field. Captions and abstracts need enough local context to be interpreted correctly on their own.

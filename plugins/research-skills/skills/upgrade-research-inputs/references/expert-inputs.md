@@ -14,9 +14,8 @@ ritual, a fixed network plan, or a recurring follow-up schedule.
 
 Match the material to the actual audience and existing confidentiality, IP, and
 publication constraints. Ask about an unknown restriction only when it affects
-the intended sharing. Preparing a private draft or suggesting a question does
-not require permission to send it; actually contacting someone requires the
-user's authorization.
+the intended sharing. Drafting a message or suggesting a question needs no permission,
+but sending it or otherwise contacting someone requires the user's authorization.
 
 Credit contributions and distinguish an expert's report or opinion from primary
 evidence and independent verification. Follow up with the outcome when useful

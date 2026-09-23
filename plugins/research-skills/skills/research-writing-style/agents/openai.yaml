@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Writing Style"
+  short_description: "Draft, edit, and review prose for lasting use"
+  default_prompt: "Use $research-writing-style to draft, edit, or review the prose of this text for its intended reader and destination."

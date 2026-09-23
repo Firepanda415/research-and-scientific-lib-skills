@@ -1,6 +1,6 @@
 interface:
   display_name: "Scientific Library Review"
   short_description: "Scientific IV&V for library semantics, evidence and costs"
-  default_prompt: "Use $scientific-library-review to review the requested library capability or change, load its project specialization, verify applicable claims and report findings and evidence gaps."
+  default_prompt: "Use $scientific-library-review to review the requested library capability or change, load any supplied project specialization, verify applicable claims and report findings and evidence gaps."
 policy:
   allow_implicit_invocation: true

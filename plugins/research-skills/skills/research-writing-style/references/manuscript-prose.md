@@ -6,6 +6,8 @@ Use this reference for manuscript or response-letter drafting, substantial parag
 
 Make each sentence serve the paper's argument. Keep reviewer correspondence and the authors' working process out of manuscript prose. Explain disagreement with a reviewer in the response letter, factually and briefly; do not add a manuscript paragraph merely to disparage a suggested citation or pre-empt criticism.
 
+Work from the active text. Commented-out source counts as deleted unless the user says otherwise, so do not cite it, derive from it, or describe it as the paper's content.
+
 Keep code variable names, file layouts, and irrelevant implementation decisions out of the paper. State mathematics in the paper's notation. Report units, normalization, solver tolerances, cutoffs, initial conditions, and algorithm choices when they affect interpretation or reproduction, in Methods, captions, supplementary material, or a referenced configuration. An undisclosed code convention must not silently shape a formula or numerical claim.
 
 Describe the actual runs. Budget exhaustion is not convergence to a poor local minimum, and adaptive numerical quadrature is not automatically Gaussian quadrature. Use the source, data, or logs; flag a claim that cannot be verified.
@@ -23,6 +25,10 @@ For every revision-driven addition, check whether a reader unfamiliar with the r
 - A bridge or announcement sentence must state a necessary logical connection. Remove sentences whose only purpose is to announce the next topic.
 - State the one or two numbers that carry the conclusion and cite the table for the rest. Row-by-row narration adds no interpretation and obscures the main finding.
 - Keep metrics and their reporting order uniform across comparable instances. Do not vary the reporting contract to create stylistic variety.
+- Give each quantity class one displayed precision, chosen from its resolution or from the paper's existing tables, and use it in text, tables, captions and the response letter. Values added to an existing table in revision follow that table's column format. An approximate prose range marked with ≈ may use fewer digits. Exact counts and identifiers keep their exact form.
+- When a quantity lies near one and its distance from one carries the result, report the complement. For example, report an infidelity 1 − F = 1.3 × 10⁻⁴ rather than F = 0.99987.
+- Round once, from the unrounded result. Compute differences, ratios and other derived values before rounding, and check values that fall on a rounding boundary.
+- A stated bound (`at least`, `at most`, a floor or ceiling) must hold for the unrounded value of every instance it covers. Round a lower bound down and an upper bound up.
 - Let the abstract present the problem, method, and headline evidence, the summary organize the contribution and theorem chain, and the conclusion state the supported result and its limits. Reuse exact terminology and verified numbers without copying the same sentence mold across all three.
 
 ## Compose sentences without changing the claim

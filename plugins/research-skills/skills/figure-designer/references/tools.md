@@ -14,6 +14,8 @@
 
 ## 1. Decision heuristic
 
+When the agent produces the figure itself, prefer text-based sources it can render and inspect: TikZ, standalone SVG, Graphviz/DOT, draw.io XML, or Matplotlib. GUI tools (PowerPoint, Figma, OmniGraffle, Keynote) are for the user to polish in. Hand over an editable source or a clearly labeled design spec.
+
 | Figure type | Primary tool | Alternative | Reason |
 |---|---|---|---|
 | Motivated Example (Figure 1) | PowerPoint | Figma | Mixed content: text, icons, code, arrows |

@@ -19,7 +19,7 @@ Load only relevant references:
 - `references/motivated-example.md`: optional comparison or motivating-example layouts.
 - `references/solution-overview.md`: optional method and architecture layouts.
 - `references/experimental-results.md`: chart selection and quantitative encoding.
-- `references/design-rules.md`: format, legibility, captions, axes, and uncertainty.
+- `references/design-rules.md`: format, legibility, captions, axes, uncertainty, and circuit and schematic conventions.
 - `references/tools.md`: tool options when the existing workflow does not settle the choice.
 
 ## Scientific and visual checks

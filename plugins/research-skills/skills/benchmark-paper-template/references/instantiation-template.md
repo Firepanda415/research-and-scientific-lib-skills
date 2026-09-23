@@ -9,9 +9,10 @@
 5. Running example and contamination mitigation
 6. Experiment plan
 7. Figure and table plan
+8. Reference case studies
 
 
-Use this template to concretize your benchmark idea before writing. Fill in each section through discussion.
+Fill only the fields the work needs. Infer answers from supplied artifacts and ask only for information that changes the design.
 
 ## 1. Basic Information
 
@@ -30,7 +31,7 @@ Use this template to concretize your benchmark idea before writing. Fill in each
 | **What makes your evaluation definition unique** vs. existing benchmarks? | |
 | **Sub-dimensions** in your evaluation framework | |
 
-## 3. Gap Analysis (see `references/gap-analysis.md`)
+## 3. Gap Analysis (see [gap-analysis.md](gap-analysis.md))
 
 | Field | Your Answer |
 |-------|-------------|
@@ -43,17 +44,13 @@ Use this template to concretize your benchmark idea before writing. Fill in each
 
 ## 4. Research Questions
 
-The example mappings below assume a standalone companion method in
-§3. If it is absent, shift the experiment references to §3 and keep
-all downstream numbering consistent.
-
 | RQ | Question | Mapped to Section |
 |----|----------|------------------|
 | RQ1 | | Experiments §__ |
 | RQ2 | | Experiments §__ |
 | RQ3 | | Experiments §__ |
 
-## 5. Benchmark Design (see `references/benchmark-design.md`)
+## 5. Benchmark Design (see [benchmark-design.md](benchmark-design.md))
 
 ### Design Goals
 
@@ -97,11 +94,11 @@ all downstream numbering consistent.
 | Held-out Evaluation Isolation | |
 | Unseen-Split or External Validation | |
 
-## 6. Construction Pipeline (see `references/construction-pipeline.md`)
+## 6. Construction Pipeline (see [construction-pipeline.md](construction-pipeline.md))
 
 | Field | Your Answer |
 |-------|-------------|
-| **Paradigm** (Reverse Synthesis / Controlled Injection / Adaptive Generation) | |
+| **Construction approach** (existing data, analytical instances, controlled perturbation, generated tasks, expert annotation, or other) | |
 | **Data Source** | |
 | **Target Scale** | |
 | **Biggest Construction Challenge** (data scarcity? subjective annotation? ambiguity? cost?) | |
@@ -109,13 +106,11 @@ all downstream numbering consistent.
 
 ### Pipeline Steps
 
+List only the steps that affect validity, cost, or reproduction, with a quality check where one applies.
+
 | Step | Input | Operation | Output | QC Gate |
 |------|-------|-----------|--------|---------|
-| 1 | | | | |
-| 2 | | | | |
-| 3 | | | | |
-| 4 | | | | |
-| 5 | | | | |
+| | | | | |
 
 ## 7. Dataset Characteristics
 
@@ -126,15 +121,15 @@ all downstream numbering consistent.
 | **Rich metadata / reasoning paths** for deep evaluation | |
 | **Key comparison dimensions** with existing benchmarks | |
 
-## 8. Expected Findings (预期洞察)
+## 8. Expected Findings
 
 | Field | Your Answer |
 |-------|-------------|
 | **What difficulties will SOTA models face?** | |
 | **Where will model errors concentrate?** | |
-| **Expected human-model performance gap** | |
+| **Expected human-model performance gap** (optional, when a human baseline applies) | |
 
-## 9. Running Example Design (Figure 1)
+## 9. Running Example Design (optional, Figure 1)
 
 | Field | Your Answer |
 |-------|-------------|
@@ -149,7 +144,7 @@ all downstream numbering consistent.
 | **Data provenance verification strategy** | |
 | **How is companion-method training kept disjoint from evaluation items and near-duplicates?** | |
 
-## 11. Experiment Plan (see `references/experiments.md`)
+## 11. Experiment Plan (see [experiments.md](experiments.md))
 
 ### Baseline Models
 
@@ -168,7 +163,7 @@ all downstream numbering consistent.
 
 ## 12. Figure & Table Plan
 
-Positions below are illustrative. Use the current venue template and update section/table numbering if the optional companion-method section is omitted.
+Positions below are illustrative. Use the current venue template.
 
 | Item | Content | Position |
 |------|---------|----------|
@@ -180,7 +175,9 @@ Positions below are illustrative. Use the current venue template and update sect
 
 ## Reference Case Studies
 
-For inspiration, consult these three published benchmark papers:
+Summaries are illustrative. Verify venue, taxonomy, and findings in the paper before citing them.
+
+These three published benchmark papers show different gap patterns and construction approaches:
 
 ### StatQA (NeurIPS 2024)
 - **Gap**: Math benchmarks test computation but ignore statistical method selection
@@ -198,6 +195,6 @@ For inspiration, consult these three published benchmark papers:
 ### VisJudge-Bench (ICLR 2026)
 - **Gap**: Evaluation checks aesthetics OR accuracy, not their interplay
 - **Paradigm**: Adaptive generation + 3-stage expert annotation
-- **Taxonomy**: 3 dimensions (信达雅) → 6 sub-dimensions
+- **Taxonomy**: 3 dimensions modeled on 信达雅 (Fidelity, Expressiveness, Aesthetics) → 6 sub-dimensions
 - **Companion Method**: VisJudge (GRPO)
 - **Key Finding**: Models excel at surface aesthetics but fail at fidelity-expressiveness balance

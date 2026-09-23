@@ -56,6 +56,8 @@ Search:
 - fresh technical platform/software releases;
 - community-attention feeds as a discovery signal.
 
+For the fresh window, prefer a direct listing (`https://arxiv.org/list/quant-ph/new`, `https://arxiv.org/list/quant-ph/recent`, or the arXiv API sorted by submission date) over search-engine queries. If only indexed search is available, state in the coverage note that the fresh window may be incomplete.
+
 Query concepts:
 
 ```text

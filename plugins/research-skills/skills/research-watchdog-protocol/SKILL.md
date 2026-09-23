@@ -1,6 +1,6 @@
 ---
 name: research-watchdog-protocol
-description: Monitor requested long-running jobs or recurring checks, and support requested research continuity or unattended operation using native task and scheduler state. Use for HPC monitoring, stall recovery, and multi-session handoffs. An ordinary long experiment does not by itself require a new orchestration workflow.
+description: Monitor requested long-running jobs or recurring checks, and support requested research continuity or unattended operation using native task and scheduler state. Use for HPC monitoring, stall recovery, and resuming in-progress work across sessions. An ordinary long experiment does not by itself require a new orchestration workflow.
 ---
 
 # Research Watchdog Protocol
@@ -21,10 +21,11 @@ Identify the actual task or job, expected output cadence, normal runtime or
 progress signals, and the user's notification and retry preferences. Reuse
 existing authorization; ask only when a necessary action falls outside it.
 Use an available persistent scheduler for recurring monitoring and do not claim
-background execution without one.
+background execution without one. Persistence is defined in
+[unattended-operation.md](references/unattended-operation.md).
 
-For custom state or existing file-based records, read
-[approval-and-state-contract.md](references/approval-and-state-contract.md).
+For custom state, existing file-based records, or the limits of monitoring
+authority, read [approval-and-state-contract.md](references/approval-and-state-contract.md).
 Use native task/scheduler state for new monitoring when it supplies the needed
 evidence; existing records do not require migration.
 

@@ -1,7 +1,7 @@
 # Manual Full-Brief Prompt
 
 ```text
-Use the quantum-research-radar skill to produce today's full quantum research briefing. Use my stored research profile, search both fresh and rolling windows, recover Expected × Unexpected work, include only substantive Quantum × AI, deduplicate against the ledger, and write in the standard Chinese format with primary links, evidence, limitations, and three must-read items.
+Use the quantum-research-radar skill to produce today's full quantum research briefing. Use my stored research profile, search both fresh and rolling windows, recover Expected × Unexpected work, include only substantive Quantum × AI, and write in the standard Chinese format with primary links, evidence, limitations, and three must-read items. Deduplicate against an existing readable coverage ledger. If none is readable, do not create one, and state in the brief that deduplication covered only briefs visible in this run.
 ```
 
 ## Compact variant

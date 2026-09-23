@@ -1,0 +1,39 @@
+schema_version: "1.1"
+name: handoff-settled-decisions
+description: >-
+  Settled decisions and a lesson that should steer every later session. Resume state,
+  a notebook entry and an implementer brief are near misses.
+tags: [routing, handoff]
+execution:
+  max_turns: 8
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    After a week of back-and-forth we settled two questions on this repository. We're dropping the dense-matrix fallback and using MPS everywhere, because the fallback silently ran out of memory above 24 qubits. And the intermittent failure in test_trotter was a random-seed problem, not a physics bug. I don't want future sessions reopening either one. Record both, with the reasons, where every later session on this project will see them. Show me the entries before writing anything.
+graders:
+  - name: calls-maintain-project-memory
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?maintain-project-memory"'
+    min: 1
+  - name: skips-research-watchdog-protocol
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-watchdog-protocol"'
+    min: 0
+    max: 0
+    arm: both
+  - name: skips-write-research-log
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?write-research-log"'
+    min: 0
+    max: 0
+    arm: both
+  - name: skips-write-implementation-job-prompts
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?write-implementation-job-prompts"'
+    min: 0
+    max: 0
+    arm: both

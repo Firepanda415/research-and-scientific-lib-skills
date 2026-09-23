@@ -1,0 +1,40 @@
+schema_version: "1.1"
+name: handoff-resume-next-session
+description: >-
+  Unfinished work that a later session must continue. Resume state belongs to the
+  watchdog protocol. Memory, a notebook entry and an implementer brief are near
+  misses.
+tags: [routing, handoff]
+execution:
+  max_turns: 8
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    I have to stop for tonight partway through a noise sweep. Settings 1 to 14 of 40 finished and their outputs are in results/sweep/. Setting 15 crashed with an out-of-memory error I haven't looked at, and 16 to 40 haven't started. Tomorrow I'll open a fresh session. Get things ready so that session can pick up exactly here without me re-explaining. Show me what you would leave behind, and don't write any files yet.
+graders:
+  - name: calls-research-watchdog-protocol
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-watchdog-protocol"'
+    min: 1
+  - name: skips-maintain-project-memory
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?maintain-project-memory"'
+    min: 0
+    max: 0
+    arm: both
+  - name: skips-write-research-log
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?write-research-log"'
+    min: 0
+    max: 0
+    arm: both
+  - name: skips-write-implementation-job-prompts
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?write-implementation-job-prompts"'
+    min: 0
+    max: 0
+    arm: both

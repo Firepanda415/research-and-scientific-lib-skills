@@ -2,7 +2,7 @@
 
 ## Table of contents
 
-1. Why Figure 1 matters
+1. When an early figure helps
 2. Paradigm A: Running Example plus Failure Case
 3. Paradigm B: Existing vs Ours
 4. Paradigm C: Performance Teaser
@@ -15,23 +15,22 @@ top-venue examples from the user's field where available, and do
 not assert visual details of these figures beyond what is
 described here.
 
-## 1. Why Figure 1 matters
+## 1. When an early figure helps
 
-Figure 1 is the single most important figure in the paper. It
-appears on page 1 or at the top of page 2, immediately after the
-Limitations paragraph in the Introduction. Its job is to convey in
-  in a quick scan (a) what problem the paper tackles and (b) why
-current methods do not solve it. Reviewers decide whether to read
-the rest of the paper partly based on this figure.
+An early figure can convey in a quick scan (a) what problem the
+paper tackles and (b) why current methods do not solve it. When it
+helps, place it near the text that motivates it, such as the
+Introduction's statement of the limitation, within the venue's float
+placement.
 
 Budget deliberate iteration time for Figure 1. One to two working
 days is a useful planning heuristic for a complex figure, not a
 requirement; scope the effort to the venue and figure complexity.
 
-## 2. Paradigm A: Running Example plus Failure Case (recommended)
+## 2. Paradigm A: Running Example plus Failure Case
 
-The most persuasive paradigm. Show a real, specific scenario and
-then show what goes wrong under the current method.
+Show a real, specific scenario and then show what goes wrong under
+the current method.
 
 ### Layout
 
@@ -93,10 +92,10 @@ Introduction as a preview of results.
 
 ### Layout
 
-A compact chart (grouped bar, scatter, or radar) showing the
-paper's method clearly dominating baselines. The chart is paired
-with a one-sentence text annotation explaining what the reader is
-seeing.
+A compact chart previewing the headline comparison, using the same
+metric, uncertainty, and legible baselines as the full results
+figure. The chart is paired with a one-sentence text annotation
+explaining what the reader is seeing.
 
 ### When to use
 
@@ -114,17 +113,17 @@ seeing.
 
 ## 5. Design principles
 
-- **Draft on paper first**. Sketch the figure by hand or on a
-  whiteboard. Show it to an advisor or collaborator. Iterate the
-  sketch before opening any software.
+- **Sketch first (optional suggestion)**. For a complex figure,
+  the agent may suggest that the user sketch it by hand and show the
+  sketch to a collaborator before detailed drawing.
 - **Real entities only**. Name real queries, real datasets, real
   outputs. Placeholder names ("Entity1", "X") undermine credibility.
-- **Quick-scan test**. Show the figure to someone unfamiliar with the
-  paper. If they cannot describe the problem after a brief scan, the
-  figure is not doing its job.
-- **Appears once, referenced throughout**. The same example in
-  Figure 1 should reappear in the Methodology (as a walkthrough)
-  and Experiments (as a case study).
+- **Quick-scan test (optional suggestion)**. The agent may suggest
+  that the user show the figure to someone unfamiliar with the paper.
+  If that reader cannot describe the problem after a brief scan, the
+  figure needs revision.
+- **Reusing the example**. Reusing the example in later sections can
+  help when it clarifies the method. Reuse is optional.
 
 ## 6. Tool recommendations
 

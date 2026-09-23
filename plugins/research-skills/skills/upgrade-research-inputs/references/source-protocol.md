@@ -1,7 +1,7 @@
 # Source and lineage protocol
 
-Use this reference whenever the workflow retrieves literature, documentation,
-code, data, or current facts.
+Read this reference for a lineage or novelty inquiry, for planning search
+queries, or for deciding which kind of source can support a claim.
 
 ## Table of contents
 
@@ -46,7 +46,6 @@ Use only families relevant to the current question:
 - current official documentation, specification, or release; and
 - strongest baseline and resource comparison.
 
-Search by mechanism and mathematical structure as well as current terminology.
 Different fields often give the same object different names.
 
 ## 3. Source hierarchy

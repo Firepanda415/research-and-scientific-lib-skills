@@ -23,3 +23,5 @@ Explain the expected benefit, the commitments required, and the uncertainty most
 When uncertainty is decisive, identify an observation that would distinguish the alternatives. Prefer evidence already available; otherwise describe a bounded check and its cost. Do not launch additional costly work without the required authorization.
 
 Give a clear recommendation with enough reasoning to evaluate it. The user may choose to retain the current direction, revise its scope, or pursue the alternative. Carry that choice into subsequent work without treating this discussion as permission to modify a system or expand an experiment.
+
+When the reconsideration needs candidate directions generated or compared, use `develop-research-ideas`. To check an alternative's closest prior work or novelty, use `upgrade-research-inputs`.

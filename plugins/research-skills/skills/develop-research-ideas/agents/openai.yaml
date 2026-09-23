@@ -1,0 +1,4 @@
+interface:
+  display_name: "Develop Research Ideas"
+  short_description: "Generate and assess research directions"
+  default_prompt: "Use $develop-research-ideas to generate or assess research directions for this question by their mechanisms, evidence, and constraints."

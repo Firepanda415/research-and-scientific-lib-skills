@@ -1,4 +1,4 @@
 interface:
   display_name: "Implementation Job Prompts"
-  short_description: "Write traceable, auditable implementer contracts"
+  short_description: "Write concise, bounded implementer handoffs"
   default_prompt: "Use $write-implementation-job-prompts to create a concise executable handoff with the actual scope and sufficient acceptance evidence."

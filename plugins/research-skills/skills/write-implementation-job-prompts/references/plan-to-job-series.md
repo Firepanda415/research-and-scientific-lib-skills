@@ -35,6 +35,11 @@ inform the split without a numeric scoring rule.
 A short job table may capture outcome, dependencies, owner/scope, and acceptance.
 Use a clause ledger or immutable contract revisions only for a plan whose size or
 governance needs that traceability. Do not silently drop an authorized outcome.
+When jobs address reported findings, map each finding to a job or a recorded
+disposition before dispatch. Leaving one out of scope or deferred requires a
+decision by the user, a maintainer, or an authoritative project contract, and the
+user's request may already set that scope. Finishing the job set or passing the
+suite does not close an unmapped finding.
 Record a deferred obligation where it will actually be revisited rather than in
 several overlapping ledgers.
 
@@ -58,6 +63,7 @@ debt to run a full suite; use the project's requirements and affected behavior.
 
 When cumulative outputs matter, distinguish the program baseline from a job's
 local baseline. Final acceptance checks required outcomes, intended artifact
-changes, and remaining temporary obligations. Mutation probes, scan controls,
-byte-identical goldens, and full closure batteries apply only when the project
-or a real evidence gap requires them. Do not turn closure into unrelated cleanup.
+changes, and remaining temporary obligations. Additional mutation probes, scan
+controls, byte-identical goldens, and full closure batteries apply only when the
+project or a real evidence gap requires them. Do not turn closure into unrelated
+cleanup.

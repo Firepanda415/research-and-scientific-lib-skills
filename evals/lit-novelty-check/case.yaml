@@ -1,0 +1,25 @@
+schema_version: "1.1"
+name: lit-novelty-check
+description: >-
+  A novelty question on an active quantum topic. Recent work is relevant, but the
+  request is a targeted evidence check, not a briefing.
+tags: [routing, literature]
+execution:
+  max_turns: 8
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    In the paper I'm drafting I claim that nobody has combined sliding-window decoding with belief propagation and ordered-statistics post-processing for qLDPC codes under circuit-level noise. Is that true? Find the papers nearest to this combination and tell me whether my claim survives.
+graders:
+  - name: calls-upgrade-research-inputs
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?upgrade-research-inputs"'
+    min: 1
+  - name: skips-quantum-research-radar
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?quantum-research-radar"'
+    min: 0
+    max: 0
+    arm: both

@@ -53,9 +53,9 @@ Use this order for a standard journal submission:
 - Keep claims aligned with the manuscript. Do not introduce novelty, performance, or scope claims that are not supported in the paper.
 - Prefer precise nouns over generic phrases: "postselection success probability" is better than "robustness" if that is what the manuscript proves.
 - Keep the letter short, usually one page.
-- Follow `research-writing-style` for the user's punctuation and vocabulary preferences. Do not introduce em dashes or semicolons into authored research prose.
+- Follow `research-writing-style` for punctuation and vocabulary. Its default house style, which an explicit user instruction or the journal's own requirements override, excludes em dashes and semicolons from authored prose.
 - Mention a working-paper or preprint version when current journal policy requires it, or when the user provides the details and requests disclosure. Never invent or infer preprint metadata.
-- For IOP/QST-style letters, `moderncv` is acceptable if examples use it, but a standard `letter` class is safer when the local/Overleaf environment lacks `moderncv`.
+- Reuse a supplied example's document class if it compiles in the target environment. Otherwise use the standard `letter` class.
 
 ## LaTeX Checks
 
@@ -75,7 +75,6 @@ For a new letter or submission-readiness check, apply the metadata and declarati
 
 ```tex
 \usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 ```
 

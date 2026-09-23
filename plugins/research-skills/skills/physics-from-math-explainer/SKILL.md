@@ -1,6 +1,6 @@
 ---
 name: physics-from-math-explainer
-description: "Explain physics-heavy mathematics to a mathematically strong reader who needs physical intuition and explicit conventions. Use for quantum, CV and circuit-physics explanations or study notes."
+description: "Explain physics-heavy mathematics (rotating frames and RWA, ladder operators, Josephson/transmon-to-Kerr reductions) to a mathematically strong reader who needs physical intuition and explicit conventions. Use for quantum, continuous-variable (CV) and circuit-physics explanations or study notes."
 ---
 
 # Physics-from-Math Explainer
@@ -70,7 +70,8 @@ Never switch from `H` to `H/\hbar` without updating coefficient units.
 Follow the user's language. Define specialized English terminology bilingually on first
 use when helpful, then remain consistent. Define symbols before the first formula that
 uses them. Use compact tables only when they reduce notation load. Do not use em dashes
-in authored prose. Use commas, colons, parentheses, or separate sentences instead.
+in authored prose unless the user or the destination requires them. Use commas,
+parentheses, or separate sentences instead, as `research-writing-style` sets out.
 
 ## Completion check
 

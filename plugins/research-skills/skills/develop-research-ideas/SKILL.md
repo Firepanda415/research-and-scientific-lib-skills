@@ -17,6 +17,7 @@ These are lenses to select, not consecutive stages to complete.
   not the boundary of the design space.
 - Explore structurally different approaches when alternatives are wanted. A new
   parameter, kernel, or application label is not a new mechanism by itself.
+  Stop generating when new candidates no longer differ in mechanism.
 - State the strongest credible hypothesis, then identify its load-bearing
   assumptions. Repair a local defect without discarding unrelated ideas, and
   abandon a premise when the evidence actually contradicts it.
@@ -36,8 +37,10 @@ result. No fixed perspective, candidate, round, or score count is required.
 Ask only for missing information that materially changes the work; otherwise use
 the supplied artifacts and state consequential assumptions.
 
-Lead with the strongest current recommendation and its decisive reasons. Explain
-the remaining uncertainty and next proof, source check, or experiment when useful.
+Lead with the strongest current recommendation and its decisive reasons. When
+the user asked for options, present the distinct candidates first, then which one
+you would pursue and why. Explain the remaining uncertainty and next proof, source
+check, or experiment when useful.
 Do not require a ranked portfolio for a single proposal or an accept/reject verdict
 for an exploratory discussion. A feasible project may still lose to a more useful
 alternative; no candidate needs to be preserved just because work has begun.
@@ -53,5 +56,7 @@ Read only what the current question needs:
 - [cross-field-transfer.md](references/cross-field-transfer.md): whether an analogy
   transfers under the target assumptions.
 
-Use `upgrade-research-inputs` when source retrieval is the missing work. No prior
-skill verdict, formal evidence map, durable log, or fixed handoff is required.
+Use `upgrade-research-inputs` when source retrieval is the missing work. Use
+`rethink-design` when the user wants to challenge an already committed direction
+or design as too limited. No prior skill verdict, formal evidence map, durable
+log, or fixed handoff is required.

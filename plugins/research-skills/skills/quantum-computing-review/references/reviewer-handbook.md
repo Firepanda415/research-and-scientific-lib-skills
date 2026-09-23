@@ -1,31 +1,34 @@
-# Quantum Computing Journal Peer Review
+# Peer Review Handbook for Technical Manuscripts
 
 ## Contents
 
-1. Journal policy, confidentiality, conflicts, and review modes
-2. Repository discovery and code/data audit
-3. Manuscript-location protocol
-4. Claim, mathematical, metric, decoder, baseline, resource, and overlap audits
-5. Quantum-subfield modules
-6. Referee-report contracts, candidate ledgers, and output templates
-7. Failure modes and completion checks
+1. Purpose
+2. Non-Negotiable Gate: Journal Policy, Confidentiality, and Conflicts
+3. Review Modes
+4. Required Inputs
+5. Mandatory Repository Discovery and Code/Data Audit
+6. Core Stance
+7. Mandatory Manuscript-Location Protocol
+8. Core Procedure (Steps 0 to 12, for every manuscript)
+9. Quantum Module (only for a contribution involving quantum computing or quantum technology)
+10. Writing the Referee Report
+11. Output Matched to the Request
+12. Failure Modes
+13. Completion Check
 
 ## Purpose
 
-This skill is specifically for **journal peer review in quantum science and
-technology**. Its goal is to help the reviewer determine:
+This handbook supports **journal peer review of another author's technical manuscript in any field**. The Core Procedure applies to every manuscript. The Quantum Module adds checks when the manuscript's contribution involves quantum computing or quantum technology. The handbook helps the reviewer determine:
 
 1. what the paper actually claims;
 2. which evidence supports each claim;
-3. whether the quantum component is necessary for the reported result;
+3. whether the component credited with the reported result is necessary for it;
 4. whether comparisons and resource accounting are fair;
 5. what is genuinely new relative to prior work;
 6. whether the problems are repairable within revision;
 7. what recommendation follows from the technical record.
 
-The skill should produce a report that is useful to both the editor and the
-authors. It should not merely list weaknesses, repeat the abstract, or reward a
-paper for using quantum hardware without establishing what that hardware adds.
+The review should produce a report that is useful to both the editor and the authors. It should not merely list weaknesses, repeat the abstract, or reward a paper for using a new method, model, or platform, such as quantum hardware, without establishing what it adds.
 
 ---
 
@@ -50,6 +53,9 @@ Run this gate **before processing a confidential manuscript**.
 6. Do not contact the authors directly; route questions through the editor.
 7. If there is a possible personal, financial, institutional, collaborative,
    competitive, or intellectual conflict, advise the user to contact the editor.
+8. Under double-anonymous review, do not try to identify the authors, and route
+   identity questions to the editor. The first gate in [SKILL.md](../SKILL.md) lists
+   what this excludes.
 
 Use the current official policy when it matters to the requested handling. Reuse policy evidence already checked for the same assignment unless its currency or applicability is uncertain.
 
@@ -81,7 +87,7 @@ evidence, and decision consequence rather than averaging the recommendations.
 
 ### Mode E: Expertise-Bridge Review
 
-Use when the reviewer is strong in one quantum subfield but weaker in the paper's
+Use when the reviewer is strong in one field or subfield but weaker in the paper's
 source discipline. Build private prerequisite notes and translate notation or
 assumptions into the reviewer's background. Do not mistake unfamiliarity for a flaw,
 and do not put tutorial notes into the submitted report.
@@ -116,6 +122,8 @@ For a computational manuscript, do this **before** writing any claim that code, 
 configs, or implementation details are missing. A repository is also evidence about the
 method itself, not only about reproducibility.
 
+Under double-anonymous review, skip every identity-seeking step in this section. Make no search for the repository or the manuscript, do not attribute a repository or dataset to its owner, and do not record or use an identity that an opened link reveals. The first gate in [SKILL.md](../SKILL.md) states the full rule. In `confidential-no-egress` mode, open an author-supplied link only when venue policy permits reviewers to access such links with the tools in use. Otherwise record the link as present but not inspected, so that the human reviewer can inspect it.
+
 ### 1. Actively discover repository and data links
 
 Search every supplied file, including the main manuscript, Supplementary Information,
@@ -129,7 +137,8 @@ extended data, appendices, cover letter, rebuttal, and text attachments, for:
 
 If the paper states that code is public but no explicit URL is recoverable, first confirm
 that the manuscript or preprint is public and that venue policy permits external lookup.
-Only then search using public metadata. In confidential-no-egress mode, never send an
+Only then search using public metadata, and never under double-anonymous review.
+In confidential-no-egress mode, never send an
 unpublished title, author list, project acronym, unique phrase, or manuscript excerpt to
 an external search service. Do not identify a same-name repository as the paper repository
 without confirming its owner, README, citation, authors, or project description.
@@ -141,7 +150,7 @@ verified search**, **claimed public but not found**, or **not claimed**.
 
 For every credible repository or archive, check:
 
-- owner and connection to the authors or institution;
+- owner and connection to the authors or institution, except under double-anonymous review;
 - manuscript title, acronym, citation block, or DOI;
 - public/private status and whether links actually open;
 - default branch, latest commit, tags, releases, archive DOI, and license;
@@ -158,8 +167,8 @@ execution files relevant to the paper's central claims. Check for:
 
 - consistency between equations, pseudocode, and implemented control flow;
 - hidden defaults, approximations, preprocessing, postprocessing, and stopping rules;
-- optimizer settings, restarts, shot counts, seeds, and hardware backends;
-- whether claimed quantum steps are actually executed or replaced by simulation;
+- optimizer settings, restarts, sample or shot counts, seeds, and hardware backends;
+- whether claimed hardware or quantum steps are actually executed or replaced by simulation;
 - whether baselines receive comparable settings and resources;
 - whether posted data are the exact result-generating inputs/outputs or only examples;
 - whether figures and tables can be traced to scripts, configs, and raw outputs;
@@ -191,10 +200,12 @@ availability alone does not validate numerical results, hardware runs, or claime
    sufficient.
 2. **Separate usefulness from claim validity.** A method can be useful as batching,
    workflow integration, or proof of compatibility even when a speedup claim fails.
-3. **Separate quantum involvement from quantum contribution.** Running a circuit on
-   a QPU does not show that the quantum subroutine improves quality, scaling, or cost.
-4. **Use the strongest structure-aware classical explanation.** Do not compare a
-   structured circuit only with a deliberately generic simulator.
+3. **Separate involvement from contribution.** Using a new component, such as a
+   learned model, a new solver, or a circuit run on a QPU, does not show that the
+   component improves quality, scaling, or cost.
+4. **Use the strongest structure-aware alternative explanation.** Do not compare a
+   structured method only with a deliberately generic alternative, such as a
+   structured circuit with a generic simulator.
 5. **Test the titled novelty.** Replace or remove the claimed new component while
    keeping the surrounding workflow fixed.
 6. **Treat prior-work overlap precisely.** Properly cited inherited infrastructure,
@@ -211,7 +222,8 @@ availability alone does not validate numerical results, hardware runs, or claime
 10. **Make every criticism locatable.** A numbered object is preferred; otherwise use
     page + section/subsection + paragraph ordinal and an opening-phrase anchor.
 11. **Use public code and data as evidence.** Actively find and inspect linked repositories
-    before judging reproducibility or implementation credibility.
+    before judging reproducibility or implementation credibility, as far as the
+    confidentiality mode and review model allow.
 12. **The human reviewer remains accountable.** Every equation, citation, comparison,
     locator, repository finding, and recommendation must be checked by the reviewer.
 
@@ -330,9 +342,11 @@ For searchable typos:
 
 ---
 
-# Core Procedure
+## Core Procedure
 
-## Step 0: Establish Venue Standard and Scope
+These steps apply to every manuscript. When the contribution involves quantum computing or quantum technology, the Quantum Module after Step 12 adds checks to Steps 1, 3, 4, 5, 6, and 8 and supplies the quantum-subfield modules.
+
+### Step 0: Establish Venue Standard and Scope
 
 Record privately:
 
@@ -347,27 +361,25 @@ Conflict-of-interest status:
 Editor-specific questions:
 ```
 
-Do not apply PRL-, PRX Quantum-, npj-, QST-, PRA-, or specialist-journal standards
-interchangeably. A technically valid incremental paper may be publishable in one venue
-and below the expected advance in another.
+Do not apply the standards of a broad letters journal, a selective flagship journal, and a specialist journal interchangeably. A technically valid incremental paper may be publishable in one venue and below the expected advance in another.
 
 ---
 
-## Step 1: Reconstruct the Paper Before Critiquing It
+### Step 1: Reconstruct the Paper Before Critiquing It
 
 Write a compact end-to-end map:
 
 ```text
-Scientific problem
-→ mathematical formulation
-→ classical preprocessing
-→ quantum encoding and state preparation
-→ quantum evolution or circuit
-→ measurement
-→ classical optimization/postprocessing
-→ final scientific or computational output
-→ claimed advantage
+Scientific or engineering problem
+→ mathematical formulation or model
+→ data, inputs, or experimental setup
+→ method, algorithm, or apparatus
+→ outputs and postprocessing
+→ final scientific or computational result
+→ claimed contribution or advantage
 ```
+
+For a quantum manuscript, expand the method stages with the Quantum Module's Quantum Paper Map.
 
 Then identify:
 
@@ -375,18 +387,18 @@ Then identify:
 - 2 to 5 **load-bearing claims**;
 - the strongest result;
 - the weakest necessary link in the argument;
-- what remains if the quantum component is removed;
+- the component credited with the main result, and what remains if it is removed;
 - what remains if the allegedly new component is replaced by the prior method.
 
 Do not start writing the final report until this map is internally consistent.
 
-## Coverage matched to the claims
+### Coverage Matched to the Claims
 
 For a full review, inspect claim attribution, numerical evidence, and application interpretation where relevant. These dimensions can share one evidence pass. In revision, inspect the original concerns and changed or newly introduced claims without reopening unrelated settled issues.
 
 A requested comprehensive audit covers all relevant dimensions even when the recommendation is already clear. A focused crosscheck stays focused. Record material unresolved questions, but do not require separate pass forms or a ledger for every routine check.
 
-## Step 2: Build a Claim-Evidence Ledger
+### Step 2: Build a Claim-Evidence Ledger
 
 Track each load-bearing claim against its evidence. Use a ledger when the number of claims or requested audit depth makes it useful; the following format is optional.
 
@@ -422,9 +434,9 @@ Protocol; section names alone are insufficient for unnumbered prose.
 
 ---
 
-## Step 3: Perform the Mathematical and Structural Audit
+### Step 3: Perform the Mathematical and Structural Audit
 
-### 3.1 Correctness and Assumptions
+#### 3.1 Correctness and Assumptions
 
 Check:
 
@@ -439,48 +451,22 @@ Check:
 
 When a derivation is central, reconstruct the decisive steps. For a suspected sign, factor, index, or notation error, identify the intended convention and propagate the smallest plausible correction through dependent equations, algorithms, and results. A local typo leaves the scientific conclusion intact after correction. If that consequence is unverified, state the uncertainty. Do not call an error fatal merely because the displayed equation is false, or harmless merely because its repair looks small. Paper-based implementation must resolve the discrepancy before using the equation, even if its referee severity is Minor.
 
-### 3.2 Structural Simplifications
+#### 3.2 Structural Simplifications
 
-Before accepting a quantum-simulation or hardware-scaling comparison, test whether the
-object has exploitable structure:
+Before accepting a simulation, scaling, or speedup comparison, test whether the object
+has exploitable structure:
 
-- tensor-product separability;
+- separability into independent parts;
 - block diagonalization;
 - commuting terms;
 - symmetry sectors and conserved quantities;
-- low entanglement;
 - low rank or low treewidth;
-- Gaussian, stabilizer, Clifford-dominated, matchgate, free-fermion, or other
-  classically tractable structure;
-- repeated identical subcircuits;
+- repeated identical subproblems;
 - independent batched instances.
 
-For example, if disjoint blocks satisfy
+When such structure exists, compare against a method that exploits it, such as independent or batched solution of the parts, and not only against a monolithic representation. The construction may still demonstrate throughput, integration, or compatibility, so the review should invalidate only the unsupported claim. For quantum objects, the Quantum Module's Quantum Structural Simplifications lists further structure and gives a worked example.
 
-$$
-H=\sum_{k=1}^{m}H_k,
-$$
-
-and the initial state, mixer, and parameters respect the same partition, then the
-ideal evolution may factorize as
-
-$$
-U=\bigotimes_{k=1}^{m}U_k,
-$$
-
-with
-
-$$
-\lvert\psi\rangle=\bigotimes_{k=1}^{m}\lvert\psi_k\rangle.
-$$
-
-In that case, compare against independent or batched simulation of the blocks, not
-only against a monolithic state-vector or density-matrix representation. However, do
-not conclude that the hardware construction is useless: it may still demonstrate QPU
-multiplexing, throughput, reduced submission overhead, or hardware compatibility. The
-review should invalidate only the unsupported claim.
-
-### 3.3 Metric Validity
+#### 3.3 Metric Validity
 
 Inspect the metric when an optimization or benchmark conclusion depends on an objective-derived scalar, normalized score, ranking, or aggregate summary.
 
@@ -536,10 +522,9 @@ Required reanalysis, if any:
 If a central figure uses an invalid metric but the underlying raw results are available, request
 reanalysis and narrow the affected claims. Do not automatically treat the entire method as invalid.
 
-### 3.4 Finite-Shot Decoder and Product-Distribution Scaling: Hard Gate
+#### 3.4 Finite-Shot Decoder and Product-Distribution Scaling: Hard Gate
 
-Complete this gate whenever a reported result is extracted from finite-shot samples and depends
-on a decoder, selected bitstring, marginal estimate, postselection rule, or blockwise readout.
+Complete this gate whenever a reported result is extracted from a finite number of samples (shots, on quantum hardware) and depends on a decoder, selected bitstring, marginal estimate, postselection rule, or blockwise readout. Samples from a quantum device, an annealer or Ising machine, or a probabilistic or Monte Carlo sampler all qualify.
 
 First identify the exact decoder:
 
@@ -589,7 +574,7 @@ When factorization or batching supports a throughput or scaling claim, require t
    raw samples when this changes the scaling interpretation;
 5. report ties, failures, postselection losses, and uncertainty;
 6. verify that any aggregation step does not silently erase the correlations attributed to
-   the quantum state.
+   the sampled state, such as a quantum state.
 
 Record the gate privately:
 
@@ -605,22 +590,22 @@ Claim that survives:
 
 ---
 
-## Step 4: Isolate the Quantum Contribution
+### Step 4: Isolate the Claimed Contribution
 
 Ask the central counterfactual:
 
-> If the quantum subroutine were replaced while every surrounding component remained
-> fixed, would the claimed improvement survive?
+> If the component credited with the improvement were replaced while every surrounding
+> component remained fixed, would the claimed improvement survive?
 
 Decompose the method into:
 
 - problem formulation;
 - decomposition or instance selection;
-- quantum state or circuit;
+- the credited component, such as a model, solver, circuit, or device;
 - optimizer;
 - sampling rule;
 - aggregation or decoding;
-- classical local improvement;
+- local improvement or postprocessing heuristics;
 - multi-start or parallel execution;
 - application model or surrogate.
 
@@ -641,7 +626,7 @@ $x_{\bar S}$ be the current outside assignment. Distinguish:
 
 Check which objective the local solver actually optimizes, which objective the aggregation
 rule evaluates, and whether dropped cross-boundary terms change the ranking of local proposals.
-The matched replacement ablation must use the same local objective as the submitted quantum
+The matched replacement ablation must use the same local objective as the submitted local
 subroutine. When relevant, a second exact conditional replacement should test whether the
 outer workflow is compensating for a misspecified induced local objective. Record `not applicable`
 when the method has no embedded local or block update.
@@ -652,12 +637,9 @@ Then propose matched replacement ablations. Depending on the paper, these may in
 - deterministic greedy updates;
 - exact solution of the small local problem;
 - exact conditional block optimization;
-- a classical local, tabu, annealing, tensor-network, stabilizer, or domain-specific
-  solver;
-- noiseless structure-aware simulation;
-- removing error mitigation or postselection;
-- preserving versus discarding the joint quantum output;
-- same algorithm with hardware sampling replaced by classical sampling.
+- an established local, tabu, annealing, or domain-specific solver;
+- removing filtering, mitigation, or postselection steps;
+- preserving versus discarding the joint structure of the component's output.
 
 Hold fixed as much as possible:
 
@@ -673,29 +655,27 @@ Hold fixed as much as possible:
 - wall-clock or compute budget;
 - parallel resources.
 
-### Minimum Decisive Ablation Template
+#### Minimum Decisive Ablation Template
 
 | Variant | Component changed | Everything held fixed | Main question answered |
 |---|---|---|---|
 | Submitted method | None | Reference | Baseline behavior |
-| Simple replacement | Quantum component replaced by random or greedy rule | Same workflow and budget | Does the quantum output beat a trivial proposal? |
-| Exact local replacement | Quantum local solver replaced by exact small-instance solution | Same blocks and aggregation | Does approximation by the quantum subroutine add value? |
-| Strong classical replacement | Structurally matched classical solver | Same resources and stopping rule | Is the titled quantum component competitive? |
-| Structure-aware simulation | Exploits factorization, symmetry, or low entanglement | Same circuit semantics | Is the simulator crossover artificial? |
+| Simple replacement | Credited component replaced by random or greedy rule | Same workflow and budget | Does the component's output beat a trivial proposal? |
+| Exact local replacement | Local solver replaced by exact small-instance solution | Same blocks and aggregation | Does the approximate local solver add value? |
+| Strong alternative replacement | Structurally matched established solver | Same resources and stopping rule | Is the titled component competitive? |
+| Structure-aware reference | Exploits factorization, symmetry, or low rank | Same problem semantics | Is the reported crossover artificial? |
 
-If the quantum-generated joint state is reduced to independent single-bit, marginal, or
-greedy proposals during postprocessing, explicitly test whether the quantum correlations
-survive into the final decision rule.
+If the credited component's joint output is reduced to independent, marginal, or greedy proposals during postprocessing, explicitly test whether the joint structure survives into the final decision rule.
 
 ---
 
-## Step 5: Stress-Test Classical Baselines and Comparison Fairness
+### Step 5: Stress-Test Baselines and Comparison Fairness
 
 A baseline is fair only if it competes on the actual claim.
 
 Check:
 
-1. **Native formulation:** Does the classical method operate directly on the original
+1. **Native formulation:** Does the baseline operate directly on the original
    problem, or is it forced through a disadvantageous transformation that the proposed
    method avoids?
 2. **Structural match:** Does the baseline exploit the same block, sparsity, symmetry,
@@ -713,15 +693,352 @@ Check:
 8. **Uncertainty:** Report seeds, instance distributions, confidence intervals, tails,
    and failure rates.
 
-Do not accept “classical methods scale exponentially” as a baseline analysis. Complexity
-class, worst-case scaling, practical implementation, and performance on the tested
-instance family are separate questions.
+Do not accept a general scaling statement, such as “classical methods scale exponentially,” as a baseline analysis. Complexity class, worst-case scaling, practical implementation, and performance on the tested instance family are separate questions.
 
 ---
 
-## Step 6: Classify the Quantum and Hardware Claim Correctly
+### Step 6: Classify the Claimed Advantage
 
-Do not collapse the following into one concept:
+Do not collapse different kinds of advantage into one concept:
+
+| Claim type | What must be shown |
+|---|---|
+| Formulation or representation benefit | A smaller, cleaner, or more faithful formulation under stated assumptions |
+| Execution-speed crossover | Faster execution than a specified alternative under matched semantics and resources |
+| Throughput | More independent jobs completed per call, device, or unit time |
+| Platform compatibility | The method runs with acceptable accuracy on the stated platform or data |
+| Solution-quality advantage | Better solution quality, success probability, or time-to-target than strong alternatives |
+| End-to-end practical advantage | Better total cost, latency, energy, or scientific outcome including all overhead |
+| Asymptotic advantage | A defensible complexity separation under explicit input, output, oracle, and error models |
+
+Solving many independent small problems in one run is not the same as solving one larger coupled problem. Problem size, interaction density, depth or iteration count, instance hardness, and solution quality are different axes.
+
+#### Resource Accounting
+
+Request the quantities relevant to the claim:
+
+- problem, model, and data sizes
+- hardware, memory, and parallel resources
+- preprocessing, training or tuning, execution, communication, and postprocessing costs,
+  reported separately
+- number of runs, repeated-run uncertainty, and failed or discarded runs
+- raw logs or equivalent metadata when allowed
+
+For quantum hardware, use the Quantum Module's Hardware Resource Accounting.
+
+---
+
+### Step 7: Audit Scalability Claims
+
+For every scalability statement, identify the scaled variable and the fixed variables:
+
+```text
+Scaled: N / qubits / modes / depth / shots / terms / code distance / instances / rank
+Fixed: accuracy / noise / coupling density / optimizer budget / success probability / data
+Measured: runtime / memory / fidelity / objective gap / throughput / physical resources
+```
+
+Check whether:
+
+- solution quality deteriorates while runtime appears flat;
+- only independent workloads are being added;
+- preprocessing or measurement dominates;
+- the tested sizes are large only in a superficial dimension;
+- exact ground truth disappears at larger sizes;
+- the metric changes when exact verification becomes unavailable;
+- asymptotic language is inferred from a narrow empirical range;
+- extrapolation ignores error correction, calibration, or communication costs.
+
+When the evidence is preliminary, use **proof of concept**, **compatibility
+demonstration**, **throughput demonstration**, or **empirical scaling over the tested
+range**, not unconditional scalability.
+
+---
+
+### Step 8: Separate Application Value from Method Value
+
+For an application pipeline, separate at least three causal layers:
+
+1. **Model or representation:** for example, a higher-order surrogate, improved
+   Hamiltonian, active space, ansatz, dataset, or physical model.
+2. **Optimizer or algorithm:** the method that searches or estimates within that model.
+3. **Execution platform:** for example, exact or approximate simulation, a noisy
+   emulator, hybrid sampling, specialized hardware, or a quantum device.
+
+A better application result may come from the representation rather than the optimizer.
+A scientifically useful design found by a workflow does not establish that the proposed
+method or platform was necessary to find it.
+
+Request factorial or cumulative ablations where practical:
+
+| Representation | Optimizer | Execution | Purpose |
+|---|---|---|---|
+| Old | Established | Standard platform | Prior pipeline |
+| New | Established | Standard platform | Isolate representation gain |
+| New | Proposed method | Standard platform or simulation | Isolate algorithmic workflow |
+| New | Proposed method | Proposed platform or hardware | Isolate platform or hardware effect |
+
+Match application-query budgets, initial datasets, surrogate training, random seeds,
+and stopping conditions.
+
+---
+
+### Step 9: Audit Same-Author Prior Work and Overlap Precisely
+
+Under double-anonymous review, do not establish authorship from sources outside the submission. Assess same-group overlap only from material the editor supplied or self-citations visible in the manuscript, and route identity questions to the editor, as the first gate in [SKILL.md](../SKILL.md) requires.
+
+When the same or substantially overlapping author group has a related paper, do not use
+vague labels such as “present in both.” Identify **what exact object is repeated**.
+
+#### Required Overlap Table
+
+| Component | Prior paper: exact object and locator | Present manuscript: exact object and locator | Exact relationship | Citation and disclosure status | Is it part of the claimed novelty? | Review significance |
+|---|---|---|---|---|---|---|
+| Problem class | page + section + paragraph/object | page + section + paragraph/object | Same / extension / different | ... | ... | ... |
+| Derivation or theorem | page + theorem/equation/paragraph | page + theorem/equation/paragraph | Reused / modified / new | ... | ... | ... |
+| Algorithmic rule | page + Methods section + paragraph/algorithm line | page + Methods section + paragraph/algorithm line | Same mechanism / generalized | ... | ... | ... |
+| Software or HPC infrastructure | page + section + paragraph/code path | page + section + paragraph/code path | Reused implementation architecture | ... | ... | ... |
+| Experimental protocol | page + section + paragraph/table | page + section + paragraph/table | Same settings / controlled continuation | ... | ... | ... |
+| Dataset or application testbed | page + section + paragraph | page + section + paragraph | Same testbed / new task | ... | ... | ... |
+| Figures, numerical data, or runs | figure/table/data locator | figure/table/data locator | Reused / newly generated / unclear | ... | ... | ... |
+| Hardware experiment | page + section + figure/table | page + section + figure/table | Same / updated device / genuinely new | ... | ... | ... |
+| Core contribution | page + contribution statement | page + contribution statement | Incremental / substantive extension / distinct | ... | ... | ... |
+
+#### Interpretation Rules
+
+1. **Inherited and cited is normally acceptable.** Reusing a decomposition policy,
+   aggregation rule, codebase, HPC layer, dataset, or application testbed is not by
+   itself a reason for rejection when it is properly cited and not falsely claimed as
+   new.
+2. **Same application does not mean same experiment.** Distinguish repeated protocol
+   from reused numerical data, figures, or conclusions.
+3. **A direct extension may still be publishable.** Extending quadratic to higher-order,
+   DV to CV, simulation to hardware, or one regime to another must be judged by the
+   technical difficulty, evidence, and resulting insight, not by the fact that the
+   direction was foreseeable.
+4. **A prior paper's future-work sentence is not dispositive.** It may reduce surprise,
+   but it does not automatically eliminate novelty.
+5. **Preprint citation is not concealment.** If the prior work was cited as an arXiv
+   preprint and is now published, request an updated final citation; do not treat the
+   old citation format as a substantive offense.
+6. **Overlap matters when claim boundaries are blurred.** Ask the authors to state what
+   is inherited, generalized, newly proved, newly implemented, and newly measured.
+7. **Serious concerns require specific evidence**, such as:
+   - undisclosed reuse of figures, tables, data, or numerical runs;
+   - substantially repeated text or derivations presented as new;
+   - the same central scientific result published twice;
+   - omission of the closest prior paper;
+   - a novelty statement contradicted by the authors' own earlier work.
+8. Do not accuse authors of self-plagiarism, salami slicing, or duplicate publication
+   unless the evidence is direct and the issue is material. When uncertain, describe
+   the overlap factually in confidential comments and ask the editor to assess policy.
+
+The novelty question is:
+
+> After removing properly cited inherited components, is the remaining contribution
+> technically substantive and sufficiently supported for this journal?
+
+---
+
+### Step 10: Crosscheck Another Review Without Inheriting Its Errors
+
+When given another report, convert it into atomic candidate findings.
+
+| Candidate point | Manuscript support | Mathematical correctness | Materiality to main claims | Actionability | Final treatment |
+|---|---|---|---|---|---|
+| ... | full locator under the Mandatory Manuscript-Location Protocol | correct / partly correct / wrong / unverified | central / secondary / cosmetic | decisive / useful / vague | absorb / rewrite / omit |
+
+Procedure:
+
+1. Remove rhetoric and isolate the technical proposition.
+2. Locate the relevant equation, method step, figure, table, supplement, code path, or
+   prior paper using page + section + numbered object, or page + section + paragraph
+   ordinal and opening-phrase anchor for unnumbered prose.
+3. Re-derive or independently reason through the proposition.
+4. Search for counterexamples or a narrower valid interpretation.
+5. Determine whether the point changes validity, novelty, significance, or only wording.
+6. Absorb only points that are correct, material, and actionable.
+7. Merge duplicate comments around one root cause.
+8. Do not inherit the other review's recommendation. Recalibrate after all points are
+   checked.
+
+A useful external review can still have an overstrong recommendation, an unfair overlap
+interpretation, or a correct concern stated for the wrong reason.
+
+---
+
+### Step 11: Reproducibility and Internal-Consistency Audit
+
+Before claiming missing code or data, search the supplied material as described in the
+repository-discovery section. Inspect the relevant implementation when a substantive concern
+depends on it. Check whether an independent group could reconstruct the central results.
+Include consequential reproducibility findings in the requested report or comprehensive audit;
+a separate private memo is optional.
+
+#### Manuscript Consistency
+
+- main text versus Supplementary Information, recording the full locator on both sides;
+- equations versus pseudocode, recording the full locator on both sides;
+- pseudocode versus the inspected repository implementation;
+- figure captions versus plotted data and available figure-generation code;
+- stated iteration counts versus manuscript, config, and algorithm loops;
+- notation and indexing;
+- units and normalization;
+- reported backend versus repository configuration;
+- abstract claims versus actual experimental mode.
+
+#### Reproducibility Items
+
+- frozen code release or commit;
+- license and access status;
+- environment and package versions;
+- complete configs and hyperparameters;
+- random seeds;
+- generated problem instances or datasets;
+- raw and processed data;
+- figure-generation scripts;
+- hardware metadata;
+- optimizer settings and stopping rules;
+- cluster, MPI, SLURM, GPU, or CPU configuration;
+- failed runs and exclusion criteria;
+- sufficient information to reproduce resource counts and timing.
+
+“Available upon reasonable request” is weak for a computational methods paper when the
+main claims depend on code, generated instances, or hardware logs.
+
+---
+
+### Step 12: Calibrate Severity and Recommendation
+
+#### Severity Labels
+
+- **Fatal / central:** invalidates a load-bearing conclusion or removes the paper's main
+  claimed contribution.
+- **Major:** requires new analysis, controlled experiments, proof repair, substantial
+  reframing, or stronger baselines, but a publishable core may remain.
+- **Minor:** local clarification, presentation, notation, reporting, or bounded additional
+  check that does not alter the central conclusion.
+- **Optional:** useful extension not required to validate the paper's claims.
+
+#### Recommendation Matrix
+
+| Recommendation | Appropriate when |
+|---|---|
+| Accept | Central claims are correct, supported, significant for the venue, and only editorial changes remain |
+| Minor revision | Core claims already stand; remaining issues are local and do not require new load-bearing evidence |
+| Major revision / revise and reconsider | A potentially publishable core remains, but decisive controls, new analysis, substantial claim narrowing, or significant experiments are required |
+| Reject with possible resubmission | The paper may become publishable only after a new study-level body of work or a substantially reconstructed contribution |
+| Reject | A central theorem, comparison, or novelty claim fails; correcting it collapses the paper below the venue standard; or the work is outside scope |
+
+Do not recommend rejection merely because:
+
+- the same group developed the prior framework;
+- inherited components are reused and properly cited;
+- the application testbed is repeated;
+- a prior paper anticipated the direction;
+- many revisions are requested.
+
+Do not recommend major revision merely to avoid a difficult decision. Ask:
+
+1. Does a distinct contribution remain after correct attribution and claim narrowing?
+2. Can the decisive evidence be added without replacing the central method?
+3. Would success on the requested controls plausibly make the paper publishable here?
+4. Does the current evidence support at least a meaningful, narrower claim?
+
+Recommendation should follow the answers, not the number of comments.
+
+---
+
+## Quantum Module
+
+Apply this module together with the Core Procedure only when the manuscript's contribution involves quantum computing or quantum technology, such as a quantum algorithm, quantum hardware or control, quantum error correction, quantum communication or sensing, or a computation run on a quantum device or its simulator. A physics topic alone does not trigger the module. Classical numerics for a condensed-matter model follows the Core Procedure only, while the same model simulated on a trapped-ion quantum computer also uses this module.
+
+The Step 0 venue calibration applies to quantum venues as well. For example, PRL, PRX Quantum, npj Quantum Information, Quantum Science and Technology, and PRA expect different levels of advance.
+
+### Quantum Paper Map
+
+Expand the Step 1 map through the quantum stages:
+
+```text
+Scientific problem
+→ mathematical formulation
+→ classical preprocessing
+→ quantum encoding and state preparation
+→ quantum evolution or circuit
+→ measurement
+→ classical optimization/postprocessing
+→ final scientific or computational output
+→ claimed advantage
+```
+
+Also identify what remains if the quantum component is removed.
+
+### Quantum Contribution and Decisive Ablation
+
+Separate quantum involvement from quantum contribution. Running a circuit on a QPU does not show that the quantum subroutine improves quality, scaling, or cost. In Step 4, the credited component is the quantum state or circuit, and local improvement is usually classical. Ask whether the claimed improvement survives when the quantum subroutine is replaced while every surrounding component remains fixed.
+
+Add these quantum-specific replacements to the matched ablations in Step 4 where they apply:
+
+- a classical tensor-network or stabilizer solver;
+- noiseless structure-aware simulation;
+- removing error mitigation or postselection;
+- preserving versus discarding the joint quantum output;
+- same algorithm with hardware sampling replaced by classical sampling.
+
+For a quantum manuscript, the Minimum Decisive Ablation Template takes this form:
+
+| Variant | Component changed | Everything held fixed | Main question answered |
+|---|---|---|---|
+| Submitted method | None | Reference | Baseline behavior |
+| Simple replacement | Quantum component replaced by random or greedy rule | Same workflow and budget | Does the quantum output beat a trivial proposal? |
+| Exact local replacement | Quantum local solver replaced by exact small-instance solution | Same blocks and aggregation | Does approximation by the quantum subroutine add value? |
+| Strong classical replacement | Structurally matched classical solver | Same resources and stopping rule | Is the titled quantum component competitive? |
+| Structure-aware simulation | Exploits factorization, symmetry, or low entanglement | Same circuit semantics | Is the simulator crossover artificial? |
+
+If the quantum-generated joint state is reduced to independent single-bit, marginal, or
+greedy proposals during postprocessing, explicitly test whether the quantum correlations
+survive into the final decision rule.
+
+In Step 5, the baseline is the strongest structure-aware classical method or simulator. Do not compare a structured circuit only with a deliberately generic simulator. In the Step 8 factorial ablation, the established optimizer and platform are classical, the proposed method may be hybrid, and the proposed platform is quantum hardware.
+
+### Quantum Structural Simplifications
+
+Before accepting a quantum-simulation or hardware-scaling comparison, also test for:
+
+- tensor-product separability;
+- low entanglement;
+- Gaussian, stabilizer, Clifford-dominated, matchgate, free-fermion, or other
+  classically tractable structure;
+- repeated identical subcircuits.
+
+For example, if disjoint blocks satisfy
+
+$$
+H=\sum_{k=1}^{m}H_k,
+$$
+
+and the initial state, mixer, and parameters respect the same partition, then the
+ideal evolution may factorize as
+
+$$
+U=\bigotimes_{k=1}^{m}U_k,
+$$
+
+with
+
+$$
+\lvert\psi\rangle=\bigotimes_{k=1}^{m}\lvert\psi_k\rangle.
+$$
+
+In that case, compare against independent or batched simulation of the blocks, not
+only against a monolithic state-vector or density-matrix representation. However, do
+not conclude that the hardware construction is useless, because it may still demonstrate QPU
+multiplexing, throughput, reduced submission overhead, or hardware compatibility. The
+review should invalidate only the unsupported claim.
+
+### Quantum and Hardware Claim Types
+
+Classify a quantum or hardware claim with this table in addition to Step 6:
 
 | Claim type | What must be shown |
 |---|---|
@@ -763,231 +1080,11 @@ Request the quantities relevant to the claim:
 Distinguish a logical $k$-body term from a hardware-native primitive. Ancilla-free logical
 encoding does not imply native physical execution.
 
----
-
-## Step 7: Audit Scalability Claims
-
-For every scalability statement, identify the scaled variable and the fixed variables:
-
-```text
-Scaled: N / qubits / modes / depth / shots / terms / code distance / instances / rank
-Fixed: accuracy / noise / coupling density / optimizer budget / success probability / data
-Measured: runtime / memory / fidelity / objective gap / throughput / physical resources
-```
-
-Check whether:
-
-- solution quality deteriorates while runtime appears flat;
-- only independent workloads are being added;
-- classical preprocessing or measurement dominates;
-- the tested sizes are large only in a superficial dimension;
-- exact ground truth disappears at larger sizes;
-- the metric changes when exact verification becomes unavailable;
-- asymptotic language is inferred from a narrow empirical range;
-- extrapolation ignores error correction, calibration, or communication costs.
-
-When the evidence is preliminary, use **proof of concept**, **compatibility
-demonstration**, **throughput demonstration**, or **empirical scaling over the tested
-range**, not unconditional scalability.
-
----
-
-## Step 8: Separate Application Value from Quantum Value
-
-For an application pipeline, separate at least three causal layers:
-
-1. **Model or representation:** for example, a higher-order surrogate, improved
-   Hamiltonian, active space, ansatz, dataset, or physical model.
-2. **Optimizer or algorithm:** the method that searches or estimates within that model.
-3. **Quantum execution:** simulator, noisy emulator, hybrid sampling, or full hardware.
-
-A better application result may come from the representation rather than the optimizer.
-A scientifically useful design found by a workflow does not establish that quantum
-computation was necessary to find it.
-
-Request factorial or cumulative ablations where practical:
-
-| Representation | Optimizer | Execution | Purpose |
-|---|---|---|---|
-| Old | Classical | Classical | Prior pipeline |
-| New | Classical | Classical | Isolate representation gain |
-| New | Proposed hybrid method | Classical simulation | Isolate algorithmic workflow |
-| New | Proposed method | Quantum hardware | Isolate hardware effect |
-
-Match application-query budgets, initial datasets, surrogate training, random seeds,
-and stopping conditions.
-
----
-
-## Step 9: Audit Same-Author Prior Work and Overlap Precisely
-
-When the same or substantially overlapping author group has a related paper, do not use
-vague labels such as “present in both.” Identify **what exact object is repeated**.
-
-### Required Overlap Table
-
-| Component | Prior paper: exact object and locator | Present manuscript: exact object and locator | Exact relationship | Citation and disclosure status | Is it part of the claimed novelty? | Review significance |
-|---|---|---|---|---|---|---|
-| Problem class | page + section + paragraph/object | page + section + paragraph/object | Same / extension / different | ... | ... | ... |
-| Derivation or theorem | page + theorem/equation/paragraph | page + theorem/equation/paragraph | Reused / modified / new | ... | ... | ... |
-| Algorithmic rule | page + Methods section + paragraph/algorithm line | page + Methods section + paragraph/algorithm line | Same mechanism / generalized | ... | ... | ... |
-| Software or HPC infrastructure | page + section + paragraph/code path | page + section + paragraph/code path | Reused implementation architecture | ... | ... | ... |
-| Experimental protocol | page + section + paragraph/table | page + section + paragraph/table | Same settings / controlled continuation | ... | ... | ... |
-| Dataset or application testbed | page + section + paragraph | page + section + paragraph | Same testbed / new task | ... | ... | ... |
-| Figures, numerical data, or runs | figure/table/data locator | figure/table/data locator | Reused / newly generated / unclear | ... | ... | ... |
-| Hardware experiment | page + section + figure/table | page + section + figure/table | Same / updated device / genuinely new | ... | ... | ... |
-| Core contribution | page + contribution statement | page + contribution statement | Incremental / substantive extension / distinct | ... | ... | ... |
-
-### Interpretation Rules
-
-1. **Inherited and cited is normally acceptable.** Reusing a decomposition policy,
-   aggregation rule, codebase, HPC layer, dataset, or application testbed is not by
-   itself a reason for rejection when it is properly cited and not falsely claimed as
-   new.
-2. **Same application does not mean same experiment.** Distinguish repeated protocol
-   from reused numerical data, figures, or conclusions.
-3. **A direct extension may still be publishable.** Extending quadratic to higher-order,
-   DV to CV, simulation to hardware, or one regime to another must be judged by the
-   technical difficulty, evidence, and resulting insight, not by the fact that the
-   direction was foreseeable.
-4. **A prior paper's future-work sentence is not dispositive.** It may reduce surprise,
-   but it does not automatically eliminate novelty.
-5. **Preprint citation is not concealment.** If the prior work was cited as an arXiv
-   preprint and is now published, request an updated final citation; do not treat the
-   old citation format as a substantive offense.
-6. **Overlap matters when claim boundaries are blurred.** Ask the authors to state what
-   is inherited, generalized, newly proved, newly implemented, and newly measured.
-7. **Serious concerns require specific evidence**, such as:
-   - undisclosed reuse of figures, tables, data, or numerical runs;
-   - substantially repeated text or derivations presented as new;
-   - the same central scientific result published twice;
-   - omission of the closest prior paper;
-   - a novelty statement contradicted by the authors' own earlier work.
-8. Do not accuse authors of self-plagiarism, salami slicing, or duplicate publication
-   unless the evidence is direct and the issue is material. When uncertain, describe
-   the overlap factually in confidential comments and ask the editor to assess policy.
-
-The novelty question is:
-
-> After removing properly cited inherited components, is the remaining contribution
-> technically substantive and sufficiently supported for this journal?
-
----
-
-## Step 10: Crosscheck Another Review Without Inheriting Its Errors
-
-When given another report, convert it into atomic candidate findings.
-
-| Candidate point | Manuscript support | Mathematical correctness | Materiality to main claims | Actionability | Final treatment |
-|---|---|---|---|---|---|
-| ... | full locator under the Mandatory Manuscript-Location Protocol | correct / partly correct / wrong / unverified | central / secondary / cosmetic | decisive / useful / vague | absorb / rewrite / omit |
-
-Procedure:
-
-1. Remove rhetoric and isolate the technical proposition.
-2. Locate the relevant equation, method step, figure, table, supplement, code path, or
-   prior paper using page + section + numbered object, or page + section + paragraph
-   ordinal and opening-phrase anchor for unnumbered prose.
-3. Re-derive or independently reason through the proposition.
-4. Search for counterexamples or a narrower valid interpretation.
-5. Determine whether the point changes validity, novelty, significance, or only wording.
-6. Absorb only points that are correct, material, and actionable.
-7. Merge duplicate comments around one root cause.
-8. Do not inherit the other review's recommendation. Recalibrate after all points are
-   checked.
-
-A useful external review can still have an overstrong recommendation, an unfair overlap
-interpretation, or a correct concern stated for the wrong reason.
-
----
-
-## Step 11: Reproducibility and Internal-Consistency Audit
-
-Before claiming missing code or data, search the supplied material as described in the
-repository-discovery section. Inspect the relevant implementation when a substantive concern
-depends on it. Check whether an independent group could reconstruct the central results.
-Include consequential reproducibility findings in the requested report or comprehensive audit;
-a separate private memo is optional.
-
-### Manuscript Consistency
-
-- main text versus Supplementary Information, recording the full locator on both sides;
-- equations versus pseudocode, recording the full locator on both sides;
-- pseudocode versus the inspected repository implementation;
-- figure captions versus plotted data and available figure-generation code;
-- stated iteration counts versus manuscript, config, and algorithm loops;
-- notation and indexing;
-- units and normalization;
-- reported backend versus repository configuration;
-- abstract claims versus actual experimental mode.
-
-### Reproducibility Items
-
-- frozen code release or commit;
-- license and access status;
-- environment and package versions;
-- complete configs and hyperparameters;
-- random seeds;
-- generated problem instances or datasets;
-- raw and processed data;
-- figure-generation scripts;
-- hardware metadata;
-- optimizer settings and stopping rules;
-- cluster, MPI, SLURM, GPU, or CPU configuration;
-- failed runs and exclusion criteria;
-- sufficient information to reproduce resource counts and timing.
-
-“Available upon reasonable request” is weak for a computational methods paper when the
-main claims depend on code, generated instances, or hardware logs.
-
----
-
-## Step 12: Calibrate Severity and Recommendation
-
-### Severity Labels
-
-- **Fatal / central:** invalidates a load-bearing conclusion or removes the paper's main
-  claimed contribution.
-- **Major:** requires new analysis, controlled experiments, proof repair, substantial
-  reframing, or stronger baselines, but a publishable core may remain.
-- **Minor:** local clarification, presentation, notation, reporting, or bounded additional
-  check that does not alter the central conclusion.
-- **Optional:** useful extension not required to validate the paper's claims.
-
-### Recommendation Matrix
-
-| Recommendation | Appropriate when |
-|---|---|
-| Accept | Central claims are correct, supported, significant for the venue, and only editorial changes remain |
-| Minor revision | Core claims already stand; remaining issues are local and do not require new load-bearing evidence |
-| Major revision / revise and reconsider | A potentially publishable core remains, but decisive controls, new analysis, substantial claim narrowing, or significant experiments are required |
-| Reject with possible resubmission | The paper may become publishable only after a new study-level body of work or a substantially reconstructed contribution |
-| Reject | A central theorem, comparison, or novelty claim fails; correcting it collapses the paper below the venue standard; or the work is outside scope |
-
-Do not recommend rejection merely because:
-
-- the same group developed the prior framework;
-- inherited components are reused and properly cited;
-- the application testbed is repeated;
-- a prior paper anticipated the direction;
-- many revisions are requested.
-
-Do not recommend major revision merely to avoid a difficult decision. Ask:
-
-1. Does a distinct contribution remain after correct attribution and claim narrowing?
-2. Can the decisive evidence be added without replacing the central method?
-3. Would success on the requested controls plausibly make the paper publishable here?
-4. Does the current evidence support at least a meaningful, narrower claim?
-
-Recommendation should follow the answers, not the number of comments.
-
----
-
-# Quantum-Subfield Modules
+### Quantum-Subfield Modules
 
 Use only the relevant module; do not mechanically apply every checklist.
 
-## Variational Algorithms, QAOA, and Quantum Optimization
+#### Variational Algorithms, QAOA, and Quantum Optimization
 
 Check:
 
@@ -1003,7 +1100,7 @@ Check:
 - trainability, depth scaling, and parameter transfer;
 - time-to-target rather than circuit runtime alone.
 
-## Quantum Algorithms and Complexity
+#### Quantum Algorithms and Complexity
 
 Check:
 
@@ -1017,7 +1114,7 @@ Check:
 - end-to-end rather than query-only complexity;
 - classical dequantization or structure-aware alternatives.
 
-## Quantum Hardware and Systems
+#### Quantum Hardware and Systems
 
 Check:
 
@@ -1030,7 +1127,7 @@ Check:
 - comparison with emulator and noise-aware simulation;
 - whether observed scaling reflects the hardware or independent workload batching.
 
-## Quantum Error Correction and Fault-Tolerant Quantum Computing
+#### Quantum Error Correction and Fault-Tolerant Quantum Computing
 
 Check:
 
@@ -1045,7 +1142,7 @@ Check:
 - complete error budget and target logical accuracy;
 - comparison under matched architecture and noise assumptions.
 
-## Quantum Simulation and Quantum Chemistry
+#### Quantum Simulation and Quantum Chemistry
 
 Check:
 
@@ -1058,7 +1155,7 @@ Check:
 - chemical-accuracy claims and uncertainty;
 - whether the application observable is actually accessible from the stated output.
 
-## Quantum Machine Learning
+#### Quantum Machine Learning
 
 Check:
 
@@ -1071,7 +1168,7 @@ Check:
 - whether the gain comes from representation, regularization, or quantum execution;
 - generalization across datasets and seeds.
 
-## Continuous-Variable, Photonic, and Bosonic Work
+#### Continuous-Variable, Photonic, and Bosonic Work
 
 Check:
 
@@ -1086,11 +1183,19 @@ Check:
 - truncation, sampling, and postselection costs;
 - fair comparison with Gaussian, tensor-network, and Fock-space simulation.
 
+### Quantum Failure Modes
+
+- Treating hardware execution as quantum advantage.
+- Comparing a tensor-product circuit only with monolithic state-vector simulation.
+- Ignoring a simple exact solver for a tiny quantum subproblem.
+- Equating larger circuit width with a larger coupled problem.
+- Attributing an application gain to the quantum optimizer when the model class changed.
+
 ---
 
-# Writing the Referee Report
+## Writing the Referee Report
 
-## Major-Comment Contract
+### Major-Comment Contract
 
 Every major comment should contain five elements:
 
@@ -1108,7 +1213,7 @@ A strong comment is not merely “add more baselines.” It names the baseline, 
 budget, controlled variables, interpretation of possible outcomes, and every manuscript
 location on which the criticism depends.
 
-## Minor-Comment Contract
+### Minor-Comment Contract
 
 Every non-typo minor comment must contain:
 
@@ -1123,10 +1228,11 @@ compact line. Representative page locations are not required unless Ctrl+F will 
 identify the target reliably. Do not write only “there are many typos”; provide the actual
 strings.
 
-## Tone
+### Tone
 
 Use professional, direct, neutral language. Preserve clear field-standard shorthands
-such as `Sec.`, `Fig.`, `Eq.`, `SI`, `QPU`, `CPU/GPU`, `QAOA`, and `HUBO`. Do not
+such as `Sec.`, `Fig.`, `Eq.`, `SI`, `CPU/GPU`, and the field's established acronyms,
+for example `QPU`, `QAOA`, and `HUBO` in quantum work. Do not
 over-polish the report into generic or overly ceremonial prose; concise wording, natural
 sentence variation, and a small amount of reviewer-style shorthand make the report read
 like an expert's working assessment.
@@ -1136,7 +1242,7 @@ Prefer:
 - “The evidence supports a narrower interpretation...”
 - “This comparison does not yet isolate...”
 - “Please distinguish X from Y...”
-- “A structure-aware classical comparison is required because...”
+- “A structure-aware comparison is required because...”
 - “This does not make the method useless; it changes the supported claim from X to Y.”
 - “The overlap appears to concern inherited and cited infrastructure rather than reused
   numerical evidence.”
@@ -1155,7 +1261,7 @@ hierarchy) to every major and non-typo minor criticism, in the submitted author-
 prose, not only in private notes. Keep additional private verification notes separate,
 but never strip a required manuscript locator from the final report.
 
-## Comment Prioritization and Page-Budget Policy
+### Comment Prioritization and Page-Budget Policy
 
 Rank comments by their effect on validity, contribution, evidence, and interpretation. Merge shared root causes. Separate useful local corrections from decision-relevant concerns. Do not turn a list of true observations into equally weighted demands.
 
@@ -1163,11 +1269,11 @@ For a requested comprehensive audit, surface all verified, nonredundant, actiona
 
 Use a candidate ledger or omission ledger when the user requests one or a complex selection process needs it. Fixed headings and duplicate private/public reports are unnecessary. When compressing a comprehensive review, disclose any omitted substantive concern that changes interpretation. Routine editorial omissions need no ledger. Preserve the user's selected comments and personal sign-off, and apply an explicit requested length at delivery rather than as a discovery limit.
 
-# Output matched to the request
+## Output Matched to the Request
 
 Return the requested review artifact. An overall assessment with ranked comments is usually sufficient. Add private verification notes when needed to explain an unresolved issue or when requested. The following report components are available, not mandatory parallel deliverables.
 
-## B. Confidential Comments to the Editor
+### Confidential Comments to the Editor
 
 When editor comments are requested, include:
 
@@ -1177,11 +1283,11 @@ When editor comments are requested, include:
 - publication-policy concern only when supported;
 - no technical surprise that is absent from comments to authors.
 
-## C. Comments to the Authors
+### Comments to the Authors
 
 Match the report to the requested scope. A comprehensive audit includes all verified, nonredundant, actionable findings. A submission-ready report prioritizes the issues that the authors and editor need to act on, with concise minor corrections.
 
-### Personal style settings
+#### Personal Style Settings
 
 These are the user's personal preferences, not general review methodology; adjust them
 here without touching the rest of the skill.
@@ -1226,7 +1332,7 @@ In Supplementary Note Y (SI p. X), ...
 Do not add a separate `Minimum Decisive Revisions` or `Recommendation` section unless
 it improves the specific report or the user requests it.
 
-## D. Revision Review
+### Revision Review
 
 For a resubmission, use:
 
@@ -1237,20 +1343,20 @@ Then write only the unresolved or newly introduced issues.
 
 ---
 
-# Failure Modes
+## Failure Modes
 
 - Writing the recommendation before verifying the central claims.
 - Stopping a requested comprehensive audit early because enough major issues have been found.
-- Treating hardware execution as quantum advantage.
-- Comparing a tensor-product circuit only with monolithic state-vector simulation.
-- Ignoring a simple exact solver for a tiny quantum subproblem.
+- Treating the use of a new method, model, or platform as evidence of its contribution.
+- Comparing a structured method only with a generic alternative that ignores the structure.
+- Ignoring a simple exact solver for a small subproblem.
 - Requesting generic baselines without matching the method's structure.
 - Accepting default settings for baselines while the proposed method is heavily tuned.
 - Using a circular metric or a metric sensitive to conventions that should not affect the stated claim.
 - Treating the most frequent global bitstring as a scalable decoder without checking its
   probability mass, product-distribution scaling, shot count, and confidence.
-- Equating larger circuit width with a larger coupled problem.
-- Attributing an application gain to the quantum optimizer when the model class changed.
+- Equating more independent instances with a larger coupled problem.
+- Attributing an application gain to the proposed method when the model class changed.
 - Calling cited inheritance duplicate publication.
 - Using “present in both papers” without identifying whether this means a derivation,
   algorithmic rule, protocol, data, figure, or application.
@@ -1273,12 +1379,15 @@ Then write only the unresolved or newly introduced issues.
 - Finding a repository but treating its existence as sufficient without checking whether
   it matches the paper, implements the stated method, and contains the claimed data.
 - Ignoring the Supplementary Information or repository when the claims depend on them.
+- Searching for or inferring author identity under double-anonymous review.
 - Violating the journal's confidentiality or AI-use policy.
+
+For a quantum manuscript, the Quantum Module lists further failure modes.
 
 ---
 
-# Completion Check
+## Completion Check
 
-The requested review is complete when its relevant claims and evidence have been inspected, central uncertainties are explicit, substantive comments are locatable and actionable, and the recommendation follows from scientific consequence, repairability, and venue standard. A full review covers numerical evidence and application interpretation as well as headline claims. Conditional checks above apply only when their mechanisms bear on a claim.
+The requested review is complete when its relevant claims and evidence have been inspected, central uncertainties are explicit, substantive comments are locatable and actionable, and the recommendation follows from scientific consequence, repairability, and venue standard. A full review covers numerical evidence and application interpretation as well as headline claims. Conditional checks above apply only when their mechanisms bear on a claim. The Quantum Module applies only when the contribution involves quantum computing or quantum technology.
 
 Do not require a fixed ledger, number of passes, or new experiment to certify completion. A missing decisive result is a review finding; the reviewer need not run the authors' full study. Keep confidentiality and actual venue restrictions in force. The human reviewer owns the final judgment and submission.

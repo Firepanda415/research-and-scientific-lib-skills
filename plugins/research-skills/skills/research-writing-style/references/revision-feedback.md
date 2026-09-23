@@ -4,7 +4,11 @@ When the deliverable is a set of edit suggestions against an existing file (manu
 
 Before writing any feedback, re-read the target file from disk, even if it was read earlier in the session. The user swaps updated copies into the folder between rounds, and suggestions computed against a stale version locate nothing. Check the modification time, verify that the anchors about to be quoted exist in the current file, and if the file shows no sign of the update the user described, say so before writing any feedback.
 
+When the target file is outside version control, such as an ignored manuscript synced from an online editor, git status and an empty diff say nothing about its state. Before a new round, confirm that edits reported as applied in earlier rounds are still present in the current file. If a copy of the previous round's file is available, compare it with the current file as well. Report an earlier change that has disappeared as a regression, before any new edits, and do not list it as a new finding. Keep any such copy in temporary working storage outside the user's source tree and use it only for comparison. Never copy it back over the user's file unless the user asks.
+
 **Revision-set packaging.** Group edits by exact target path and assign stable edit IDs (`V1`, `V2a`, and so on). Map each edit to the specific defect or audit finding, then give one concise rationale before the mechanical instruction. Label each item `proposed`, `already applied`, `deferred`, or `no change`. Report verification such as anchor checks or builds separately so a proposed edit is never presented as completed. Keep deliberate `no change` decisions outside the paste instructions, with one concise reason and any optional alternative labeled explicitly.
+
+When a block delivered in an earlier round must change, in chat or in a file, and the user may already have pasted it, report the change explicitly as a *replace* edit. Never revise the block silently. If the user's pasted copy cannot be read, this is the one exception to the current-file anchor rule below. Take the anchor character for character from the delivered block, and say that its uniqueness in the destination could not be checked.
 
 **Per-edit format.** Every edit has exactly three parts, in this order:
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "Quantum Computing Review"
-  short_description: "Prepare evidence-grounded quantum referee reports"
-  default_prompt: "Use $quantum-computing-review to audit this quantum manuscript and prepare a source-grounded referee report."
+  short_description: "Prepare evidence-grounded referee reports"
+  default_prompt: "Use $quantum-computing-review to referee this technical manuscript and prepare a source-grounded report."

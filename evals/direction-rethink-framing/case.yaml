@@ -1,0 +1,25 @@
+schema_version: "1.1"
+name: direction-rethink-framing
+description: >-
+  Evidence that an established direction has stopped paying off. The user asks to
+  question the framing before any new options are generated.
+tags: [routing, direction]
+execution:
+  max_turns: 8
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    For two years my group has fit Pauli noise models to randomized-benchmarking data, and every paper improves the fit a little. Our fidelity predictions land within 2% on benchmark circuits but miss by about 20% on the circuits our users actually run. It feels like we're polishing the wrong thing. Before suggesting anything new, tell me whether the way we've framed the problem is what's holding us back, and why you think so.
+graders:
+  - name: calls-rethink-design
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?rethink-design"'
+    min: 1
+  - name: skips-develop-research-ideas
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?develop-research-ideas"'
+    min: 0
+    max: 0
+    arm: both

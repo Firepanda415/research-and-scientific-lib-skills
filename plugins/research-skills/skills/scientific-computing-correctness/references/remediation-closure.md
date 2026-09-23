@@ -17,11 +17,20 @@ Keep these axes separate:
 
 - `origin`: `new regression`, `pre-existing`, or `unknown`.
 - `disposition`: `open`, `docs-only`, `partial`, `closed`, `duplicate`,
-  `intentional decision`, or `out of scope`.
+  `not a defect`, `unverified`, `intentional decision`, or `out of scope`.
 
-An `intentional decision` requires explicit authority from the user, maintainer,
-or an already authoritative project contract. A runtime or public-record finding
-remains open when documentation only acknowledges it.
+`closed` corresponds to deep-code-review's `resolved` and `not a defect` to its
+`rejected`. A documented deferral remains `open`. `unverified` means current
+evidence cannot decide the item.
+
+`not a defect` requires concrete counterevidence against the finding itself.
+Rejecting a proposed remedy does not close the underlying defect. An
+`intentional decision`, an `out of scope` disposition and
+any deferral of a reported finding require explicit authority from the user, a
+maintainer or an already authoritative project contract. The user's request may
+already set that scope. Without such authority the item stays `open`. Ask for
+the specific decision and continue the independent authorized work. A runtime
+or public-record finding remains open when documentation only acknowledges it.
 
 Before accepting the implementer's examples, independently reconstruct the
 affected relation from the public contract and live ownership. Determine which

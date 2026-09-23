@@ -7,11 +7,19 @@ technical terms with vague language or assume every user is a beginner.
 
 ## Follow the task through its visible result
 
-Start with the documented public entry and representative valid options. Check
-whether the user can discover prerequisites, perform the task, interpret the
-result and take the next appropriate action without undocumented internal calls.
+Start with the documented public entry and representative valid options,
+including documented switches that select a different method or execution path,
+not the defaults alone. Check whether the user can discover prerequisites,
+perform the task, interpret the result and take the next appropriate action
+without undocumented internal calls.
 Use the interface actually consumed: a notebook kernel, CLI, Python API or
 browser as applicable. A browser is not required for a library workflow.
+
+For scripts, examples and command-line entries, help and an unknown or
+misspelled option should stop before scientific work starts or files are
+written. A control that is silently ignored runs a configuration the user did
+not request. Check this through the parser path or with a no-work guard, so that
+a faulty entry cannot launch its full workload during the check.
 
 Treat a success message or returned object as a signal to inspect, not proof
 that the whole task completed. When persistence or downstream use is in scope,
