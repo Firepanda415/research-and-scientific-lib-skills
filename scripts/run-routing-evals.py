@@ -39,18 +39,21 @@ def check_cases(evals, skills):
         graders = case["graders"]
         assert len({g["name"] for g in graders}) == len(graders), f"{where}: duplicate grader names"
         expected = []
+        graded_skills = set()
         for grader in graders:
             assert set(grader) <= GRADER_KEYS, f"{where}: grader fields {sorted(grader)}"
             assert grader["type"] == "tool_used" and grader["tool"] == "Skill", f"{where}: Skill graders only"
             match = SKILL_MATCH.fullmatch(grader["input_match"])
             assert match and match[1] in skills, f"{where}: unknown skill in {grader['input_match']}"
+            assert match[1] not in graded_skills, f"{where}: duplicate or contradictory graders for {match[1]}"
+            graded_skills.add(match[1])
             if "max" in grader:
                 assert (grader["min"], grader["max"], grader.get("arm")) == (0, 0, "both"), (
                     f"{where}: {grader['name']} must set min 0, max 0 and arm both")
             else:
                 assert grader["min"] == 1 and "arm" not in grader, f"{where}: {grader['name']} must set min 1"
                 expected.append(match[1])
-        assert len(expected) == 1, f"{where}: expected exactly one skill, found {expected}"
+        assert expected, f"{where}: expected at least one required skill"
         names.append(where)
     assert names, f"no case.yaml under {evals}"
     return names

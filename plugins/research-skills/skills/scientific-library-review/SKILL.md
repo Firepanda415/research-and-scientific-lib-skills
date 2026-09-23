@@ -7,6 +7,8 @@ description: "Review scientific libraries and numerical software using Scientifi
 
 Deliver an integrated review using scientific independent verification and validation (Scientific IV&V). Judge the requested scientific quantity and actual user workflow, engineering behavior and material resource costs. Independently derive expected relations rather than accepting a plan, implementation, test oracle or successful execution as its own justification.
 
+When the review judges a simplification or deletion proposal, API/schema retirement, replacement architecture, or remediation design, load and apply [Ponytail](../ponytail/SKILL.md) unless it is off. Use it to compare maintenance obligations and alternatives in this same review. This skill continues to own scientific meaning, evidence and resource limits, and a review-only request remains read-only.
+
 ## Scope and project specialization
 
 Resolve the requested capability or change, endpoint, comparison base when relevant, working-tree changes and applicable project instructions. Read the project's memory entry or review specialization when the user, project instructions, host memory or a session hook already supplies one, and do not search for one otherwise. That profile supplies domain contracts, source/test owners, environment commands, resource permissions and reporting locations. Do not require projects to create a profile before they can be reviewed. Keep project paths, incident lists and environment versions out of this reusable skill.

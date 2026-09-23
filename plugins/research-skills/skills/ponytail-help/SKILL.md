@@ -19,13 +19,18 @@ persist anything.
 | **Full** | `$ponytail full` | Use the simplest implementation meeting correctness and resource requirements. Default. |
 | **Ultra** | `$ponytail ultra` | Challenge accidental complexity more aggressively while completing requested behavior. |
 
-The agent loads Ponytail when it judges that a task involves writing or
-changing code, or when you ask for Ponytail. Name a level with a trigger above
-or in plain words, such as "use ponytail ultra". The level lasts until you name
-another or turn Ponytail off, and `full` applies when no level is named. It
-governs coding decisions, not the length or structure of paper reviews and
-research explanations. A subagent does not see the conversation, so the agent
-states the level in a coding subagent's brief.
+Ponytail applies to implementation, debugging, refactoring, and read-only
+simplification or code/API/test retirement decisions. `simplify-codebase` and
+the relevant review, scientific-computing and handoff skills load it under their
+stated conditions. The correctness or review skill leads, without a second
+audit. Factual code explanations and prose-only work do not trigger Ponytail.
+
+Name a level with a trigger above or in plain words, such as "use ponytail
+ultra". The level lasts until you name another or turn Ponytail off, and `full`
+applies when no level is named. Companion skills respect the off state. It
+governs code-design decisions, not the length or structure of paper reviews and
+research explanations. Include the level or off state in briefs for applicable
+subagent work.
 
 The ladder: establish behavior and data flow; avoid speculative work; reuse
 existing code and optimized numerical kernels; use stdlib/native facilities for

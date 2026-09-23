@@ -7,6 +7,8 @@ description: "Audit or perform authorized codebase simplification to remove acci
 
 Reduce the number of concepts and obligations a codebase must keep coherent. Line-count reduction is supporting evidence, not the objective. A successful run may conclude that the inspected surface is already justified.
 
+For both surveys and authorized changes, load and apply [Ponytail](../ponytail/SKILL.md) unless the user has turned it off. Use its ladder to judge maintenance value and feature retirement within this investigation. Keep the review read-only when requested, and do not start a separate Ponytail audit. A relevant scientific review still owns correctness and evidence requirements.
+
 ## Select mode and scope
 
 First choose the authority mode:
@@ -65,7 +67,7 @@ Net effect: maintenance concepts removed minus replacement or migration machiner
 
 Prove cut boundaries below file granularity when the candidate shares an artifact with surviving consumers. Account for candidate-exclusive selectors, members, fields, keys, registry entries, generated fragments, and fixtures without disturbing the surviving owners.
 
-Keep or downgrade the candidate when a real consumer exists, dynamic reachability remains unresolved, a current decision still owns the design, the change merely relocates complexity, the result is outside scope or retires no meaningful obligation, or the available check cannot distinguish success from accidental breakage.
+Do not classify a candidate as unused while real consumers exist or dynamic reachability remains unresolved. Assess deliberate capability retirement separately, with its alternatives, lost behavior, migration consequences, and the authority needed for removal. Keep or downgrade a candidate when it remains necessary for a current requirement, merely relocates complexity, falls outside scope, removes no meaningful obligation, or lacks a check that could expose an incorrect cut.
 
 Rank confidence separately from benefit. A high-value guess does not outrank a smaller proved cut.
 

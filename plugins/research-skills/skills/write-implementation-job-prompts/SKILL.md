@@ -18,6 +18,8 @@ and the expected result or forbidden work. A reported reproducer witnesses that
 relation; it does not define its whole domain. Trace the actual transformation
 to its consumer, including any later conversion or rewrite that can undo the fix.
 
+When the handoff requires choosing an implementation structure, simplification, or code/API retirement, load and apply [Ponytail](../ponytail/SKILL.md) unless it is off. Carry the active level or off state to the implementation agent. Merely transferring a fully settled edit does not need another design pass.
+
 Use the user's existing authority and scope. Drafting a prompt does not itself
 authorize dispatch or implementation, but do not request permission again for
 actions already authorized. Necessary tests, documentation, and direct callers

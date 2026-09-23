@@ -1,0 +1,23 @@
+schema_version: "1.1"
+name: simplify-retirement-proposal
+description: >-
+  A read-only deletion proposal includes callable public interfaces. The review
+  needs both simplification evidence and a judgment about continued maintenance.
+tags: [routing, simplification]
+execution:
+  max_turns: 8
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    Please review a colleague's cleanup proposal for our Python client library before I authorize any edits. It deletes private helpers with no callers and keeps every public wrapper because users can still call it. Several wrappers duplicate the current request API and are used only in old examples and tests. Help me decide which deletions are justified and which public interfaces are worth retiring, including the evidence and migration consequences needed for each decision. Keep this review read-only.
+graders:
+  - name: calls-simplify-codebase
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?simplify-codebase"'
+    min: 1
+  - name: calls-ponytail
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?ponytail"'
+    min: 1

@@ -1,8 +1,8 @@
 # Routing evals
 
-These cases check which `research-skills` skill Claude Code loads for requests near the boundary between two or more skills. Run them after editing a skill's `description` to catch a change in skill selection before release.
+These cases check which `research-skills` skill Claude Code loads for requests near the boundary between two or more skills. Use them to assess changes to skill descriptions or companion routing instructions before release, subject to the cost approval below.
 
-Each case directory holds one `case.yaml` in the format that `claude plugin eval` reads. A case sends one prompt and grades only the session's Skill tool calls. The expected skill must be called at least once. Each adjacent skill gets a grader with `min: 0`, `max: 0` and `arm: both`, so these checks still count toward the score if the suite is later run with the default no-plugin comparison arm. The `input_match` pattern accepts both the qualified name `research-skills:<skill>` and the bare skill name.
+Each case directory holds one `case.yaml` in the format that `claude plugin eval` reads. A case sends one prompt and grades only the session's Skill tool calls. Each required skill, including a required companion, must be called at least once. An excluded skill gets a grader with `min: 0`, `max: 0` and `arm: both`, so these checks still count toward the score if the suite is later run with the default no-plugin comparison arm. The `input_match` pattern accepts both the qualified name `research-skills:<skill>` and the bare skill name. The checker rejects unknown skills, duplicate or contradictory graders for a skill, and cases without any required skill.
 
 | Case prefix | Boundary |
 | --- | --- |
@@ -11,13 +11,14 @@ Each case directory holds one `case.yaml` in the format that `claude plugin eval
 | `direction-` | choosing a new research direction and reconsidering an existing one |
 | `writing-` | a brief for another agent and instructions that people will keep |
 | `scicode-` | review of a scientific library, general code review, and work on one computation |
+| `simplify-` | deletion and API retirement decisions, including a session-level Ponytail opt-out |
 | `handoff-` | resume state for a later session, project memory, a research log entry, and an implementer prompt |
 
 To add a case, copy an existing `case.yaml` into a new directory named after the case. The dry run checks the fields, the grader rules above, and that each skill name exists in the Claude package, which carries all 27 skills.
 
 ## Cost and approval
 
-The package checks, `scripts/check-package.py` and the Node tests, do not run this suite. Each run of a case is a full Claude Code session on the maintainer's own credentials, and the cost of a complete suite has not been measured. The 15 cases at the default of three runs each start 45 sessions. Running the suite needs the maintainer's explicit approval, and a first run should be a one-case pilot. The `--max-cost-usd` ceiling is checked before each run starts, so a run already in progress can finish above it.
+The package checks, `scripts/check-package.py` and the Node tests, do not run this suite. Each run of a case is a full Claude Code session on the maintainer's own credentials, and the cost of a complete suite has not been measured. The 18 cases at the default of three runs each start 54 sessions. Running the suite needs the maintainer's explicit approval, and a first run should be a one-case pilot. The `--max-cost-usd` ceiling is checked before each run starts, so a run already in progress can finish above it.
 
 ## Dry run
 
@@ -44,6 +45,8 @@ The aggregate result, the JSON run record and the HTML report go to `--results-d
 
 ## Reading results
 
-The plugin's writing hook tells each session to read `research-writing-style/SKILL.md` by file path. A session that follows it uses the Read tool, which the Skill graders do not see. Before counting a pass or failure on a `research-writing-style` grader as a routing result, check the run's trace for that read.
+Skill graders do not observe file reads. The writing hook names a `SKILL.md` path, and companion instructions link to one, so a compliant agent may use Read instead of Skill. Before treating a grader result as a routing outcome, inspect the trace for relevant file reads as well as Skill calls.
 
-The agent may load `ponytail` alongside the expected skill in the `scicode-` cases, because Ponytail applies to writing or changing code and may join `deep-code-review`, `scientific-library-review` or `scientific-computing-correctness`. No grader limits these calls. The graders count Skill calls without checking their order, so when a `scicode-` run calls `ponytail`, check in its trace that the expected skill was called first.
+`simplify-retirement-proposal` requires both `simplify-codebase` and `ponytail`, even though the prompt names neither skill and authorizes only a review. `scicode-library-remediation` requires `scientific-library-review` and `ponytail` for a repair decision. `simplify-ponytail-off` requires the simplification workflow while forbidding Ponytail, and `writing-contributing-guide` forbids Ponytail for prose about coding. The other `scicode-` cases leave Ponytail calls ungraded. These cases test selection boundaries, not the quality of a simplification or repair.
+
+The graders count Skill calls without checking their order or whether the agent followed the loaded guidance. When a run loads Ponytail alongside another workflow, inspect its trace to check that the owning workflow was loaded first. For the retirement case, check whether the response separates evidence that an interface is callable from evidence that it is worth maintaining. For the remediation case, check whether it compares fixes at the shared contract with adapters at individual callers while preserving scientific meaning.

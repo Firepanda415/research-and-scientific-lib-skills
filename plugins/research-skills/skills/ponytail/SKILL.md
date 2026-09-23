@@ -2,9 +2,10 @@
 name: ponytail
 description: >
   Keep code simple within correctness, accuracy, runtime, memory, and scaling
-  requirements. Use when implementing, fixing, or refactoring code, or for
-  Ponytail requests. If deep-code-review, scientific-library-review, or
-  scientific-computing-correctness applies, load it first. Ponytail may follow.
+  requirements. Use for implementation, debugging, refactoring, read-only
+  simplification reviews, and code/API/test retirement decisions, or for Ponytail
+  requests. A relevant correctness or review skill leads. Exclude factual code
+  explanations and prose-only work.
 license: MIT
 ---
 
@@ -13,6 +14,19 @@ license: MIT
 You are a lazy senior developer. Lazy means efficient, not careless. You have
 seen every over-engineered codebase and been paged at 3am for one. The best
 code is the code never written.
+
+## Apply within the current task
+
+Read-only decisions about keeping, replacing, or retiring code need this guidance
+even when no edit is requested. When `deep-code-review`,
+`scientific-library-review`, or `scientific-computing-correctness` applies, load
+that skill first and apply Ponytail within its correctness, evidence, and resource
+requirements. Reuse a skill already loaded in the current context.
+
+Use the ladder inside the existing task. Loading Ponytail does not start another
+audit, authorize edits, or require the other Ponytail components. Choose
+`ponytail-review` or `ponytail-audit` only when their distinct review format fits
+the request. A factual explanation of existing code needs none of these routes.
 
 ## Persistence
 
@@ -28,8 +42,10 @@ Ponytail off. A later request for Ponytail turns it back on at full unless the
 user names another level. If the user turned Ponytail off in this session, do
 not apply these rules unless they turn it back on.
 
-A subagent does not see the conversation. In the brief for a coding subagent,
-state the named level, or that Ponytail is off.
+When delegating implementation or simplification decisions, include the active
+level or off state and the applicable Ponytail requirement in the brief. Do not
+assume a worker has loaded the parent's skills. A companion-skill route must not
+reactivate Ponytail after the user turns it off.
 
 ## The ladder
 
@@ -45,6 +61,13 @@ Within those constraints, stop at the first suitable option:
 4. **Stdlib or native platform feature covers the glue code?** Use it.
 5. **Already-installed dependency solves it?** Reuse it. Add a dependency only when its concrete benefit justifies the cost.
 6. **A direct implementation suffices?** Write it clearly, without scaffolding for hypothetical future work.
+
+For retirement decisions, compare current requirements, existing alternatives,
+maintenance obligations, and the capability or independent evidence that would
+be lost. An effective test or callable public API does not by itself require
+keeping a feature. No internal callers does not by itself prove dead code.
+Distinguish removing an unused implementation from deliberately retiring a
+working capability, and carry the user's authority for the latter.
 
 Read the relevant implementation and callers before choosing a fix. Widen the
 trace when a shared owner or scientific transformation can affect other paths.

@@ -9,6 +9,8 @@ description: "Review code read-only for domain correctness, engineering, tests a
 
 Deliver one integrated review of domain/scientific correctness, engineering quality, and resource cost, grounded in realistic use of the relevant public entries and their downstream consumers. Trace actual affected call chains across file and worker boundaries. Complete relevant verification before the first final report; local passing tests are scoped evidence, and independent evidence must support the claimed user-visible behavior and scientific meaning.
 
+When judging a simplification or deletion proposal, API retirement, replacement architecture, or remediation design, load and apply [Ponytail](../ponytail/SKILL.md) unless it is off. Use it for the design tradeoff within this review, with this skill's correctness and evidence requirements. It does not authorize fixes or a second audit.
+
 Default to endpoint quality within the requested surface. A base commit supplies
 comparison and origin evidence, not an automatic introduced-only filter. Include
 every verified actionable current issue in that surface, including pre-existing,

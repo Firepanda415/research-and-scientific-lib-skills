@@ -13,6 +13,8 @@ Connect worker-local checks to that user-facing relation. Base completion on int
 
 Discarding information does not by itself justify a stronger claim or greater certainty. Improvements from denoising, estimation, or aggregation need their own mathematical or empirical justification.
 
+For implementation, optimization, refactoring, or proposed structural changes, load and apply [Ponytail](../ponytail/SKILL.md) unless it is off. Choose the simplest design that meets the scientific and resource contract established here. Pure verification of a specified result without code-design decisions does not need that additional route.
+
 ## Authority of project records
 
 When a plan, policy, framework, constants registry, review report, or prior

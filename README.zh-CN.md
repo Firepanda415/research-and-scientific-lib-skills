@@ -41,7 +41,9 @@ python3 scripts/install-claude.py
 
 ## 技能一览
 
-可以在 Codex 或 Claude Code 中选择指定技能，也可以让 agent 根据任务自动选择。agent 判断任务涉及编写或修改代码，或者你要求使用 Ponytail 时，会加载 `ponytail`。`deep-code-review`、`scientific-library-review` 或 `scientific-computing-correctness` 适用时，由该 skill 主导，Ponytail 在其要求范围内工作。可以在对话中指定级别（`lite`、`full` 或 `ultra`），例如在 Codex 中输入 `$ponytail lite`，或在 Claude Code 中输入 `/research-skills:ponytail lite`，该级别持续到你指定其他级别或关闭 Ponytail 为止。未指定级别时使用 `full`。说 `stop ponytail` 或 `normal mode`，或使用 `$ponytail off`，可关闭 Ponytail，直到你在本次对话中再次要求使用。再次开启时使用 `full`，除非你指定其他级别。`ponytail-help` 列出两个 host 上的调用方式。
+可以在 Codex 或 Claude Code 中选择指定 skill，也可以让 agent 根据任务自动选择。Ponytail 适用于 implementation、debugging、refactoring，以及代码、API 和 tests 的只读简化与退役判断。`simplify-codebase` 在 survey 和实际修改中加载它。Code review、scientific computing 和 implementation handoff skills 在涉及各自说明的设计取舍时也会加载它。相关 correctness 或 review skill 主导，Ponytail 在其要求范围内工作，不另开一次 audit。普通代码事实解释和仅涉及 prose 的任务不触发它。
+
+可以在对话中指定级别（`lite`、`full` 或 `ultra`），例如在 Codex 中输入 `$ponytail lite`，或在 Claude Code 中输入 `/research-skills:ponytail lite`，该级别持续到你指定其他级别或关闭 Ponytail 为止。未指定级别时使用 `full`。说 `stop ponytail` 或 `normal mode`，或使用 `$ponytail off`，可关闭 Ponytail，直到你在本次对话中再次要求使用。再次开启时使用 `full`，除非你指定其他级别。其他 skills 也遵守这一 off 状态。`ponytail-help` 列出两个 host 上的调用方式。
 
 凡是供人保存、反复阅读、分享、发布、发送或粘贴到其他地方的文字，写作钩子都要求 Codex 或 Claude Code 在起草、编辑这类文字或审阅其行文前读取并应用 `research-writing-style` 和其中的 durable-prose reference。普通文档、邮件、网页正文、聊天窗口中交付的可直接粘贴文本均在范围内，不分语言和篇幅。仅用于当前聊天的总结与进度说明除外。返回给其他 agent 或程序的材料（如结构化的发现或搜索结果）也不在路由范围内，由把它整理成交付文本的 agent 应用写作规范。路由会在会话启动、压缩后和子代理启动时注入。在 Codex 中，每次安装或更新后都要打开 `/hooks` 并信任 research-skills 的钩子，获得信任前写作路由不会运行。钩子提供加载指令，不能机械保证每份文字的质量。
 
