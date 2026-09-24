@@ -11,8 +11,7 @@ description: >
 
 # Ponytail Gain
 
-Display this scoreboard when invoked. One-shot: do NOT change the level or
-persist anything.
+Display this scoreboard when invoked. It leaves the Ponytail level unchanged.
 
 The figures below are historical upstream results from
 `../../benchmarks/results/2026-06-18-agentic.md`: 12 feature tasks on a FastAPI + React

@@ -76,10 +76,9 @@ sentences with two independent clauses joined only by a comma
 | We propose a method, it has high efficiency. | We propose a method. It has high efficiency. |
 | We propose a method, it has high efficiency. | We propose a method with high efficiency. |
 
-Long sentences should be split at natural boundaries. Use
-"Specifically," or "In particular," to start the continuation
-sentence rather than stuffing everything into one complex
-sentence.
+Long sentences should be split at natural boundaries. Begin the
+continuation with a connective only when it states the relation
+between the two sentences.
 
 ## 5. Which versus that
 
@@ -102,9 +101,9 @@ important. "The method was evaluated" is acceptable when the
 evaluator's identity does not matter; "We evaluated the method"
 is stronger when it does.
 
-Over-use of passive voice makes prose feel evasive. Audit
-paragraphs for strings of passive constructions and replace the
-most important sentences with active voice.
+Replace a passive construction when it hides an actor the reader
+needs to know. Keep it when the operation or object is the point
+or the actor is unknown.
 
 ## 7. Chinglish patterns
 

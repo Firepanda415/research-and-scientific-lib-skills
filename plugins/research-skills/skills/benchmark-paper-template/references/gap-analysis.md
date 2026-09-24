@@ -24,7 +24,7 @@ Answer these questions from the available sources. Ask the user only for what th
 
 ## Step 2: Identify the Blind Spot
 
-Explain the scientific consequence of the gap. More data or larger instances can be valuable when they resolve a coverage, precision, or scaling question. The example summaries are illustrative, so verify each one in its paper before citing it. Useful example patterns include:
+Explain the scientific consequence of the gap. More data or larger instances can be valuable when they resolve a coverage, precision, or scaling question. The example summaries are illustrative and all come from LLM and visualization benchmarks, so verify each one in its paper before citing it. Useful example patterns include:
 
 ### Pattern A: Dimension Blindness
 Existing benchmarks measure capability X but completely ignore related capability Y.

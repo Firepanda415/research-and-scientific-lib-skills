@@ -11,8 +11,9 @@ required.
   cover related angles when a shared trace supplies their evidence. Use
   independent reviewers where a distinct perspective or oracle adds confidence;
   there is no required agent or lane count.
-- Never create an "everything else" or "rest" lane. If a lane cannot name its
-  invariant and evidence target, split it.
+- Give every lane an invariant and evidence target that it owns end to end.
+  Split a lane that cannot name them, such as a catch-all lane for the
+  remaining surfaces.
 - Add independent overlap for consequential decisions when the first evidence
   source could share a failure mode. More agents repeating one assumption do
   not strengthen the result.

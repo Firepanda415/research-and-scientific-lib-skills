@@ -8,7 +8,7 @@ State the problem, contribution, main evidence, and necessary scope. A theoretic
 
 ## Introduction
 
-Connect the problem and existing limitations to the proposed contribution. Cite the relevant prior work where it supports that comparison. A running example or a challenge-to-method map is useful for some papers, but no fixed six-paragraph sequence is required.
+Connect the problem and existing limitations to the proposed contribution. Cite the relevant prior work where it supports that comparison. A running example or a challenge-to-method map is useful for some papers.
 
 ## Problem and method
 
@@ -26,7 +26,7 @@ Describe the observed result and its uncertainty. Distinguish a supported mechan
 
 ## Related work
 
-Place related work where it helps comprehension. Compare the closest relevant methods accurately, credit inherited contributions, and state the new boundary. Use the venue's bibliography style and verify citation metadata against the actual source. DBLP and database-venue abbreviations are not universal requirements.
+Place related work where it helps comprehension. Compare the closest relevant methods accurately, credit inherited contributions, and state the new boundary. Use the venue's bibliography style and verify citation metadata against the actual source.
 
 ## Conclusion
 

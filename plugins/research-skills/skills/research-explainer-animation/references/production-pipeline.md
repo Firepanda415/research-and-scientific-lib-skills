@@ -11,6 +11,8 @@
 
 ## Tools
 
+The `KPipeline(lang_code="a")` call, the skipped audio in `Scene.add_sound` after a cached animation, and the width-independent `Text` cache were checked on 2026-09-24 against Manim Community Edition 0.20.1 and Kokoro 0.9.4.
+
 - Manim Community Edition animates. Typst typesets mathematics when no full TeX distribution is available. The conda-forge `texlive-core` package has TeX binaries but no LaTeX packages or `dvisvgm`, so it cannot serve Manim's LaTeX path.
 - ffmpeg with libass burns subtitles and encodes. fontTools converts web fonts such as WOFF to TTF for Pango and libass.
 - Kokoro synthesizes speech locally. Its first use downloads about 330 MB of weights from Hugging Face. Use `KPipeline(lang_code="a")` for American English. Print the phoneme string of names, units, and acronyms before a full synthesis, and override a wrong pronunciation inline in the spoken text:

@@ -1,6 +1,6 @@
 # Manuscript and response-letter prose
 
-Use this reference for manuscript or response-letter drafting, substantial paragraph work, and additions driven by reviewer feedback. It supplies the existing writing mode's detailed guidance; it does not require a new paper outline, scientific audit, or experiment.
+Use this reference for manuscript or response-letter drafting, substantial paragraph work, and additions driven by reviewer feedback. It does not require a new paper outline, scientific audit, or experiment.
 
 ## Write for the paper's reader
 

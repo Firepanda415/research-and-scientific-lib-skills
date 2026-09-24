@@ -6,7 +6,7 @@ The collection's default house style in `research-writing-style` excludes em das
 
 These are editorial requirements. An em dash or a repeated word is not automatically a Major scientific finding. Do not infer AI authorship from vocabulary, sentence shape, or a detector score.
 
-Judge wording by meaning. Words such as "general-purpose", "yielding", "reveal", "robust", and "significant" can be precise technical language. Flag a phrase only when it is unsupported praise, vague, redundant, or changes the claimed scope. No occurrence-count thresholds are required.
+Judge wording by meaning. Words such as "general-purpose", "yielding", "reveal", "robust", and "significant" can be precise technical language. Flag a phrase only when it is unsupported praise, vague, redundant, or changes the claimed scope.
 
 ## Overclaims
 

@@ -48,7 +48,7 @@ Weakness: not reproducible from data; every edit is manual.
 Best for polishing a Motivated Example or Solution Overview after
 the layout is stable.
 
-Weakness: browser-only; offline editing is limited.
+Weakness: offline editing is limited.
 
 ## 4. draw.io (diagrams.net)
 

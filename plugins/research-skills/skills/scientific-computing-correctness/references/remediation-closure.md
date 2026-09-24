@@ -144,9 +144,11 @@ behavioral witness; disclose any narrowed evidence scope.
 
 Record and verify the interpreter, installed dependency versions against the
 supported range, import origin, source revision, and source hashes before
-classifying failures. Run source-mutating probes in an isolated worktree or
-after all read-only review has finished. Never delete workspace files unless
-the current task created them or ownership is otherwise established.
+classifying failures. Run source-mutating probes only in an isolated disposable
+checkout, such as a temporary worktree or copy, and confirm that its tests
+import from that copy rather than from an editable install of the original.
+Never delete workspace files unless the current task created them or ownership
+is otherwise established.
 
 ## Review output and implementation handoff
 

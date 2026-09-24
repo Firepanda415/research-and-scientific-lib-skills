@@ -80,10 +80,9 @@ unresolved possibilities do not become a dispatch queue merely by appearing in
 memory.
 
 Reuse the existing entry and naming conventions. Create a new record only when
-the topic and its reader justify it; do not require WIP/TODO/DEV_NOTE files or a
-fixed set of ledgers. Keep rationale meant for the coordinating agent or user
-separate from task instructions handed to implementing agents, where the project
-makes that distinction.
+the topic and its reader justify it. Keep rationale meant for the coordinating
+agent or user separate from task instructions handed to implementing agents,
+where the project makes that distinction.
 
 Project memory loads only in its own project. Flag records you read during the
 update whose scope exceeds the project, such as a user-wide preference, a model

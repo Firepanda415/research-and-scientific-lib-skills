@@ -399,7 +399,8 @@ def lint_prompt(
                 "WARNING",
                 f"line {_line_number(prose, agent_match.start())}: agent or "
                 "process name in prompt prose; avoid naming agents or sessions "
-                "unless the job depends on a specific host's tools",
+                "unless the job depends on a specific host's tools or a carried "
+                "rule names them, such as an authorship rule",
             )
         )
 

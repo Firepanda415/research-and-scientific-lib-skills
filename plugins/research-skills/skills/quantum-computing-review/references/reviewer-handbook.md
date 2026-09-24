@@ -57,7 +57,7 @@ Run this gate **before processing a confidential manuscript**.
    identity questions to the editor. The first gate in [SKILL.md](../SKILL.md) lists
    what this excludes.
 
-Use the current official policy when it matters to the requested handling. Reuse policy evidence already checked for the same assignment unless its currency or applicability is uncertain.
+Check the current official policy before processing any confidential manuscript, including for a focused question or a later review round. Reuse policy evidence already checked for the same assignment unless its currency or applicability is uncertain.
 
 ---
 
@@ -384,7 +384,8 @@ For a quantum manuscript, expand the method stages with the Quantum Module's Qua
 Then identify:
 
 - the **title-level novelty**;
-- 2 to 5 **load-bearing claims**;
+- every **load-bearing claim**, meaning each claim that the title, abstract, or
+  conclusions depend on;
 - the strongest result;
 - the weakest necessary link in the argument;
 - the component credited with the main result, and what remains if it is removed;
@@ -1237,7 +1238,7 @@ over-polish the report into generic or overly ceremonial prose; concise wording,
 sentence variation, and a small amount of reviewer-style shorthand make the report read
 like an expert's working assessment.
 
-Prefer:
+Illustrative phrasings of this register, to adapt to each comment:
 
 - “The evidence supports a narrower interpretation...”
 - “This comparison does not yet isolate...”
@@ -1329,8 +1330,8 @@ In Supplementary Note Y (SI p. X), ...
 2. Typos: “searchable typo” -> “correction”; ...
 ```
 
-Do not add a separate `Minimum Decisive Revisions` or `Recommendation` section unless
-it improves the specific report or the user requests it.
+Do not add a separate `Recommendation` section unless the user requests it. The
+sign-off rule above governs how the recommendation appears.
 
 ### Revision Review
 
@@ -1339,7 +1340,8 @@ For a resubmission, use:
 | Original concern | Author response | Manuscript change | Assessment | Remaining action |
 |---|---|---|---|---|
 
-Then write only the unresolved or newly introduced issues.
+Then write the unresolved and newly introduced issues, and any load-bearing
+problem that the original review clearly missed (see Mode C).
 
 ---
 

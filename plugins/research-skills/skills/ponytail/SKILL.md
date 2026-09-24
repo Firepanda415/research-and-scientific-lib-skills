@@ -103,7 +103,7 @@ the depth it needs. Do not add a list of unrequested features you omitted.
 | **full** | Apply the ladder within correctness and resource constraints. Default. |
 | **ultra** | Challenge accidental complexity more aggressively, while completing all requested behavior. |
 
-Example: a deterministic calculation with immutable inputs is called repeatedly and takes about 5% of a profiled run. No cache exists or was requested, and the memory budget allows 1,000 stored results.
+Example (illustrative decisions, not report templates): while speeding up a run at the user's request, you find a deterministic calculation with immutable inputs that is called repeatedly and takes about 5% of the profiled time. No cache exists, and the memory budget allows 1,000 stored results.
 - lite: "Added a cache bounded at 1,000 results. Precomputing every result would avoid computing on a cache miss but exceed the memory budget."
 - full: "`@functools.lru_cache(maxsize=1000)` caches the repeated calls within the 1,000-result memory budget."
 - ultra: "No cache added, because the calculation's 5% share of the profiled run does not justify one."

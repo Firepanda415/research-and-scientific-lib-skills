@@ -93,6 +93,8 @@ Every submitted major or non-typo minor comment must contain:
 - the smallest decisive correction, clarification, analysis, or experiment;
 - for a major comment, the narrower claim that survives when the stronger claim fails.
 
+For a non-typo minor comment, the handbook's Minor-Comment Contract replaces the second and third items.
+
 Do not fabricate page, equation, paragraph, repository, or line numbers. Searchable typo-only comments may give the exact string and correction instead of a page locator.
 
 ## Artifact and confidentiality rules

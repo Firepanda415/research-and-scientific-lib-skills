@@ -8,8 +8,7 @@ description: >
 
 # Ponytail Help
 
-Display this reference card when invoked. One-shot, do NOT change the level or
-persist anything.
+Display this reference card when invoked. It leaves the Ponytail level unchanged.
 
 ## Levels
 

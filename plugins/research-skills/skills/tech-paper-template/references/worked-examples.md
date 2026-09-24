@@ -1,4 +1,4 @@
-# Filled thinking templates
+# Filled method-paper skeletons
 
 ## Table of contents
 
@@ -10,11 +10,13 @@
 
 ## 1. How to read these examples
 
-Each example below is a retrospective filling of the thinking
-template for a published paper. Details are illustrative
-reconstructions and are not guaranteed to match the original papers
-word for word. The narrative labels follow the rows of
-[paper-types.md](paper-types.md).
+Each example below fills a method-paper skeleton retrospectively
+for a published paper. Details are illustrative reconstructions and
+are not guaranteed to match the original papers word for word. The
+narrative labels follow the rows of [paper-types.md](paper-types.md).
+The tables split the prompts in [thinking-template.md](thinking-template.md)
+into numbered limitations, challenges, modules, and contributions.
+Those counts come from each paper and are not a pattern to copy.
 
 ## 2. Example A: Alpha-SQL, new method or mechanism
 
@@ -103,7 +105,7 @@ New problem or setting. The goal carries the narrative.
 | Contribution 1 | Problem formulation: iterative data selection without additional inference (Section 2) |
 | Contribution 2 | Instance-level Dynamic Uncertainty with theoretical analysis (Sections 3, 4) |
 | Contribution 3 | LEAD framework design (Section 3) |
-| Evidence | Extensive experiments (Section 5) |
+| Evidence | Experiments in Section 5. This reconstruction does not record their benchmarks or gains, so take them from the paper |
 
 ### Consistency checks
 

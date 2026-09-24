@@ -14,6 +14,6 @@ Keep prior-work claims supportable, result-sensitive regimes explicit, and theor
 
 ## Optional outline examples
 
-[worked-examples.md](worked-examples.md) contains the Alpha-SQL, AFlow, and LEAD case families formerly also used by the Introduction skill. Load it only when a worked example would help. Those illustrative analyses are not verified evidence about the named papers; inspect a source before using its details. No case establishes a required paragraph count or one-to-one mapping between challenges and modules.
+[worked-examples.md](worked-examples.md) contains the Alpha-SQL, AFlow, and LEAD case families. Load it only when a worked example would help. Those illustrative analyses are not verified evidence about the named papers; inspect a source before using its details. No case establishes a required paragraph count or one-to-one mapping between challenges and modules.
 
 Adapted and condensed from the former intro-drafter skill. Original material: Copyright (c) 2026 Yuyu Luo (methodology) and contributors, [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). Changes remove fixed scaffolding and combine duplicated references.

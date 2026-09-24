@@ -92,6 +92,6 @@ For each selected E×U item, explicitly answer:
 3. **真正的新能力：** state the capability unlocked.
 4. **证据与边界：** state the strongest evidence and the principal limit.
 
-## Canonical calibration case: Lean-QEC
+## Calibration case: Lean-QEC
 
 See `examples/lean-qec-example.md` for the full worked case, including the gate-by-gate scoring table and tag rationale. That file is the single source of truth for this case.
