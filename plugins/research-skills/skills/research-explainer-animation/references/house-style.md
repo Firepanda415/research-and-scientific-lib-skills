@@ -39,7 +39,8 @@ Keep each role fixed within a video, and label series so that meaning does not d
 
 ## Subtitles
 
-- One line at a time, at most 14 words, timed in proportion to its length within each narrated sentence and held up to 0.8 s into pauses.
+- One line at a time, no wider than 1760 px at 1080p when measured in the subtitle font, timed in proportion to its length within each narrated sentence and held up to 0.8 s into pauses. Split a longer sentence into balanced lines of at most about 70 characters. Prefer a break after a comma or period, and avoid ending a line on an article, preposition, or conjunction. If a break still separates a value from its unit or splits an expression such as "n − 1", reword the sentence or write the expression without spaces.
+- Check that every subtitle character exists in the subtitle font. IBM Plex Sans lacks the superscript minus and the subscript j, so libass draws them from a fallback font or not at all. Write such values as decimals or in words when the fallback looks wrong.
 - IBM Plex Sans at 46 px in ink, centered in the subtitle strip.
 
 ## Voice

@@ -34,6 +34,7 @@ Each entry gives the symptom, the cause, and the remedy.
 6. **Duplicate or stale subtitle lines.** Subtitle text drawn inside the scene by an updater can persist in Manim's cached list of moving objects. Burn subtitles in during encoding.
 7. **Errors without a TeX installation.** `MathTex`, `Tex`, and `DecimalNumber` need LaTeX. Use typeset SVG for mathematics and regenerated `Text` for changing numbers.
 8. **A render hangs after an exception.** Run the scene with `--dry_run` to catch errors quickly, and run long renders under a timeout.
+9. **Subtitle lines run off the frame.** A word or character limit does not bound the rendered width, and a font-size change widens every line. Measure each line in the subtitle font and size, for example with Pillow's `ImageFont.getlength`, and split it until it fits.
 
 ## Frame with a subtitle strip
 
