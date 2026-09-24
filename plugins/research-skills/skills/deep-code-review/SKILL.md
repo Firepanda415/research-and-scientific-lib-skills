@@ -1,6 +1,6 @@
 ---
 name: deep-code-review
-description: "Review code read-only for domain correctness, engineering, tests and resource costs. Use for substantive code or remediation reviews. Include verified current issues unless the user limits scope to introduced defects. Exclude implementation and style-only review. Review or acceptance of scientific libraries and numerical software uses scientific-library-review."
+description: "Review code read-only for domain correctness, engineering, tests and resource costs, including pre-existing issues in the reviewed surface. Use for substantive code or remediation reviews. Exclude implementation and style-only review. Review or acceptance of scientific libraries and numerical software uses scientific-library-review."
 ---
 
 # Deep Code Review

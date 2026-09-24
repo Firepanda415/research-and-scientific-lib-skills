@@ -4,7 +4,7 @@ Purpose: produce a bounded coverage map in which every in-scope domain is inspec
 
 ## Build a coverage map
 
-Start with the largest or most central production surfaces, then partition the relevant system by responsibility rather than file type. Typical domains are:
+Partition the relevant system by responsibility rather than file type. Typical domains are:
 
 - entrypoints, orchestration, and runtime control;
 - public APIs, commands, configuration, and feature selection;

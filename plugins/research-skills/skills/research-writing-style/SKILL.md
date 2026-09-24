@@ -1,6 +1,6 @@
 ---
 name: research-writing-style
-description: "Draft, edit, or review the prose of text for lasting human use: documents, reports, papers, READMEs, slides, websites, emails, letters, and paste-ready prose in any language. Required for these tasks. Every generated or revised deliverable must pass adversarial reader review before delivery. Review-only starts from the existing text. Exclude temporary chat summaries and status updates."
+description: "Draft, edit, or review the prose of text for lasting human use: documents, reports, papers, READMEs, slides, websites, emails, letters, and paste-ready prose in any language. Required for these tasks, including the pre-delivery review of any generated or revised deliverable. Exclude temporary chat summaries and status updates."
 ---
 
 # Research writing style

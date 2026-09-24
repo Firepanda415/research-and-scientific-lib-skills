@@ -1,6 +1,6 @@
 ---
 name: benchmark-paper-template
-description: Plan, draft, or assess the evaluation gap, construction, measurement design, and findings of the user's benchmark paper, in any field including numerical and quantum benchmarks. An LLM dataset, companion method, human baseline, or fixed paper skeleton is not required. Not for refereeing another author's manuscript.
+description: Plan, draft, or assess the evaluation gap, construction, measurement design, and findings of the user's benchmark paper, in any field including numerical and quantum benchmarks. Not for refereeing another author's manuscript.
 ---
 
 # Benchmark Paper Template

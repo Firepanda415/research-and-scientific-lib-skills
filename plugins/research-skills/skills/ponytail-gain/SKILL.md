@@ -2,11 +2,9 @@
 name: ponytail-gain
 description: >
   Show historical upstream Ponytail benchmark results as a compact scoreboard
-  with their measured scope. These do not validate this customized fork or
-  predict savings on the current repository. One-shot display, not a persistent
-  mode. Trigger: /ponytail-gain,
-  "ponytail gain", "what does ponytail save", "show ponytail impact",
-  "ponytail scoreboard".
+  with their measured scope, for /ponytail-gain or questions about what
+  Ponytail saves. These do not validate this customized fork or predict savings
+  on the current repository. One-shot display, not a persistent mode.
 ---
 
 # Ponytail Gain

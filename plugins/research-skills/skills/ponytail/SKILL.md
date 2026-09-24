@@ -55,7 +55,7 @@ and scaling. Source length is not a performance measure.
 
 Within those constraints, stop at the first suitable option:
 
-1. **Does this need to exist at all?** Speculative need = skip it, say so in one line. (YAGNI)
+1. **Does this need to exist at all?** Speculative need = skip it and say so briefly. (YAGNI)
 2. **Already in this codebase?** A helper, util, type, or pattern that already lives here → reuse it. Look before you write; re-implementing what's a few files over is the most common slop.
 3. **Established numerical kernel solves it?** Reuse the project's optimized stack for expensive computation. Preserve sparse, matrix-free, batched, or device-resident representations when the workload needs them.
 4. **Stdlib or native platform feature covers the glue code?** Use it.
