@@ -14,7 +14,7 @@ Each case directory holds one `case.yaml` in the format that `claude plugin eval
 | `simplify-` | deletion and API retirement decisions, including a session-level Ponytail opt-out |
 | `handoff-` | resume state for a later session, project memory, a research log entry, and an implementer prompt |
 
-To add a case, copy an existing `case.yaml` into a new directory named after the case. The dry run checks the fields, the grader rules above, and that each skill name exists in the Claude package, which carries all 27 skills.
+To add a case, copy an existing `case.yaml` into a new directory named after the case. The dry run checks the fields, the grader rules above, and that each skill name exists in the Claude package, which carries all 28 skills.
 
 ## Cost and approval
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Explainer Animation"
+  short_description: "Narrated explainer videos for papers and code"
+  default_prompt: "Use $research-explainer-animation to make a narrated, subtitled explainer animation of this paper or repository, checked against the source."

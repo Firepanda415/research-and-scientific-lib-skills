@@ -4,7 +4,7 @@
 
 A collection of skills for Codex and Claude Code that I use for research and scientific software development. It covers research planning, literature searches, manuscript writing, figures, scientific computing, and code review. I update it as my work and needs evolve.
 
-In both Codex and Claude Code, the plugin provides **all 27 skills**, including a customized Ponytail coding mode, and the writing hook.
+In both Codex and Claude Code, the plugin provides **all 28 skills**, including a customized Ponytail coding mode, and the writing hook.
 
 ## Install
 
@@ -35,7 +35,7 @@ With a current Claude Code version, Python 3, and Node.js on your `PATH`, run th
 python3 scripts/install-claude.py
 ```
 
-The script builds a local marketplace under `~/.local/share/research-skills/claude-marketplace/` and installs `research-skills@research-skills` at user scope through the Claude CLI. It includes all 27 skills, their supporting files, and the writing hook. If the `claude` on your `PATH` is missing, fails to run, or is not the Claude Code you use, pass the current executable with `--claude-bin /path/to/claude`. The script prints the executable it uses. See the [Claude Code marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces) for local marketplace behavior.
+The script builds a local marketplace under `~/.local/share/research-skills/claude-marketplace/` and installs `research-skills@research-skills` at user scope through the Claude CLI. It includes all 28 skills, their supporting files, and the writing hook. If the `claude` on your `PATH` is missing, fails to run, or is not the Claude Code you use, pass the current executable with `--claude-bin /path/to/claude`. The script prints the executable it uses. See the [Claude Code marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces) for local marketplace behavior.
 
 Rerun the script after changing the source, then start a new Claude Code session. Sessions and workflows already running keep the previous copy until they end. In a new session, invoke a skill by name, for example `/research-skills:scientific-library-review`. If Claude Code also has the standalone Ponytail plugin, uninstall it so that its hooks and duplicate skills do not run alongside this plugin.
 
@@ -68,6 +68,7 @@ By default, the skill writes prose without semicolons, em dashes, or colons join
 | [benchmark-paper-template](plugins/research-skills/skills/benchmark-paper-template/SKILL.md) | Plan or assess your benchmark paper’s evaluation gap, construction, measurement design, and findings, in any field. | [1](#credit-1) |
 | [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) | Draft, edit, and adversarially review lasting prose and paste-ready text, with mandatory review before delivery and a review-only entry. | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10) |
 | [figure-designer](plugins/research-skills/skills/figure-designer/SKILL.md) | Design and assess scientific figures, diagrams, and reproducible plots. | [1](#credit-1) |
+| [research-explainer-animation](plugins/research-skills/skills/research-explainer-animation/SKILL.md) | Script, animate, and check narrated, subtitled explainer videos of papers and code, with every number traced to the source. | — |
 | [pre-submission-reviewer](plugins/research-skills/skills/pre-submission-reviewer/SKILL.md) | Check your manuscript’s scientific claims, consistency, presentation, and a revision's response to referees, before submission. | [1](#credit-1) |
 | [journal-cover-letter](plugins/research-skills/skills/journal-cover-letter/SKILL.md) | Draft and revise journal submission cover letters. | — |
 | [quantum-computing-review](plugins/research-skills/skills/quantum-computing-review/SKILL.md) | Prepare or assess referee reports on another author’s technical manuscript in any field, following venue and confidentiality requirements, with added checks for quantum computing and quantum technology work. | — |
