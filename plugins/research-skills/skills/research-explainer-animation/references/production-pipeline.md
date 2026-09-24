@@ -35,6 +35,7 @@ Each entry gives the symptom, the cause, and the remedy.
 7. **Errors without a TeX installation.** `MathTex`, `Tex`, and `DecimalNumber` need LaTeX. Use typeset SVG for mathematics and regenerated `Text` for changing numbers.
 8. **A render hangs after an exception.** Run the scene with `--dry_run` to catch errors quickly, and run long renders under a timeout.
 9. **Subtitle lines run off the frame.** A word or character limit does not bound the rendered width, and a font-size change widens every line. Measure each line in the subtitle font and size, for example with Pillow's `ImageFont.getlength`, and split it until it fits.
+10. **Plotted data come from a different experiment.** A paper's code repository can ship tutorial or benchmark data from a later run on another device. Read the device name and date in the data files before plotting them. Use such data only in sections whose narration makes no device-specific claim, and state the device, qubit, and date on screen.
 
 ## Frame with a subtitle strip
 
