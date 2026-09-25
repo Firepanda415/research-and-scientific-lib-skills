@@ -12,6 +12,12 @@ each matching session's first prompt and judge individual loads, and --refs to
 count reads of a skill's reference files. For a Codex
 subagent it shows the parent session's first prompt, because the subagent's
 own brief is not stored as a plain message.
+
+Counts come from tool-call requests, so they do not confirm that a read
+succeeded, how much of a file was read, or why. Several reads in one session
+count once. Installed paths carry the plugin version, which the report lists.
+--plugin-version restricts the counts to sessions that read that version's
+files, and leaves out Skill calls, which carry no version.
 """
 
 import argparse
@@ -24,8 +30,8 @@ import time
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 HOME = pathlib.Path.home()
 NAMES = sorted(p.parent.name for p in (ROOT / "plugins/research-skills/skills").glob("*/SKILL.md"))
-INSTALLED = re.compile(r"plugins/cache/research-skills/research-skills/[^/\s\"']+/skills/([a-z0-9-]+)/SKILL\.md")
-REFERENCE = re.compile(r"plugins/cache/research-skills/research-skills/[^/\s\"']+/skills/([a-z0-9-]+)/references/([\w.-]+\.md)")
+INSTALLED = re.compile(r"plugins/cache/research-skills/research-skills/([^/\s\"']+)/skills/([a-z0-9-]+)/SKILL\.md")
+REFERENCE = re.compile(r"plugins/cache/research-skills/research-skills/([^/\s\"']+)/skills/([a-z0-9-]+)/references/([\w.-]+\.md)")
 NAMED = re.compile(r"\b(" + "|".join(map(re.escape, NAMES)) + r")/SKILL\.md")
 CLAUDE_READERS = {"Read", "Bash"}
 CODEX_CALLS = {"function_call", "custom_tool_call", "local_shell_call"}
@@ -48,7 +54,7 @@ def text_of(content):
 
 def claude_session(path):
     project = path.relative_to(HOME / ".claude/projects").parts[0]
-    session = {"subagent": "subagents" in path.parts, "loads": set(), "refs": set(), "named": set(), "prompt": "",
+    session = {"subagent": "subagents" in path.parts, "loads": set(), "reads": set(), "refs": set(), "named": set(), "prompt": "",
                "project": project.removeprefix(str(HOME).replace("/", "-") + "-")}
     for entry in entries(path):
         content = (entry.get("message") or {}).get("content")
@@ -66,7 +72,7 @@ def claude_session(path):
                     if prefix in ("", "research-skills") and name in NAMES:
                         session["loads"].add(name)
                 elif tool in CLAUDE_READERS:
-                    session["loads"].update(INSTALLED.findall(json.dumps(args)))
+                    session["reads"].update(INSTALLED.findall(json.dumps(args)))
                     session["refs"].update(REFERENCE.findall(json.dumps(args)))
             elif block.get("type") == "text":
                 session["named"].update(NAMED.findall(block.get("text", "")))
@@ -74,7 +80,7 @@ def claude_session(path):
 
 
 def codex_session(path):
-    session = {"subagent": False, "loads": set(), "refs": set(), "named": set(), "prompt": "", "project": ""}
+    session = {"subagent": False, "loads": set(), "reads": set(), "refs": set(), "named": set(), "prompt": "", "project": ""}
     meta_seen = False
     for entry in entries(path):
         payload = entry.get("payload")
@@ -89,7 +95,7 @@ def codex_session(path):
         kind = payload.get("type")
         if kind in CODEX_CALLS:
             call = [payload.get("arguments"), payload.get("input"), payload.get("action")]
-            session["loads"].update(INSTALLED.findall(json.dumps(call)))
+            session["reads"].update(INSTALLED.findall(json.dumps(call)))
             session["refs"].update(REFERENCE.findall(json.dumps(call)))
         elif kind == "message":
             text = text_of(payload.get("content"))
@@ -120,20 +126,31 @@ def main():
     parser.add_argument("--days", type=float, default=7, help="look at transcripts modified in this many days (default 7)")
     parser.add_argument("--list", metavar="SKILL", help="list the sessions that loaded SKILL")
     parser.add_argument("--refs", metavar="SKILL", help="count the sessions that read each reference file of SKILL")
+    parser.add_argument("--plugin-version", metavar="PREFIX", help="count only reads of installed files whose plugin version starts with PREFIX")
     args = parser.parse_args()
     cutoff = time.time() - args.days * 86400
     hosts = (("Claude Code", [HOME / ".claude/projects"], claude_session),
              ("Codex", [HOME / ".codex/sessions", HOME / ".codex/archived_sessions"], codex_session))
     for host, roots, read in hosts:
-        sessions = []
+        sessions, versions = [], collections.Counter()
         for path in recent(roots, cutoff):
             try:
-                sessions.append(read(path))
+                s = read(path)
             except OSError:
                 continue
+            versions.update({version for version, _ in s["reads"]} | {version for version, _, _ in s["refs"]})
+            if args.plugin_version:
+                keep = lambda version: version.startswith(args.plugin_version)
+                s["loads"] = {name for version, name in s["reads"] if keep(version)}
+                s["refs"] = {(version, skill, ref) for version, skill, ref in s["refs"] if keep(version)}
+            else:
+                s["loads"] |= {name for _, name in s["reads"]}
+            sessions.append(s)
         used = [s for s in sessions if s["loads"]]
         print(f"{host}, last {args.days:g} days: {len(sessions)} sessions "
               f"({sum(s['subagent'] for s in sessions)} subagents), {len(used)} loaded a research-skills skill")
+        if versions:
+            print("  plugin versions read: " + ", ".join(f"{v} ({n} sessions)" for v, n in versions.most_common()))
         loads, named = collections.Counter(), collections.Counter()
         for s in sessions:
             loads.update((name, s["subagent"]) for name in s["loads"])
@@ -145,7 +162,7 @@ def main():
         for name in rows:
             print(f"  {name:32} {loads[name, False]:5d} {loads[name, True]:9d} {named[name]:6d}")
         if args.refs:
-            refs = collections.Counter((ref, s["subagent"]) for s in sessions for skill, ref in s["refs"] if skill == args.refs)
+            refs = collections.Counter((ref, s["subagent"]) for s in sessions for ref in {ref for _, skill, ref in s["refs"] if skill == args.refs})
             print(f"  {args.refs} references read, main and subagent sessions:")
             for ref in sorted({ref for ref, _ in refs}):
                 print(f"    {ref:30} {refs[ref, False]:5d} {refs[ref, True]:9d}")

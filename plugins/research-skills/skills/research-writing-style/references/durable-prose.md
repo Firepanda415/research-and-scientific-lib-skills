@@ -14,7 +14,7 @@ In a copyedit, fix a visible defect with the smallest useful change. A broader r
 
 ## Compose sentences around their meaning
 
-Use these local mechanisms during generation and editing. The review stage tests the complete draft, including how its sentences work together in the complete argument when its reasoning depends on its structure. These diagnostics draw on Williams and Bizup's *Style: Lessons in Clarity and Grace*, 11th edition, Pearson, copyright 2014, ISBN 978-0-321-89868-5. References below use its printed pages. The guidance is independently written, without reproducing the book's examples.
+Use these local mechanisms during generation and editing. The review stage tests how the resulting sentences work together in the complete argument. These diagnostics draw on Williams and Bizup's *Style: Lessons in Clarity and Grace*, 11th edition, Pearson, copyright 2014, ISBN 978-0-321-89868-5. References below use its printed pages. The guidance is independently written, without reproducing the book's examples.
 
 Give the reader an identifiable subject and action before stacking qualifications. Keep the main verb close enough to its subject that the relation remains easy to follow. A participant can be a mathematical object, process, or institution. Do not invent a human actor or anthropomorphize a model. Nominalizations can name defined concepts, connect to prior material, or condense an already understood action. Passive voice can preserve topic continuity or omit an irrelevant or unknown agent (Lessons 3–4, pp. 28–65).
 

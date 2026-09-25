@@ -2,7 +2,7 @@
 
 本次把 `research-writing-style` 扩展到供人保存、反复阅读、分享、发送、发布或直接粘贴使用的文字。文档、网页、邮件、图注和在聊天中交付的正文都在范围内，不按字数或语言区分。仅服务于当前聊天的总结和进度说明除外。
 
-执行规则见 [SKILL.md](../SKILL.md)、共享写作标准 [durable-prose.md](durable-prose.md)、交付前必读的 [prose-review.md](prose-review.md)，以及推理依赖结构或上下文时加读的 [document-review.md](document-review.md)。同一 skill 内，生成或修改完成后必须审阅完整成稿。只要求 review 时直接审现有文字，不自动重写。此表用于检查整合是否有遗漏，日常写作不必加载。写作路由在会话启动、恢复、清空、压缩后和子代理启动时注入。钩子依赖正常安装和 Codex 的信任机制，不能把“发出了加载指令”称为机械保证每一份文字都合格。
+执行规则见 [SKILL.md](../SKILL.md)、共享写作标准 [durable-prose.md](durable-prose.md) 和交付前必读的 [prose-review.md](prose-review.md)。同一 skill 内，生成或修改完成后必须审阅完整成稿。只要求 review 时直接审现有文字，不自动重写。此表用于检查整合是否有遗漏，日常写作不必加载。写作路由在会话启动、恢复、清空、压缩后和子代理启动时注入。钩子依赖正常安装和 Codex 的信任机制，不能把“发出了加载指令”称为机械保证每一份文字都合格。
 
 ## 本次核对的版本
 
@@ -262,10 +262,10 @@
 
 ## 生成与审阅的分工
 
-句子的主语与动作、从句组织、修饰范围、术语、强调位置和精简机制属于 `durable-prose.md` 的生成指引。`prose-review.md` 负责每份成稿都要经过的审阅，包括对话和 prompt 泄漏、证据与结论的关系以及交付标准。`document-review.md` 以完整论证为主要单位，检查全文结构、段落功能和上下文衔接，用于推理依赖结构或上下文的文字。可选的 [detector-evaluation.md](detector-evaluation.md) 只在用户明确要求按检测结果改写或比较检测结果时加载，普通写作不调用外部检测器。
+句子的主语与动作、从句组织、修饰范围、术语、强调位置和精简机制属于 `durable-prose.md` 的生成指引。`prose-review.md` 以完整论证为主要单位，检查全文结构、段落功能、上下文衔接以及证据与结论的关系。可选的 [detector-evaluation.md](detector-evaluation.md) 只在用户明确要求按检测结果改写或比较检测结果时加载，普通写作不调用外部检测器。
 
 ## 许可与改写边界
 
 Humanizer 使用 MIT，保留 [Siqi Chen 的完整许可通知](../../../LICENSES/HUMANIZER-MIT.txt)。Wikipedia 来源采用 CC BY-SA 4.0，其 [贡献者历史](https://en.wikipedia.org/w/index.php?title=Wikipedia:Signs_of_AI_writing&action=history) 可追溯作者。本表及 `durable-prose.md` 按 [CC BY-SA 4.0](../../../LICENSES/WRITING-CC-BY-SA.txt) 分发。规则按本集合用途重组，添加中文例子、科学保真要求及适用边界，不搬运上游引用的百科案例。其他组件继续使用各自许可证。
 
-Williams 与 Bizup 的原书、引文、图示、练习和答案不随包分发，本项目许可证不覆盖原书。`prose-review.md` 和 `document-review.md` 是本项目按读者诊断思想和本项目要求独立编写的执行流程，使用本项目 MIT 许可并给出书目信息及页码。移入 `durable-prose.md` 的原创句子指引随该文件按上述 CC BY-SA 4.0 分发，各文件的许可边界不变。本表关于该书的说明也是原创评述，不是教材替代品。
+Williams 与 Bizup 的原书、引文、图示、练习和答案不随包分发，本项目许可证不覆盖原书。`prose-review.md` 是本项目按读者诊断思想和本项目要求独立编写的执行流程，使用本项目 MIT 许可并给出书目信息及页码。移入 `durable-prose.md` 的原创句子指引随该文件按上述 CC BY-SA 4.0 分发，两个文件的许可边界不变。本表关于该书的说明也是原创评述，不是教材替代品。
