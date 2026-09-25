@@ -24,6 +24,6 @@ Flag a suspected scientific error separately and inspect the relevant source bef
 
 For source-document prose or math, apply [source layout](source-layout.md). For suggestions the user will paste manually, also read [revision feedback](revision-feedback.md) and apply its current-file, exactly-once full-span anchor and complete-text contract. For authorized direct edits, apply and verify the file without a separate manual replacement package. Combine applicable checks within the parent's mandatory review stage after drafting or editing. Each criterion does not need its own pass or report. Review-only requests do not authorize file changes or a full rewrite.
 
-Adapted and condensed from the former manuscript-writing-review skill. Original material: Copyright (c) 2026 Lorena A. Barba, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Changes clarify scope, semantic preservation, and proportionate review.
+Adapted and condensed from Lorena A. Barba's [sciwrite](https://github.com/labarba/sciwrite) skill. Original material: Copyright (c) 2026 Lorena A. Barba, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Changes clarify scope, semantic preservation, and proportionate review.
 
 Original repository: https://github.com/labarba/sciwrite

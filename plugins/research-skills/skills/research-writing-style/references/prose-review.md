@@ -2,7 +2,7 @@
 
 Read this reference for the parent's mandatory review stage and for review-only requests. Review the text that exists. Do not generate another version merely to have something to compare, and do not rewrite a sound passage to demonstrate effort. The shared criteria remain in [durable prose](durable-prose.md).
 
-The reader-oriented diagnostics here draw on Joseph M. Williams and Joseph Bizup, *Style: Lessons in Clarity and Grace*, 11th edition, Pearson, copyright 2014, ISBN 978-0-321-89868-5. Page references below use the book's printed numbering. This is an independently written review procedure informed by the book's ideas and the user's requirements, not a reproduction of its lessons, examples, or exercises. The book treats its principles as aids to diagnosis rather than universal prescriptions (Preface, p. vii).
+The reader-oriented diagnostics here draw on Joseph M. Williams and Joseph Bizup, *Style: Lessons in Clarity and Grace*, 11th edition, Pearson, copyright 2014, ISBN 978-0-321-89868-5. Page references below use the book's printed numbering. This is an independently written review procedure informed by the book's ideas and this collection's requirements, not a reproduction of its lessons, examples, or exercises. The book treats its principles as aids to diagnosis rather than universal prescriptions (Preface, p. vii).
 
 ## Review as a skeptical reader
 

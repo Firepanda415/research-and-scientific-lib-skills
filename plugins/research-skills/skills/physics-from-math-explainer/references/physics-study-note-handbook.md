@@ -314,7 +314,7 @@ The minimal memory version should contain only equations and rules the user shou
 
 ## Markdown formatting rules
 
-The user prefers Markdown notes that can be copied into VS Code.
+Keep Markdown notes copy-paste safe for a Markdown editor with math rendering, such as VS Code.
 
 ### Inline math
 
@@ -585,4 +585,4 @@ Before finalizing an answer, check:
 9. Is there no standalone `=` line?
 10. Is there no raw `|n\rangle` inside Markdown tables?
 11. Is there a minimal memory version?
-12. If the user asks for Markdown notes, is the output copy-paste safe for VS Code?
+12. If the user asks for Markdown notes, is the output copy-paste safe for the target Markdown editor, such as VS Code?

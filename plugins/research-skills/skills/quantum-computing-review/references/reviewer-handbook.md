@@ -292,7 +292,7 @@ Use the most specific available locator.
    ```text
    Commit abc123, src/solver.py, lines 84-101
    notebooks/hardware.ipynb, cell 17
-   config/heron.yaml, keys shots and optimization_level
+   config/backend.yaml, keys shots and optimization_level
    ```
 
 ### Location Rules
@@ -760,7 +760,7 @@ range**, not unconditional scalability.
 
 For an application pipeline, separate at least three causal layers:
 
-1. **Model or representation:** for example, a higher-order surrogate, improved
+1. **Model or representation:** for example, a learned surrogate, improved
    Hamiltonian, active space, ansatz, dataset, or physical model.
 2. **Optimizer or algorithm:** the method that searches or estimates within that model.
 3. **Execution platform:** for example, exact or approximate simulation, a noisy
@@ -807,14 +807,14 @@ vague labels such as “present in both.” Identify **what exact object is repe
 
 #### Interpretation Rules
 
-1. **Inherited and cited is normally acceptable.** Reusing a decomposition policy,
-   aggregation rule, codebase, HPC layer, dataset, or application testbed is not by
+1. **Inherited and cited is normally acceptable.** Reusing a codebase, solver,
+   preprocessing pipeline, dataset, or benchmark suite is not by
    itself a reason for rejection when it is properly cited and not falsely claimed as
    new.
 2. **Same application does not mean same experiment.** Distinguish repeated protocol
    from reused numerical data, figures, or conclusions.
-3. **A direct extension may still be publishable.** Extending quadratic to higher-order,
-   DV to CV, simulation to hardware, or one regime to another must be judged by the
+3. **A direct extension may still be publishable.** Extending a method to a larger
+   problem class or a new encoding, from simulation to hardware, or from one regime to another must be judged by the
    technical difficulty, evidence, and resulting insight, not by the fact that the
    direction was foreseeable.
 4. **A prior paper's future-work sentence is not dispositive.** It may reduce surprise,
@@ -935,7 +935,7 @@ Do not recommend rejection merely because:
 
 - the same group developed the prior framework;
 - inherited components are reused and properly cited;
-- the application testbed is repeated;
+- the same benchmark or application is reused;
 - a prior paper anticipated the direction;
 - many revisions are requested.
 
@@ -1018,7 +1018,7 @@ $$
 H=\sum_{k=1}^{m}H_k,
 $$
 
-and the initial state, mixer, and parameters respect the same partition, then the
+and the initial state and every circuit layer, with its parameters, respect the same partition, then the
 ideal evolution may factorize as
 
 $$
@@ -1033,8 +1033,8 @@ $$
 
 In that case, compare against independent or batched simulation of the blocks, not
 only against a monolithic state-vector or density-matrix representation. However, do
-not conclude that the hardware construction is useless, because it may still demonstrate QPU
-multiplexing, throughput, reduced submission overhead, or hardware compatibility. The
+not conclude that the hardware construction is useless, because it may still demonstrate parallel
+execution on one QPU, throughput, reduced submission overhead, or hardware compatibility. The
 review should invalidate only the unsupported claim.
 
 ### Quantum and Hardware Claim Types
@@ -1045,7 +1045,7 @@ Classify a quantum or hardware claim with this table in addition to Step 6:
 |---|---|
 | Logical encoding benefit | Fewer logical variables, cleaner formulation, or lower logical interaction order under stated assumptions |
 | Circuit-simulation crossover | Faster execution than a specified classical simulation method under matched semantics and resources |
-| QPU multiplexing / throughput | More independent jobs completed per QPU call or unit time |
+| Parallel QPU execution / throughput | More independent jobs completed per QPU call or unit time |
 | Hardware compatibility | The circuit runs with acceptable fidelity on a real device |
 | Optimization advantage | Better solution quality, success probability, or time-to-target than strong classical optimization |
 | End-to-end practical advantage | Better total cost, latency, energy, or scientific outcome including classical overhead |
@@ -1233,7 +1233,7 @@ strings.
 
 Use professional, direct, neutral language. Preserve clear field-standard shorthands
 such as `Sec.`, `Fig.`, `Eq.`, `SI`, `CPU/GPU`, and the field's established acronyms,
-for example `QPU`, `QAOA`, and `HUBO` in quantum work. Do not
+for example `QPU`, `VQE`, and `QEC` in quantum work. Do not
 over-polish the report into generic or overly ceremonial prose; concise wording, natural
 sentence variation, and a small amount of reviewer-style shorthand make the report read
 like an expert's working assessment.
@@ -1290,8 +1290,9 @@ Match the report to the requested scope. A comprehensive audit includes all veri
 
 #### Personal Style Settings
 
-These are the user's personal preferences, not general review methodology; adjust them
-here without touching the rest of the skill.
+These are adjustable reviewer-style defaults, not review methodology. A sign-off, length,
+or layout given in the user's request or guidance replaces them. Adjust them here without
+touching the rest of the skill.
 
 - **Sign-off:** do not add a separate `Recommendation` section. End the Overall
   Assessment with one of these forms:

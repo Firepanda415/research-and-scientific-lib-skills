@@ -18,8 +18,8 @@ For implementation, optimization, refactoring, or proposed structural changes, l
 ## Authority of project records
 
 When a plan, policy, framework, constants registry, review report, or prior
-AI-authored summary could change the scientific decision, use the user's
-project-level authority classification:
+AI-authored summary could change the scientific decision, classify it by the
+authority the user or project assigns:
 
 - **Constitutional:** an invariant or decision the user explicitly designates
   as requiring an explicit amendment before it changes.

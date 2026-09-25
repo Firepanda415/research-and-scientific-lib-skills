@@ -1,6 +1,6 @@
 # Default house style
 
-These defaults keep explainers consistent with the user's earlier videos, which accompany publications on mqzh.science. A destination with its own style module or brand overrides them.
+These defaults keep a series of explainers visually consistent. A destination with its own style module or brand overrides them.
 
 ## Frame and pacing
 

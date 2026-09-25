@@ -36,9 +36,10 @@ runtime, peak memory, and access assumptions. Compare like quantities.
 
 Before expanding numerical tuning, check whether a baseline admits an analytical
 simplification or a better implementation within the same allowed capabilities.
-For quantum resource comparisons, this can mean grouping quadratic terms into an
-exactly implementable Gaussian block, replacing number-diagonal evolution with
-an available programmable phase gate, or merging adjacent compatible gates.
+For quantum resource comparisons, this can mean compiling a group of commuting or
+exactly solvable terms into one implementable block, replacing a decomposed
+sequence with an equivalent gate the platform already provides, or merging
+adjacent compatible gates.
 Verify the identity in the representation used and count the resources needed
 to realize it. Reassess the size and explanation of the gain against that baseline
 before proposing more runs.

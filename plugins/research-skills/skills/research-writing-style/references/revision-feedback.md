@@ -1,8 +1,8 @@
 # Delivering revision feedback on an existing document
 
-When the deliverable is a set of edit suggestions against an existing file (manuscript, response letter, README) rather than fresh text, the user applies each edit by exact text search in their own editor (Overleaf). Every edit must therefore be self-locating and paste-ready. A diff, a patch hunk, or a prose description of a change is unusable.
+When the deliverable is a set of edit suggestions against an existing file (manuscript, response letter, README) rather than fresh text, the user applies each edit by exact text search in their own editor (for example, Overleaf). Every edit must therefore be self-locating and paste-ready. A diff, a patch hunk, or a prose description of a change is unusable.
 
-Before writing any feedback, re-read the target file from disk, even if it was read earlier in the session. The user swaps updated copies into the folder between rounds, and suggestions computed against a stale version locate nothing. Check the modification time, verify that the anchors about to be quoted exist in the current file, and if the file shows no sign of the update the user described, say so before writing any feedback.
+Before writing any feedback, re-read the target file from disk, even if it was read earlier in the session. The user may replace the file with an updated copy between rounds, and suggestions computed against a stale version locate nothing. Check the modification time, verify that the anchors about to be quoted exist in the current file, and if the file shows no sign of the update the user described, say so before writing any feedback.
 
 When the target file is outside version control, such as an ignored manuscript synced from an online editor, git status and an empty diff say nothing about its state. Before a new round, confirm that edits reported as applied in earlier rounds are still present in the current file. If a copy of the previous round's file is available, compare it with the current file as well. Report an earlier change that has disappeared as a regression, before any new edits, and do not list it as a new finding. Keep any such copy in temporary working storage outside the user's source tree and use it only for comparison. Never copy it back over the user's file unless the user asks.
 
@@ -18,10 +18,10 @@ When a block delivered in an earlier round must change, in chat or in a file, an
 
 A *replace* edit is delivered exactly like this:
 
-> Line 1968, anchor (the exact span being replaced): `Ideal normalized kernel target before any coefficient or oscillator-space truncation.`
+> Line 212, anchor (the exact span being replaced): `Exact reference solution before any time-step or basis truncation.`
 > Replace with:
 > ```latex
-> Ideal normalized kernel target before coefficient or oscillator-space truncation.
+> Exact reference solution before time-step or basis truncation.
 > ```
 
 An *insert after* edit (the anchor line itself stays):
@@ -43,7 +43,7 @@ If the pattern also occurs in commented, legacy, or unrelated text, do not use a
 **Never deliver:**
 
 - a diff or patch hunk (`@@ ... @@`, leading `+`/`-` lines): it cannot be applied by text search,
-- a paraphrased or from-memory anchor ("the sentence about the kernel target"): it will not match anything,
+- a paraphrased or from-memory anchor ("the sentence about the reference solution"): it will not match anything,
 - a position without an anchor ("the third paragraph of Section 4"): line numbers alone go stale the moment the file changes,
 - an anchor that matches more than one place in the file: lengthen it until unique,
 - a block that mixes new text with unchanged context, forcing the user to hand-merge.

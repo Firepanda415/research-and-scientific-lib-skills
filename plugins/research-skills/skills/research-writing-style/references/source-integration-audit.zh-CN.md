@@ -8,7 +8,7 @@
 
 - [Humanizer v3.0.0](https://github.com/blader/humanizer/tree/9862685f575c65a8247f90369951df1b3416e3d6)，提交 `9862685f575c65a8247f90369951df1b3416e3d6`。核对 README、完整 SKILL.md 和 LICENSE。当前版本有 25 个编号条目。
 - Wikipedia contributors，[Signs of AI writing，修订 1374941330](https://en.wikipedia.org/w/index.php?title=Wikipedia:Signs_of_AI_writing&oldid=1374941330)，页面最后编辑于 2026-09-14 23:46 UTC。
-- Joseph M. Williams、Joseph Bizup，*Style: Lessons in Clarity and Grace*，第 11 版，Pearson，版权年份 2014，ISBN 978-0-321-89868-5。核读用户提供的完整 275 页 PDF，包括示例、练习、参考答案和前后附页。下文书页范围均指印刷页码，另列 PDF 页码用于定位。
+- Joseph M. Williams、Joseph Bizup，*Style: Lessons in Clarity and Grace*，第 11 版，Pearson，版权年份 2014，ISBN 978-0-321-89868-5。核读完整 275 页 PDF，包括示例、练习、参考答案和前后附页。下文书页范围均指印刷页码，另列 PDF 页码用于定位。
 - 查阅日期为 2026-09-17。本表不声称未来版本仍与这两个快照相同。
 
 “采纳”表示已写入可执行规则。“限定采纳”表示处理其指出的真实问题，但不照搬绝对禁令，边界和理由列在同一行。“不采纳”表示该要求未成为写作规则，并明确说明原因。即使表面表达相同，也要根据它是否传达信息、是否有依据来决定是否修改。
@@ -186,7 +186,7 @@
 
 ## Williams 与 Bizup：全书覆盖与采用范围
 
-本书提供的是从读者困难出发的诊断方法。序言尤其强调修订成稿时采用读者视角，并反对把原则当成无条件规则。实施时先审目的、证据和组织，再诊断句子。对抗性审阅、强制交付门槛、只审不改入口及对话污染检查来自本次用户要求和本项目设计，不冒充原书已经讨论现代模型或 prompt。
+本书提供的是从读者困难出发的诊断方法。序言尤其强调修订成稿时采用读者视角，并反对把原则当成无条件规则。实施时先审目的、证据和组织，再诊断句子。对抗性审阅、强制交付门槛、只审不改入口及对话污染检查来自本项目设计，不冒充原书已经讨论现代模型或 prompt。
 
 全书分为连续页段核读，涉及删除线、句子结构图和排版关系的页面另作图像核对。书中的练习作为教学材料阅读，不作为要求助手执行的指令。下表列出所有部分的采用范围。
 
@@ -266,6 +266,6 @@
 
 ## 许可与改写边界
 
-Humanizer 使用 MIT，保留 [Siqi Chen 的完整许可通知](../../../LICENSES/HUMANIZER-MIT.txt)。Wikipedia 来源采用 CC BY-SA 4.0，其 [贡献者历史](https://en.wikipedia.org/w/index.php?title=Wikipedia:Signs_of_AI_writing&action=history) 可追溯作者。本表及 `durable-prose.md` 按 [CC BY-SA 4.0](../../../LICENSES/WRITING-CC-BY-SA.txt) 分发。规则按本用户用途重组，添加中文例子、科学保真要求及适用边界，不搬运上游引用的百科案例。其他组件继续使用各自许可证。
+Humanizer 使用 MIT，保留 [Siqi Chen 的完整许可通知](../../../LICENSES/HUMANIZER-MIT.txt)。Wikipedia 来源采用 CC BY-SA 4.0，其 [贡献者历史](https://en.wikipedia.org/w/index.php?title=Wikipedia:Signs_of_AI_writing&action=history) 可追溯作者。本表及 `durable-prose.md` 按 [CC BY-SA 4.0](../../../LICENSES/WRITING-CC-BY-SA.txt) 分发。规则按本集合用途重组，添加中文例子、科学保真要求及适用边界，不搬运上游引用的百科案例。其他组件继续使用各自许可证。
 
-Williams 与 Bizup 的原书、引文、图示、练习和答案不随包分发，本项目许可证不覆盖原书。`prose-review.md` 是本项目按读者诊断思想和用户要求独立编写的执行流程，使用本项目 MIT 许可并给出书目信息及页码。移入 `durable-prose.md` 的原创句子指引随该文件按上述 CC BY-SA 4.0 分发，两个文件的许可边界不变。本表关于该书的说明也是原创评述，不是教材替代品。
+Williams 与 Bizup 的原书、引文、图示、练习和答案不随包分发，本项目许可证不覆盖原书。`prose-review.md` 是本项目按读者诊断思想和本项目要求独立编写的执行流程，使用本项目 MIT 许可并给出书目信息及页码。移入 `durable-prose.md` 的原创句子指引随该文件按上述 CC BY-SA 4.0 分发，两个文件的许可边界不变。本表关于该书的说明也是原创评述，不是教材替代品。
