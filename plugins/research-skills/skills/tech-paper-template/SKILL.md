@@ -33,6 +33,17 @@ Do not invent limitations, challenges, modules, or contribution bullets to fill
 cells. A method component need not be a standalone contribution, and a scientific
 result need not map one-to-one onto an implementation module.
 
+When turning experiment or validation records into a manuscript, organize the
+results around the conclusions the evidence supports. Present each main result
+with its evidence type and material conditions, distinguishing an identity, a
+conditional bound, a numerical observation, and a physical interpretation.
+State the supported result directly, and keep counterevidence and unsuccessful
+controls visible when they explain or limit it. Move routine search chronology,
+seeds, and refinement logs to methods, appendices, or linked records as appropriate.
+Introduce the main result once its necessary assumptions and definitions are in
+place. Give background, dictionaries, and classifications the space needed to
+understand the argument.
+
 ## Output
 
 Produce the requested skeleton, diagnosis, or structure proposal. A compact

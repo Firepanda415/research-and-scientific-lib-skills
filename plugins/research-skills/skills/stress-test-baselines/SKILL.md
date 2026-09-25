@@ -34,6 +34,22 @@ resource to be equal simultaneously. For quantum computing this can include
 accuracy, problem size, state preparation, measurement shots, classical work,
 runtime, peak memory, and access assumptions. Compare like quantities.
 
+Before expanding numerical tuning, check whether a baseline admits an analytical
+simplification or a better implementation within the same allowed capabilities.
+For quantum resource comparisons, this can mean grouping quadratic terms into an
+exactly implementable Gaussian block, replacing number-diagonal evolution with
+an available programmable phase gate, or merging adjacent compatible gates.
+Verify the identity in the representation used and count the resources needed
+to realize it. Reassess the size and explanation of the gain against that baseline
+before proposing more runs.
+
+Match the requested outputs as well as the accuracy threshold. For time-evolution
+comparisons, distinguish accuracy at each method's own step endpoints from
+accuracy at common requested observation times. State which task the evidence
+supports, including any partial final steps or extra readout needed for the
+common-time task. A lower count obtained by using more of the error budget is
+evidence of better resource selection, not by itself of a better synthesis method.
+
 Use fair bounded tuning for every compared method, including the proposed one,
 and report the search space, effort, selected settings, and meaningful
 sensitivity. When the claim concerns one configuration of the proposed method
@@ -51,7 +67,10 @@ Use seeds, regimes, datasets, accuracy targets, tails, or limiting cases where
 they materially affect the claim. A ranking at one accuracy target can reverse at
 another target a reader would reasonably use. Do not require every axis or
 component to be tested, and do not run a full Cartesian sweep without a
-decision-relevant reason and budget.
+decision-relevant reason and budget. For a selected configuration close to an
+acceptance threshold, use existing records first to assess whether a nearby
+threshold or a configuration with more error margin changes the conclusion.
+Distinguish that sensitivity check from an optimality claim over untested settings.
 
 For an ablation study, identify what is removed and which outcome can reveal its
 contribution, and check interactions when removing components separately could
