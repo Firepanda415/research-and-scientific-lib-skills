@@ -58,13 +58,27 @@ Keep hypotheses and proposals visibly provisional when they are useful to retain
 A concrete incident may illustrate a general mechanism; it does not justify a
 universal restriction, permanent test, new runtime check or recurring experiment.
 
+Write entries as current guidance. Before adding or rewriting a rule, identify
+the mistake a later session would make without it, and leave out a rule that
+prevents none. A removed or rejected option belongs in memory only inside the
+decision that excluded it, with the reason and any condition for reconsidering
+it, or when the user explicitly asks to keep it out. An item removed only
+because it is no longer needed leaves nothing to record. Record a temporary
+arrangement, such as a workaround awaiting an upstream fix, as current status
+that names the condition ending it, rather than as a project convention.
+
 ## Reconcile rather than append
 
 Choose whether each relevant record needs an addition, correction, replacement
 link or removal. Decisions and evidence may be marked historical. Remove
 superseded operating guidance in active entries (routes, commands, environment
-names, branch or revision status, job states, retired gates)
-rather than relabeling it, and do not reimport it. Keep one current owner for
+names, conventions, branch or revision status, job states, retired gates)
+rather than relabeling or inverting it, and do not reimport it. When a removed
+item or an ended arrangement leaves no current requirement, delete in the same
+update every rule, index line and reference that existed because of it, and
+add nothing in their place. For example, when a folder prepared for one meeting
+is deleted, delete the rule that kept it in sync instead of rewriting it as
+“ignore that folder.” Keep one current owner for
 each decision and link to it from readers that need it. Preserve unique
 rationale and evidence before consolidating records; respect immutable history
 and user-owned files.

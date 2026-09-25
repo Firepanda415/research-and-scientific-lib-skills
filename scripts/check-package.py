@@ -119,7 +119,7 @@ def main():
             prompt = fields.get("interface", {}).get("default_prompt")
             if prompt:
                 assert f"${name}" in prompt, f"stale UI invocation: {ui}"
-    assert names and "ponytail" in names and "rethink-design" in names and "geju" not in names
+    assert names and "ponytail" in names and "rethink-design" in names
     for doc in (root / "README.md", root / "README.zh-CN.md"):
         catalog = re.findall(r"\]\(plugins/research-skills/skills/([^/]+)/SKILL.md\)", doc.read_text())
         assert set(catalog) == names and len(catalog) == len(names), f"catalog drift: {doc}"

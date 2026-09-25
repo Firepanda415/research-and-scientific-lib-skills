@@ -35,7 +35,7 @@ Start with the decisive check and the diff. Add checks below only when the cut
 affects the corresponding contract, a repository rule requires them, or unresolved
 risk justifies them. A focused private-code deletion need not run every layer.
 
-1. **Residue check**: search removed names, strings, paths, formats, flags, and docs.
+1. **Residue check**: search removed names, strings, paths, formats, flags, and docs. Delete or update each hit outside history records, including a note, comment, or test added only to record the removal. Hits in changelogs, migration notes, attributions, and dated logs stay. The search is a one-time check and does not become a permanent test.
 2. **Decisive check**: run the smallest test or probe that would fail if the cut were incorrect.
 3. **Lead check**: re-run any analyzer or query that produced the original candidate.
 4. **Local gates**: run required package gates and checks for the affected behavior.

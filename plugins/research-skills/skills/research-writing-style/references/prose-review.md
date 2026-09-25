@@ -18,15 +18,15 @@ Adversarial review needs evidence. For each finding, identify the location, the 
 
 ## Hard gate: exclude conversation and prompt leakage
 
-Separate source facts the user supplied from instructions about how to write. Audience, scope, tone, prohibited moves, feedback on previous drafts, and generation plans control the work. They do not become content merely because they appeared in a message.
+Separate source facts the user supplied from instructions about how to write. Audience, scope, tone, prohibited moves, feedback on previous drafts, and generation plans control the work. They do not become content merely because they appeared in a message. Removals made during the work change what the artifact describes. They do not become statements about the removed item.
 
-Inspect every reference to the user, a prompt, the conversation, an earlier draft, an instruction, or the writing process. Also inspect unexplained deictic phrases, declarations of compliance, defensive exclusions, and negative comparisons. Typical symptoms include “as you requested,” “the user emphasized,” “this version avoids,” “we do not discuss X,” “unlike the previous draft,” “根据你的要求,” “按前面讨论,” “这里不做 X,” and “不是 X，而是 Y.” These are prompts for inspection, not a string blacklist.
+Inspect every reference to the user, a prompt, the conversation, an earlier draft or version, an instruction, or the writing process. Also inspect unexplained deictic phrases, declarations of compliance, defensive exclusions, negative comparisons, and mentions of removed items. Typical symptoms include “as you requested,” “the user emphasized,” “this version avoids,” “we do not discuss X,” “unlike the previous draft,” “X is no longer used,” “now uses Y,” “ignore the old X,” “根据你的要求,” “按前面讨论,” “这里不做 X,” “不再使用 X,” “改为 Y,” and “不是 X，而是 Y.” These are prompts for inspection, not a string blacklist.
 
 For each suspect sentence, ask:
 
 1. Does it tell the intended reader something about the subject, or merely record how the assistant was told to write?
 2. Would it belong here if that reader had never seen the prompt? Does the draft give the reader the needed context on its own?
-3. Does a negative statement express a supported technical boundary, a necessary instruction to this reader, or a real alternative they need to distinguish? Or did it appear only because the user told the writer not to do something?
+3. Does a negative statement express a supported technical boundary, a necessary instruction to this reader, or a real alternative they need to distinguish? Or did it appear only because the user told the writer not to do something, or because an earlier draft or version contained the item?
 
 Remove process residue without replacing it with a smoother declaration of obedience. Express the supported positive content directly. A request not to discuss a topic does not establish that the method excludes it, cannot handle it, or deliberately rejected it. If excluding that topic needs no explanation for this reader, give none.
 
@@ -37,7 +37,9 @@ Original examples of this distinction:
 | “不要夸大结果” | “We avoid overstating the significance of these results.” | Report the result with its actual evidence and limits. Remove the self-assessment. |
 | “不要在这里讨论噪声” | “Our method does not consider noise.” | Delete the invented scope claim. The writing instruction is not evidence about the method. |
 | “别提我们刚才试过的方案” | “Unlike the previous approach, this method is straightforward.” | State the current method and any reader-relevant rationale supported by the material. |
+| “去掉 `--fast` 选项” | “The CLI no longer offers `--fast`. Do not reintroduce it.” | Document the current options. Put the removal in the commit message, and in the changelog when users must change their commands. |
 | Supplied fact: the bound assumes finite dimension | “The bound is proved only for finite-dimensional systems.” | Keep it when it states the actual scope. A necessary limitation is not prompt residue. |
+| Supplied decision: dense storage exhausted memory above 24 qubits, so the project uses MPS | “Use MPS at every system size. Dense storage exhausted memory above 24 qubits.” | Keep it. It states the current rule and its measured reason. |
 
 Exceptions must follow the artifact's purpose. A requested conversation record, revision history, response letter, migration guide, or reusable instruction set may need process information or prohibitions. Include only the history or instruction the user intends that reader to receive. Do not expose incidental chat wording or private working notes. A skill about writing rules can state writing rules. A paper's result section normally cannot narrate compliance with its drafting prompt.
 

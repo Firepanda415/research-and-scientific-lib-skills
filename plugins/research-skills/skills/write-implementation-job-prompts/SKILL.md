@@ -70,6 +70,15 @@ For a correction, state what supersedes the old instruction and why, using
 helpful. Preserve dispositions of relevant findings without making a new
 permanent test for each review comment. Existing evidence may cover several fixes.
 
+When the job removes or replaces something, state the end state. Code, tests,
+documentation and configuration describe only the surviving behavior, and a
+one-time search for the old names finds no reference outside history records
+such as changelogs, migration notes, attributions and dated logs. Request a
+note about the removal only with a stated reason the item must stay absent, and
+a permanent absence test only when a product, security, or compatibility
+contract requires the absence or the user explicitly asks for one. The commit
+message or the project's change record carries the history.
+
 Use the current project's supplied guidance to identify required reading and its actual paths. Give the implementer only material relevant to the assigned role and task, following the project's access and storage rules. Carry applicable workspace setup, import binding, integration, and delivery requirements into the handoff. Do not require a project to adopt another project's document layout or workflow. A brief for another implementer belongs to this skill. Resume state for continuing the same work in a later session belongs to `research-watchdog-protocol`.
 
 ## Proportional acceptance

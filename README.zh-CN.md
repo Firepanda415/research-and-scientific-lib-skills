@@ -45,7 +45,7 @@ python3 scripts/install-claude.py
 
 可以在对话中指定级别（`lite`、`full` 或 `ultra`），例如在 Codex 中输入 `$ponytail lite`，或在 Claude Code 中输入 `/research-skills:ponytail lite`，该级别持续到你指定其他级别或关闭 Ponytail 为止。未指定级别时使用 `full`。说 `stop ponytail` 或 `normal mode`，或使用 `$ponytail off`，可关闭 Ponytail，直到你在本次对话中再次要求使用。再次开启时使用 `full`，除非你指定其他级别。其他 skills 也遵守这一 off 状态。`ponytail-help` 列出两个 host 上的调用方式。
 
-凡是供人保存、反复阅读、分享、发布、发送或粘贴到其他地方的文字，写作钩子都要求 Codex 或 Claude Code 在起草、编辑这类文字或审阅其行文前读取并应用 `research-writing-style` 和其中的 durable-prose reference。普通文档、邮件、网页正文、聊天窗口中交付的可直接粘贴文本均在范围内，不分语言和篇幅。仅用于当前聊天的总结与进度说明除外。返回给其他 agent 或程序的材料（如结构化的发现或搜索结果）也不在路由范围内，由把它整理成交付文本的 agent 应用写作规范。路由会在会话启动、压缩后和子代理启动时注入。在 Codex 中，每次安装或更新后都要打开 `/hooks` 并信任 research-skills 的钩子，获得信任前写作路由不会运行。钩子提供加载指令，不能机械保证每份文字的质量。
+凡是供人保存、反复阅读、分享、发布、发送或粘贴到其他地方的文字，写作钩子都要求 Codex 或 Claude Code 在起草、编辑这类文字或审阅其行文前读取并应用 `research-writing-style` 和其中的 durable-prose reference。普通文档、邮件、网页正文、聊天窗口中交付的可直接粘贴文本均在范围内，不分语言和篇幅。仅用于当前聊天的总结与进度说明除外。返回给其他 agent 或程序的材料（如结构化的发现或搜索结果）也不在路由范围内，由把它整理成交付文本的 agent 应用写作规范。钩子还要求文档、项目记忆、指令、代码注释和测试描述当前状态。删除某项或结束临时安排时，因它而存在的规则、引用和测试一并删除。历史记录放在版本控制、带日期的记录、决策记录，以及用户需要操作时的变更记录或迁移说明中，例如下文的升级说明。其他地方如果要写关于已删除项的说明或禁令，必须写明该项为什么不能恢复。断言它不存在的测试，则需要有要求它不存在的合约或用户的明确要求。规则的参考来源见 [12](#credit-12)。路由会在会话启动、压缩后和子代理启动时注入。在 Codex 中，每次安装或更新后都要打开 `/hooks` 并信任 research-skills 的钩子，获得信任前写作路由不会运行。钩子提供的是指令，不能机械保证它们得到遵守。
 
 同一 skill 分为两个阶段。生成和编辑阶段在写作时落实句子结构与用词要求，完整成稿随后必须经过[对抗性审阅](plugins/research-skills/skills/research-writing-style/references/prose-review.md)才能交付。审阅重点检查全文结构、段落功能、上下文和推理。先确认提取材料的来源与文档角色，再结合上下文核对证据、读者理解障碍，以及混入正文的对话和 prompt。用户要求“不要讨论 X”，不能变成对写作对象缺乏依据的断言。只要求 review 时，直接检查现有文字并报告有依据的问题，不自动重写。检测器标签本身不要求修改。用户明确要求按检测结果改写时，启用可选的[检测实验流程](plugins/research-skills/skills/research-writing-style/references/detector-evaluation.md)，保全含义并记录实测对比。普通写作不要求检测。复测中关于选择依据、能力与操作的联系、限定归属及上下文衔接的写作经验，已纳入默认生成和审阅规则。[来源采纳审计](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md)记录完整覆盖范围、限定采用及未采用的建议。
 
@@ -59,12 +59,12 @@ python3 scripts/install-claude.py
 | [stress-test-baselines](plugins/research-skills/skills/stress-test-baselines/SKILL.md) | 设计公平的基线比较、消融实验和稳健性检查。 | — |
 | [write-research-log](plugins/research-skills/skills/write-research-log/SKILL.md) | 记录研究进展、实验观察、假设与预测。 | — |
 | [research-watchdog-protocol](plugins/research-skills/skills/research-watchdog-protocol/SKILL.md) | 跟进长时间运行的任务，并在新会话中接续进行中的研究。 | — |
-| [maintain-project-memory](plugins/research-skills/skills/maintain-project-memory/SKILL.md) | 整理 project memory，保留 decision rationale、可复用经验与 evidence 范围，支持后续 session 接续工作。 | [6](#credit-6), [7](#credit-7) |
+| [maintain-project-memory](plugins/research-skills/skills/maintain-project-memory/SKILL.md) | 整理 project memory，保留 decision rationale、可复用经验与 evidence 范围，支持后续 session 接续工作。 | [6](#credit-6), [7](#credit-7), [12](#credit-12) |
 | [quantum-research-radar](plugins/research-skills/skills/quantum-research-radar/SKILL.md) | 生成中文量子研究简报和针对某一主题的近期工作扫描，关注量子计算与人工智能等相关方向。 | — |
 | [physics-from-math-explainer](plugins/research-skills/skills/physics-from-math-explainer/SKILL.md) | 从数学出发解释物理，补充物理直觉，讲清符号和约定。 | — |
 | [tech-paper-template](plugins/research-skills/skills/tech-paper-template/SKILL.md) | 组织技术论文的论点、引言和章节结构。 | [1](#credit-1) |
 | [benchmark-paper-template](plugins/research-skills/skills/benchmark-paper-template/SKILL.md) | 规划或评估自己的基准测试论文，包括评估缺口、构建、测量设计和结论，不限领域。 | [1](#credit-1) |
-| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) | 起草、编辑和对抗性审阅长期使用及可直接粘贴的文字，交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10) |
+| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) | 起草、编辑和对抗性审阅长期使用及可直接粘贴的文字，交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10), [12](#credit-12) |
 | [figure-designer](plugins/research-skills/skills/figure-designer/SKILL.md) | 设计论文插图、方法示意图和可复现的数据图表。 | [1](#credit-1) |
 | [research-explainer-animation](plugins/research-skills/skills/research-explainer-animation/SKILL.md) | 为论文和代码制作带配音和字幕的讲解动画，画面与旁白中的数字都可追溯到原始来源，交付前逐帧检查。 | — |
 | [pre-submission-reviewer](plugins/research-skills/skills/pre-submission-reviewer/SKILL.md) | 投稿或返修前检查论文的科学主张、证据、写作、LaTeX 排版、图表以及审稿回复。 | [1](#credit-1) |
@@ -72,10 +72,10 @@ python3 scripts/install-claude.py
 | [quantum-computing-review](plugins/research-skills/skills/quantum-computing-review/SKILL.md) | 为他人的技术论文撰写或核查审稿意见，不限领域，遵守期刊规则与保密要求，并对量子计算与量子技术论文增加专项检查。 | — |
 | [scientific-computing-correctness](plugins/research-skills/skills/scientific-computing-correctness/SKILL.md) | 实现、调试、优化和独立验证科学计算，关注计算精度与资源开销。 | — |
 | [scientific-library-review](plugins/research-skills/skills/scientific-library-review/SKILL.md) | 审查科学软件库的数学含义、使用流程、执行行为与资源开销。 | [7](#credit-7) |
-| [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | — |
-| [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据。 | [4](#credit-4) |
-| [write-implementation-job-prompts](plugins/research-skills/skills/write-implementation-job-prompts/SKILL.md) | 将需求或审查结果整理为清晰、可执行的开发任务提示词。 | — |
-| [ponytail](plugins/research-skills/skills/ponytail/SKILL.md) | 在满足正确性和性能要求的前提下，选择简单的实现。 | [5](#credit-5) |
+| [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | [12](#credit-12) |
+| [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据。 | [4](#credit-4), [12](#credit-12) |
+| [write-implementation-job-prompts](plugins/research-skills/skills/write-implementation-job-prompts/SKILL.md) | 将需求或审查结果整理为清晰、可执行的开发任务提示词。 | [12](#credit-12) |
+| [ponytail](plugins/research-skills/skills/ponytail/SKILL.md) | 在满足正确性和性能要求的前提下，选择简单的实现。 | [5](#credit-5), [12](#credit-12) |
 | [ponytail-review](plugins/research-skills/skills/ponytail-review/SKILL.md) | 审查代码变更，提出有依据的简化建议。 | [5](#credit-5) |
 | [ponytail-audit](plugins/research-skills/skills/ponytail-audit/SKILL.md) | 以精简的只读审查报告列出整个仓库中可以删除或简化的代码。 | [5](#credit-5) |
 | [ponytail-debt](plugins/research-skills/skills/ponytail-debt/SKILL.md) | 汇总代码中标记的简化取舍，以及需要重新处理这些取舍的条件。 | [5](#credit-5) |
@@ -100,6 +100,15 @@ python3 scripts/install-claude.py
 10. <a id="credit-10"></a>Joseph M. Williams 与 Joseph Bizup。*Style: Lessons in Clarity and Grace*，第 11 版，Pearson，版权年份 2014，ISBN 978-0-321-89868-5。完整阅读本书后，将其思想用于 durable-prose 中原创的句子生成指引和 prose-review 中基于上下文的读者诊断。不随包分发原书章节、练习、示例或 PDF，原书版权独立于本项目许可证。
 
 11. <a id="credit-11"></a>Yijia Shao 等（[NAACL 2024](https://doi.org/10.18653/v1/2024.naacl-long.347)）与 Yucheng Jiang 等（[EMNLP 2024](https://doi.org/10.18653/v1/2024.emnlp-main.554)），Stanford OVAL。[STORM 与 Co-STORM](https://github.com/stanford-oval/storm)。为 `upgrade-research-inputs` 的可选迭代探究 reference 提供方法启发。该 reference 由本项目编写，采用本项目的 **MIT** license，不包含 STORM 的文字或代码。
+
+12. <a id="credit-12"></a>现状规则的参考来源。写作钩子、`research-writing-style`、`maintain-project-memory`、`ponytail`、`deep-code-review`、`simplify-codebase` 和 `write-implementation-job-prompts` 把这条规则用于文档、项目记忆、指令、代码注释和测试。规则由本项目编写，每处文字沿用所在文件的 license，durable-prose reference 中为 **CC BY-SA 4.0**，其余为 **MIT**。不包含来源的文字。
+    - Anthropic。[`claude-api` skill 的 prompt-audit reference](https://github.com/anthropics/skills/blob/53048666b05b4799081517d00e09e0a2dd688678/skills/claude-api/shared/prompt-audit.md)，revision `5304866`。它把 migration-relative phrasing 归为 fossil，并按 provenance 判断每条禁令。
+    - Anthropic。[Best practices for Claude Code](https://code.claude.com/docs/en/best-practices) 与 [Give Claude context: CLAUDE.md and better prompts](https://support.claude.com/en/articles/14553240-give-claude-context-claude-md-and-better-prompts)（2026）。前者给出 CLAUDE.md 的逐行测试，后者把历史记录列为不必写入的内容。
+    - OpenAI。[Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model)，查阅于 2026-09-25。它建议不写“不会做什么”和“什么保持不变”。
+    - Google。Google 开发者文档风格指南中的 [Timeless documentation](https://developers.google.com/style/timeless-documentation)。
+    - Robert C. Martin。*Clean Code: A Handbook of Agile Software Craftsmanship*，Prentice Hall，2008，ISBN 978-0-13-235088-4，第 4 章，以及 [Avoid Inappropriate Information](https://www.informit.com/articles/article.aspx?p=1323427)（InformIT，2009）。修改历史属于版本控制。
+    - Alex Eagle。[Change-Detector Tests Considered Harmful](https://testing.googleblog.com/2015/01/testing-on-toilet-change-detector-tests.html)，Google Testing Blog（2015）。
+    - Daniel M. Wegner 等。[Paradoxical effects of thought suppression](https://doi.org/10.1037/0022-3514.53.1.5)，*Journal of Personality and Social Psychology* 53（1987），5–13。Louis Castricato 等。[Suppressing Pink Elephants with Direct Principle Feedback](https://arxiv.org/abs/2402.07896)（2024）。Logan Mann 等。[Don't Think of the White Bear: Ironic Negation in Transformer Models Under Cognitive Load](https://arxiv.org/abs/2511.12381)（2025）。这些研究发现，试图压制一个被点名的对象，反而可能让它更常出现。两项模型研究都是在开源模型上测得这一效应。
 
 各部分的条款见 [LICENSE.md](LICENSE.md)，来源与修改说明见 [NOTICE.md](plugins/research-skills/NOTICE.md)。
 

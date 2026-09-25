@@ -53,7 +53,6 @@ test('writing routing reaches sessions and subagents with stdin open', async () 
     assert.match(context, /Temporary chat summaries and progress updates alone do not trigger it/);
     assert.match(context, /paste-ready text delivered in chat/);
     assert.match(context, /returned to another agent or a program/);
-    assert.doesNotMatch(context.split(root).join(''), /ponytail/i);
   }
   const invalid = spawnSync(process.execPath, [script, 'InvalidEvent'], { encoding: 'utf8' });
   assert.equal(invalid.status, 1);
