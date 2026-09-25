@@ -23,4 +23,6 @@ The optional [detector-evaluation workflow](skills/research-writing-style/refere
 
 Original editorial observations from those rewriting trials also refine the required generation and review references. They connect decisions to their evidence, capabilities to concrete operations, and qualifications to the claims they limit, and check revisions within unchanged neighboring text. The trial records, including test passages and detector results, are not distributed with the plugin. These refinements follow their respective reference files' existing licenses and do not claim a proven detector mechanism.
 
+The shared test-necessity guidance in `ponytail` and its use in `scientific-library-review` are collection modifications. They judge tests by current user obligations and the failures that remaining checks would miss after removal. The library-review guidance also distinguishes cases by their scientific premises and separates source inventory from substantive review and executed validation.
+
 Copyright notices and license terms are listed in [LICENSE.md](LICENSE.md).

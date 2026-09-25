@@ -125,6 +125,8 @@ Hardware is never the ideal on paper: a real clock drifts, a real sensor
 reads off, a PCA9685 runs a few percent fast. Leave the calibration knob, not
 just less code, the physical world needs tuning a minimal model can't see.
 
+### Test necessity
+
 Use the existing test system. Add only the smallest independent checks needed
 for changed failure modes. Existing coverage may already suffice. A one-line
 formula can need verification, and a large edit does not justify a test quota.
@@ -133,6 +135,20 @@ a spec, derivation, reference, or known-good case, not from the new code. Each
 check should be able to fail when the behavior it covers is wrong. For a fix,
 show or reuse a failure on the old code that the defect causes. Check behavior
 rather than the presence of text unless that text is the contract.
+
+Judge each added or changed test by the current user obligation it protects.
+Ask which plausible failure would escape the remaining checks if this test were
+removed. Prefer extending or replacing an existing check when it can cover the
+same failure. A temporary reproducer need not become a permanent test, and a
+release or coverage target alone does not justify one. A kernel test and a
+public-workflow test can both be needed when they detect different failures.
+Pin private helper calls or implementation structure only when that restriction
+protects scientific meaning, resource use, lifecycle behavior or a compatibility
+contract. If a valid refactor breaks only that arrangement, reconsider the test.
+Recommend consolidation or removal only after identifying what evidence would
+be lost and how the remaining checks cover the obligation.
+
+### Scientific and resource constraints
 
 For scientific code, preserve equations, signs, conventions, parameters, and
 the meaning of reported results. Distinguish empirical checks from certified
