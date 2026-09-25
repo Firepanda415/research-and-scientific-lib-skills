@@ -45,7 +45,7 @@ Keep each role fixed within a video, and label series so that meaning does not d
 
 ## Voice
 
-- Kokoro voice `am_puck`, a young male American English voice, at speed 1.08. The user chose this voice, so keep it unless they ask for another.
+- Without a recorded voice choice, include Kokoro `am_puck`, a young male American English voice at speed 1.08, among the voice samples the skill asks for. A recorded choice, with its speed, takes precedence.
 - Pauses of about 0.28 s between sentences and 0.45 s between segments.
 
 ## Poster

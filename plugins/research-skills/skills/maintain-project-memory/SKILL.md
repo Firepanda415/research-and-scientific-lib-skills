@@ -83,6 +83,8 @@ each decision and link to it from readers that need it. Preserve unique
 rationale and evidence before consolidating records; respect immutable history
 and user-owned files.
 Do not delete raw research evidence merely because a summary now exists.
+Archive or delete a report only after its intended reader has read it, unless
+the user decides otherwise.
 If the user authorizes pruning evidence, keep the remaining originals unmodified
 and record their sources, with hashes when later readers must check integrity.
 Mark claims resting only on a summary as no longer re-checkable.

@@ -31,6 +31,15 @@ evidence needed by the next action. Read only state needed to continue, rather
 than reparsing complete research logs or large outputs. Report missing evidence;
 do not repair scientific content by guessing.
 
+When parallel workers must pause, for example while the owner is offline, each
+worker commits its finished part on its task branch when the job allows
+commits, leaves unfinished edits in its worktree, and stops. A worker whose
+commits and worktree do not show the next step first writes a compact resume
+note in a location that survives a restart. On resumption, a message tells
+each worker to read its note, if any, and continue. This relies on a host that
+can resume a stopped agent with its context. Committed work also survives an
+unplanned restart.
+
 Existing deployments may already have progress, hypothesis, finding, evidence,
 decision, and verification files. Preserve their consumers and actual schemas
 while maintaining those tasks. This optional guide does not require migration,

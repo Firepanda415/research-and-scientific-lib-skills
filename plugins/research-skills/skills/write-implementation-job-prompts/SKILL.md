@@ -71,9 +71,12 @@ helpful. Preserve dispositions of relevant findings without making a new
 permanent test for each review comment. Existing evidence may cover several fixes.
 
 When the job removes or replaces something, state the end state. Code, tests,
-documentation and configuration describe only the surviving behavior, and a
-one-time search for the old names finds no reference outside history records
-such as changelogs, migration notes, attributions and dated logs. Request a
+documentation and configuration describe only the surviving behavior, including
+any compatibility path or migration the project still owes its users. A
+one-time search for the old names within the job's edit surface then finds
+references only in that surviving behavior and in history records such as
+changelogs, migration notes, attributions and dated logs. The implementer lists
+any hits outside that surface. Request a
 note about the removal only with a stated reason the item must stay absent, and
 a permanent absence test only when a product, security, or compatibility
 contract requires the absence or the user explicitly asks for one. The commit

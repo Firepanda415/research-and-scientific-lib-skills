@@ -4,7 +4,7 @@
 
 这是我日常科研和科学软件开发中使用的 Codex 与 Claude Code skills 集合，覆盖研究选题、论文阅读与写作、绘图、科学计算和代码审查，也包含按个人习惯修改的 Ponytail。我会根据实际使用持续更新，欢迎按自己的研究需要使用和调整。
 
-**在 Codex 和 Claude Code 中，插件都提供全部 28 个 skills（包括按个人习惯修改的 Ponytail 编码模式）和写作 hook。**
+**在 Codex 和 Claude Code 中，插件都提供全部 29 个 skills（包括按个人习惯修改的 Ponytail 编码模式）和写作 hook。**
 
 ## 安装
 
@@ -33,7 +33,7 @@ codex plugin add research-skills@research-skills
 python3 scripts/install-claude.py
 ```
 
-脚本在 `~/.local/share/research-skills/claude-marketplace/` 创建 local marketplace，并通过 Claude CLI 将 `research-skills@research-skills` 安装到 user scope。安装内容包括全部 28 个 skills、配套文件和写作 hook。如果 `PATH` 中的 `claude` 不存在、无法运行，或不是你正在使用的 Claude Code，可用 `--claude-bin /path/to/claude` 指定当前 executable。脚本会打印实际使用的 executable。Local marketplace 的加载方式见 [Claude Code marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces)。
+脚本在 `~/.local/share/research-skills/claude-marketplace/` 创建 local marketplace，并通过 Claude CLI 将 `research-skills@research-skills` 安装到 user scope。安装内容包括全部 29 个 skills、配套文件和写作 hook。如果 `PATH` 中的 `claude` 不存在、无法运行，或不是你正在使用的 Claude Code，可用 `--claude-bin /path/to/claude` 指定当前 executable。脚本会打印实际使用的 executable。Local marketplace 的加载方式见 [Claude Code marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces)。
 
 修改源文件后，重新运行该脚本并新建 Claude Code session。已在运行的 session 和 workflow 会继续使用旧副本，直到结束。在新 session 中可按名称调用 skill，例如 `/research-skills:scientific-library-review`。如果 Claude Code 中也装有独立的 Ponytail 插件，请卸载它，以免它的钩子和重复的 skills 与本插件同时运行。
 
@@ -45,9 +45,9 @@ python3 scripts/install-claude.py
 
 可以在对话中指定级别（`lite`、`full` 或 `ultra`），例如在 Codex 中输入 `$ponytail lite`，或在 Claude Code 中输入 `/research-skills:ponytail lite`，该级别持续到你指定其他级别或关闭 Ponytail 为止。未指定级别时使用 `full`。说 `stop ponytail` 或 `normal mode`，或使用 `$ponytail off`，可关闭 Ponytail，直到你在本次对话中再次要求使用。再次开启时使用 `full`，除非你指定其他级别。其他 skills 也遵守这一 off 状态。`ponytail-help` 列出两个 host 上的调用方式。
 
-凡是供人保存、反复阅读、分享、发布、发送或粘贴到其他地方的文字，写作钩子都要求 Codex 或 Claude Code 在起草、编辑这类文字或审阅其行文前读取并应用 `research-writing-style` 和其中的 durable-prose reference。普通文档、邮件、网页正文、聊天窗口中交付的可直接粘贴文本均在范围内，不分语言和篇幅。仅用于当前聊天的总结与进度说明除外。返回给其他 agent 或程序的材料（如结构化的发现或搜索结果）也不在路由范围内，由把它整理成交付文本的 agent 应用写作规范。钩子还要求文档、项目记忆、指令、代码注释和测试描述当前状态。删除某项或结束临时安排时，因它而存在的规则、引用和测试一并删除。历史记录放在版本控制、带日期的记录、决策记录，以及用户需要操作时的变更记录或迁移说明中，例如下文的升级说明。其他地方如果要写关于已删除项的说明或禁令，必须写明该项为什么不能恢复。断言它不存在的测试，则需要有要求它不存在的合约或用户的明确要求。规则的参考来源见 [12](#credit-12)。路由会在会话启动、压缩后和子代理启动时注入。在 Codex 中，每次安装或更新后都要打开 `/hooks` 并信任 research-skills 的钩子，获得信任前写作路由不会运行。钩子提供的是指令，不能机械保证它们得到遵守。
+凡是供人保存、反复阅读、分享、发布、发送或粘贴到其他地方的文字，写作钩子都要求 Codex 或 Claude Code 在起草、编辑这类文字或审阅其行文前读取并应用 `research-writing-style` 和其中的 durable-prose reference。普通文档、邮件、网页正文、聊天窗口中交付的可直接粘贴文本均在范围内，不分语言和篇幅。仅用于当前聊天的总结与进度说明除外。返回给其他 agent 或程序的材料（如结构化的发现或搜索结果）也不在路由范围内，由把它整理成交付文本的 agent 应用写作规范。钩子还要求文档、项目记忆、指令、代码注释和测试描述当前状态。删除某项或结束临时安排时，本次工作获准修改的文件中只因它而存在的规则、引用和测试一并删除。仍服务于兼容路径或迁移的引用保留。历史记录放在版本控制、带日期的记录、决策记录，以及用户需要操作时的变更记录或迁移说明中，例如下文的升级说明。其他地方如果要写关于已删除项的说明或禁令，必须写明该项为什么不能恢复。断言它不存在的测试，则需要有要求它不存在的合约或用户的明确要求。规则的参考来源见 [12](#credit-12)。钩子最后一部分规定，用户针对当前任务给出的明确指令，以及用户写在自己指令文件中的明确要求，都优先于本插件的指导，包括写作路由。记录或保护外部义务的规则（如期刊或会议的保密政策、许可证条款）仍然适用。本插件的某条规则让 agent 暂停、请求批准、留下未完成的工作或偏离用户的要求时，agent 先说明这一结果，再指出规则的出处并引用这条规则。这一部分的来源见 [13](#credit-13)。路由会在会话启动、压缩后和子代理启动时注入。在 Codex 中，每次安装或更新后都要打开 `/hooks` 并信任 research-skills 的钩子，获得信任前写作路由不会运行。钩子提供的是指令，不能机械保证它们得到遵守。
 
-同一 skill 分为两个阶段。生成和编辑阶段在写作时落实句子结构与用词要求，完整成稿随后必须经过[对抗性审阅](plugins/research-skills/skills/research-writing-style/references/prose-review.md)才能交付。审阅重点检查全文结构、段落功能、上下文和推理。先确认提取材料的来源与文档角色，再结合上下文核对证据、读者理解障碍，以及混入正文的对话和 prompt。用户要求“不要讨论 X”，不能变成对写作对象缺乏依据的断言。只要求 review 时，直接检查现有文字并报告有依据的问题，不自动重写。检测器标签本身不要求修改。用户明确要求按检测结果改写时，启用可选的[检测实验流程](plugins/research-skills/skills/research-writing-style/references/detector-evaluation.md)，保全含义并记录实测对比。普通写作不要求检测。复测中关于选择依据、能力与操作的联系、限定归属及上下文衔接的写作经验，已纳入默认生成和审阅规则。[来源采纳审计](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md)记录完整覆盖范围、限定采用及未采用的建议。
+同一 skill 分为两个阶段。生成和编辑阶段在写作时落实句子结构与用词要求，完整成稿随后必须经过[对抗性审阅](plugins/research-skills/skills/research-writing-style/references/prose-review.md)才能交付。每份成稿都要检查是否混入对话和 prompt，以及论断是否有证据支撑。推理依赖文档结构或上下文时，例如多段文档、对现有文档的审阅，或论断依赖周边结果的图注和摘要，还要做[文档层面的审阅](plugins/research-skills/skills/research-writing-style/references/document-review.md)，先确认提取材料的来源与文档角色，再检查全文结构、段落功能、上下文和读者理解障碍。用户要求“不要讨论 X”，不能变成对写作对象缺乏依据的断言。只要求 review 时，直接检查现有文字并报告有依据的问题，不自动重写。检测器标签本身不要求修改。用户明确要求按检测结果改写时，启用可选的[检测实验流程](plugins/research-skills/skills/research-writing-style/references/detector-evaluation.md)，保全含义并记录实测对比。普通写作不要求检测。复测中关于选择依据、能力与操作的联系、限定归属及上下文衔接的写作经验，已纳入生成指引和审阅规则。[来源采纳审计](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md)记录完整覆盖范围、限定采用及未采用的建议。
 
 该 skill 默认的写作风格是正文不用分号、破折号或连接独立分句的冒号，除已成型的技术术语外也不用 `retain`、`honest` 及其变形。用户的明确要求或文字去向的格式规定（如期刊格式指南）优先于这些默认规则。
 
@@ -72,6 +72,7 @@ python3 scripts/install-claude.py
 | [quantum-computing-review](plugins/research-skills/skills/quantum-computing-review/SKILL.md) | 为他人的技术论文撰写或核查审稿意见，不限领域，遵守期刊规则与保密要求，并对量子计算与量子技术论文增加专项检查。 | — |
 | [scientific-computing-correctness](plugins/research-skills/skills/scientific-computing-correctness/SKILL.md) | 实现、调试、优化和独立验证科学计算，关注计算精度与资源开销。 | — |
 | [scientific-library-review](plugins/research-skills/skills/scientific-library-review/SKILL.md) | 审查科学软件库的数学含义、使用流程、执行行为与资源开销。 | [7](#credit-7) |
+| [library-example-notebooks](plugins/research-skills/skills/library-example-notebooks/SKILL.md) | 编写或审阅科学软件库的示例 notebook 和教程，让读者在第一屏看到计算结果，以及如何换成自己的问题。 | — |
 | [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | [12](#credit-12) |
 | [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据。 | [4](#credit-4), [12](#credit-12) |
 | [write-implementation-job-prompts](plugins/research-skills/skills/write-implementation-job-prompts/SKILL.md) | 将需求或审查结果整理为清晰、可执行的开发任务提示词。 | [12](#credit-12) |
@@ -97,18 +98,20 @@ python3 scripts/install-claude.py
 8. <a id="credit-8"></a>Siqi Chen。[Humanizer v3.0.0](https://github.com/blader/humanizer/tree/9862685f575c65a8247f90369951df1b3416e3d6)。**MIT**（2025）。其 25 个写作模式及编辑流程用于 `research-writing-style` 的 durable-prose reference。改编时保全事实、技术含义、必要的不确定性和用户要求的文体。
 9. <a id="credit-9"></a>Wikipedia contributors。[Signs of AI writing，修订 1374941330](https://en.wikipedia.org/w/index.php?title=Wikipedia:Signs_of_AI_writing&oldid=1374941330)。**CC BY-SA 4.0**。durable-prose reference 和[中文采纳审计](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md)吸收其内容、排版、引用及草稿残留检查，按 CC BY-SA 4.0 分发。审计逐项说明限定采纳和未采纳内容的理由，不把检测线索当成通用写作禁令。
 
-10. <a id="credit-10"></a>Joseph M. Williams 与 Joseph Bizup。*Style: Lessons in Clarity and Grace*，第 11 版，Pearson，版权年份 2014，ISBN 978-0-321-89868-5。完整阅读本书后，将其思想用于 durable-prose 中原创的句子生成指引和 prose-review 中基于上下文的读者诊断。不随包分发原书章节、练习、示例或 PDF，原书版权独立于本项目许可证。
+10. <a id="credit-10"></a>Joseph M. Williams 与 Joseph Bizup。*Style: Lessons in Clarity and Grace*，第 11 版，Pearson，版权年份 2014，ISBN 978-0-321-89868-5。完整阅读本书后，将其思想用于 durable-prose 中原创的句子生成指引和 prose-review、document-review 中基于上下文的读者诊断。不随包分发原书章节、练习、示例或 PDF，原书版权独立于本项目许可证。
 
 11. <a id="credit-11"></a>Yijia Shao 等（[NAACL 2024](https://doi.org/10.18653/v1/2024.naacl-long.347)）与 Yucheng Jiang 等（[EMNLP 2024](https://doi.org/10.18653/v1/2024.emnlp-main.554)），Stanford OVAL。[STORM 与 Co-STORM](https://github.com/stanford-oval/storm)。为 `upgrade-research-inputs` 的可选迭代探究 reference 提供方法启发。该 reference 由本项目编写，采用本项目的 **MIT** license，不包含 STORM 的文字或代码。
 
 12. <a id="credit-12"></a>现状规则的参考来源。写作钩子、`research-writing-style`、`maintain-project-memory`、`ponytail`、`deep-code-review`、`simplify-codebase` 和 `write-implementation-job-prompts` 把这条规则用于文档、项目记忆、指令、代码注释和测试。规则由本项目编写，每处文字沿用所在文件的 license，durable-prose reference 中为 **CC BY-SA 4.0**，其余为 **MIT**。不包含来源的文字。
     - Anthropic。[`claude-api` skill 的 prompt-audit reference](https://github.com/anthropics/skills/blob/53048666b05b4799081517d00e09e0a2dd688678/skills/claude-api/shared/prompt-audit.md)，revision `5304866`。它把 migration-relative phrasing 归为 fossil，并按 provenance 判断每条禁令。
     - Anthropic。[Best practices for Claude Code](https://code.claude.com/docs/en/best-practices) 与 [Give Claude context: CLAUDE.md and better prompts](https://support.claude.com/en/articles/14553240-give-claude-context-claude-md-and-better-prompts)（2026）。前者给出 CLAUDE.md 的逐行测试，后者把历史记录列为不必写入的内容。
-    - OpenAI。[Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model)，查阅于 2026-09-25。它建议不写“不会做什么”和“什么保持不变”。
+    - OpenAI。[Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra.md)，查阅于 2026-09-25。其中约束模型自身回复的示例 prompt 要求不写“不会做什么”和“什么保持不变”。
     - Google。Google 开发者文档风格指南中的 [Timeless documentation](https://developers.google.com/style/timeless-documentation)。
     - Robert C. Martin。*Clean Code: A Handbook of Agile Software Craftsmanship*，Prentice Hall，2008，ISBN 978-0-13-235088-4，第 4 章，以及 [Avoid Inappropriate Information](https://www.informit.com/articles/article.aspx?p=1323427)（InformIT，2009）。修改历史属于版本控制。
     - Alex Eagle。[Change-Detector Tests Considered Harmful](https://testing.googleblog.com/2015/01/testing-on-toilet-change-detector-tests.html)，Google Testing Blog（2015）。
-    - Daniel M. Wegner 等。[Paradoxical effects of thought suppression](https://doi.org/10.1037/0022-3514.53.1.5)，*Journal of Personality and Social Psychology* 53（1987），5–13。Louis Castricato 等。[Suppressing Pink Elephants with Direct Principle Feedback](https://arxiv.org/abs/2402.07896)（2024）。Logan Mann 等。[Don't Think of the White Bear: Ironic Negation in Transformer Models Under Cognitive Load](https://arxiv.org/abs/2511.12381)（2025）。这些研究发现，试图压制一个被点名的对象，反而可能让它更常出现。两项模型研究都是在开源模型上测得这一效应。
+    - Daniel M. Wegner 等。[Paradoxical effects of thought suppression](https://doi.org/10.1037/0022-3514.53.1.5)，*Journal of Personality and Social Psychology* 53（1987），5–13。Louis Castricato 等。[Suppressing Pink Elephants with Direct Principle Feedback](https://arxiv.org/abs/2402.07896)（2024）。Logan Mann 等。[Don't Think of the White Bear: Ironic Negation in Transformer Models Under Cognitive Load](https://arxiv.org/abs/2511.12381)（2025）。Wegner 等发现，试图压制某个念头的人，之后报告这个念头的次数多于没有压制过的人。Mann 等在九个不超过 20B 参数的开源模型上发现，“不要提某个词”的指令在多数模型中提高了该词作为下一个 token 的概率。Castricato 等发现，要求回避某个话题的指令在开源模型上常常无效，GPT-4 则大多能遵守，他们随后训练模型遵守这类指令。两项模型研究都没有测试当前的前沿模型。
+
+13. <a id="credit-13"></a>写作钩子中优先级规则的来源。OpenAI。[Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra.md) 中关于 instruction following 的部分，查阅于 2026-09-25。其中的示例 prompt 让用户指令优先于 skill 的指导，并要求模型指出导致暂停的 skill 指令。钩子中的文字由本项目编写，采用本项目的 **MIT** license，不包含来源的文字。
 
 各部分的条款见 [LICENSE.md](LICENSE.md)，来源与修改说明见 [NOTICE.md](plugins/research-skills/NOTICE.md)。
 
@@ -174,4 +177,4 @@ codex plugin marketplace remove research-skills
 
 ## 个人偏好
 
-写作风格和量子简报的[研究偏好](plugins/research-skills/skills/quantum-research-radar/references/user-research-profile.md)按我的研究习惯设置。可以在请求中指定自己的偏好，也可以修改本地仓库后重新安装。
+写作风格、`research-explainer-animation` 的默认视觉与配音风格，以及量子简报的[研究偏好](plugins/research-skills/skills/quantum-research-radar/references/user-research-profile.md)按我的研究习惯设置。可以在请求中指定自己的偏好，也可以修改本地仓库后重新安装。

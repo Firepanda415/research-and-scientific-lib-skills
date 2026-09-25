@@ -54,7 +54,13 @@ For every removed test, assertion, fixture, probe, gate, scheduled workflow, or
 report line:
 
 1. Name the defect class it could detect.
-2. Locate a surviving independent owner for that same defect class.
+2. Locate a surviving independent owner for that same defect class. When the
+   project keeps mutation probes and the relevant mutant runs are cheap or
+   approved, run those mutants on the current tree with and without the
+   removal. Each mutant that a removed test killed must
+   still be killed by a surviving test. Otherwise show that the relation it
+   protected has no user-visible consequence, and retire the probes whose only
+   killing test is removed.
 3. Classify the deletion as `relocated equivalent`, `stronger replacement`,
    `true duplicate`, `obsolete contract`, `lost evidence`, or `unresolved`.
 4. When cheap and safe, replay the deleted witness against an isolated copy of

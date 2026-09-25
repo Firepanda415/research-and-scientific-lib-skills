@@ -43,6 +43,23 @@ suite does not close an unmapped finding.
 Record a deferred obligation where it will actually be revisited rather than in
 several overlapping ledgers.
 
+## Parallel workers on one repository
+
+For a parallel sweep across many files, give workers disjoint file ownership and
+one shared brief, for example one worker for the Markdown and examples and one
+for each source subtree. A worker sets work aside with a WIP commit on its own
+branch rather than with `git stash`, because all worktrees of a repository share
+one stash list, which may hold the owner's entries. Record a job as dispatched
+only after its agent exists, not when its worktree is created. Unless the
+project prescribes its own integration method, integrate through one integration
+branch with cherry-picks or fast-forwards. Before deleting a task branch,
+confirm that its content is integrated by ancestry or patch identity. A commit
+changed during conflict resolution needs a content comparison such as `git
+range-diff`, because matching subjects and line counts are weaker evidence. When
+two independent reviews run in parallel for a review-and-fix task, repairs can
+start from the first report, and the second is deduplicated against those
+repairs.
+
 ## Refresh before dispatch
 
 Verify the relevant live baseline and prerequisites when a job becomes ready.

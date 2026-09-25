@@ -84,7 +84,7 @@ at that owner instead of patching the same symptom separately in each caller.
 - No unrequested abstractions: avoid interfaces, factories, helpers, configuration, and compatibility paths without a current consumer or requirement.
 - No boilerplate, no scaffolding "for later", later can scaffold for itself.
 - Deletion over addition. Boring over clever, clever is what someone decodes at 3am.
-- Delete completely. After a removal, code, comments, docs, and tests describe only what exists. Version control holds the history, and a changelog or migration note records it when users must act. A `removed` or `no longer` comment or a stub needs a stated reason the item must stay absent, such as a measured failure. A test of its absence needs a product, security, or compatibility contract, such as a secret that must never reach logs.
+- Delete completely. After a removal, code, comments, docs, and tests describe only what exists. Version control holds the history, and a changelog or migration note records it when users must act. A `removed` or `no longer` comment or a stub needs a stated reason the item must stay absent, such as a measured failure or an explicit user request. A test of its absence needs a product, security, or compatibility contract, such as a secret that must never reach logs, or an explicit user request.
 - Minimize the change after satisfying the actual scientific and engineering contract. Do not trade required behavior or performance for a smaller diff.
 - Complete the authorized task. Resolve routine choices from context; ask only when a missing fact materially changes the result or authority.
 - Choose algorithms by their relevant failure modes and resource costs, not by line count.
@@ -137,21 +137,29 @@ check should be able to fail when the behavior it covers is wrong. For a fix,
 show or reuse a failure on the old code that the defect causes. Check behavior
 rather than the presence or absence of text unless that text is the contract.
 
-Judge each added or changed test by the current user obligation it protects.
-Ask which plausible failure would escape the remaining checks if this test were
-removed. Prefer extending or replacing an existing check when it can cover the
-same failure. A temporary reproducer need not become a permanent test, and a
-release or coverage target alone does not justify one. A test whose only claim
-is that a removed API, option, file or name stays absent protects no current
-obligation unless that absence is itself a product, security, or compatibility
-contract. Search for leftovers once, while removing the item. A kernel test
-and a public-workflow test can both be needed when they detect different
-failures.
-Pin private helper calls or implementation structure only when that restriction
-protects scientific meaning, resource use, lifecycle behavior or a compatibility
-contract. If a valid refactor breaks only that arrangement, reconsider the test.
-Recommend consolidation or removal only after identifying what evidence would
-be lost and how the remaining checks cover the obligation.
+Judge each added or changed test by the current user obligation it protects. Ask
+which plausible failure would escape the remaining checks if this test were
+removed. Tests that usually earn a permanent place check a scientific relation
+or a user-visible contract against an independently computed expected value,
+through the public workflow or at the kernel that owns the relation, act as a
+canary for a dependency's behavior, or are the one test for a recurring failure
+class. A test that only witnesses one past fix, pins one site's numbers, or
+reaches the code through a monkeypatched path that users cannot reach protects
+no current obligation. A fix's failing-before check stays in the suite only when
+it also protects such an obligation. Otherwise its before-and-after evidence
+goes in the report or scratch files. Prefer extending or replacing an existing
+check when it can cover the same failure. A temporary reproducer need not become
+a permanent test, and a release or coverage target alone does not justify one. A
+test whose only claim is that a removed API, option, file or name stays absent
+protects no current obligation unless that absence is itself a product,
+security, or compatibility contract, or the user asks for the test. Search for
+leftovers once, while removing the item. A kernel test and a public-workflow
+test can both be needed when they detect different failures. Pin private helper
+calls or implementation structure only when that restriction protects scientific
+meaning, resource use, lifecycle behavior or a compatibility contract. If a
+valid refactor breaks only that arrangement, reconsider the test. Recommend
+consolidation or removal only after identifying what evidence would be lost and
+how the remaining checks cover the obligation.
 
 ### Scientific and resource constraints
 

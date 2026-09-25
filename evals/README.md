@@ -14,7 +14,7 @@ Each case directory holds one `case.yaml` in the format that `claude plugin eval
 | `simplify-` | deletion and API retirement decisions, including a session-level Ponytail opt-out |
 | `handoff-` | resume state for a later session, project memory, a research log entry, and an implementer prompt |
 
-To add a case, copy an existing `case.yaml` into a new directory named after the case. The dry run checks the fields, the grader rules above, and that each skill name exists in the Claude package, which carries all 28 skills.
+To add a case, copy an existing `case.yaml` into a new directory named after the case. The dry run checks the fields, the grader rules above, and that each skill name exists in the Claude package, which carries all 29 skills.
 
 ## Cost and approval
 
@@ -50,3 +50,14 @@ Skill graders do not observe file reads. The writing hook names a `SKILL.md` pat
 `simplify-retirement-proposal` requires both `simplify-codebase` and `ponytail`, even though the prompt names neither skill and authorizes only a review. `scicode-library-remediation` requires `scientific-library-review` and `ponytail` for a repair decision. `simplify-ponytail-off` requires the simplification workflow while forbidding Ponytail, and `writing-contributing-guide` forbids Ponytail for prose about coding. The other `scicode-` cases leave Ponytail calls ungraded. These cases test selection boundaries, not the quality of a simplification or repair.
 
 The graders count Skill calls without checking their order or whether the agent followed the loaded guidance. When a run loads Ponytail alongside another workflow, inspect its trace to check that the owning workflow was loaded first. For the retirement case, check whether the response separates evidence that an interface is callable from evidence that it is worth maintaining. For the remediation case, check whether it compares fixes at the shared contract with adapters at individual callers while preserving scientific meaning.
+
+## Usage in real sessions
+
+`scripts/skill-usage.py` reports which skills recent Claude Code and Codex sessions actually loaded, using the local transcripts of both hosts, including archived Codex sessions. It calls no model and needs only the Python standard library.
+
+```sh
+python3 scripts/skill-usage.py --days 7
+python3 scripts/skill-usage.py --days 7 --list research-writing-style
+```
+
+A skill counts as loaded when a Skill call names it or a file read or shell command names its installed `SKILL.md`, and the report separates main sessions from subagents. It covers Codex, which has no routing cases, and reads through the writing hook's path, which Skill graders do not observe. It cannot tell whether a load was appropriate. `--refs research-writing-style` also counts the sessions that read each of that skill's reference files, for example to see how often a review also reads `document-review.md` alongside `prose-review.md`. `--list` shows the start of each matching session's first prompt so that you can judge that by hand. For a Codex subagent it shows the parent session's first prompt, because the subagent's own brief is not stored as a plain message. To assess a change to routing text, run the report with `--days 7` just before the change reaches both installations and again a week later.

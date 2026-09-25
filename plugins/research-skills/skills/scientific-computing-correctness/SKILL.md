@@ -98,6 +98,14 @@ For paper-derived implementations, proof-assistant formalizations, or equation/r
   machinery or reject usable experimental output merely because no proof exists.
 - Coefficient size alone does not determine relevance to a state, observable,
   cancellation, or later decision. Use the bound in the consumer's frame.
+- Keep an internal numerical guard, such as a condition-number gate, only while
+  it corresponds to a failure mechanism of the current formulation. A documented
+  rejection that users rely on is a public contract and changes only as one. After a
+  reformulation, reproduce the mechanism a guard targets before keeping,
+  tuning, or trusting it, and locate the actual source of any remaining error.
+  A gate kept from an earlier closed form can reject valid inputs while missing
+  the real error, such as a dependency's matrix exponential that loses accuracy
+  on upper-triangular inputs with nearly equal diagonal entries.
 - Combining exact and sampled contributions needs a valid uncertainty model
   for any certified result. Preserve the raw estimate and provenance when a
   variance-like estimate is negative; clipping it to zero does not establish
@@ -193,6 +201,20 @@ cannot provide missing human approval.
   diagnostic serialization out of hot loops unless the algorithm requires them.
   Use the established optimized numerical stack and a scalable representation;
   fewer lines or a standard-library loop do not imply less computation.
+- When software enforces a declared work or memory limit and a stage's count is
+  known before it starts, such as a circuit count given by a closed-form law,
+  check the stage against the limit before its first unit of work. Charge
+  what each stage actually adds rather than a whole-run upper bound, which
+  would refuse runs that stop early. A refusal names the limit's field, the
+  limit, the amount already counted, the amount requested, and the minimum
+  needed, all taken from the current state, and every remedy, such as the
+  constructor argument or the method that extends an open run.
+- Before an admission check relies on a work or memory law, derive the law as
+  an upper bound and compare it with traced execution over varied inputs.
+  Report the range of the law's ratio to the measurement. A ratio below one on
+  any traced input refutes the bound. Say where the law overestimates most and
+  why, for example a memory bound that cannot anticipate how much truncation
+  will remove.
 - Revisit a deferred item when new measurements or an expanded workload invalidate
   its rationale. Record the cost, owner, and revisit condition; increasing the
   affected footprint requires remeasurement or a justified bound before acceptance.

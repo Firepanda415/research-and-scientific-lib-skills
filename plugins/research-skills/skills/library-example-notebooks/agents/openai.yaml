@@ -1,0 +1,4 @@
+interface:
+  display_name: "Library Example Notebooks"
+  short_description: "Result-first example notebooks for scientific libraries"
+  default_prompt: "Use $library-example-notebooks to write, restructure, or review this library's example notebooks so that a newcomer sees the result and how to use their own problem on the first screen."

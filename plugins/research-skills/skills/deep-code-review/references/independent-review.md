@@ -17,6 +17,9 @@ required.
 - Add independent overlap for consequential decisions when the first evidence
   source could share a failure mode. More agents repeating one assumption do
   not strengthen the result.
+- Independent reviews by different models can report largely different
+  defects. When a second model's review is authorized, run it in parallel and
+  deduplicate its findings against the first by first divergence and remedy.
 - Start independent lanes in parallel up to the available concurrency limit.
   Cover remaining angles locally or in additional waves when needed; preserve
   coverage without turning the matrix into a staffing quota.
