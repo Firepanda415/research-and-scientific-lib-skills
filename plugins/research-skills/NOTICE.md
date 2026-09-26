@@ -31,4 +31,6 @@ The current-state rule in the writing hook, `research-writing-style`, `maintain-
 
 The writing hook's precedence rule gives an explicit user instruction precedence over the plugin's guidance, except rules that record or protect an external obligation, and asks the agent to name a plugin rule that stops or redirects the requested work. It follows the instruction-following prompts suggested in OpenAI's GPT-6 guidance. Its wording was written for this collection under the MIT license, and no source text is bundled.
 
+The writing hook's scope rule has the agent plan each deliverable from the requester's intent and from what its readers or users come to it for, stop gathering material once their need is met, and give other agents the same audience, question or task, and stopping point. It follows the task-scope and deliverable-length guidance in Anthropic's prompting guides for Claude Opus 5 and Claude Opus 5.5 and the intent-inference prompt in OpenAI's GPT-6 guidance. Its wording was written for this collection under the MIT license, and no source text is bundled.
+
 Copyright notices and license terms are listed in [LICENSE.md](LICENSE.md).
