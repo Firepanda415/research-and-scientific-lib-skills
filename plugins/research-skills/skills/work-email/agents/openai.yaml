@@ -1,0 +1,4 @@
+interface:
+  display_name: "Work Email"
+  short_description: "Fix or draft short work emails without changing facts"
+  default_prompt: "Use $work-email to fix the grammar of this work email while keeping its facts, requests and tone."

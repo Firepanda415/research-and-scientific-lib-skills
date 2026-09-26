@@ -47,8 +47,14 @@ test('writing routing reaches sessions and subagents with stdin open', async () 
     assert.equal(output.hookSpecificOutput.hookEventName, event);
     assert.equal(output.systemMessage, undefined);
     const context = output.hookSpecificOutput.additionalContext;
-    for (const file of ['SKILL.md', path.join('references', 'durable-prose.md'), path.join('references', 'prose-review.md')]) {
-      assert.ok(context.includes(JSON.stringify(path.join(root, 'skills', 'research-writing-style', file))));
+    const routed = [
+      ...['SKILL.md', path.join('references', 'durable-prose.md'), path.join('references', 'prose-review.md')]
+        .map(file => path.join(root, 'skills', 'research-writing-style', file)),
+      path.join(root, 'skills', 'work-email', 'SKILL.md'),
+    ];
+    for (const file of routed) {
+      assert.ok(fs.existsSync(file), `missing routed file ${file}`);
+      assert.ok(context.includes(JSON.stringify(file)));
     }
     assert.match(context, /Temporary chat summaries and progress updates alone do not trigger it/);
     assert.match(context, /paste-ready text delivered in chat/);

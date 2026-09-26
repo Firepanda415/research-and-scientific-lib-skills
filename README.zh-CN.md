@@ -4,7 +4,7 @@
 
 这是我日常科研和科学软件开发中使用的 Codex 与 Claude Code skills 集合，覆盖研究选题、论文阅读与写作、绘图、科学计算和代码审查，也包含按个人习惯修改的 Ponytail。我会根据实际使用持续更新，欢迎按自己的研究需要使用和调整。
 
-**在 Codex 和 Claude Code 中，插件都提供全部 29 个 skills（包括按个人习惯修改的 Ponytail 编码模式）和写作 hook。**
+**在 Codex 和 Claude Code 中，插件都提供全部 30 个 skills（包括按个人习惯修改的 Ponytail 编码模式）和写作 hook。**
 
 ## 安装
 
@@ -33,7 +33,7 @@ codex plugin add research-skills@research-skills
 python3 scripts/install-claude.py
 ```
 
-脚本在 `~/.local/share/research-skills/claude-marketplace/` 创建 local marketplace，并通过 Claude CLI 将 `research-skills@research-skills` 安装到 user scope。安装内容包括全部 29 个 skills、配套文件和写作 hook。如果 `PATH` 中的 `claude` 不存在、无法运行，或不是你正在使用的 Claude Code，可用 `--claude-bin /path/to/claude` 指定当前 executable。脚本会打印实际使用的 executable。Local marketplace 的加载方式见 [Claude Code marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces)。
+脚本在 `~/.local/share/research-skills/claude-marketplace/` 创建 local marketplace，并通过 Claude CLI 将 `research-skills@research-skills` 安装到 user scope。安装内容包括全部 30 个 skills、配套文件和写作 hook。如果 `PATH` 中的 `claude` 不存在、无法运行，或不是你正在使用的 Claude Code，可用 `--claude-bin /path/to/claude` 指定当前 executable。脚本会打印实际使用的 executable。Local marketplace 的加载方式见 [Claude Code marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces)。
 
 修改源文件后，重新运行该脚本并新建 Claude Code session。已在运行的 session 和 workflow 会继续使用旧副本，直到结束。在新 session 中可按名称调用 skill，例如 `/research-skills:scientific-library-review`。如果 Claude Code 中也装有独立的 Ponytail 插件，请卸载它，以免它的钩子和重复的 skills 与本插件同时运行。
 
@@ -45,13 +45,13 @@ python3 scripts/install-claude.py
 
 可以在对话中指定级别（`lite`、`full` 或 `ultra`），例如在 Codex 中输入 `$ponytail lite`，或在 Claude Code 中输入 `/research-skills:ponytail lite`，该级别持续到你指定其他级别或关闭 Ponytail 为止。未指定级别时使用 `full`。说 `stop ponytail` 或 `normal mode`，或使用 `$ponytail off`，可关闭 Ponytail，直到你在本次对话中再次要求使用。再次开启时使用 `full`，除非你指定其他级别。其他 skills 也遵守这一 off 状态。`ponytail-help` 列出两个 host 上的调用方式。
 
-凡是供人保存、反复阅读、分享、发布、发送或粘贴到其他地方的文字，写作钩子都要求 Codex 或 Claude Code 在起草、编辑这类文字或审阅其行文前读取并应用 `research-writing-style` 和其中的 durable-prose reference。普通文档、邮件、网页正文、聊天窗口中交付的可直接粘贴文本均在范围内，不分语言和篇幅。仅用于当前聊天的总结与进度说明除外。返回给其他 agent 或程序的材料（如结构化的发现或搜索结果）也不在路由范围内，由把它整理成交付文本的 agent 应用写作规范。对任何交付物（包括代码和分析），钩子要求 agent 先推断提出要求的人的意图，以及交付物的读者或用户想从中得到什么。agent 按提出要求的人想要的范围工作，由这些读者或用户的需要决定调研、写入和实现哪些内容。参考论文、原型或他人代码中的方法或设计时，agent 先从来源本身弄清作者当初为了什么、在什么约束下做的，再按当前工作的目的判断它是否合适，目的不同就改造。保留、修改或舍弃其中影响结果的部分，都要有与当前目的相关的理由。需要满足后就停止收集材料。证据标准决定每条写入的说法核实到什么程度，但不扩大搜索范围。交给其他 agent 的任务说明要写明读者、要回答的问题或要完成的任务，以及停止条件。规则的参考来源见 [14](#credit-14)。钩子还要求文档、项目记忆、指令、代码注释和测试描述当前状态。删除某项或结束临时安排时，本次工作获准修改的文件中只因它而存在的规则、引用和测试一并删除。仍服务于兼容路径或迁移的引用保留。历史记录放在版本控制、带日期的记录、决策记录，以及用户需要操作时的变更记录或迁移说明中，例如下文的升级说明。其他地方如果要写关于已删除项的说明或禁令，必须写明该项为什么不能恢复。断言它不存在的测试，则需要有要求它不存在的合约或用户的明确要求。规则的参考来源见 [12](#credit-12)。钩子最后一部分规定，用户针对当前任务给出的明确指令，以及用户写在自己指令文件中的明确要求，都优先于本插件的指导，包括写作路由。记录或保护外部义务的规则（如期刊或会议的保密政策、许可证条款）仍然适用。本插件的某条规则让 agent 暂停、请求批准、留下未完成的工作或偏离用户的要求时，agent 先说明这一结果，再指出规则的出处并引用这条规则。这一部分的来源见 [13](#credit-13)。路由会在会话启动、压缩后和子代理启动时注入。在 Codex 中，每次安装或更新后都要打开 `/hooks` 并信任 research-skills 的钩子，获得信任前写作路由不会运行。钩子提供的是指令，不能机械保证它们得到遵守。
+凡是供人保存、反复阅读、分享、发布、发送或粘贴到其他地方的文字，写作钩子都要求 Codex 或 Claude Code 在起草、编辑这类文字或审阅其行文前读取并应用 `research-writing-style` 和其中的 durable-prose reference。普通文档、邮件、网页正文、聊天窗口中交付的可直接粘贴文本均在范围内，不分语言和篇幅。仅用于当前聊天的总结与进度说明除外。由你提供内容的简短工作邮件和消息（包括只改语法）改用轻量的 `work-email` skill，由它自己的最终检查代替完整的 review。返回给其他 agent 或程序的材料（如结构化的发现或搜索结果）也不在路由范围内，由把它整理成交付文本的 agent 应用写作规范。对任何交付物（包括代码和分析），钩子要求 agent 先推断提出要求的人的意图，以及交付物的读者或用户想从中得到什么。agent 按提出要求的人想要的范围工作，由这些读者或用户的需要决定调研、写入和实现哪些内容。参考论文、原型或他人代码中的方法或设计时，agent 先从来源本身弄清作者当初为了什么、在什么约束下做的，再按当前工作的目的判断它是否合适，目的不同就改造。保留、修改或舍弃其中影响结果的部分，都要有与当前目的相关的理由。需要满足后就停止收集材料。证据标准决定每条写入的说法核实到什么程度，但不扩大搜索范围。交给其他 agent 的任务说明要写明读者、要回答的问题或要完成的任务，以及停止条件。规则的参考来源见 [14](#credit-14)。钩子还要求文档、项目记忆、指令、代码注释和测试描述当前状态。删除某项或结束临时安排时，本次工作获准修改的文件中只因它而存在的规则、引用和测试一并删除。仍服务于兼容路径或迁移的引用保留。历史记录放在版本控制、带日期的记录、决策记录，以及用户需要操作时的变更记录或迁移说明中，例如下文的升级说明。其他地方如果要写关于已删除项的说明或禁令，必须写明该项为什么不能恢复。断言它不存在的测试，则需要有要求它不存在的合约或用户的明确要求。规则的参考来源见 [12](#credit-12)。钩子最后一部分规定，用户针对当前任务给出的明确指令，以及用户写在自己指令文件中的明确要求，都优先于本插件的指导，包括写作路由。记录或保护外部义务的规则（如期刊或会议的保密政策、许可证条款）仍然适用。本插件的某条规则让 agent 暂停、请求批准、留下未完成的工作或偏离用户的要求时，agent 先说明这一结果，再指出规则的出处并引用这条规则。这一部分的来源见 [13](#credit-13)。路由会在会话启动、压缩后和子代理启动时注入。在 Codex 中，每次安装或更新后都要打开 `/hooks` 并信任 research-skills 的钩子，获得信任前写作路由不会运行。钩子提供的是指令，不能机械保证它们得到遵守。
 
 同一 skill 分为两个阶段。生成和编辑阶段在写作时落实句子结构与用词要求，完整成稿随后必须经过[对抗性审阅](plugins/research-skills/skills/research-writing-style/references/prose-review.md)才能交付。审阅重点检查全文结构、段落功能、上下文和推理。先确认提取材料的来源与文档角色，再结合上下文核对证据、读者理解障碍，以及混入正文的对话和 prompt。用户要求“不要讨论 X”，不能变成对写作对象缺乏依据的断言。只要求 review 时，直接检查现有文字并报告有依据的问题，不自动重写。检测器标签本身不要求修改。用户明确要求按检测结果改写时，启用可选的[检测实验流程](plugins/research-skills/skills/research-writing-style/references/detector-evaluation.md)，保全含义并记录实测对比。普通写作不要求检测。复测中关于选择依据、能力与操作的联系、限定归属及上下文衔接的写作经验，已纳入默认生成和审阅规则。[来源采纳审计](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md)记录完整覆盖范围、限定采用及未采用的建议。
 
 该 skill 默认的写作风格是正文不用分号、破折号或连接独立分句的冒号，除已成型的技术术语外也不用 `retain`、`honest` 及其变形。用户的明确要求或文字去向的格式规定（如期刊格式指南）优先于这些默认规则。交付前，该 skill 的最终检查会扫描新写的正文中有没有分号、破折号和这几个词，并列出每份交付物都要通过的其他检查，例如 prompt 泄漏、含义、术语、引用和变更记录。
 
-另有几个 skill 在完成工作后单独做一次简短的 review，包括代码方面的 `scientific-computing-correctness` 和 `ponytail`、notebook 方面的 `library-example-notebooks`、渲染后插图的 `figure-designer`、比较实验的 `stress-test-baselines`、文献综述的 `upgrade-research-inputs`，以及项目记录的 `maintain-project-memory`。每个 review 核对的是该 skill 生成阶段已经规定的条目，主要挑选生成时容易漏掉、又能在成品上核对的项目，例如每个新公式旁的推导、说某个量是精确的或不存在时所依据的语境，以及把尚未运行的比较标为计划。Review 只核对列出的条目，不重复先前的验证，除任务本身要求的检查外也不增加运行。这一设计的参考来源见 [15](#credit-15)。
+另有几个 skill 在完成工作后单独做一次简短的 review，包括代码方面的 `scientific-computing-correctness` 和 `ponytail`、notebook 方面的 `library-example-notebooks`、渲染后插图的 `figure-designer`、比较实验的 `stress-test-baselines`、文献综述的 `upgrade-research-inputs`、项目记录的 `maintain-project-memory`，以及短邮件的 `work-email`。每个 review 核对的是该 skill 生成阶段已经规定的条目，主要挑选生成时容易漏掉、又能在成品上核对的项目，例如每个新公式旁的推导、说某个量是精确的或不存在时所依据的语境，以及把尚未运行的比较标为计划。Review 只核对列出的条目，不重复先前的验证，除任务本身要求的检查外也不增加运行。这一设计的参考来源见 [15](#credit-15)。
 
 | 技能 | 用途 | Credits |
 |---|---|---|
@@ -67,6 +67,7 @@ python3 scripts/install-claude.py
 | [tech-paper-template](plugins/research-skills/skills/tech-paper-template/SKILL.md) | 组织技术论文的论点、引言和章节结构。 | [1](#credit-1) |
 | [benchmark-paper-template](plugins/research-skills/skills/benchmark-paper-template/SKILL.md) | 规划或评估自己的基准测试论文，包括评估缺口、构建、测量设计和结论，不限领域。 | [1](#credit-1) |
 | [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) | 起草、编辑和对抗性审阅长期使用及可直接粘贴的文字，交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10), [12](#credit-12), [15](#credit-15) |
+| [work-email](plugins/research-skills/skills/work-email/SKILL.md) | 修改简短工作邮件或消息的语法，或按你给的要点起草，保持事实、请求和语气不变。 | — |
 | [figure-designer](plugins/research-skills/skills/figure-designer/SKILL.md) | 设计论文插图、方法示意图和可复现的数据图表。 | [1](#credit-1), [15](#credit-15) |
 | [research-explainer-animation](plugins/research-skills/skills/research-explainer-animation/SKILL.md) | 为论文和代码制作带配音和字幕的讲解动画，画面与旁白中的数字都可追溯到原始来源，交付前逐帧检查。 | — |
 | [pre-submission-reviewer](plugins/research-skills/skills/pre-submission-reviewer/SKILL.md) | 投稿或返修前检查论文的科学主张、证据、写作、LaTeX 排版、图表以及审稿回复。 | [1](#credit-1) |
