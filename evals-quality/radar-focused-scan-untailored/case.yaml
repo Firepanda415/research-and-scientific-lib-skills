@@ -1,0 +1,51 @@
+schema_version: "1.1"
+name: radar-focused-scan-untailored
+description: >-
+  A focused two-month scan of non-unitary dynamics papers from supplied candidates, judged on the papers alone, testing claim calibration, update dates, negative results and scope.
+tags: [quality, tier3, quantum-research-radar]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    今天是 2026-09-26。帮我扫一下最近两个月 non-unitary dynamics / LCHS / quantum ODE-PDE solver 方向值得看的新工作。候选我已经导出来放在 candidates.md 了（abstract，有些带正文摘录），今天没法联网，就基于这些。这次只评 paper 本身，不用联系我自己的项目。直接在回复里给我，不用写文件。
+graders:
+  - name: loads-quantum-research-radar
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?quantum-research-radar"'
+    min: 1
+  - name: reads-quantum-research-radar
+    type: tool_used
+    tool: Read
+    input_match: 'skills/quantum-research-radar/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: calibrated-claims
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: arXiv:2608.22019 (adaptive auxiliary-variable discretization for Schrodingerization) claims in its abstract to "demonstrate an exponential speedup", but its Sec. 4 shows only classical emulations with at most 6 qubits, 30% to 45% fewer grid points than a uniform grid, and no asymptotic complexity analysis. A press article headlined "Quantum computers can now solve any differential equation exponentially faster" reports on this paper.
+      PASS if the response describes 2608.22019's evidence as small-scale numerical results (for example "reports numerically", 6-qubit emulation, grid-point savings) and does not state that it proves or demonstrates an exponential speedup, and does not treat the press article as a separate item or as evidence. FAIL if it repeats the exponential-speedup claim as established, or lists the press article as its own finding.
+  - name: material-update
+    type: llm
+    criteria: >-
+      Background: arXiv:2607.01880 was first posted 2026-07-03, outside the two-month window, and its v2 of 2026-09-18 corrects Lemma 4: the v1 success-probability bound omitted a factor ||u(T)||^2/||u(0)||^2, so the main theorem now holds only for solutions whose norm does not decay.
+      PASS if the response includes 2607.01880 on the strength of its v2 update, states the correction (the missing norm-ratio factor, or the restriction to non-decaying solutions), and distinguishes the first-posting date from the update date. FAIL if it omits the paper, or includes it without describing the correction, or treats it as a new paper from September.
+  - name: values-negative-result
+    type: llm
+    criteria: >-
+      Background: arXiv:2609.10555 proves an Omega(log(1/eps)) lower bound on the LCHS kernel frequency cutoff for every admissible kernel, matching known upper bounds up to a log log factor, so further kernel design within that class cannot improve the cutoff scaling.
+      PASS if the response selects 2609.10555 and explains it as a lower-bound or tightness (negative) theorem that limits what further kernel design can achieve. FAIL if it omits the paper or describes it as a new algorithm or an improved upper bound.
+  - name: respects-scope
+    type: llm
+    criteria: >-
+      Background: the user asked for the last two months (since about 2026-07-26) on non-unitary dynamics, LCHS and quantum ODE/PDE solvers. arXiv:2609.14777 is QAOA for MaxCut (off topic). arXiv:2605.07721 was posted 2026-05-11 with no later version (outside the window).
+      PASS if 2609.14777 is not selected, and 2605.07721 is either omitted or explicitly marked as outside the requested window. FAIL if either is presented as a selected in-window item.
+  - name: untailored-and-coverage
+    type: llm
+    criteria: >-
+      Background: the user asked to judge the papers on their own merits without connecting them to the user's own projects, and the scan used only a supplied candidates file with no web access.
+      PASS if the response contains no statements linking papers to the user's own research, projects or interests (such as "relevant to your CV-DV work" or a "tailored picks" section), and it ends with a brief coverage note saying the scan covered only the supplied candidates file, without web search, over the stated window. FAIL if it adds personal-relevance statements, or lacks a coverage note stating that limitation.

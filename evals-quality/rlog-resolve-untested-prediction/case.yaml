@@ -1,0 +1,45 @@
+schema_version: "1.1"
+name: rlog-resolve-untested-prediction
+description: >-
+  Append a new result to a research notebook and resolve an earlier prediction when the run used a different target error than the prediction specified, testing whether the entry distinguishes an outcome that does not test the prediction from a confirmation and preserves the original prediction.
+tags: [quality, tier3, write-research-log]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    The L=12 adaptive run finished; the results are in results/adaptive_L12/. Please add it to my notebook (notebook/adaptive-trotter.md) and resolve P-07. Then reply with a two-sentence summary.
+graders:
+  - name: loads-write-research-log
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?write-research-log"'
+    min: 1
+  - name: reads-write-research-log
+    type: tool_used
+    tool: Read
+    input_match: 'skills/write-research-log/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: prediction-text-preserved
+    type: regex
+    target: {source: file, path: notebook/adaptive-trotter.md}
+    pattern: 'target error 1e-3, adaptive step-size\s+control reduces the total number of Trotter steps by at least 30% relative to the\s+fixed-step baseline in O-05\.'
+    match: contains
+  - name: resolution-says-not-tested
+    type: llm
+    weight: 2
+    focus: {source: file, path: notebook/adaptive-trotter.md}
+    criteria: >-
+      Context: prediction P-07 in this notebook says that at target error 1e-3, adaptive step-size control reduces Trotter steps by at least 30% relative to the fixed-step baseline of 1,840 steps. The new L=12 adaptive run used target error 1e-2 (its config has a TODO to set it back to 1e-3 after a smoke test) and achieved error 8.7e-3 with 862 steps, which would be a 53% reduction but at a ten times looser target, so it does not test P-07. PASS if the newly added entry or entries state that the run used target error 1e-2 rather than 1e-3, conclude that P-07 is not tested by this run and remains open or unresolved (not confirmed and not refuted), and name the run needed to resolve it (an adaptive run at target error 1e-3). FAIL if the notebook now marks P-07 as confirmed, supported, met or refuted on the basis of this run, or if the added text does not mention the target-error mismatch.
+  - name: appended-with-provenance
+    type: llm
+    focus: {source: file, path: notebook/adaptive-trotter.md}
+    criteria: >-
+      Context: this notebook's convention is dated second-level headings of the form "## YYYY-MM-DD · ID · title", entries appended in date order with the newest last, IDs O-nn for observations, P-nn for predictions and R-nn for resolutions, and resolutions linking the prediction they resolve. Before the edit the last entry was O-06 (2026-09-18). The new run's source is results/adaptive_L12/summary.csv, generated 2026-09-24 at commit 8a41d07 from configs/adaptive_L12.toml, with target error 1e-2, achieved error 8.7e-3, 862 Trotter steps and 1432 s wall time. PASS if the new entry or entries appear after O-06 at the end of the file in the same heading format with new IDs, any resolution references P-07, the text records commit 8a41d07 and the config or results path, and the existing entries O-05, P-07 and O-06 are unchanged in content. FAIL if the new text is inserted elsewhere, P-07's original text is edited, or the commit and source path are missing.
+  - name: summary-not-a-confirmation
+    type: llm
+    criteria: >-
+      Context: a research prediction (P-07) was about a 30% step reduction at target error 1e-3; the new run used target error 1e-2 and showed a 53% reduction. PASS if the reply does not call P-07 confirmed or supported and mentions that the run used the looser 1e-2 target so a run at 1e-3 is still needed. FAIL if the reply says the prediction was confirmed, met or exceeded, or does not mention the target-error mismatch.

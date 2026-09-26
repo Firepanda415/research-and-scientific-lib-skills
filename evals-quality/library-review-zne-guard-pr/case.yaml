@@ -1,0 +1,51 @@
+schema_version: "1.1"
+name: library-review-zne-guard-pr
+description: >-
+  Acceptance review of a ZNE pull request that mixes valid input validation with an output guard rejecting legitimate estimates and a test edit that hides the resulting bias, testing legal-preservation cases, caller tracing and the sweep for weakened evidence.
+tags: [quality, tier2, scientific-library-review]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    请帮我做 PR #31 的 acceptance review。PR 是这个 repo 的最后一个 commit；diff 在 pr-31.diff，作者的描述在 pr-31.md。我们打算 merge 之后发 zne 0.4.0。Should we merge it? Reply in English with your verdict and findings, at most about 500 words. Don't modify the repository; the tests run with `python3 -m unittest`.
+graders:
+  - name: loads-scientific-library-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?scientific-library-review"'
+    min: 1
+  - name: reads-scientific-library-review
+    type: tool_used
+    tool: Read
+    input_match: 'skills/scientific-library-review/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: rejects-range-guard-with-legal-case
+    type: llm
+    weight: 3
+    criteria: >-
+      Background: a pull request to a zero-noise extrapolation (ZNE) library adds `if abs(estimate) > 1.0: raise ValueError(...)` to extrapolate(), on the grounds that Pauli expectation values lie in [−1, 1]. This rejects legitimate results in two ways: (a) the library's public entry run_zne extrapolates expectation values of Pauli-sum observables such as molecular Hamiltonians (the README example is the H2 energy, about −1.137 Ha), which lie outside [−1, 1], so the documented workflow now raises; (b) the Richardson estimate is a linear combination with weights 15/8, −5/4, 3/8 that amplifies shot noise about 2.3-fold, so for a true value near ±1 the raw estimate legitimately exceeds 1 (the PR's own new test rejects values 0.99, 0.97, 0.96, whose estimate 1.004 is consistent with a true value near 1). The text below is the review.
+      PASS if the review rejects the output guard or requires it to change (for example removing it, or replacing the exception with a warning or flag that keeps the raw estimate) and supports this with at least one concrete legitimate case it wrongly rejects, either (a) or (b) above.
+      FAIL if the review accepts the output guard, or objects to it without any concrete legitimate case.
+  - name: flags-test-weakening
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: a pull request to a ZNE library adds an exception for extrapolated values outside [−1, 1]. To keep test_unbiased_under_shot_noise passing, the PR wraps each trial in try/except ValueError and skips rejected trials, and widens the tolerance from delta=0.002 to delta=0.01. With the true value 0.98 and a noise-amplified standard deviation of about 0.023, about 18% of trials are rejected, and discarding them pulls the mean down by about 0.008, which the old tolerance would have caught. The PR description calls this fixing a flaky test. The text below is the review.
+      PASS if the review identifies this test change as weakening the evidence: that skipping rejected trials biases the result (selection or truncation bias) and/or that the tolerance was widened to accommodate the new guard rather than for a derived reason.
+      FAIL if the review does not mention this change to the test, or accepts it as a harmless fix for flakiness.
+  - name: keeps-input-validation
+    type: llm
+    criteria: >-
+      Background: a pull request to a ZNE library makes two kinds of change. Input validation: richardson_weights now raises ValueError for repeated scale factors (the Lagrange weights divide by zero) and extrapolate raises when the number of values differs from the number of scale factors; these reject genuinely invalid inputs. Output guard: extrapolate raises when the estimate is outside [−1, 1], which rejects legitimate results. The text below is the review.
+      PASS if the review distinguishes the two, treating the duplicate-scale-factor and length checks as acceptable input validation to keep (possibly with minor suggestions) while objecting to the output guard.
+      FAIL if the review recommends dropping the input checks, or treats all of the PR's validation as one undifferentiated change.
+  - name: not-merge-as-is
+    type: llm
+    criteria: >-
+      Background: a pull request to a ZNE library passes all 9 of its tests, but it adds an output guard that makes the library's documented energy workflow raise and rejects legitimate estimates near ±1, and it edits a test to hide the bias this introduces. The text below is the review.
+      PASS if the review's verdict is not to merge the PR as it is (request changes, block, or merge only after the output guard and the test change are reverted or reworked), and it does not treat the passing test suite as sufficient evidence.
+      FAIL if the review recommends merging as it is, or relies on the passing tests as the main evidence of acceptability.

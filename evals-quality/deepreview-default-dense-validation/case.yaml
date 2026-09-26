@@ -1,0 +1,44 @@
+schema_version: "1.1"
+name: deepreview-default-dense-validation
+description: >-
+  Review of a "validate circuits" change that turns on dense-unitary construction by default and adds a qubit cap below the documented range, testing runtime-cost and changed-default review and impact classification.
+tags: [quality, tier3, deep-code-review]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Please review the latest commit (HEAD~1..HEAD) in this repo. A collaborator added circuit validation to our statevector simulator because someone passed a non-unitary gate last week. 我想知道这个 commit 能不能直接合。Tests: `python3 -m unittest`. Reply with the review in chat; don't change any files.
+graders:
+  - name: loads-deep-code-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?deep-code-review"'
+    min: 1
+  - name: reads-deep-code-review
+    type: tool_used
+    tool: Read
+    input_match: 'skills/deep-code-review/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: flags-default-dense-unitary-cost
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a pure-Python statevector simulator's run(circuit, n) previously applied each gate to a 2^n-amplitude state in O(2^n) time. The reviewed commit added validate=True as the default, and validation builds the dense 2^n x 2^n matrix of every gate and multiplies these matrices (each product is O(8^n) operations, storage O(4^n)) before checking U^dagger U = I. So every ordinary call to run now pays exponentially more time and memory than the simulation itself, which makes 10-qubit circuits take very long (a 1024 x 1024 pure-Python matrix product per gate) and larger circuits infeasible. A per-gate check of each 2 x 2 matrix would catch a non-unitary gate at O(1) cost per gate. PASS if the review identifies that the default validation path builds dense 2^n x 2^n matrices or the full circuit unitary and that this cost is exponential or far larger than the simulation, and recommends a cheaper check (such as checking each 2 x 2 gate) or turning the dense check off by default. FAIL if the review does not identify this cost or treats the validation as an acceptable default without addressing its cost.
+  - name: flags-qubit-cap-below-documented-range
+    type: llm
+    criteria: >-
+      Context: the project's README states that run() simulates circuits of up to 20 qubits, and benchmarks/ghz_scaling.py runs GHZ circuits from 2 to 18 qubits. The reviewed commit added MAX_QUBITS = 10 and makes run() raise ValueError for n > 10. PASS if the review reports that this new cap rejects work the README documents or the benchmark script performs (for example 11 to 20 qubits, or the benchmark failing above 10 qubits). FAIL if the review does not mention the cap's conflict with the documented or benchmarked range.
+  - name: classifies-impact
+    type: llm
+    criteria: >-
+      Context: in the reviewed simulator change, the problems are a large runtime and memory cost on the default path and a new qubit cap that rejects previously supported inputs. The state-evolution arithmetic itself was not changed and produces correct statevectors. PASS if the review explicitly states that it found no error in the simulated statevectors or amplitudes (for example, that simulation results are unchanged or correct), and presents the cost and cap problems as resource or API/workflow issues rather than numerical errors. FAIL if the review never says whether the simulated results themselves are correct, or if it claims the simulator now returns wrong statevectors or amplitudes.
+  - name: no-edits
+    type: tool_used
+    tool: Edit
+    min: 0
+    max: 0
+    arm: both

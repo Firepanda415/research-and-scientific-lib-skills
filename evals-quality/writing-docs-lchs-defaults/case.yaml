@@ -1,0 +1,76 @@
+schema_version: "1.1"
+name: writing-docs-lchs-defaults
+description: >-
+  A user-guide section from supplied facts, the owner's most common long-document task.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Write the "Choosing the default LCHS configuration" section of our quantum-algorithm library's user guide, for scientists deciding whether to keep the default. Use about 180 words of Markdown prose and reply with only the section.
+
+    Facts to include:
+    - The default tolerance is 0.01, split evenly between the tail budget and the quadrature budget (0.005 each).
+    - On the guide's 2D example the default builds 204 branches in 256 slots on 9 qubits.
+    - The construction tolerance controls these two budgets. It is not a certificate of the total physical error.
+    - Lowering the tolerance increases the number of branches and qubits.
+    - Exact dense synthesis is refused above the max_select_work limit of 1e8.
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-0.01
+    type: regex
+    pattern: '0\.01\b'
+    match: contains
+  - name: keeps-0.005
+    type: regex
+    pattern: '0\.005'
+    match: contains
+  - name: keeps-204-branches
+    type: regex
+    pattern: '\b204\b'
+    match: contains
+  - name: keeps-256-slots
+    type: regex
+    pattern: '\b256\b'
+    match: contains
+  - name: keeps-9-qubits
+    type: regex
+    pattern: '\b9 qubits'
+    match: contains
+  - name: states-no-total-error-certificate
+    type: llm
+    criteria: >-
+      The text says that the construction tolerance is not a certificate or guarantee of the total physical error.
+  - name: meaning-preserved
+    type: llm
+    criteria: >-
+      Every number and condition matches the facts below, and the text adds no claim that they do not support, such as a claim about accuracy, speed, hardware, or how many problems or studies the default suits. Facts: the default tolerance is 0.01, split evenly between the tail budget and the quadrature budget (0.005 each). On the guide's 2D example the default builds 204 branches in 256 slots on 9 qubits. The construction tolerance controls these two budgets and is not a certificate of the total physical error. Lowering the tolerance increases the number of branches and qubits. Exact dense synthesis is refused above the max_select_work limit of 1e8.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

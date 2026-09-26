@@ -1,0 +1,52 @@
+schema_version: "1.1"
+name: baselines-audit-oracle-selection
+description: >-
+  Audit of a Trotter comparison with per-instance oracle selection, an untuned baseline whose own records reverse the claim, mismatched evaluation times and selections at the acceptance threshold.
+tags: [quality, tier3, stress-test-baselines]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    下周要投稿，Results 部分在 draft/results_section.md，数据在 results/，配置说明在 configs/README.md。帮我看一下 AdaTrot vs Trotter2 这个 comparison 站不站得住，reviewer 会不会挑。不要跑新实验，也不要改文件，回复里给结论就行。English, at most 450 words.
+graders:
+  - name: loads-stress-test-baselines
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?stress-test-baselines"'
+    min: 1
+  - name: reads-stress-test-baselines
+    type: tool_used
+    tool: Read
+    input_match: 'skills/stress-test-baselines/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: flags-oracle-selection
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: a paper claims AdaTrot reduces CNOT count by 33% on average across four instances. AdaTrot's chunk size was swept over {2, 4, 8} and, for each instance separately, the setting with the lowest CNOT count meeting the error target was picked (chunk 8, 2, 4, 8 for H1 to H4), using the same evaluation metric that is reported. Only chunk size 2 meets the target on all four instances, and with it the average reduction against the paper's baseline falls to about 23 to 24%.
+      PASS if the response identifies that picking each instance's best chunk size by the reported metric is oracle (post hoc) selection that inflates an across-instance claim, and says a single setting chosen by a stated rule (or a disclosed per-instance tuning claim) is needed. Quoting the roughly 23 to 24% figure is not required. FAIL if the per-instance selection is not mentioned or is accepted as fair.
+  - name: tuned-baseline-reverses-claim
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: the baseline Trotter2 is run at the library default r = 100 steps, reaching errors of 1.8e-4 to 2.4e-4, far below the 1e-3 target, while AdaTrot's selected settings reach 9.7e-4 to 9.9e-4. An existing step scan in results/trotter2_steps.csv shows r = 50 meets 1e-3 on all four instances (errors 8.2e-4, 9.6e-4, 7.2e-4, 8.8e-4) with CNOT counts 2400, 3200, 4000, 4800, all lower than AdaTrot's selected 3050, 4400, 5500, 6350.
+      PASS if the response points out that the baseline was not tuned to the same error budget and uses the existing step scan (r = 50 or equivalent numbers) to show that a Trotter2 run meeting the same target needs fewer CNOTs than AdaTrot, so the claimed reduction does not survive or reverses. FAIL if it only says the baseline "should be tuned" without using the existing records to show the consequence, or does not raise the baseline's unused error budget.
+  - name: common-evaluation-time
+    type: llm
+    criteria: >-
+      Background: AdaTrot's errors are evaluated at its own final chunk endpoint t_eval, between 9.77 and 9.96, while the task is <Z_0> at T = 10 and Trotter2 is evaluated at t_eval = 10.00.
+      PASS if the response notes that AdaTrot is evaluated at t_eval < 10 rather than at T = 10, so the two methods are not answering the same task (reaching T = 10 would need a partial final chunk or extra steps and CNOTs). FAIL if the evaluation-time mismatch is not mentioned.
+  - name: threshold-proximity
+    type: llm
+    criteria: >-
+      Background: AdaTrot's selected configurations have errors 9.8e-4, 9.9e-4, 9.7e-4 and 9.9e-4, just under the 1e-3 target, and the draft says "the advantage persists at stricter accuracy targets". In the existing sweep, at a target of 8e-4 instance H2 has no passing AdaTrot chunk size (its best is 9.9e-4), H1 would need chunk 4, and H4 chunk 2.
+      PASS if the response notes that the selected configurations sit at the acceptance threshold and uses the existing sweep to show that a slightly stricter target changes the selection or breaks it (for example that H2 has no passing AdaTrot setting at 8e-4), or states that the "persists at stricter targets" sentence is unsupported by the records. FAIL if neither the threshold proximity nor the unsupported stricter-target sentence is raised.
+  - name: no-fabricated-results
+    type: llm
+    criteria: >-
+      Background: the only data available are two CSV files: an AdaTrot sweep over chunk sizes {2, 4, 8} for four instances and a Trotter2 scan over r in {40, 50, 60, 80, 100}. The user asked not to run new experiments.
+      PASS if every number the response reports either appears in or is computed from those records, and any additional experiment it recommends is presented as a suggestion not yet run. FAIL if it reports results for configurations absent from the records (for example other chunk sizes, other step counts, or AdaTrot evaluated at T = 10) as if they had been measured.

@@ -57,6 +57,7 @@ test('writing routing reaches sessions and subagents with stdin open', async () 
       assert.ok(context.includes(JSON.stringify(file)));
     }
     assert.match(context, /Temporary chat summaries and progress updates alone do not trigger it/);
+    assert.match(context, /analyses answered in chat for the requester's own decision do not trigger it either/);
     assert.match(context, /paste-ready text delivered in chat/);
     assert.match(context, /returned to another agent or a program/);
   }

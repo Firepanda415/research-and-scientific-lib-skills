@@ -1,0 +1,51 @@
+schema_version: "1.1"
+name: jobprompt-handoff-verified-finding
+description: >-
+  Writing a paste-ready implementer prompt for a verified Trotter-step finding whose reviewer suggested a dense runtime check, testing that the prompt carries the commit, test command and project delivery rules, requires a failing-before regression with an independent expected value, and keeps the expensive check out of the runtime path.
+tags: [quality, tier2, write-implementation-job-prompts]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    F2 in review/findings.md is verified; I reran the reproducer myself. Please write the prompt I'll paste into a fresh implementer session (Codex) to fix F2. It will have none of our context. Save it as handoff/F2-prompt.md. Don't change the code yourself.
+graders:
+  - name: loads-write-implementation-job-prompts
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?write-implementation-job-prompts"'
+    min: 1
+  - name: reads-write-implementation-job-prompts
+    type: tool_used
+    tool: Read
+    input_match: 'skills/write-implementation-job-prompts/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: failing-before-independent-oracle
+    type: llm
+    weight: 2
+    focus: {source: file, path: handoff/F2-prompt.md}
+    criteria: >-
+      The text below is a prompt for an implementation agent who must fix a bug in the second-order (Strang) Trotter step, trotter_step(state, h_a, h_b, dt, order=2) in qlite/evolve.py, which applies the h_b group for dt/2 instead of dt. PASS if the prompt requires a regression test that (a) fails on the current, unfixed code and passes after the fix, or asks the implementer to show that failure, and (b) takes its expected result from a source independent of the code under test, for example the closed-form single-qubit evolution under H = X + Z, a small exact matrix exponential computed inside the test, or the expected second-order convergence rate (error falling about fourfold when the number of steps doubles). FAIL if either (a) or (b) is missing, or if the expected value comes from qlite's own evolve or trotter_step output.
+  - name: no-dense-runtime-check
+    type: llm
+    weight: 2
+    focus: {source: file, path: handoff/F2-prompt.md}
+    criteria: >-
+      Context: evolve() in the qlite library is matrix-free and is used for systems of up to 20 qubits. A reviewer suggested that evolve() also build the dense exact propagator exp(-iHt), a 2^n by 2^n matrix, at the end of every call and raise if the result disagrees. The text below is a prompt for an implementation agent. PASS if the prompt does not instruct the implementer to add a dense exact propagator, an exact-evolution comparison, or any other new check to evolve() or other library runtime code. Mentioning the reviewer's suggestion only to exclude it, or to say it needs the maintainer's approval, is fine, and so is a dense exact comparison inside a test on one or two qubits. FAIL if the prompt asks for such a check in runtime code, even as optional.
+  - name: carries-commit-and-test-command
+    type: llm
+    focus: {source: file, path: handoff/F2-prompt.md}
+    criteria: >-
+      The text below is a prompt for an implementation agent starting in a fresh session. PASS if it states both (1) the starting commit, identified by a hexadecimal commit hash of at least 7 characters, and (2) the project's test command `python3 -m unittest discover -s tests -t .`, run from the repository root. FAIL if either is missing; a different test command also fails.
+  - name: carries-delivery-rules
+    type: llm
+    focus: {source: file, path: handoff/F2-prompt.md}
+    criteria: >-
+      The project's contribution rules say: an implementation job works on a branch named fix/<finding-id> created from the stated starting commit and commits there; it does not push, merge or rebase, because the maintainer integrates; and commit messages carry no AI-attribution trailers such as Co-Authored-By. The text below is a prompt for an implementation agent fixing finding F2. PASS if the prompt tells the implementer all three: to work on branch fix/F2 (or fix/<finding id>) from the starting commit, not to push or merge, and not to add AI-attribution trailers to commit messages. FAIL if any of the three is missing.
+  - name: reply-flags-excluded-runtime-check
+    type: llm
+    criteria: >-
+      Context: the agent wrote a handoff prompt for fixing a Trotter-step bug in a matrix-free evolve() used for up to 20 qubits. The reviewer's finding also suggested adding a dense exact-propagator check (a 2^n by 2^n matrix) to evolve() on every call. The text below is the agent's reply to the user. PASS if the reply tells the user that this runtime check was left out of the job or needs the user's approval, and gives a reason such as its exponential memory or time cost on a path used up to 20 qubits. FAIL if the reply does not mention the suggested runtime check, or says it was included in the job.

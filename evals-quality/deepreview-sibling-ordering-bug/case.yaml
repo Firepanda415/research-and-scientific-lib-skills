@@ -1,0 +1,44 @@
+schema_version: "1.1"
+name: deepreview-sibling-ordering-bug
+description: >-
+  Review of a qubit-ordering fix whose unchanged sibling keeps the bug and whose regression test cannot fail, testing endpoint review of the surrounding surface and test-oracle strength.
+tags: [quality, tier3, deep-code-review]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    组里学生提了个 PR，就是这个 repo 的最后一个 commit (HEAD~1..HEAD)，修 expectation_z 的 qubit ordering bug。合并之前请帮我仔细 review 一下。Tests run with `python3 -m unittest`. Reply with the review in chat and do not modify any files.
+graders:
+  - name: loads-deep-code-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?deep-code-review"'
+    min: 1
+  - name: reads-deep-code-review
+    type: tool_used
+    tool: Read
+    input_match: 'skills/deep-code-review/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: finds-unchanged-zz-sibling
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a Python module documents that qubit 0 is the most significant bit of the basis index. A pull request fixed expectation_z to read bit (index >> (n - 1 - qubit)) instead of (index >> qubit), but left the sibling function expectation_zz in the same file unchanged, still reading (index >> q1) and (index >> q2), which is the old least-significant-bit ordering. A consumer, ising_energy, combines expectation_zz for coupling terms with expectation_z for field terms, so after the PR the two terms use different qubit conventions. For example, for n = 3 and the basis state |100> (index 4), the correct <Z0 Z1> is -1 but expectation_zz returns +1. PASS if the review reports that expectation_zz still uses the wrong (old, least-significant-bit) qubit ordering, or equivalently that it disagrees with the documented convention or with the fixed expectation_z. A concrete counterexample or the ising_energy consequence strengthens the finding but is not required. FAIL if the review does not identify this defect in expectation_zz, or says expectation_zz is correct.
+  - name: finds-degenerate-regression-test
+    type: llm
+    criteria: >-
+      Context: a pull request that fixed the qubit ordering of expectation_z added a regression test using the two-qubit state |11> (state = [0, 0, 0, 1]) and asserting that <Z> is -1 for qubit 0 and for qubit 1. Because both qubits are in |1>, this assertion holds under either bit ordering, so the test also passes on the pre-fix code and does not protect the fix. PASS if the review says that this new test cannot distinguish the two orderings, would pass on the old buggy code, or otherwise does not guard the fix, and suggests an asymmetric state such as |01> or |10> or equivalent. FAIL if the review does not raise this point or calls the new test adequate.
+  - name: finds-loosened-tolerance
+    type: llm
+    criteria: >-
+      Context: in the same pull request, an existing test, test_plus_state, which checks that <Z> of the one-qubit |+> state is 0, had its tolerance changed from assertAlmostEqual(..., places=12) to delta=1e-2. The exact value is 0 up to rounding near 1e-16, and the change was unrelated to the ordering fix and not explained. PASS if the review flags this loosened tolerance as an unjustified weakening of the test or asks for it to be reverted. FAIL if the review does not mention it or approves it.
+  - name: no-edits
+    type: tool_used
+    tool: Edit
+    min: 0
+    max: 0
+    arm: both

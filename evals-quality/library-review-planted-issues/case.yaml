@@ -1,0 +1,62 @@
+schema_version: "1.1"
+name: library-review-planted-issues
+description: >-
+  Read-only review of a small readout-statistics library with five planted issues of different kinds (formula sign, blind test, approximation outside its validity, dense default cost, missing provenance) and style-only distractions, testing whether the review finds and ranks them without style padding.
+tags: [quality, tier2, scientific-library-review]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    我们组下周要用 shotkit 处理一批 20-qubit 的 readout 数据：每个 qubit 的 mitigated ⟨Z⟩ 和 confidence interval，再加上 full-distribution mitigation，结果用 save_results 存档。想先确认这个库的结果能不能信，请 review 一下 shotkit。Reply in English with the review, most important findings first, at most about 600 words. Don't change any files; the tests run with `python3 -m unittest`.
+graders:
+  - name: loads-scientific-library-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?scientific-library-review"'
+    min: 1
+  - name: reads-scientific-library-review
+    type: tool_used
+    tool: Read
+    input_match: 'skills/scientific-library-review/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: finds-mitigation-sign-error
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: the reviewed library's theory note derives the single-qubit readout mitigation <Z> = (<Z>_raw − (e1 − e0)) / (1 − e0 − e1), with e0 = P(read 1 | prepared 0) and e1 = P(read 0 | prepared 1). The code of mitigate_z computes (zRaw + (e1 − e0)) / (1 − e0 − e1), adding the offset instead of subtracting it. For e0 = 0.02, e1 = 0.08 and a true <Z> of 0.5, the raw value is 0.51 and the code returns about 0.633 instead of 0.5. The results are correct only when e0 = e1. The text below is a review of the library.
+      PASS if the review reports this sign error in mitigate_z (the offset e1 − e0 added rather than subtracted, or equivalently wrong results whenever e0 ≠ e1).
+      FAIL if the review does not report it.
+  - name: finds-blind-mitigation-test
+    type: llm
+    criteria: >-
+      Background: in the reviewed library, the only unit test of mitigate_z uses equal readout errors e0 = e1 = 0.05. With equal errors the offset term (e1 − e0) is zero, so the test passes even though mitigate_z has a sign error in that term. The text below is a review of the library.
+      PASS if the review points out that this test cannot detect the sign error, or more generally that the mitigation test uses symmetric readout errors (e0 = e1) and therefore does not exercise the offset term.
+      FAIL if the review does not mention this weakness of the test.
+  - name: finds-zero-width-interval
+    type: llm
+    criteria: >-
+      Background: in the reviewed library, estimate_with_ci always computes its 95% confidence interval with wald_interval, a normal approximation whose own docstring says it is adequate only when shots · p̂ · (1 − p̂) ≥ 10. When every shot of a qubit reads the same value (p̂ = 0 or 1), the interval has zero width, for example (1.0, 1.0, 1.0) for 20 shots all reading 0, which claims certainty from finite data. The text below is a review of the library.
+      PASS if the review reports, in any wording, that the default interval uses the normal/Wald approximation outside its validity and gives zero-width or otherwise invalid intervals for estimates at or near ±1 or with few shots.
+      FAIL if the review does not report this problem.
+  - name: finds-dense-mitigation-cost
+    type: llm
+    criteria: >-
+      Background: the reviewed library's README advertises full-distribution readout mitigation for up to 20 qubits. mitigate_counts builds a dense 2^n × 2^n assignment matrix and solves it by Gaussian elimination, which needs O(4^n) memory and O(8^n) time (about 0.5 s at 8 qubits, growing about eightfold per qubit, and 2^40 matrix entries at 20 qubits). The readout model is a tensor product, so the inverse factorizes per qubit and can be applied in O(n 2^n) time. The text below is a review of the library.
+      PASS if the review reports that mitigate_counts is infeasible or far too expensive at the advertised 20 qubits because of the dense 2^n × 2^n construction and solve, and points to the tensor-product (per-qubit) inverse or an equivalent scalable method.
+      FAIL if the review does not report this cost problem.
+  - name: finds-missing-provenance
+    type: llm
+    criteria: >-
+      Background: the reviewed library's README says save_results(path, results) writes a reproducible record containing each estimate together with its shot count, the readout calibration (e0, e1) used, and the library version. The function only dumps the list of result dicts it is given, and the README's own example builds those dicts with only qubit, z and ci, so no shot counts, calibration or version are saved. The text below is a review of the library.
+      PASS if the review reports that save_results does not store the promised provenance (shot counts, calibration, or version), or that the README claim about a reproducible record is false.
+      FAIL if the review does not report this.
+  - name: ranked-without-style-padding
+    type: llm
+    criteria: >-
+      Background: the reviewed readout-statistics library has scientific defects (a sign error in readout mitigation, and zero-width confidence intervals from a normal approximation used outside its validity), a resource defect (dense 2^n × 2^n mitigation advertised for 20 qubits), a test that cannot detect the sign error, and missing provenance in saved results. It also has style-only features: camelCase local names such as nShots and zRaw, %-style string formatting, single-letter matrix names, and no type hints. The text below is a review of the library.
+      PASS if both hold: (1) the review's first finding is a scientific or resource defect (the mitigation sign error, the zero-width interval, or the dense 2^n × 2^n mitigation cost) rather than the test weakness, the provenance gap or a style item, and (2) it does not present style-only matters (naming, formatting, type hints, docstring style) as findings; at most one brief line grouping such minor items is acceptable.
+      FAIL if the review leads with lower-impact items, or spends findings on style-only matters.

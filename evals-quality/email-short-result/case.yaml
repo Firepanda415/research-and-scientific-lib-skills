@@ -1,0 +1,81 @@
+schema_version: "1.1"
+name: email-short-result
+description: >-
+  A short email that states measured results and should stay with work-email.
+tags: [quality, email]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Fix the grammar and reply with only the email.
+
+    Hi team,
+
+    Quick update: the new admission check refuse the H4 run after 185 circuits instead of 512, and the error message now show the exact need (739 circuits). The H2 default run still finish after 60 circuits. No other behavior change.
+
+    Thanks,
+    Sam
+graders:
+  - name: loads-work-email
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?work-email"'
+    min: 1
+  - name: reads-work-email
+    type: tool_used
+    tool: Read
+    input_match: 'skills/work-email/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: skips-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 0
+    max: 0
+  - name: skips-reading-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: keeps-185
+    type: regex
+    pattern: '\b185\b'
+    match: contains
+  - name: keeps-512
+    type: regex
+    pattern: '\b512\b'
+    match: contains
+  - name: keeps-739
+    type: regex
+    pattern: '\b739\b'
+    match: contains
+  - name: keeps-60
+    type: regex
+    pattern: '\b60\b'
+    match: contains
+  - name: grammar-only
+    type: llm
+    criteria: >-
+      The text is the original email below with only its grammar corrected (for example refuse to refuses, show to shows, finish to finishes). The numbers, content and tone are unchanged. Original email: "Hi team, Quick update: the new admission check refuse the H4 run after 185 circuits instead of 512, and the error message now show the exact need (739 circuits). The H2 default run still finish after 60 circuits. No other behavior change. Thanks, Sam"
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

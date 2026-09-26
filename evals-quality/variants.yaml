@@ -1,0 +1,24 @@
+# Ablation variants of the writing skill. Each removes named sections in the staged copy only.
+# Paths are relative to the staged plugin. The runner fails when a heading no longer exists.
+no-patterns:
+  skills/research-writing-style/references/durable-prose.md:
+    remove:
+      - "## State the point without staging it"
+      - "## Replace inflation with evidence"
+      - "## Choose structure from the information"
+      - "## Word choice, punctuation, and voice"
+no-sentence-mechanics:
+  skills/research-writing-style/references/durable-prose.md:
+    remove:
+      - "## Compose sentences around their meaning"
+lean-review:
+  skills/research-writing-style/references/prose-review.md:
+    remove:
+      - "### Purpose, motivation, and argument"
+      - "### Evidence, responsibility, and meaning"
+      - "## Check continuity and reader comprehension"
+skill-only:
+  skills/research-writing-style/references/durable-prose.md:
+    replace: "This reference is intentionally empty in this evaluation build."
+  skills/research-writing-style/references/prose-review.md:
+    replace: "This reference is intentionally empty in this evaluation build."

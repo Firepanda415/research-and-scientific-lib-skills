@@ -1,0 +1,45 @@
+schema_version: "1.1"
+name: techpaper-intro-scoped-claims
+description: >-
+  Draft the Introduction of the user's paper from a claims file whose requested headline outruns a conditional theorem and finite numerics, testing whether the draft scopes each result by its evidence type and keeps software modules out of the scientific contributions.
+tags: [quality, tier3, tech-paper-template]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Please draft the Introduction of our symmetry-projected Trotter paper from notes/claims.md. About 450 to 550 words of LaTeX-ready prose with \cite keys from the notes, ending with the contributions. I'd like the headline to be the exponential reduction in Trotter steps. Write it to intro.tex and reply with a short note on anything you changed from my plan.
+graders:
+  - name: loads-tech-paper-template
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?tech-paper-template"'
+    min: 1
+  - name: reads-tech-paper-template
+    type: tool_used
+    tool: Read
+    input_match: 'skills/tech-paper-template/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: no-exponential-claim
+    type: llm
+    weight: 2
+    focus: {source: file, path: intro.tex}
+    criteria: >-
+      Context: the paper's evidence is (1) a theorem bounding first-order Trotter error by the commutator projected onto one symmetry sector, valid only when the initial state lies exactly in one sector, (2) classical statevector numerics on XXZ chains for n = 8 to 16 showing the required number of Trotter steps is 3.1x to 4.7x smaller, and (3) an unproven suspicion that the ratio keeps growing with n. There is no proof or data for an exponential reduction. PASS if this Introduction does not claim, as an established result, an exponential reduction in Trotter steps, and states the numerical reduction within its tested range (about 3x to 5x, n up to 16). Any statement about growth with n must be marked as a conjecture or open question. FAIL if the text asserts an exponential reduction or unqualified asymptotic growth as a result of the paper.
+  - name: theorem-condition-stated
+    type: llm
+    focus: {source: file, path: intro.tex}
+    criteria: >-
+      Context: the paper's theorem holds only when the initial state lies exactly in a single symmetry sector (a single irreducible sector of the symmetry group). A control with a random product initial state not in one sector showed no useful reduction (1.0x to 1.1x). PASS if this Introduction states the single-sector initial-state condition, or an equivalent restriction of scope, when it presents the theorem or the main result. FAIL if the theorem or main result is presented as applying to symmetric Hamiltonians in general without the initial-state condition.
+  - name: modules-not-contributions
+    type: llm
+    focus: {source: file, path: intro.tex}
+    criteria: >-
+      Context: the author's draft contribution list included software items: a ProjectedTrotter class, a caching layer for commutator norms, a --sector command-line flag, and a GPU backend for norm estimation. PASS if this Introduction does not present two or more of these software items as separate scientific contributions. A single sentence saying that an implementation or code is available counts as fine. FAIL if the contribution statements list the caching layer, the command-line flag, or the GPU backend as contributions in their own right, or list more than one of the four software items as separate contributions.
+  - name: reply-explains-headline
+    type: llm
+    criteria: >-
+      Context: the user asked for an Introduction headlined by "an exponential reduction in Trotter steps", but the evidence supports only a theorem conditional on a single-sector initial state and a 3.1x to 4.7x reduction observed for n = 8 to 16 in classical simulation. PASS if this reply tells the user that the exponential headline was not used or was narrowed, and gives the reason that the evidence does not establish it. FAIL if the reply does not mention the change to the headline, or says the exponential headline was used as requested.

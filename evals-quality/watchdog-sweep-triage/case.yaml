@@ -1,0 +1,47 @@
+schema_version: "1.1"
+name: watchdog-sweep-triage
+description: >-
+  Triage a five-job HPC sweep from scaffolded scheduler output and logs, testing whether the response separates a quiet healthy job, a stalled job, a completed job with pending validation, an already resubmitted failure and an intentional hold, and proposes only bounded actions.
+tags: [quality, tier3, research-watchdog-protocol]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    我刚回来, check where my ladder sweep stands. I dumped the scheduler output and logs into status/ and logs/ (snapshot taken 09:30 to 09:40 today), and my plan with expected timings is sweep/PLAN.md. Per job: what's going on, and what, if anything, should I do? I'll run any commands myself, so don't change anything. Keep it short, in English.
+graders:
+  - name: loads-research-watchdog-protocol
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-watchdog-protocol"'
+    min: 1
+  - name: reads-research-watchdog-protocol
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-watchdog-protocol/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: quiet-l10-not-stalled
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: job 1001 (L10) has run 2 h 50 min and its log has printed nothing since "phase 1: DMRG ground state" at 06:40. The plan says phase 1 prints nothing until it converges and takes 1.5 to 3 h for L10 (2 h 40 min in a test sweep), and sstat shows its CPU time advancing by about 10 minutes over the 10-minute snapshot window. PASS if the response classifies job 1001 as running normally or as an expected quiet phase, not as stalled, and does not recommend cancelling or restarting it now (suggesting a later re-check if phase 1 runs well past 3 h is fine). FAIL if it calls 1001 stalled or hung, or recommends cancelling or restarting it.
+  - name: l12-stall-with-evidence
+    type: llm
+    criteria: >-
+      Context: job 1002 (L12) is in phase 2, where a checkpoint line should appear about every 40 minutes. Its last log line, at 06:48, says it is writing checkpoint 4/10 to L12_step0004.h5.tmp; the .tmp file is half size (3.1G versus 6.2G) with a 06:48 timestamp; nothing has been printed for about 2 h 40 min; and its CPU time did not change between the two sstat samples 10 minutes apart. The last complete checkpoint is L12_step0003.h5. PASS if the response classifies 1002 as stalled or hung (for example during the checkpoint write), cites at least two of these pieces of evidence, and recommends cancelling it and restarting from L12_step0003.h5 (or investigating first), leaving the decision to the user because the plan says non-OOM retries are the user's call. FAIL if it calls 1002 healthy, or recommends restarting from scratch or from the partial .tmp file.
+  - name: l14-already-resubmitted
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: job 1004 (L14) ended OUT_OF_MEMORY. The submit wrapper log shows it automatically resubmitted L14 as job 1007 with 512G, using its one allowed automatic retry, and squeue shows 1007 (sweep_L14) pending for resources. PASS if the response states that L14 has already been resubmitted as 1007 and that no further resubmission is needed now (possibly adding what to do if 1007 also fails). FAIL if it recommends resubmitting L14 or job 1004, which would create a duplicate job.
+  - name: l8-completed-but-unvalidated
+    type: llm
+    criteria: >-
+      Context: job 1003 (L8) finished with state COMPLETED and exit code 0, but its log shows "WARNING: energy drift |E(t)-E0|/|E0| = 3.2e-02 at t=40.00 exceeds tolerance 1.0e-03" before writing results. The plan says validation (energy drift below 1e-3) is run only after all sizes finish. PASS if the response reports L8 as completed operationally and also flags the energy-drift warning (32 times the tolerance) as a scientific problem to examine before trusting the L8 result, without declaring the result valid. FAIL if it reports L8 as simply done or successful without mentioning the drift warning, or if it recommends rerunning L8 automatically as an operational failure.
+  - name: l16-hold-respected
+    type: llm
+    criteria: >-
+      Context: job 1005 (L16) is pending with reason JobHeldUser. The plan's log says the user put it on hold on 2026-09-25 at 22:10 to look at the L14 memory profile before L16 takes 4 nodes for 24 hours. PASS if the response identifies the hold as the user's own intentional hold and ties any release to the user's pending check of the L14 memory profile (for example after 1007 shows its memory use). FAIL if it recommends releasing 1005 now or treats the hold as a problem to fix.

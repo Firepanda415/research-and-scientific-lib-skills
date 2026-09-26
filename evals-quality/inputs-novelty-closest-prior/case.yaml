@@ -1,0 +1,51 @@
+schema_version: "1.1"
+name: inputs-novelty-closest-prior
+description: >-
+  A novelty check from supplied sources where the closest prior work uses different terminology, one scaling claim rests on an abstract from the same group, and a blog overclaims.
+tags: [quality, tier3, upgrade-research-inputs]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    我们想写一篇 Shadow-ADAPT 的 paper（idea 在 sources/S0-our-idea.md）。Is it novel enough? What is the closest prior work, and what would we need to show that is actually new? 我能找到的材料都在 sources/ 里了，今天没法联网，就基于这些判断。English reply, at most 450 words, and please don't change any files.
+graders:
+  - name: loads-upgrade-research-inputs
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?upgrade-research-inputs"'
+    min: 1
+  - name: reads-upgrade-research-inputs
+    type: tool_used
+    tool: Read
+    input_match: 'skills/upgrade-research-inputs/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: identifies-closest-prior
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: the user's idea "Shadow-ADAPT" estimates all ADAPT-VQE pool gradients <[H, A_k]> from one shared set of classical shadows (random single-qubit Pauli-basis snapshots) with median-of-means. Source S1 (Okafor and Lindqvist, arXiv:2503.04417, 2025) describes "randomized-measurement recycling": measuring the ansatz state in uniformly random single-qubit Pauli bases and reusing the same snapshots, with median-of-means, to estimate every pool gradient.
+      PASS if the response identifies S1 as implementing the same mechanism under different terminology (random Pauli-basis snapshots are classical shadows) and concludes that the idea as stated is not novel. FAIL if it calls Shadow-ADAPT novel, treats S1 only as loosely related, or names a different source as the closest prior work.
+  - name: search-limits-not-novelty
+    type: llm
+    criteria: >-
+      Background: the user's note says an arXiv search for "classical shadow ADAPT-VQE", "shadow gradient operator pool" and "classical shadows operator selection" found 0 relevant hits, and claims "to our knowledge first". The closest prior work describes the same method as "randomized-measurement recycling" without the word "shadow".
+      PASS if the response states that the zero-hit keyword search did not establish novelty, and explains that the search terms missed prior work using different terminology or that search by mechanism is needed. FAIL if it does not address the search, or treats it as supporting novelty.
+  - name: flags-weak-evidence
+    type: llm
+    criteria: >-
+      Background: source S3 (Haddad, Okafor and Lindqvist, 2026) is available only as an abstract and reports an 80x measurement reduction at up to 30 qubits; it shares two authors with S1 and calls its result a confirmation of their earlier work. Source S5 is a blog post claiming "100x savings at any system size".
+      PASS if the response marks S3's 80x/30-qubit result as unverified or abstract-only (or notes it is from the same group as S1 and so not independent confirmation), and does not use the S5 blog's 100x claim as evidence. FAIL if it presents the 80x result as an established finding without qualification, or cites the blog's 100x figure as support.
+  - name: grounded-delta
+    type: llm
+    criteria: >-
+      Background: S1 states that its estimator variance grows as 3^w for commutators of Pauli weight w, so it restricts to pools with w <= 4 and does not treat fermionic pools with long Jordan-Wigner strings. S2 (Brandt et al., abstract only) reports fermionic classical shadows whose variance for k-body fermionic observables does not depend on Jordan-Wigner string length. S4 (Ruiz and Tanaka) is a deterministic alternative, commutator grouping, with 5x to 8x fewer measurement settings.
+      PASS if the response suggests a possible new contribution grounded in a limitation stated in these sources, most naturally extending gradient screening to high-weight or fermionic pools (for example with fermionic shadows as in S2), presents it as a hypothesis still to be tested (S2 being abstract only), and names S1 and/or S4 as a baseline the new work must beat. FAIL if the suggested contribution is generic (for example "run larger molecules" or "do hardware experiments") without reference to a limitation in the sources, or if no baseline comparison is named.
+  - name: no-invented-evidence
+    type: llm
+    criteria: >-
+      Background: the only supplied sources report these results: S1, 12x/21x/35x measurement reduction on H4 (8 qubits), LiH (12) and BeH2 (14); S2, abstract only, reduced cost for fermionic k-RDM estimation with no number; S3, abstract only, 80x at up to 30 qubits; S4, 5x to 8x fewer measurement settings on the same molecules; S5, a blog claiming 100x at any size.
+      PASS if every numerical result the response attributes to these sources matches the list above, and any paper or result it mentions from outside S0 to S5 is explicitly marked as recalled from memory, unverified, or something to check. FAIL if it attributes to a source a result not in this list, or cites an outside paper with specific results presented as established evidence.

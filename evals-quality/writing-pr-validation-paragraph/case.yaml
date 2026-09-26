@@ -1,0 +1,67 @@
+schema_version: "1.1"
+name: writing-pr-validation-paragraph
+description: >-
+  A pull-request validation paragraph from test logs, which must keep separate runs separate.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Write the "Validation" paragraph of a pull-request description for maintainers, at most 120 words. Reply with only the paragraph.
+
+    Evidence from the logs:
+    - Full test suite at commit f458bf6: 2438 passed, 0 failed, 0 skipped, 146 s, Python 3.12.14, NumPy 2.5.2.
+    - Mutation campaign (separate run): all 186 probes killed, baseline of 144 tests passed.
+    - Notebooks: 6 re-executed at commit 9259581, 119 s, no errors.
+    - Ruff and the strict docs build passed.
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-2438
+    type: regex
+    pattern: '\b2,?438\b'
+    match: contains
+  - name: keeps-186
+    type: regex
+    pattern: '\b186\b'
+    match: contains
+  - name: keeps-python-version
+    type: regex
+    pattern: '3\.12\.14'
+    match: contains
+  - name: keeps-commit
+    type: regex
+    pattern: 'f458bf6'
+    match: contains
+  - name: runs-kept-separate
+    type: llm
+    criteria: >-
+      The paragraph reports the test suite, the mutation campaign and the notebook run as separate runs, with their own commits where given. It does not add them into one total and does not claim checks that the evidence below does not show. Evidence: full test suite at commit f458bf6, 2438 passed, 0 failed, 0 skipped, 146 s, Python 3.12.14, NumPy 2.5.2. Mutation campaign (separate run, no commit given): all 186 probes killed, baseline of 144 tests passed. Notebooks: 6 re-executed at commit 9259581, 119 s, no errors. Ruff and the strict docs build passed (no commit given).
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

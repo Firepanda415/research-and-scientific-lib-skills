@@ -1,0 +1,52 @@
+schema_version: "1.1"
+name: memory-supersede-precision-decision
+description: >-
+  Recording a new complex128 benchmark decision in project memory that narrates the superseded complex64 decision, testing a current-state rewrite with the rejection reason, deletion of the rule that existed only for complex64, and reporting of source leftovers without editing them.
+tags: [quality, tier2, maintain-project-memory]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    今天组会定了：从现在起 benchmarks 全部用 complex128。complex64 fails the fidelity check on the 24-qubit QFT (state infidelity 3.1e-4 against our 1e-6 tolerance, see results/qft24-c64.log), so its memory savings aren't worth it. On the 16 GB nodes that caps us at 29 qubits. Please update the project memory accordingly.
+graders:
+  - name: loads-maintain-project-memory
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?maintain-project-memory"'
+    min: 1
+  - name: reads-maintain-project-memory
+    type: tool_used
+    tool: Read
+    input_match: 'skills/maintain-project-memory/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: benchmarks-entry-current-state
+    type: llm
+    weight: 2
+    focus: {source: file, path: memory/benchmarks.md}
+    criteria: >-
+      Context: a project decided that all benchmark runs use complex128, because complex64 failed the fidelity check on the 24-qubit QFT (state infidelity 3.1e-4 against the tolerance 1e-6, log results/qft24-c64.log). With complex128 the 16 GB nodes fit at most 29 qubits. Before the update, the memory file below recorded complex64 as the decision (30 qubits, a run command with --dtype complex64) as a dated history: 2026-09-02 started with complex128 and ran out of memory at 30 qubits, 2026-09-04 switched to complex64, 2026-09-10 decided complex64. PASS if the file now (1) states complex128 as the current precision for all benchmark runs, (2) gives 29 qubits as the limit on the 16 GB nodes, (3) records why complex64 was rejected, with the 3.1e-4 versus 1e-6 result or the log path, (4) gives any run command with complex128 and not complex64, and (5) no longer narrates the earlier sequence of switches (the 2026-09-02, 2026-09-04 and 2026-09-10 entries or an equivalent story) and presents neither complex64 nor 30 qubits as current guidance. FAIL if any of the five fails.
+  - name: no-history-narration
+    type: regex
+    target: {source: file, path: memory/benchmarks.md}
+    pattern: '2026-09-0[24]|2026-09-10|previously|no longer|used to|formerly|switched (to|back|from)'
+    flags: i
+    match: not_contains
+  - name: golden-sync-rule-unindexed
+    type: regex
+    target: {source: file, path: memory/INDEX.md}
+    pattern: 'c64-goldens|complex64 goldens'
+    flags: i
+    match: not_contains
+  - name: source-left-unchanged
+    type: regex
+    target: {source: file, path: bench/run.py}
+    pattern: 'default="complex64"'
+    match: contains
+  - name: report-deletion-and-leftovers
+    type: llm
+    criteria: >-
+      Context: project memory held a rule file, memory/c64-goldens.md, saying to regenerate complex64 golden files whenever complex128 goldens change; those goldens existed only for complex64 benchmark comparisons. The project has now decided that all benchmarks run in complex128. Outside memory, bench/run.py still defaults to --dtype complex64 and --qubits 30, and complex64 golden files remain under tests/goldens/c64/. The user asked only for a project-memory update. The text below is the agent's final report. PASS if the report (1) says the complex64 golden-sync rule was deleted from memory (not rewritten as a note to ignore it or marked obsolete), and (2) points out at least one leftover outside memory for the user to decide on: the complex64 default (or the 30-qubit default) in bench/run.py, or the tests/goldens/c64/ files. FAIL if either is missing, or if the report says it edited bench/run.py or deleted the golden files.

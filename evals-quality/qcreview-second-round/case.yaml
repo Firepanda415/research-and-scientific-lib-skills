@@ -1,0 +1,42 @@
+schema_version: "1.1"
+name: qcreview-second-round
+description: >-
+  Draft the user's second-round referee report on another author's revised VQE manuscript, testing whether each original concern is traced from rebuttal to manuscript, a false matched-budget claim is caught, and a new offset-dependent energy ratio is rejected as a metric.
+tags: [quality, tier3, quantum-computing-review]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 25
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Second round for the Fermi-Hubbard VQE paper I reviewed. My first report is round1/my_report.md, and the authors' rebuttal and revised manuscript are in round2/. Same journal and policy as round 1 (round1/policy_note.md). Please draft my second-round report: for each of my original points say whether it is resolved, and add any new problems introduced by the revision. Under 500 words, in the chat. Don't edit files.
+graders:
+  - name: loads-quantum-computing-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?quantum-computing-review"'
+    min: 1
+  - name: reads-quantum-computing-review
+    type: tool_used
+    tool: Read
+    input_match: 'skills/quantum-computing-review/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: shot-budget-not-matched
+    type: llm
+    criteria: >-
+      Context: the authors' rebuttal claims matched sampling budgets, "1e4 shots for VQE and 1e4 samples for VMC". The revised methods section says the VQE measures 45 Pauli groups with 1e4 shots per group per energy evaluation over 300 optimizer iterations, which is about 1.35e8 shots in total (or at least 4.5e5 shots per energy evaluation), while the VMC baseline uses 1e4 samples in total. PASS if the report states that the budgets are not matched, because 1e4 is the per-group or per-evaluation shot count rather than the VQE total, and treats the referee's budget point as unresolved. FAIL if the report accepts the matched-budget claim or does not examine it.
+  - name: offset-ratio-invalid
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: the revised manuscript adds a constant offset c = 40 to the Hamiltonian and reports the energy ratio r = (E_exact + c) / (E_VQE + c) = 30.20 / 30.26 = 0.998, with E_exact = -9.80 and E_VQE = -9.74. The ratio depends on the arbitrary constant c and tends to 1 as c grows, so it makes the VQE look closer to exact than it is. The absolute error is 0.06 and the relative error about 0.6%. PASS if the report identifies that this ratio is not meaningful because it depends on the arbitrary offset, and asks for an offset-independent measure such as the absolute or relative energy error. FAIL if the report does not criticize the offset-dependent ratio.
+  - name: unmade-change-detected
+    type: llm
+    criteria: >-
+      Context: the authors' rebuttal says they removed the extrapolation to 20 sites, but the revised conclusion still says the VQE approach "scales favorably to 20 sites". PASS if the report flags that the 20-site scaling claim is still in the revised conclusion, so the referee's point is not resolved. FAIL otherwise.
+  - name: abstract-contradicts-table
+    type: llm
+    criteria: >-
+      Context: the revised abstract still says the VQE "outperforms classical methods", while the new Table 3 gives energy errors of 6e-2 for VQE, 3e-2 for the classical VMC baseline and 1e-8 for DMRG. PASS if the report flags that the outperformance claim is contradicted by the table (VQE is less accurate than both VMC and DMRG) and treats the original DMRG point as not fully resolved until the claim is revised. FAIL if the report treats the DMRG point as resolved just because the table was added.

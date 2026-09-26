@@ -1,0 +1,59 @@
+schema_version: "1.1"
+name: rethink-sweep-limiting-choice
+description: >-
+  A request to replace a slow simulator with a GPU rewrite, where the supplied profile shows the limiting choice is recomputing time-independent work at every time point.
+tags: [quality, tier3, rethink-design]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    qsimlite（当前目录）这几个月我们每周都在抠 3–5% 的性能，感觉太 incremental 了。我在考虑干脆大改：换成 GPU tensor-network backend，再加一个描述 Hamiltonian 的小 DSL。profile、team notes 和 API 文档都在 repo 里。先别改代码，帮我判断方向该怎么定，回复就是你的建议，English, at most 400 words. 测试用 `python3 -m unittest`。
+graders:
+  - name: loads-rethink-design
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?rethink-design"'
+    min: 1
+  - name: reads-rethink-design
+    type: tool_used
+    tool: Read
+    input_match: 'skills/rethink-design/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: finds-t-independent-recomputation
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: a simulator's evolve(hamiltonian_terms, t, state, tol) is called once per time point in a 200-point sweep. Each call runs synthesize_block_encoding, which builds per-term tables and runs dense Hermiticity and norm checks. Its output depends only on the Hamiltonian, not on t. A profile shows synthesize_block_encoding takes about 78 s of 83 s (about 94%), apply_qsvt about 4.3 s (about 5%), and qsp_phases about 0.5 s.
+      PASS if the response identifies, from the profile, that the block-encoding synthesis (or its validation checks) dominates the runtime and is repeated for every time point although it does not depend on t, and names this repeated time-independent work as the main limitation. FAIL if it does not identify synthesis as the dominant cost, or treats the problem mainly as slow state-vector arithmetic that a faster backend would fix.
+  - name: rejects-misaimed-rewrite
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: a team spent several weeks making apply_qsvt 3 to 5% faster each week, and now proposes a GPU tensor-network backend plus a Hamiltonian DSL. A profile of their 200-point time sweep shows apply_qsvt (the state-vector arithmetic) is only about 5% of the runtime, while the time-independent block-encoding synthesis and its checks, repeated at every time point, take about 94%. Their stated goal is to make the 200-point sweep finish in under 20 s (it currently takes about 83 s).
+      PASS if the response recommends against making the GPU tensor-network rewrite and DSL the next step, with a reason tied to this evidence (for example that the backend would accelerate the roughly 5% part, or that the weekly apply_qsvt tuning targets the wrong part). FAIL if it endorses the GPU rewrite or DSL as the main direction, or recommends against it without any reason drawn from the profile or the goal.
+  - name: mechanism-and-expected-gain
+    type: llm
+    criteria: >-
+      Background: a time sweep currently takes about 83 s, of which about 78 s is the time-independent block-encoding synthesis repeated at 200 time points (about 0.39 s per call), about 4.3 s is state-vector arithmetic, and about 0.5 s is computing series coefficients. The goal is under 20 s.
+      PASS if the response proposes a concrete alternative with a mechanism, such as synthesizing the block encoding once per Hamiltonian and reusing it across time points, or reformulating the sweep so the t-independent Chebyshev vectors are computed once and only the t-dependent coefficients change, and ties its benefit to the measured numbers (for example an estimate of roughly 5 s, a roughly 15x speedup, or a statement that this alone meets the 20 s goal). FAIL if the alternative is only a list of features or a bigger architecture without a mechanism, or if it gives no link between the proposal and the profile numbers.
+  - name: keeps-public-signature
+    type: llm
+    criteria: >-
+      Background: the documented public API is evolve(hamiltonian_terms, t, state, tol=1e-6), stable since v1.0 and called directly by two downstream packages, and any signature change needs a one-minor-release deprecation cycle.
+      PASS if the proposed change keeps this signature working, for example by an internal cache keyed on the Hamiltonian, or by adding a new function or object for sweeps alongside the unchanged evolve, or explicitly routes any signature change through a deprecation cycle. FAIL if it proposes changing or removing evolve's signature without a deprecation path, or does not address compatibility at all while proposing an API change.
+  - name: no-file-edits
+    type: tool_used
+    tool: Edit
+    min: 0
+    max: 0
+    arm: both
+  - name: no-file-writes
+    type: tool_used
+    tool: Write
+    min: 0
+    max: 0
+    arm: both

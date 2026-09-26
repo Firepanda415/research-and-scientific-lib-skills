@@ -1,0 +1,56 @@
+schema_version: "1.1"
+name: correctness-trotter-error-default-cost
+description: >-
+  Adding per-run Trotter error information to a matrix-free simulator advertised for about 22 qubits, testing whether the default path stays free of dense or repeated reference evolutions without approval and whether a bound is labeled and documented as a bound.
+tags: [quality, tier2, scientific-computing-correctness]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    用户老是问 hsim 的 Trotter 结果到底准不准。请在 hsim/trotter.py 里给 `trotter_evolve` 返回的 `TrotterResult` 加上误差信息，让用户每次跑完都能看到这次 Trotter 近似的误差有多大。Add tests to tests/test_trotter.py and run `python3 -m unittest`. Finish with a short summary in English of what you did.
+graders:
+  - name: loads-scientific-computing-correctness
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?scientific-computing-correctness"'
+    min: 1
+  - name: reads-scientific-computing-correctness
+    type: tool_used
+    tool: Read
+    input_match: 'skills/scientific-computing-correctness/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: default-path-stays-cheap
+    type: llm
+    weight: 3
+    focus:
+      source: file
+      path: hsim/trotter.py
+    criteria: >-
+      This module implements matrix-free first-order Trotter evolution of statevectors for a simulator advertised for up to about 22 qubits. The package also has hsim.reference with dense_matrix, expm and exact_evolve, which build 2^n × 2^n matrices (O(4^n) memory, O(8^n) time per product). The module was just changed to add error information to the TrotterResult returned by trotter_evolve.
+      PASS if a default call trotter_evolve(hamiltonian, time, steps, state), with no extra arguments, performs no dense-matrix construction, no exact or dense reference evolution, no additional evolution of the state (such as rerunning the Trotter evolution with more steps or a higher order to estimate the error), and no applications of commutators or Pauli-term pairs to the state, whose cost is comparable to or larger than the evolution itself. Computing the error information from the Hamiltonian's coefficients and commutation relations, which costs no statevector work, is fine. Any such extra computation is acceptable only behind an argument that is off by default.
+      FAIL if the default call runs any of these extra computations, or if the file adds no error information at all.
+  - name: reply-discloses-cost-of-exact-error
+    type: llm
+    criteria: >-
+      Background: a user asked that every run of a Trotter simulator (advertised for up to about 22 qubits) report how large the Trotter error is. The actual error can be measured only against an exact or much finer reference evolution: a dense matrix exponential costs O(4^n) memory, and rerunning the evolution with more steps multiplies the run time. A commutator bound computed from the Hamiltonian's coefficients costs no extra evolution. The response below is the final message to the user.
+      PASS if the response makes the cost of the error information clear: it says the default error information needs no extra evolution (for example because it is a commutator or coefficient bound), and any exact-reference or finer-step comparison it mentions is described as optional or off by default, or as a proposal for the user to approve, together with its cost.
+      FAIL if the response says an exact-reference, dense or step-doubling comparison now runs on every call, or says nothing about what computing the error information costs.
+  - name: labels-bound-as-bound
+    type: llm
+    criteria: >-
+      Background: a user asked that every run of a first-order Trotter simulator report how large the Trotter error is. A cheap answer is an a priori commutator bound such as (t²/(2r)) Σ_{j<k} ||[H_j, H_k]||, which is an upper bound on the operator-norm distance between the exact and Trotterized evolutions (and so on the 2-norm distance of the final state) and can be much larger than the actual error. The response below is the final message to the user.
+      PASS if the response states what the reported number is: when it is a bound, the response calls it an upper bound (not the actual or measured error of this run) and names the quantity it bounds, such as the operator-norm or state-vector distance; when it is a measured error against a reference, the response says so and names the reference.
+      FAIL if a bound is presented as the actual error, or the response does not say what the number bounds or measures.
+  - name: formula-documented-at-definition
+    type: llm
+    focus:
+      source: file
+      path: hsim/trotter.py
+    criteria: >-
+      This module implements first-order Trotter evolution and was just changed to add error information to its results. A correct cheap choice is the first-order commutator bound ||exp(−iHt) − S_1(t/r)^r|| ≤ (t²/(2r)) Σ_{j<k} ||[H_j, H_k]||, where for Pauli strings ||[c_j P_j, c_k P_k]|| is 2|c_j c_k| when they anticommute and 0 when they commute.
+      PASS if the code that computes the error information has a docstring or comment giving its formula together with the derivation steps or a citable source, and its assumptions (for example first-order product formula, terms applied in the given order, what norm it bounds). A measured error against a reference passes if its docstring states the reference, how the distance is computed and its cost.
+      FAIL if the error computation has no such documentation, or the file adds no error information.

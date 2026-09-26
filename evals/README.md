@@ -51,6 +51,26 @@ Skill graders do not observe file reads. The writing hook names a `SKILL.md` pat
 
 The graders count Skill calls without checking their order or whether the agent followed the loaded guidance. When a run loads Ponytail alongside another workflow, inspect its trace to check that the owning workflow was loaded first. For the retirement case, check whether the response separates evidence that an interface is callable from evidence that it is worth maintaining. For the remediation case, check whether it compares fixes at the shared contract with adapters at individual callers while preserving scientific meaning.
 
+## Quality evals
+
+The routing cases check which skill loads. The cases in `evals-quality/` check what a skill contributes to the result. Each case pairs a realistic request with graders: regular expressions for checkable rules, such as numbers kept from the source, house punctuation and prompt leakage, and rubric graders that another model judges. The default run adds the no-plugin arm, so the report gives the score with the plugin, the score without it, and their difference.
+
+`evals-quality/variants.yaml` defines ablation variants that remove named sections of a skill in the staged copy only, for example the pattern catalogue of the writing skill. Run the same cases on the unmodified plugin and on each variant with `--ablation none`, and compare the responses and the session cost per case as described below. A part whose removal changes neither beyond the spread between repeated runs is a candidate for removal or for a conditional reference. The runner fails when a named heading no longer exists.
+
+`scripts/run-quality-evals.py` stages the package, applies `--variant` when given, and prints or runs the command. By the maintainer's choice on 2026-09-26, the sessions under test run `claude-opus-5-5` at effort `medium`, set through `CLAUDE_CODE_EFFORT_LEVEL`, and the rubric graders also use `claude-opus-5-5`. The same approval rule as for the routing suite applies, and `--run` needs `--max-cost-usd` and `--results-dir`. Eval sessions use the Claude Code CLI's own login, not the desktop app's, so run `claude auth login` once first. A run that fails to start still passes the graders that require an absence, so exclude runs with an error before comparing scores.
+
+Tags group the cases. `writing` and `email` cover the writing route and work-email, and their `variant` subset serves the ablation variants above. `tier2` covers five workflow skills (scientific-library-review, scientific-computing-correctness, ponytail, write-implementation-job-prompts and maintain-project-memory) at three runs per arm. `tier3` screens the remaining skills, except ponytail-help, ponytail-gain and ponytail-debt, and is meant for `--runs 1`. Most `tier2` and `tier3` cases seed their workspace from a `scaffold.sh` in the case directory, so pass `--scaffold` and `--allow-tools Write Edit`. The eval sandbox refuses any `Bash` grant on a machine whose Docker configuration directory holds symbolic links, such as those Docker Desktop installs. No case therefore needs to run code, and graders about tests check that a response does not claim a run it could not perform. On 2026-09-26 each of the three groups cost about 36 USD at list price, including 4 to 13 USD for the rubric judge.
+
+```sh
+python3 scripts/run-quality-evals.py
+python3 scripts/run-quality-evals.py --variant no-patterns --ablation none --tag variant
+python3 scripts/run-quality-evals.py --tag tier2 --scaffold --allow-tools Write Edit
+```
+
+The rubric judge receives only its criteria and the agent's final response, not the prompt. A criterion therefore states every fact it checks, such as the original text of a copyedit or the points supplied for a letter. The result JSON keeps a final response only as the evidence of a rubric grader, so every case whose responses will be compared needs at least one. `--keep-temp` also keeps each run's directory, with its trace and the files the agent changed. Under `--ablation none`, the graders that serve as indicators in the default run, those with `arm: with-only` and every `tool_used: Skill` grader, count toward the score. Compare a variant with the unmodified plugin only on graders that both runs score.
+
+Absolute graders separate the arms only where the model fails without the plugin. In the first run of these cases, on 2026-09-26, Claude Opus 5.5 without the plugin passed most of them. A blind pairwise comparison of the stored responses was far more sensitive. An Opus 5.5 judge that saw only the request and two unlabelled responses in random order preferred the response with the plugin in 18 of 24 pairs and the other response in 2. Compare variants in the same way, because their differences are smaller than the plugin's. The cases are short, so they do not show the effect of guidance that matters only in long documents, such as structure and continuity across sections.
+
 ## Usage in real sessions
 
 `scripts/skill-usage.py` reports which skills recent Claude Code and Codex sessions actually loaded, using the local transcripts of both hosts, including archived Codex sessions. It calls no model and needs only the Python standard library.

@@ -1,0 +1,42 @@
+schema_version: "1.1"
+name: coverletter-readiness-check
+description: >-
+  Check whether the user's existing cover letter is ready for a first submission, testing whether the check compares metadata and claims with the manuscript, catches resubmission leftovers and an undefined manuscript macro, and treats declarations and an open placeholder as blockers that need confirmation.
+tags: [quality, tier3, journal-cover-letter]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    明天投 Physical Review Applied, first submission, Regular Article. Is cover_letter.tex ready to submit? The manuscript is paper/main.tex. Just tell me what is wrong, I'll fix it myself. Don't edit files.
+graders:
+  - name: loads-journal-cover-letter
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?journal-cover-letter"'
+    min: 1
+  - name: reads-journal-cover-letter
+    type: tool_used
+    tool: Read
+    input_match: 'skills/journal-cover-letter/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: not-ready-with-declaration-blockers
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a cover letter for a first submission contains an unresolved placeholder "[AUTHOR CONFIRMATION REQUIRED: preprint status]" and asserts "This manuscript is not under consideration elsewhere" and "The authors declare no competing interests" and "On behalf of all authors" without any record that the authors confirmed these facts. PASS if the response judges the letter not ready to submit, names the unresolved preprint placeholder as a blocker, and says that the factual declarations (at least not-under-consideration and competing interests) need confirmation by the authors or a submission record rather than being accepted as boilerplate. FAIL if the response calls the letter ready, or does not mention the placeholder, or does not raise confirmation of the declarations.
+  - name: source-mismatches
+    type: llm
+    criteria: >-
+      Context: the manuscript title is "Shot-efficient iterative amplitude estimation with adaptive confidence intervals", the corresponding email is w.solberg@harlow.example.edu, and the manuscript reports a factor of 2.4 fewer oracle queries in noiseless simulation. The cover letter gives the title "Adaptive-confidence amplitude estimation with fewer shots", the email wsolberg@harlow.example.org, and claims a factor of 4. PASS if the response identifies all three mismatches: the title, the email, and the factor 4 versus 2.4. FAIL if any of the three is missing.
+  - name: resubmission-leftover
+    type: llm
+    criteria: >-
+      Context: this is a first submission, but the cover letter says "We have addressed all comments raised by the reviewers in the previous round and highlighted the changes in red." PASS if the response flags this sentence as a leftover that does not belong in a first-submission letter. FAIL otherwise.
+  - name: undefined-macro
+    type: llm
+    criteria: >-
+      Context: the cover letter uses the macro \QAE, which is defined only in the manuscript's preamble, not in the cover letter file, so the standalone letter will fail to compile or show an undefined-control-sequence error. PASS if the response flags that \QAE is undefined in the cover letter. FAIL otherwise.

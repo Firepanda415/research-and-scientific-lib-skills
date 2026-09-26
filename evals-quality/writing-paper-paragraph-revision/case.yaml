@@ -1,0 +1,70 @@
+schema_version: "1.1"
+name: writing-paper-paragraph-revision
+description: >-
+  Revision of an overclaiming paragraph for a journal, keeping every claim and condition.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Revise this paragraph for a physics journal so it states its claims plainly. Keep every claim, number and condition. Reply with only the revised paragraph.
+
+    Our groundbreaking method dramatically outperforms all existing approaches, achieving a remarkable 3.2x reduction in CNOT count on the tested benchmarks (up to 12 qubits), which unlocks a transformative path toward scalable quantum simulation. It's worth noting that these results were obtained on noiseless simulators and that the comparison uses each baseline's published default settings.
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-3.2x
+    type: regex
+    pattern: '3\.2'
+    match: contains
+  - name: keeps-12-qubits
+    type: regex
+    pattern: '\b12\b'
+    match: contains
+  - name: keeps-noiseless
+    type: regex
+    pattern: 'noiseless'
+    flags: i
+    match: contains
+  - name: keeps-default-settings
+    type: regex
+    pattern: 'default'
+    flags: i
+    match: contains
+  - name: drops-hype
+    type: regex
+    pattern: 'groundbreaking|transformative|remarkable|unlocks|dramatically'
+    flags: i
+    match: not_contains
+  - name: claims-not-strengthened
+    type: llm
+    criteria: >-
+      The text revises the original paragraph below. Removing its promotional words is expected. The revision keeps every claim at its original scope: the method outperforms all existing approaches, it reduces the CNOT count by a factor of 3.2 on the tested benchmarks of up to 12 qubits, and this offers a path toward scalable quantum simulation. It keeps both conditions: noiseless simulators and each baseline's published default settings. It adds no claim, such as results on hardware or beyond the tested benchmarks, and it neither strengthens, weakens nor drops a claim. Original paragraph: "Our groundbreaking method dramatically outperforms all existing approaches, achieving a remarkable 3.2x reduction in CNOT count on the tested benchmarks (up to 12 qubits), which unlocks a transformative path toward scalable quantum simulation. It's worth noting that these results were obtained on noiseless simulators and that the comparison uses each baseline's published default settings."
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

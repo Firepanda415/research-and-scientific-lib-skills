@@ -1,0 +1,42 @@
+schema_version: "1.1"
+name: presub-rewrite-trace
+description: >-
+  Judge a coauthor's claim that a sign error in the user's rewritten section blocks submission, testing whether the check sets severity by whether the local correction preserves the bound and table values, and traces symbols and labels that the rewrite removed.
+tags: [quality, tier3, pre-submission-reviewer]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 25
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I rewrote Sec. 3 of our paper yesterday (paper/main.tex). My coauthor says Eq. (3) has a sign error, wants to call it a critical issue, and wants to delay submission. Is he right, and did the rewrite break anything else? Only check the rewrite and its consequences, not the whole paper. The table values come from scripts/steps.py (python3 scripts/steps.py). Reply in the chat, don't edit files.
+graders:
+  - name: loads-pre-submission-reviewer
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?pre-submission-reviewer"'
+    min: 1
+  - name: reads-pre-submission-reviewer
+    type: tool_used
+    tool: Read
+    input_match: 'skills/pre-submission-reviewer/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: sign-error-severity
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a manuscript writes the Baker-Campbell-Hausdorff expansion as exp(-iAd) exp(-iBd) = exp(-i(A+B)d + (d^2/2)[A,B] + O(d^3)), where d is the step length. The correct second-order term is -(d^2/2)[A,B], because [-iAd, -iBd] = -d^2 [A,B]. The per-step error bound d^2 C / 2 with C = ||[A,B]||, the total bound t^2 C / (2r), the step-count formula r = ceil(t^2 C / (2 eps)) and the table of step counts depend only on the norm of the commutator, so they stay correct. A coauthor wants to call the sign error critical and delay submission. PASS if the response confirms the sign error and concludes that it is a local correction that leaves the bound, the step-count formula and the table values unchanged, so it is minor rather than critical, while recommending the fix. FAIL if the response denies the sign error, rates it critical or submission-blocking, or does not say whether the downstream bound and results are affected.
+  - name: orphaned-tau
+    type: llm
+    criteria: >-
+      Context: the rewritten Sec. 3 of a manuscript now calls the step length delta = t/r and no longer defines tau. The following section (Gate cost, Sec. 4) still writes "Each step of length tau" and G = (t/tau)(g_A + g_B). PASS if the response flags that tau in the gate-cost section is undefined after the rewrite, or should become delta. FAIL otherwise.
+  - name: broken-equation-reference
+    type: llm
+    criteria: >-
+      Context: the rewrite renamed the bound's label to eq:first-order-bound, but the step-count section still cites Eq.~\eqref{eq:trotter-bound}, a label that no longer exists, so the reference prints as ?? in the PDF. PASS if the response flags the stale eq:trotter-bound reference or the resulting broken reference. FAIL otherwise.
+  - name: checks-table-values
+    type: llm
+    criteria: >-
+      Context: the manuscript's table lists first-order step counts r = 2.0e3 for (t = 1, C = 4, eps = 1e-3), 2.0e5 for (t = 10, C = 4, eps = 1e-3) and 5.0e5 for (t = 10, C = 1, eps = 1e-4), which agree with r = ceil(t^2 C / (2 eps)). PASS if the response reports that at least one table value was checked, by running the script or by computing it from the formula, and found consistent with the bound. FAIL if the response makes no check of the reported values.

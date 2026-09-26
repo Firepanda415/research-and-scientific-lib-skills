@@ -1,0 +1,51 @@
+schema_version: "1.1"
+name: animation-plan-paper-explainer
+description: >-
+  Plan and script a narrated explainer video of a preprint without rendering it, testing a sourced claim map, narration that keeps the paper's conditions, a check of the repository's plot data against the paper, and speech-specific text.
+tags: [quality, tier3, research-explainer-animation]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I'd like a narrated explainer video of about three and a half minutes for our COT preprint (paper/paper.md; the code repo is checked out in code/). It will be animated in Manim and rendered on my workstation later, so for now I need the production plan and the full narration script. Put both in video/plan.md. In your reply, give me a short summary (under 200 words) of anything I need to decide or check.
+graders:
+  - name: loads-research-explainer-animation
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-explainer-animation"'
+    min: 1
+  - name: reads-research-explainer-animation
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-explainer-animation/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: sourced-claim-map
+    type: llm
+    weight: 2
+    focus: {source: file, path: video/plan.md}
+    criteria: >-
+      This is a production plan and narration script for an explainer video of a preprint. The preprint's numbers are in its Abstract ("up to 3.1x fewer CNOT gates", six Hamiltonians, up to 12 qubits), Table 2 (CNOT counts per Trotter step and ratios 1.4, 1.7, 1.8, 1.9, 2.2 and 3.1 for six Hamiltonians), Section 3.2 (Trotter error differs by less than 4%) and Section 4 (limitations). PASS if the plan attributes each number that the narration or on-screen text uses to a specific place in the paper (for example "Table 2", "Sec. 3.2", "Abstract") and marks any number not printed in the paper, such as a median ratio of about 1.85 or a percentage reduction computed from two table entries, as derived or computed. FAIL if the quoted numbers carry no source locations, or if a computed number is presented as if the paper stated it. FAIL also if the file is missing.
+  - name: narration-keeps-conditions
+    type: llm
+    weight: 2
+    focus: {source: file, path: video/plan.md}
+    criteria: >-
+      Facts from the preprint: COT's CNOT savings per Trotter step range from 1.4x (H2) to 3.1x (the 12-qubit 2D transverse-field Ising model), with 1.7x to 2.2x on the other instances. All counts are compiled for all-to-all connectivity with no routing, and the paper states that routing on a hardware coupling map may undo part of the cancellation. Only first-order formulas and at most 12 qubits were studied. The term grouping is taken from prior work (Ref. [7]); COT's contribution is the ordering of terms across a step. PASS if the narration script (a) presents 3.1x as the best case or gives the range rather than stating a general 3x saving, (b) states the all-to-all or no-routing condition or the routing limitation, and (c) credits Ref. [7] or the prior grouping method for what COT builds on. FAIL if any of (a), (b) or (c) is missing from the narration.
+  - name: checks-repo-data-against-paper
+    type: llm
+    focus: {source: file, path: video/plan.md}
+    criteria: >-
+      Context: the code repository ships code/data/cnot_counts.csv, whose header says it is a later benchmark run (cot-compiler v1.2, 2026-05-14) compiled for a heavy-hex 127-qubit coupling map with SABRE routing. Its CNOT counts and ratios (for example 2.1x for the 2D Ising model instead of 3.1x) do not match Table 2 of the paper, which is for all-to-all connectivity with no routing. PASS if the plan notes that this CSV comes from a different, routed setup or does not match Table 2, and plots the Table 2 values for the paper's results or labels any use of the CSV as the routed run. FAIL if the plan plots the CSV as the paper's results, or never mentions the mismatch.
+  - name: separate-spoken-text
+    type: llm
+    focus: {source: file, path: video/plan.md}
+    criteria: >-
+      A narration script for text-to-speech should give, for sentences containing acronyms, chemical formulas, symbols or numbers with units, a spoken form separate from the subtitle text, for example "CNOT" spoken as "see-not", "H2" as "H two", "LiH" as "lithium hydride", "3.1x" as "three point one times", or a spelled-out acronym. PASS if the script provides such separate spoken text or explicit pronunciation overrides for at least three distinct terms or numbers. FAIL if the narration is given only as a single text for both subtitles and speech with no spoken forms.
+  - name: reply-names-listening-and-render-checks
+    type: llm
+    criteria: >-
+      Context: the assistant planned and scripted a narrated explainer video that has not yet been synthesized or rendered, and it cannot hear audio. PASS if the reply both (1) asks the user to listen for pronunciation and names at least one specific word or term at risk (for example CNOT, Trotterization, LiH, a person's name, or an acronym), and (2) says that the rendered video still has to be checked, naming at least one concrete check such as inspecting frames for clipped or overlapping text, subtitle and speech alignment, or comparing on-screen numbers with the paper. FAIL if either part is missing.

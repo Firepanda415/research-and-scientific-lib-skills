@@ -1,0 +1,66 @@
+schema_version: "1.1"
+name: writing-referee-reply-zh-brief
+description: >-
+  An English reply to a referee from Chinese instructions that include something to leave out.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    审稿人意见：“The authors do not compare against HHL.” 请写一段英文回复，只给回复正文。要点：HHL 需要量子相位估计，在我们考虑的规模下，资源比我们的方法高两个数量级（附录 C 表 3）；我们在第 4.2 节第二段加了一段说明。不要提我们之前试过实现 HHL 但没跑通。
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: cites-appendix-c
+    type: regex
+    pattern: 'Appendix C'
+    match: contains
+  - name: cites-table-3
+    type: regex
+    pattern: 'Table 3'
+    match: contains
+  - name: cites-section-4.2
+    type: regex
+    pattern: 'Section 4\.2'
+    match: contains
+  - name: omits-failed-attempt
+    type: regex
+    pattern: 'tried|attempt|did not (work|succeed)|unsuccessful|previously'
+    flags: i
+    match: not_contains
+  - name: no-chinese-in-output
+    type: regex
+    pattern: '[\u4e00-\u9fff]'
+    match: not_contains
+  - name: answers-the-point
+    type: llm
+    criteria: >-
+      The reply answers the referee comment "The authors do not compare against HHL." directly. It explains that HHL requires quantum phase estimation and needs two orders of magnitude more resources than the authors' method at the considered scale (Appendix C, Table 3), and it points to the paragraph added as the second paragraph of Section 4.2. It adds no claim beyond these points and says nothing about an earlier failed implementation.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

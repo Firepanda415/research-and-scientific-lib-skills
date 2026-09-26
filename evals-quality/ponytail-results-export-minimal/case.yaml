@@ -1,0 +1,45 @@
+schema_version: "1.1"
+name: ponytail-results-export-minimal
+description: >-
+  Adding JSON and CSV saving of benchmark results when the user mentions possible future formats and column sets, testing that the change adds no writer hierarchy, registry or column option and that the report does not list speculative extensions.
+tags: [quality, tier2, ponytail]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    我们需要把 benchmark results 存下来。Please add a way to save a list of `BenchResult` to a JSON file and to a CSV file (all fields, one row per result in the CSV). Put it in `qbench/io.py` next to the loader. We'll probably want HDF5 and maybe Parquet at some point, and different groups want different column sets, but right now I only need JSON and CSV with all fields. Add tests and run them with `python3 -m unittest`.
+graders:
+  - name: loads-ponytail
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?ponytail"'
+    min: 1
+  - name: reads-ponytail
+    type: tool_used
+    tool: Read
+    input_match: 'skills/ponytail/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: no-speculative-abstraction
+    type: llm
+    weight: 2
+    focus: {source: file, path: qbench/io.py}
+    criteria: >-
+      This Python module for benchmark results originally contained only SCHEMA_VERSION = 1 and a function load_results(path) that reads JSON of the form {"schema": 1, "results": [...]} into BenchResult records. The task was to add saving of a list of BenchResult records to a JSON file and to a CSV file with all fields. The user mentioned that HDF5, Parquet and per-group column sets might be wanted some day but asked only for JSON and CSV with all fields. PASS if the added saving code consists of plain functions (for example one for JSON and one for CSV) and the file adds none of the following: a new class definition of any kind (writer, exporter, format or configuration class; using standard-library classes such as csv.DictWriter is fine), an abstract base class or Protocol, a registry or dictionary mapping format names to writer functions, a parameter for choosing a subset or order of columns or fields, or stubs, placeholders or TODO comments for HDF5 or Parquet. Choosing JSON or CSV by file extension inside one function is acceptable. FAIL if any of the listed items is present.
+  - name: no-class-or-interface
+    type: regex
+    target: {source: file, path: qbench/io.py}
+    pattern: '\bclass\s+\w+|abstractmethod|\bProtocol\b|\bABC\b'
+    match: not_contains
+  - name: json-matches-loader
+    type: llm
+    focus: {source: file, path: qbench/io.py}
+    criteria: >-
+      The module contains load_results(path), which reads a JSON object {"schema": 1, "results": [ {field: value, ...}, ... ]} and rejects any other schema value. PASS if the added JSON saving code writes exactly that layout: an object whose "schema" key is 1 (or SCHEMA_VERSION) and whose "results" key holds one object per BenchResult with its fields (name, n_qubits, depth, shots, seconds, fidelity), so that load_results can read the file back. FAIL if it writes a bare list, omits the schema key, or uses another layout.
+  - name: report-without-future-list
+    type: llm
+    criteria: >-
+      This is a coding agent's final report after adding JSON and CSV saving of benchmark results to a small Python package. The user had said that HDF5, Parquet and per-group column sets might be wanted later but asked only for JSON and CSV with all fields. PASS if the report states what was added and whether the tests were run, and mentions the deferred formats or column selection in at most one brief sentence or not at all. FAIL if it contains a list, a section, or two or more sentences of suggested future extensions, design options or next steps, such as how to add HDF5 or Parquet, a column-selection option, a writer interface, a registry or a plugin mechanism.

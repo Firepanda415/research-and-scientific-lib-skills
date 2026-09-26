@@ -1,0 +1,44 @@
+schema_version: "1.1"
+name: ideas-cross-field-mlmc-transfer
+description: >-
+  A proposed transfer of multilevel Monte Carlo to Trotterized observable estimation whose gain depends on coupled samples that independent quantum shots cannot provide.
+tags: [quality, tier3, develop-research-ideas]
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Idea I want a second opinion on before I spend the next month on it.
+
+    In computational finance, multilevel Monte Carlo (MLMC) cuts the cost of estimating E[P] for an SDE from O(eps^-3) to O(eps^-2). Level l uses step size h_l = h_0 2^{-l}, and E[P_L] = E[P_0] + sum_{l=1}^{L} E[P_l - P_{l-1}]. Most samples go to the cheap coarse levels because Var[P_l - P_{l-1}] decays with l.
+
+    My transfer: for Trotterized simulation of <O(t)> on our 2D Heisenberg model (24 qubits, t = 5), let level l be second-order Trotter with step h_l = 0.5 * 2^{-l}. I estimate <O> at the finest level with the same telescoping sum. Each correction term E[O_l - O_{l-1}] is estimated by running the level-l and level-(l-1) circuits separately and measuring each with its own independent shots. Coarse circuits are shallow, so most shots are cheap. I expect the same eps^-3 to eps^-2 gain in total gates times shots.
+
+    Plan: implement the full MLMC pipeline in our simulator library (level scheduler, optimal sample allocation, GPU batching), then run the 24-qubit experiments. Is this worth doing? Reply in English, at most 400 words.
+graders:
+  - name: loads-develop-research-ideas
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?develop-research-ideas"'
+    min: 1
+  - name: reads-develop-research-ideas
+    type: tool_used
+    tool: Read
+    input_match: 'skills/develop-research-ideas/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: finds-missing-coupling
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: in multilevel Monte Carlo for SDEs, the gain comes from coupling adjacent levels: P_l and P_{l-1} are computed from the same random path (common random numbers), so Var[P_l - P_{l-1}] decays with l. In the proposed quantum transfer, the correction E[O_l - O_{l-1}] is estimated by measuring the level-l and level-(l-1) Trotter circuits separately with independent shots. Then Var[O_l - O_{l-1}] is about Var[O_l] + Var[O_{l-1}], which is set by projective shot noise and does not decay with l, so the telescoping sum brings no variance reduction and can cost more than measuring the finest level directly.
+      PASS if the response identifies that the proposed scheme lacks the coupling between levels that MLMC's gain depends on, and concludes that with independent shots the level-difference variance does not decay, so the expected eps^-3 to eps^-2 gain does not follow. FAIL if it endorses the expected gain, or criticizes the idea only on other grounds (implementation effort, Trotter error scaling, hardware noise) without identifying the missing coupling or the non-decaying difference variance.
+  - name: cheap-check-before-pipeline
+    type: llm
+    criteria: >-
+      Background: the user planned to implement a full MLMC pipeline (level scheduler, sample allocation, GPU batching) and then run 24-qubit experiments.
+      PASS if the response advises against building the full pipeline and running the 24-qubit experiments first, and proposes a cheaper check that can decide the question, such as a short variance calculation or a small simulation on a few qubits that measures the variance of the level-difference estimator. FAIL if it endorses building the pipeline first, or gives no cheaper decisive check.
+  - name: clear-decision-and-alternative
+    type: llm
+    criteria: >-
+      PASS if the response opens with a clear decision on the idea as stated (for example set it aside, narrow it, or reframe it) and names either a condition under which a transfer could work (a genuine coupling between levels, or measuring a quantity whose variance itself shrinks with level) or a better-matched existing technique for reducing Trotter bias, such as Richardson extrapolation. FAIL if the decision is missing or appears only at the end after a long discussion, or if it names neither a condition for a working transfer nor a better-matched alternative.

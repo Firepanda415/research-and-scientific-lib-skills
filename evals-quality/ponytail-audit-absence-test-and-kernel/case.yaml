@@ -1,0 +1,49 @@
+schema_version: "1.1"
+name: ponytail-audit-absence-test-and-kernel
+description: >-
+  Repo-wide Ponytail audit of a sparse time-evolution package with absence tests for removed functions, a "was removed" comment, unread options and a re-implemented isclose, testing complete deletion of retirement residue while keeping the sparse kernel.
+tags: [quality, tier3, ponytail-audit]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 25
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Please do a Ponytail audit of the hamevo repo before the 0.5 release. Report only; leave the code as it is. Tests: `python3 -m unittest`.
+graders:
+  - name: loads-ponytail-audit
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?ponytail-audit"'
+    min: 1
+  - name: reads-ponytail-audit
+    type: tool_used
+    tool: Read
+    input_match: 'skills/ponytail-audit/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: tagged-finding-with-path
+    type: regex
+    pattern: '(?:delete|stdlib|native|yagni|shrink)\W{0,3}:[^\n]*\[[^\]\n]*\.(?:py|txt|toml|cfg)[^\]\n]*\]'
+    flags: i
+    match: contains
+  - name: deletes-removal-residue
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: the audited repository has tests/test_removed_api.py, whose only two tests assert that hamevo.evolve has no attribute old_expm and hamevo has no attribute dense_expm. Nothing in the repository documents a compatibility, security or product requirement that these names stay absent. hamevo/evolve.py also carries the comment "# old_expm() was removed in v0.4; use evolve() instead." with no reason why old_expm must stay absent. Under the audit's rule, tests that only check that removed names stay absent, and comments that only record a removal, protect no current behavior and should be deleted; history belongs in version control or a changelog. PASS if the audit recommends deleting tests/test_removed_api.py (or both of its tests). Also recommending deletion of the "was removed" comment is expected but not required. FAIL if it does not recommend deleting the absence tests, or recommends keeping them as regression protection.
+  - name: keeps-sparse-kernel
+    type: llm
+    criteria: >-
+      Context: hamevo stores Hamiltonians in a hand-written compressed sparse row (CSR) class with a matvec method, and the README says this is what lets 18-qubit chains (262,144 amplitudes, about 5 million nonzeros) fit in memory, where a dense matrix would need 2^36 entries. The package has no dependencies. PASS if the audit does not recommend replacing the CSR representation or its matvec with a dense matrix, and does not recommend adding a dependency such as SciPy or NumPy as a simplification without addressing the zero-dependency setup. Saying the CSR code is justified, or not discussing it, is fine. FAIL if it recommends a dense matrix, or recommends swapping CSR for a new dependency without noting that the package currently has no dependencies.
+  - name: finds-unread-options-and-isclose
+    type: llm
+    criteria: >-
+      Context: hamevo/options.py defines a dataclass Options with fields order, steps, precision and verbose; only order and steps are read anywhere. hamevo/numeric.py defines isclose(a, b, rel, abs_) as abs(a - b) <= max(rel * max(abs(a), abs(b)), abs_), which is the formula of the standard library's math.isclose. PASS if the audit recommends removing the unread precision and verbose fields and recommends replacing the hand-written isclose with math.isclose. FAIL if it misses either.
+  - name: no-edits
+    type: tool_used
+    tool: Edit
+    min: 0
+    max: 0
+    arm: both

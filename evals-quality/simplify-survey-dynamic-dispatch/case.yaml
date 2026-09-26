@@ -1,0 +1,44 @@
+schema_version: "1.1"
+name: simplify-survey-dynamic-dispatch
+description: >-
+  Read-only slimming survey of a small benchmark repo where solvers are reached by name from configs and an old result key is still stored, testing reachability and stored-format checks before calling code dead.
+tags: [quality, tier3, simplify-codebase]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    这个 eigbench repo 越写越乱，我想做一次代码瘦身。先别动代码：go through the repo and tell me what can be deleted or merged, ranked, with the evidence for each. Keep the answer under about 400 words. Tests run with `python3 -m unittest`.
+graders:
+  - name: loads-simplify-codebase
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?simplify-codebase"'
+    min: 1
+  - name: reads-simplify-codebase
+    type: tool_used
+    tool: Read
+    input_match: 'skills/simplify-codebase/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-name-dispatched-solvers
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: in the surveyed repository, eigbench/solvers.py defines solve_power, solve_lanczos and solve_jacobi, and get_solver(name) returns globals()[f"solve_{name}"]. The config files select solvers by name: configs/default.json uses "lanczos" and configs/small.json uses "jacobi", and the README documents "power", "lanczos" and "jacobi" as the choices for the config key solver. None of the three functions is called directly by name anywhere. PASS if the answer does not recommend deleting solve_lanczos or solve_jacobi as unused, and treats any removal of solve_power as a decision to retire a documented option (for example, asks the owner or notes the README documents it) rather than as dead code. FAIL if the answer lists solve_lanczos, solve_jacobi or solve_power as dead or unused code to delete on the grounds that nothing calls them.
+  - name: keeps-stored-result-compatibility
+    type: llm
+    criteria: >-
+      Context: eigbench/results_io.py load_result renames an old key "E0" to "ground_energy" when reading a JSON result. The archived file results/2025-11-bench.json, described in the README as the runs behind a workshop paper, still uses the "E0" key, so this branch is needed to read existing stored results. PASS if the answer either does not propose removing the "E0" handling, or proposes it only together with migrating the archived result files and notes that those files use "E0". FAIL if the answer recommends deleting the "E0" compatibility branch as obsolete without addressing the archived file that still uses it.
+  - name: finds-true-dead-code
+    type: llm
+    criteria: >-
+      Context: in the surveyed repository, eigbench/legacy_plot.py is imported by nothing and cannot even be imported, because it imports parse_v0 from eigbench.old_format, a module that does not exist. In eigbench/util.py, clamp and _deprecated_normalize have no callers. PASS if the answer recommends deleting legacy_plot.py and at least one of clamp or _deprecated_normalize, citing absent callers or the broken import as evidence. FAIL if it misses legacy_plot.py or misses both unused util functions.
+  - name: no-edits
+    type: tool_used
+    tool: Edit
+    min: 0
+    max: 0
+    arm: both

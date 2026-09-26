@@ -1,0 +1,44 @@
+schema_version: "1.1"
+name: rlog-observation-entry-from-notes
+description: >-
+  Turn raw scratch notes and two run logs into a notebook entry returned in chat, testing whether the entry keeps result-sensitive parameters, records the evidence that contradicts the author's own guess, stays within the checked scope, and invents no expectations or files.
+tags: [quality, tier3, write-research-log]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 15
+  timeout_seconds: 600
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Can you turn today's scratch notes (scratch/2026-09-26-raw.txt) and the two run logs in runs/ into a clean entry for my research notebook? Just give me the entry here; I'll paste it in myself.
+graders:
+  - name: loads-write-research-log
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?write-research-log"'
+    min: 1
+  - name: reads-write-research-log
+    type: tool_used
+    tool: Read
+    input_match: 'skills/write-research-log/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: no-file-written
+    type: tool_used
+    tool: Write
+    min: 0
+    max: 0
+    arm: both
+  - name: records-contradicting-evidence
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: the author's scratch notes guess that the energy drift in a TEBD run is caused by truncation ("prob truncation?? chi too small"). The logs show relative energy drift 2.1e-3 at t=10 with bond dimension chi=64 and 2.0e-3 with chi=128, while the maximum discarded weight falls from 3.4e-7 to 9.7e-11. So increasing chi by 2x cut the truncation error by more than three orders of magnitude but left the drift essentially unchanged, which argues against truncation as the main cause. PASS if the entry records both drift values (or states they are essentially equal) together with the much smaller discarded weight at chi=128, and states that this does not support, or contradicts, truncation as the cause. FAIL if the entry presents truncation as the cause or as the leading explanation, or omits the chi=128 comparison.
+  - name: keeps-result-parameters
+    type: llm
+    criteria: >-
+      Facts from the notes and logs: XXZ chain with L=40, Jz=1.5, open boundaries, Neel initial state; second-order TEBD with dt=0.02 to t_final=10; bond dimensions chi=64 and chi=128; code commit c41f9e2; relative energy drift 2.1e-3 (chi=64) and 2.0e-3 (chi=128) at t=10; log files runs/tebd_chi64.log and runs/tebd_chi128.log. PASS if the entry states all of these: L=40, Jz=1.5, second order, dt=0.02, both chi values, commit c41f9e2, both drift values, and a reference to the log files by path. FAIL if any of them is missing or altered.
+  - name: scoped-and-no-invented-expectations
+    type: llm
+    criteria: >-
+      Context: the notes say the staggered magnetization of the chi=64 and chi=128 runs agrees to about 1e-5 up to t=5 and that later times were not compared. The notes' next steps are "try dt=0.01 tomorrow?" and "compare magnetization past t=5"; they contain no prediction or expected result for those steps. PASS if (1) the entry limits the magnetization agreement to t up to 5 (or says later times were not compared), and (2) the entry does not state a prediction or expected quantitative outcome for the next steps as the author's expectation or as a finding (for example "halving dt should reduce the drift fourfold"). A next step listed as a plan or an open question is acceptable, and an alternative cause such as Trotter time-step error may be named if it is marked as untested. FAIL if the entry claims agreement over the whole run, or adds an expected outcome that the notes do not contain.

@@ -1,0 +1,49 @@
+schema_version: "1.1"
+name: physics-dispersive-study-note
+description: >-
+  Write a reusable Markdown study note deriving the dispersive readout Hamiltonian for a transmon and resonator with supplied parameters, testing scale conditions, statement status, the transmon correction to the two-level result, and math formatting that survives a Markdown preview.
+tags: [quality, tier3, physics-from-math-explainer]
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I'm preparing for group meeting and want a study note on how the dispersive readout Hamiltonian comes out of Jaynes-Cummings for our transmon-resonator device: omega_q/2pi = 6.0 GHz, omega_r/2pi = 7.2 GHz, g/2pi = 90 MHz, transmon anharmonicity alpha/2pi = -220 MHz. I read my notes in VS Code's Markdown preview with math rendering, and I'll keep this one for reference. Write it in English to notes/dispersive_readout.md and plug in our numbers where it helps. In your reply, just tell me the main result in a few sentences.
+graders:
+  - name: loads-physics-from-math-explainer
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?physics-from-math-explainer"'
+    min: 1
+  - name: reads-physics-from-math-explainer
+    type: tool_used
+    tool: Read
+    input_match: 'skills/physics-from-math-explainer/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: markdown-safe-delimiters
+    type: regex
+    target: {source: file, path: notes/dispersive_readout.md}
+    pattern: '(^|[^\\])\\\[|(^|[^\\])\\\(|^[ \t]*=[ \t]*$'
+    flags: m
+    match: not_contains
+  - name: no-raw-pipe-kets
+    type: regex
+    target: {source: file, path: notes/dispersive_readout.md}
+    pattern: '\|[^|$\n]{0,20}\\rangle'
+    match: not_contains
+  - name: conditions-and-status
+    type: llm
+    weight: 2
+    focus: {source: file, path: notes/dispersive_readout.md}
+    criteria: >-
+      Facts for a transmon-resonator device with omega_q/2pi = 6.0 GHz, omega_r/2pi = 7.2 GHz and g/2pi = 90 MHz: the Jaynes-Cummings form comes from the Rabi-type coupling by a rotating-wave approximation that drops the counter-rotating terms, which needs |g| much smaller than omega_q + omega_r (about 13.2 GHz here). The dispersive Hamiltonian comes from second-order perturbation theory or a Schrieffer-Wolff transformation, which needs |g| much smaller than |Delta| with Delta = omega_q - omega_r = 2pi x (-1.2 GHz), so g/|Delta| = 0.075, and a resonator photon number much smaller than the critical number n_crit = Delta^2/(4 g^2), about 44 here. PASS if the note labels the JC step as an RWA (approximation) and the dispersive step as perturbative or effective (not exact), and states both dispersive conditions, |g| << |Delta| and n << n_crit, with n_crit given by the formula or a value near 44. FAIL if either dispersive condition is missing or the dispersive Hamiltonian is presented as exact.
+  - name: transmon-correction-and-convention
+    type: llm
+    focus: {source: file, path: notes/dispersive_readout.md}
+    criteria: >-
+      Facts: for a two-level qubit the dispersive shift is chi = g^2/Delta, which is 2pi x (-6.75 MHz) here with Delta = omega_q - omega_r = 2pi x (-1.2 GHz). For a transmon, the second excited level modifies this to chi = (g^2/Delta) x alpha/(Delta + alpha), equivalently chi = chi_01 - chi_12/2 with chi_12 = 2g^2/(Delta + alpha); with alpha/2pi = -220 MHz the factor is about 0.155, so chi/2pi is about -1.05 MHz (and the resonator frequency difference between qubit states, 2chi, is about 2.1 MHz in magnitude). PASS if the note (1) states that the two-level formula does not apply directly to a transmon and gives the anharmonicity-corrected result with a magnitude near 1.0 to 1.1 MHz for chi, or near 2.1 MHz if it reports the full shift 2chi and says so, and (2) states the convention for the dispersive term, meaning the sign convention of Delta and whether the resonator frequency shift between qubit states is 2chi or chi. FAIL if the note uses only the two-level value near 6.75 MHz for this transmon or does not state the convention.
+  - name: reply-gives-main-result
+    type: llm
+    criteria: >-
+      Context: the reply accompanies a study note on the dispersive readout Hamiltonian for a transmon (omega_q/2pi = 6.0 GHz, omega_r/2pi = 7.2 GHz, g/2pi = 90 MHz, alpha/2pi = -220 MHz). PASS if the reply states in a few sentences that in the dispersive regime the resonator frequency depends on the qubit state (a qubit-state-dependent shift, chi), gives at least one validity condition (|g| << |Delta| or photon number well below the critical number), and gives a shift value consistent with the transmon result (chi/2pi of about -1.05 MHz, or a full shift 2chi of about 2.1 MHz in magnitude). FAIL if it quotes only the two-level value near 6.75 MHz as the device's shift or gives no validity condition.

@@ -1,0 +1,42 @@
+schema_version: "1.1"
+name: benchmark-plan-review
+description: >-
+  Review the user's benchmark experiment plan before cluster jobs start, testing whether the review treats a companion method as optional, catches training on evaluation data, keeps costly validation out of the timed workload, trims a redundant grid, and questions a mismatched cost model.
+tags: [quality, tier3, benchmark-paper-template]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Before I submit the cluster jobs for our QLS-Bench paper, please review plan.md. My advisor wants the learned predictor and the human baseline added. Should we add them, and what would you change in the plan? Keep the answer to about one page. The answer is your reply, please don't edit files.
+graders:
+  - name: loads-benchmark-paper-template
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?benchmark-paper-template"'
+    min: 1
+  - name: reads-benchmark-paper-template
+    type: tool_used
+    tool: Read
+    input_match: 'skills/benchmark-paper-template/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: companion-method-optional-and-leakage
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a benchmark paper plan compares resource requirements of quantum linear-system solvers with classical iterative solvers. An advisor wants to add (1) a learned phase-factor predictor, an MLP trained on the same matrices used in the benchmark, as "the paper's method", and (2) a human-expert baseline in which two students hand-tune phase factors. PASS only if the response does both of the following. (a) It states that a benchmark paper does not need a new method, and does not need the human baseline, to make a contribution, or that neither is required for this benchmark's question. (b) It points out that training the predictor on the same matrices used for evaluation is leakage, or requires held-out evaluation instances separated from training and tuning data if the predictor is added. FAIL if either (a) or (b) is missing, or if the response recommends adding the predictor or the human baseline as necessary for publication.
+  - name: validation-out-of-timing
+    type: llm
+    criteria: >-
+      Context: the plan computes, for every quantum run up to size 2^20, the fidelity with the exact solution using a dense statevector after each QSVT phase block, and it runs this check inside the timed region. PASS if the response says this validation should not be inside the timed measurement (it distorts the measured cost) and also that it is costly at large sizes, recommending validation on small trusted instances or outside the timed workload. FAIL if the response does not object to the validation being timed, or does not address its cost at large sizes.
+  - name: trims-redundant-grid
+    type: llm
+    criteria: >-
+      Context: the plan runs a full 5 x 8 x 6 x 4 x 10 grid of 9,600 runs. All five solvers are deterministic, and the 10 seeds only change the random sparse SPD matrix family, yet the same 10 seeds are also run for the fixed Poisson and road-network families. PASS if the response points out that repeating the seeds on the fixed deterministic families is pure duplication, and recommends replacing the full Cartesian grid with a smaller design chosen to answer the stated question. FAIL if the response does not identify the redundant seeds on the fixed families.
+  - name: cost-model-parity
+    type: llm
+    criteria: >-
+      Context: the plan measures quantum cost as T-count and logical qubits with the block-encoding of A and the state preparation of b given as uncounted oracles, and measures classical cost as laptop wall-clock time. PASS if the response points out that these cost measures are not directly comparable, and that the uncounted block-encoding, state preparation, or readout costs must be stated or included for the comparison the question asks about. FAIL if the response accepts the two cost measures as comparable without comment.

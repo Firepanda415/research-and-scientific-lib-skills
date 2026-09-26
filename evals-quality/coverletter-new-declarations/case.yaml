@@ -1,0 +1,50 @@
+schema_version: "1.1"
+name: coverletter-new-declarations
+description: >-
+  Write a new journal cover letter for the user's paper modeled on an old letter, testing whether factual declarations, preprint details and suggested reviewers are left for author confirmation instead of copied, the letter compiles without manuscript macros, and its claims follow the manuscript.
+tags: [quality, tier3, journal-cover-letter]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Please write the cover letter for submitting paper/main.tex to Quantum Science and Technology as a Paper. Use examples/old_cover_letter.tex, my letter for our last paper, as the model. I'm the corresponding author. Save it as cover_letter.tex and tell me briefly what I need to check before submitting.
+graders:
+  - name: loads-journal-cover-letter
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?journal-cover-letter"'
+    min: 1
+  - name: reads-journal-cover-letter
+    type: tool_used
+    tool: Read
+    input_match: 'skills/journal-cover-letter/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: declarations-not-copied
+    type: llm
+    weight: 2
+    focus: {source: file, path: cover_letter.tex}
+    criteria: >-
+      Context: this cover letter is for a new manuscript. The author supplied an old letter for a different paper as a model. The old letter asserted that the manuscript is not under consideration elsewhere, that all authors approved the submission, that there are no conflicts of interest, that a preprint is at arXiv:2503.01234, and it suggested two reviewers, Dr. Anneke Vorhees and Dr. Paulo Estrada-Lind. The author has not confirmed any of these facts for the new manuscript. PASS if this letter contains none of these as unqualified statements of fact: each is either omitted or shown as a clearly marked placeholder or bracketed note asking for author confirmation. FAIL if the letter contains arXiv:2503.01234, either suggested reviewer's name, or states without a confirmation marker that the manuscript is not under consideration elsewhere, that all authors approved it, or that there are no conflicts of interest.
+  - name: standalone-macros
+    type: llm
+    focus: {source: file, path: cover_letter.tex}
+    criteria: >-
+      Context: the manuscript defines the LaTeX macros \lchs and \Oh in its own preamble. A cover letter is compiled as a separate file. PASS if this cover letter source either does not use \lchs or \Oh, or defines any of them that it uses in its own preamble, so that it compiles on its own. FAIL if it uses \lchs or \Oh without defining them.
+  - name: claims-match-manuscript
+    type: llm
+    focus: {source: file, path: cover_letter.tex}
+    criteria: >-
+      Context: the manuscript "Tail-aware truncation for linear combination of Hamiltonian simulation" reports a tail bound that sets the truncation from the kernel decay, 38% fewer LCHS branches at tolerance 1e-3 on the two-dimensional heat equation, a circuit of 9 qubits instead of 11, a rigorous bound for dissipative generators and no guarantee for non-dissipative ones. PASS if every technical claim in this letter is consistent with these facts, the letter uses the exact figures where it quotes results, and it contains no promotional words such as groundbreaking, transformative, revolutionary, paradigm-shifting or unprecedented. FAIL if the letter adds unsupported claims (for example general speedups, hardware results, or guarantees for non-dissipative generators), misstates a number, or uses such promotional words.
+  - name: no-em-dash-or-semicolon
+    type: regex
+    target: {source: file, path: cover_letter.tex}
+    pattern: '—|---|;'
+    match: not_contains
+  - name: reply-lists-confirmations
+    type: llm
+    criteria: >-
+      Context: the assistant wrote a journal cover letter modeled on an old letter for a different paper. The factual declarations (not under consideration elsewhere, author approval, conflicts of interest, preprint status, suggested reviewers) were not confirmed by the author for the new paper, and the journal's current cover-letter requirements were not verified from an official source during the task. PASS if this reply tells the author which declarations or facts need their confirmation before submission, and states that the current journal requirements were not verified or cites the official source consulted with a date. FAIL if the reply presents the letter as ready without asking for any declaration confirmation.

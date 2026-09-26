@@ -1,0 +1,45 @@
+schema_version: "1.1"
+name: writing-contributing-bug-section
+description: >-
+  Contributor instructions that people will keep in the repository.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Two new master's students join our group on Monday and will start by fixing small bugs in our simulation package. Write the "Fixing a bug" section of our CONTRIBUTING.md: how to reproduce the bug, add a failing test first, and what must pass before they open a pull request. Plain Markdown, about 150 words. Reply with only the section.
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: ordered-and-plain
+    type: llm
+    criteria: >-
+      The section gives the steps in order (reproduce the bug, write a failing test first, the checks that must pass before a pull request) in roughly 150 words, without filler, praise or motivational language.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

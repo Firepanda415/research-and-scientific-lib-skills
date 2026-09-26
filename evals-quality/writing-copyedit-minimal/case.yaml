@@ -1,0 +1,52 @@
+schema_version: "1.1"
+name: writing-copyedit-minimal
+description: >-
+  A grammar-only copyedit of a technical paragraph.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Fix only the grammar and spelling in this paragraph. Change nothing else, and reply with only the corrected paragraph.
+
+    The solver return a normalized state whose amplitudes is proportional to the solution vector. To recover the physical solution, the user must rescale it by the norm that the method estimate from a seperate set of measurements, which introduce an additional sampling error.
+graders:
+  - name: fixes-returns
+    type: regex
+    pattern: 'solver returns'
+    match: contains
+  - name: fixes-are
+    type: regex
+    pattern: 'amplitudes are'
+    match: contains
+  - name: fixes-estimates
+    type: regex
+    pattern: 'method estimates'
+    match: contains
+  - name: fixes-separate
+    type: regex
+    pattern: 'separate'
+    match: contains
+  - name: grammar-only
+    type: llm
+    criteria: >-
+      The text is the original paragraph below with only its grammar and spelling corrected. Its wording, sentence order and technical content are otherwise the same. Changing "which introduce" to "which introduces" and keeping it are both acceptable, because "which" can refer to the measurements. Original paragraph: "The solver return a normalized state whose amplitudes is proportional to the solution vector. To recover the physical solution, the user must rescale it by the norm that the method estimate from a seperate set of measurements, which introduce an additional sampling error."
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

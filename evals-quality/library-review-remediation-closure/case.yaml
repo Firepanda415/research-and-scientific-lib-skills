@@ -1,0 +1,50 @@
+schema_version: "1.1"
+name: library-review-remediation-closure
+description: >-
+  Acceptance of a remediation that claims to resolve four earlier review findings, of which one is truly closed, one is fixed off the public path, one is documentation only and one is dismissed without counterevidence, testing per-finding closure dispositions.
+tags: [quality, tier2, scientific-library-review]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    上周我们 review 了 shotkit，findings 在 REVIEW.md。Implementer 说 remediation 已经做完了：就是这个 repo 的最后一个 commit，说明在 REMEDIATION.md，diff 在 remediation.diff。请检查这些 findings 是否真的都关闭了，我要据此决定能不能把这个 review 关掉，并在下周的 20-qubit 数据上用 shotkit。Reply in English, at most about 400 words. Don't modify the repository; the tests run with `python3 -m unittest`.
+graders:
+  - name: loads-scientific-library-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?scientific-library-review"'
+    min: 1
+  - name: reads-scientific-library-review
+    type: tool_used
+    tool: Read
+    input_match: 'skills/scientific-library-review/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: f1-closed-with-evidence
+    type: llm
+    criteria: >-
+      Background: an earlier review of a readout-mitigation library found (F1) that mitigate_z added the readout offset (e1 − e0) instead of subtracting it, and that the only test used e0 = e1 and could not detect this. The remediation corrected the sign and added a test with e0 = 0.02, e1 = 0.08 and true <Z> = 0.5; that test fails on the pre-fix code, which returns about 0.633. So F1 is genuinely closed. The text below assesses the remediation.
+      PASS if the assessment accepts F1 as fixed or closed and supports this with evidence beyond the implementer's statement, such as that the new asymmetric-error test fails on the old code, or its own check that the corrected formula matches the derivation or recovers the true value.
+      FAIL if F1 is judged open or not fixed, or is accepted only because the implementer says so or the tests pass.
+  - name: f2-open-public-path-unchanged
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: an earlier review found (F2) that estimate_with_ci, the public function users call for <Z> with a 95% interval, uses the Wald interval, which has zero width when all shots agree. The remediation added a separate wilson_interval function and a test of that function, but estimate_with_ci still calls wald_interval, so it still returns (1.0, 1.0, 1.0) for 20 shots that all read 0. The implementer reports F2 as fixed. The text below assesses the remediation.
+      PASS if the assessment says F2 is not closed (open, partial or unresolved) because the public estimate_with_ci path still uses the Wald interval, in any wording.
+      FAIL if it accepts F2 as fixed.
+  - name: f3-docs-only-not-closed
+    type: llm
+    criteria: >-
+      Background: an earlier review found (F3) that mitigate_counts builds a dense 2^n × 2^n matrix and solves it with O(8^n) Gaussian elimination, while the README advertises full-distribution mitigation for up to 20 qubits. The remediation only added a docstring note that the function becomes slow above about 12 qubits; the computation and the README's 20-qubit claim are unchanged. The implementer reports F3 as addressed. The text below assesses the remediation.
+      PASS if the assessment says F3 is not closed because only documentation changed (for example labelling it documentation-only, open or unresolved), noting that the dense computation or the 20-qubit claim is unchanged.
+      FAIL if it accepts the docstring note as resolving F3.
+  - name: f4-dismissal-not-accepted
+    type: llm
+    criteria: >-
+      Background: an earlier review found (F4) that the README promises save_results writes shot counts, the readout calibration and the library version, but the function writes only the result dicts it is given. The implementer marked F4 "not a defect" because the output is intentionally minimal and users can record provenance themselves, but left the README promise unchanged. The text below assesses the remediation.
+      PASS if the assessment does not accept the "not a defect" disposition: it keeps F4 open, or says that either the code or the README must change before F4 can be closed, or that the dismissal lacks evidence against the finding.
+      FAIL if it accepts the dismissal or does not assess F4.

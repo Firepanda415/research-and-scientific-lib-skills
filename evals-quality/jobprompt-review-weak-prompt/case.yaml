@@ -1,0 +1,51 @@
+schema_version: "1.1"
+name: jobprompt-review-weak-prompt
+description: >-
+  Reviewing a drafted implementer prompt with a false claim about failing tests, a circular regression test, a tolerance-loosening instruction, a wrong test selector and delivery rules that contradict the project, testing live verification of claims and a quoted clause-by-clause review without a rewrite.
+tags: [quality, tier2, write-implementation-job-prompts]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 25
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I'm about to send handoff/F2-prompt.md to the implementer. Can you review it first? Just tell me what's wrong with it. Reply in chat, don't edit any files.
+graders:
+  - name: loads-write-implementation-job-prompts
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?write-implementation-job-prompts"'
+    min: 1
+  - name: reads-write-implementation-job-prompts
+    type: tool_used
+    tool: Read
+    input_match: 'skills/write-implementation-job-prompts/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: false-failing-tests-claim
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a drafted implementer prompt claims "Currently 2 tests in tests/test_evolve.py fail because of this." In fact the whole suite (4 tests, including all of tests/test_evolve.py) passes on the current code, because the bug is untested. The text below is a review of that prompt. PASS if the review says this claim is false or contradicted, for example that the tests currently pass or that the bug is untested. FAIL if the review does not address the claim, accepts it, or only says it could not be checked.
+  - name: circular-regression-test
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a drafted implementer prompt asks for a regression test that runs evolve(state, h_a, h_b, t, steps, order=2) and checks that the result equals the state obtained by applying trotter_step(..., order=2) steps times. evolve is exactly that loop over trotter_step, so the test compares the code with itself and cannot fail for the bug being fixed (trotter_step applying H_B for dt/2 instead of dt). The text below is a review of that prompt. PASS if the review identifies that this test takes its expected value from the code under test, or cannot detect the defect, and asks for an independent expected value (such as the closed-form evolution under H = X + Z, an exact exponential computed in the test, or the second-order convergence rate) or for a test that fails before the fix. FAIL otherwise.
+  - name: tolerance-loosening
+    type: llm
+    criteria: >-
+      Context: a drafted implementer prompt says: "If test_norm_preserved starts failing after your change, loosen its tolerance from 1e-12 to 1e-6." Each Trotter step is unitary, so a norm error above about 1e-12 would indicate a real defect in the change. The text below is a review of that prompt. PASS if the review objects to this instruction, for example as hiding a real failure or as gaming the test, and says the implementer should investigate or report such a failure instead. FAIL if it does not object to it.
+  - name: wrong-test-selector
+    type: llm
+    criteria: >-
+      Context: a drafted implementer prompt says to verify with `python3 -m unittest tests.test_trotter`. No module tests/test_trotter.py exists; the tests are in tests/test_evolve.py, and the project's DEVELOPING.md gives the command `python3 -m unittest discover -s tests -t .`. The text below is a review of that prompt. PASS if the review says the test command names a module that does not exist (or fails to import) and gives a working command, such as the DEVELOPING.md command or `python3 -m unittest tests.test_evolve`. FAIL otherwise.
+  - name: delivery-conflicts-with-project-rules
+    type: llm
+    criteria: >-
+      Context: the project's DEVELOPING.md says an implementation job starts from a stated commit, works on a branch named fix/<finding-id>, and does not push, merge or rebase, because the maintainer integrates. A drafted implementer prompt says: "Commit on main with the message 'Fix Strang splitting' and push to origin/main when done." The text below is a review of that prompt. PASS if the review says this delivery instruction conflicts with the project's rules and states the correction (a fix/F2 branch, no push). FAIL otherwise.
+  - name: quoted-findings-without-rewrite
+    type: llm
+    criteria: >-
+      The text below is a review of a drafted implementer prompt; the user asked only to be told what is wrong with it. PASS if each problem the review reports is tied to the prompt's own text, by quoting it or naming the exact clause or section, together with a specific fix, and the review does not include a complete rewritten replacement prompt. Short replacement wording for individual clauses is fine. FAIL if the review gives problems without identifying the clauses or fixes, or includes a full rewritten version of the prompt.

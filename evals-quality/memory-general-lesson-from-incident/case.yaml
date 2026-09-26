@@ -1,0 +1,51 @@
+schema_version: "1.1"
+name: memory-general-lesson-from-incident
+description: >-
+  Recording a lesson from a seed-reproducibility incident caused by worker-dependent seeding, testing a general mechanism-and-rule entry in the existing lesson format, an extension of the existing result-recording rule at its owner, no universal restriction or new test, and a compact always-loaded file.
+tags: [quality, tier2, maintain-project-memory]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    今天又踩坑了，浪费了半天。Two runs of the 20-qubit random-circuit benchmark with seed=7 gave different counts (TVD 0.04, far above shot noise) on my laptop and on the cluster node. Turned out `parallel_sampler.sample` splits the shots across `os.cpu_count()` workers and seeds worker w with seed + w, so 8 cores vs 64 cores gives a different random stream even with the same seed. The simulator itself is fine. 把这个教训记到 project memory 里，以后别再犯。
+graders:
+  - name: loads-maintain-project-memory
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?maintain-project-memory"'
+    min: 1
+  - name: reads-maintain-project-memory
+    type: tool_used
+    tool: Read
+    input_match: 'skills/maintain-project-memory/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: general-lesson-entry
+    type: llm
+    weight: 2
+    focus: {source: file, path: memory/lessons.md}
+    criteria: >-
+      Context: this project lessons file uses entries with Mechanism, Exposed by, Rule and Applies to. A new lesson should come from this incident: two runs of a 20-qubit random-circuit benchmark with seed 7 differed (TVD 0.04) between an 8-core laptop and a 64-core cluster node, because tessim.parallel_sampler.sample splits shots across os.cpu_count() workers by default and seeds worker w with seed + w, so the samples depend on the worker count as well as the seed. PASS if the file contains a lesson for this incident that (1) states the mechanism in general terms (the seed alone does not determine the samples; the number of workers does too), (2) gives a prevention rule such as recording the worker count with the seed and comparing or reproducing sampled results only at the same worker count, or passing n_workers explicitly, (3) imposes no universal restriction such as always using one worker or never using the parallel sampler, and requires no new permanent test, runtime check or recurring experiment, and (4) is written as a rule rather than a narrative of the day's debugging. FAIL if any of the four fails.
+  - name: recording-rule-extended-at-owner
+    type: llm
+    focus: {source: file, path: memory/benchmarks.md}
+    criteria: >-
+      Context: this file's "Recording results" section said: "Record the seed, the tessim commit and the backend with every result, in the result folder's meta.json." Its "Comparing runs" section says two runs with the same recorded settings should agree exactly. The project has learned that sampled results also depend on the number of sampler worker processes. PASS if the file lists the worker count (n_workers, number of workers or processes) among the settings recorded with every result, inside the existing recording rule or directly beside it, without adding a second separate rule that repeats the seed, commit and backend list. FAIL if the recording rule does not include the worker count, or if the file now has two overlapping recording rules.
+  - name: always-loaded-file-compact
+    type: regex
+    target: {source: file, path: CLAUDE.md}
+    pattern: 'cpu_count|seed \+ w|TVD|0\.04|laptop|64[- ]core|8[- ]core|半天'
+    flags: i
+    match: not_contains
+  - name: sampler-code-unchanged
+    type: regex
+    target: {source: file, path: tessim/parallel_sampler.py}
+    pattern: 'seed \+ w for w in range\(n_workers\)'
+    match: contains
+  - name: report-records-and-boundary
+    type: llm
+    criteria: >-
+      Context: the user asked the agent to record a lesson in project memory after an incident in which the same seed gave different sampled counts on machines with different core counts, because the parallel sampler seeds each worker with seed + worker index and uses os.cpu_count() workers by default. The text below is the agent's final report. PASS if the report names the memory files it changed and presents any change to the sampler code (such as seeding independent of the worker count) only as a suggestion for the user rather than as something it did. FAIL if it reports editing the sampler code, or does not say which memory files changed.

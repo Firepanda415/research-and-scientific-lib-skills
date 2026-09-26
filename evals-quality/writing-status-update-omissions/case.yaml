@@ -1,0 +1,54 @@
+schema_version: "1.1"
+name: writing-status-update-omissions
+description: >-
+  A wiki status update from Chinese instructions that forbid mentioning a removed rule.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    为组里的 wiki 写一段两段式的项目进展（英文），介绍 QHD refinement 层的现状。事实：每一层的盒子以出现概率最大的点为中心；缩放对坐标单位不变；测试覆盖了最优点落在边界上的情况和双势阱目标函数。不要提我们放弃了作者的 left_endpoint 规则，也不要写“不再”这一类的话。只给正文。
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: no-removed-rule-or-contrast
+    type: regex
+    pattern: 'left[_ ]endpoint|no longer|abandon|dropped|instead of|rather than|replac'
+    flags: i
+    match: not_contains
+  - name: no-chinese-in-output
+    type: regex
+    pattern: '[\u4e00-\u9fff]'
+    match: not_contains
+  - name: describes-current-state
+    type: llm
+    criteria: >-
+      The update describes the current behavior (each box centered on the most probable point, scaling invariant to coordinate units, tests covering boundary optima and double-well objectives), adds no claim beyond these facts, and says nothing about removed rules or earlier versions.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

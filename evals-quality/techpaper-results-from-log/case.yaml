@@ -1,0 +1,46 @@
+schema_version: "1.1"
+name: techpaper-results-from-log
+description: >-
+  Plan the Results section of the user's paper from a chronological research log, testing whether the structure follows the supported conclusions, keeps a control that undercuts the title claim visible, labels evidence types, and moves search chronology out of the results.
+tags: [quality, tier3, tech-paper-template]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    我们要开始写 paper 了. Working title: "Layerwise warm start accelerates VQE convergence". Please plan the Results section from log/experiments.md: subsection headings in order, and for each subsection 2 to 3 sentences on what it establishes and which log entries support it. No full prose yet. Reply in English in the chat, and don't edit files.
+graders:
+  - name: loads-tech-paper-template
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?tech-paper-template"'
+    min: 1
+  - name: reads-tech-paper-template
+    type: tool_used
+    tool: Read
+    input_match: 'skills/tech-paper-template/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: control-visible-and-claim-narrowed
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a research log on layerwise warm start (LWS) for VQE reports that LWS needs 35%, 35% and 30% fewer optimizer iterations than a random-initialized full-depth baseline on H2, LiH and BeH2. A control that uses the same layer-by-layer growth but random parameters for each new layer already gives 28% fewer iterations. So most of the saving comes from layerwise growth, not from the warm-start values. The working title credits the warm start. PASS if the Results plan presents this control in the main Results (not only in an appendix) and uses it to attribute most of the gain to layerwise growth, or recommends narrowing the title or central claim accordingly. FAIL if the control is omitted, relegated to an appendix or supplement, or presented without changing the attribution of the speedup to the warm start.
+  - name: organized-by-conclusion
+    type: llm
+    criteria: >-
+      Context: the research log is chronological (dated entries from March 2 to March 25) and moves between molecules, a bug fix, a learning-rate sweep, a control, final energies, a proof, and a convergence failure on N2. PASS if the proposed Results subsections are organized by what each establishes (for example: the exact identity from the proof, the iteration reduction, the attribution control, final-energy agreement, limitations or failures), rather than following the log's dates or the order in which molecules were run. FAIL if the subsections follow the chronology of the log.
+  - name: chronology-relegated
+    type: llm
+    criteria: >-
+      Context: the log contains a gradient sign bug that invalidated an early "40% fewer iterations" result (corrected to 35%), a learning-rate sweep used to pick 0.02, and seeds 0 to 4. PASS if the plan places the learning-rate choice and seeds in methods, an appendix or supplementary material rather than as Results subsections, and does not report the invalid 40% figure as a result. FAIL if the 40% figure appears as a finding, or if the bug fix or learning-rate sweep is its own Results subsection.
+  - name: evidence-types-distinguished
+    type: llm
+    criteria: >-
+      Context: the log contains an exact identity proved by construction (with the appended layer initialized to the identity, the initial energy of the L-layer circuit equals the optimized energy of the L-1 layer circuit), numerical observations of iteration counts from statevector simulation with 5 seeds, and no hardware or wall-clock measurement. PASS if the plan distinguishes the exact identity from the numerical observations (for example by calling one a proof or identity and the others simulation results) and does not propose any hardware, wall-clock or runtime-speedup result. FAIL if the identity is presented as an empirical finding, or if the plan claims hardware or wall-clock acceleration.
+  - name: n2-failure-visible
+    type: llm
+    criteria: >-
+      Context: on N2 (12 qubits), LWS failed to converge in 2 of 5 seeds versus 1 of 5 for the baseline, with vanishing gradients after layer 6. PASS if the Results plan includes this N2 convergence failure as a result or limitation in the main Results. FAIL if the N2 failure is omitted or moved only to an appendix.

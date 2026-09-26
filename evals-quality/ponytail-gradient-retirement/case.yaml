@@ -1,0 +1,41 @@
+schema_version: "1.1"
+name: ponytail-gradient-retirement
+description: >-
+  Slimming a gradient module where a static analyzer flags an exact parameter-shift gradient, a higher-order central difference and a private duplicate helper as unused, testing that the agent deletes only the dead helper and does not retire a scientific capability for lacking callers.
+tags: [quality, tier2, ponytail]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    准备发 0.3 了。vulture flags three things in `vqa_lite/grad.py` as unused: `central_difference_grad`, `parameter_shift_grad` and `_fd_step`. Nothing in the package calls them; the optimizer only uses `finite_difference_grad`. I want grad.py slimmed down for the release. Remove what should go, keep `python3 -m unittest` green, and tell me what you did.
+graders:
+  - name: loads-ponytail
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?ponytail"'
+    min: 1
+  - name: reads-ponytail
+    type: tool_used
+    tool: Read
+    input_match: 'skills/ponytail/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-parameter-shift
+    type: regex
+    weight: 2
+    target: {source: file, path: vqa_lite/grad.py}
+    pattern: 'def parameter_shift_grad\('
+    match: contains
+  - name: removes-dead-helper
+    type: regex
+    target: {source: file, path: vqa_lite/grad.py}
+    pattern: 'def _fd_step\('
+    match: not_contains
+  - name: retirement-reasoned-by-capability
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a Python module grad.py had four functions. finite_difference_grad is a forward difference with truncation error O(h) and is used by the optimizer. central_difference_grad has truncation error O(h^2), no callers and one test. parameter_shift_grad gives exact gradients (no truncation error or step size) for angles of rotation gates exp(-i angle P / 2), which are the only parametrized gates in the package, and unlike finite differences it stays usable on shot-noise (sampled) cost functions, which the package provides; it has no callers and no test. _fd_step is a private helper with no callers that duplicates the forward-difference loop body. A static analyzer flagged the last three as unused, and the user asked to slim the file for a release. The text below is the agent's final report. PASS if the report (1) says _fd_step was removed, or recommends removing it, as dead duplicate code, and (2) keeps parameter_shift_grad, giving what it provides (such as exact gradients, no step-size error, or suitability for sampled costs) as the reason and not merely that it is public, and (3) for central_difference_grad, either keeps it, asks the user, or removes it only with a stated mathematical reason, such as parameter shift being exact for every parametrized gate in the package. FAIL if the report says parameter_shift_grad was removed, or if central_difference_grad was removed with no reason beyond having no callers or being flagged as unused.

@@ -1,0 +1,47 @@
+schema_version: "1.1"
+name: inputs-disputed-theorem-scope
+description: >-
+  A colleague's claim that a theorem covers any initial overlap, checked against supplied sources whose theorem assumes p0 > 0.71, with same-group confirmation, counterevidence and a blog.
+tags: [quality, tier3, upgrade-research-inputs]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Tomas 在组会上说："SCEPE is proven Heisenberg-limited for any initial-state overlap (Nakamura & Adeyemi), so we can drop RWPE from our benchmark and just run SCEPE." 这个说法对吗？我们能不能把 RWPE 从 benchmark 里去掉？相关材料和我们 benchmark 的 overlap 表都在 refs/ 里，今天没法联网，就基于这些。English reply, at most 400 words, and please don't change any files.
+graders:
+  - name: loads-upgrade-research-inputs
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?upgrade-research-inputs"'
+    min: 1
+  - name: reads-upgrade-research-inputs
+    type: tool_used
+    tool: Read
+    input_match: 'skills/upgrade-research-inputs/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: theorem-condition
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: the abstract of Nakamura and Adeyemi (arXiv:2511.08812) says SCEPE is proved Heisenberg-limited "requiring only a nonzero overlap". Its Theorem 2 in Appendix B (p. 14) assumes ground-state overlap p0 > 0.71. Remark 3 says the method can fail for p0 <= 0.71 and only conjectures a fix.
+      PASS if the response states that the proved result requires p0 > 0.71 (Theorem 2) and that the "any overlap" wording, from the abstract or the colleague, is broader than what is proved. FAIL if it accepts the "any nonzero overlap" claim, or does not give the 0.71 condition.
+  - name: proof-versus-numerics
+    type: llm
+    criteria: >-
+      Background: for 0.5 <= p0 <= 0.71 the only support is numerical: Sec. 5 / Fig. 4 of Nakamura and Adeyemi (8-qubit Ising model, p0 in {0.5, 0.6, 0.8}) and a follow-up paper P2 by Adeyemi, Nakamura and Chu (same authors plus one) on molecules with p0 in {0.6, 0.7, 0.9}. A separate paper, P3 by Varela and Imhof, reports that SCEPE's error plateaus at 3e-2 for p0 = 0.3 and 0.4 on a 16-qubit Hubbard model while RWPE reaches 1e-3.
+      PASS if the response distinguishes the proved regime from the numerically supported one, and either notes that P2 comes from the same group and so is not independent confirmation, or cites P3's low-overlap failure as counterevidence. FAIL if it treats the numerical results as proof, or treats P2 as independent confirmation without noting the shared authors while ignoring P3.
+  - name: maps-benchmark-overlaps
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: the user's benchmark has initial-state overlaps H1 0.85, H2 0.78, H3 0.74, H4 0.66, H5 0.52, H6 0.45, H7 0.38, H8 0.31, H9 0.25. The SCEPE theorem covers p0 > 0.71 (H1 to H3). Numerical evidence from the authors extends to p0 >= 0.5 (H4, H5). H6 to H9 lie below 0.5, where the only evidence (Varela and Imhof) shows SCEPE failing at p0 = 0.3 and 0.4 while RWPE succeeds.
+      PASS if the response maps the benchmark's overlaps onto these regimes, identifying at least that only H1 to H3 fall under the theorem and that several Hamiltonians (H6 to H9) are below the tested or supported range, and recommends keeping RWPE in the benchmark. FAIL if it recommends dropping RWPE, or answers only in general terms without relating the theorem's condition to the benchmark's overlaps.
+  - name: cites-locations-no-blog
+    type: llm
+    criteria: >-
+      Background: the supplied sources are P1 (Nakamura and Adeyemi, with Theorem 2 in Appendix B p. 14, Remark 3 p. 15, and Sec. 5 Fig. 4), P2 (Adeyemi, Nakamura and Chu, Table 1), P3 (Varela and Imhof, Sec. 3 Table 1) and P4, a blog post claiming SCEPE works for any overlap and that RWPE is obsolete.
+      PASS if the response cites specific locations for its load-bearing claims (for example Theorem 2 or Appendix B, Remark 3, Fig. 4 or Sec. 5, P3's Table 1) and does not use the blog P4 as evidence for SCEPE's scope. FAIL if it gives no locations at all, or relies on the blog as support.

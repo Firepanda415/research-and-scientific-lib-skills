@@ -1,0 +1,49 @@
+schema_version: "1.1"
+name: ponytail-bit-order-owner-fix
+description: >-
+  A reported wrong marginal traced to a shared bit-order helper that another caller silently compensates for, testing a fix at the owner that also removes the caller's compensation, updates the stale README example and shows the regression failing before the fix.
+tags: [quality, tier2, ponytail]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 35
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    A student reported a bug: on 2 qubits, `marginal` puts the X on the wrong qubit. `s = apply_1q(zero_state(2), X, 0)` and then `marginal([abs(a) ** 2 for a in s], [0])` returns `{(0,): 1.0, (1,): 0.0}`, but qubit 0 is in |1>. 帮忙修一下。Tests: `python3 -m unittest`.
+graders:
+  - name: loads-ponytail
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?ponytail"'
+    min: 1
+  - name: reads-ponytail
+    type: tool_used
+    tool: Read
+    input_match: 'skills/ponytail/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: owner-fixed
+    type: regex
+    target: {source: file, path: qlite/bits.py}
+    pattern: 'n_qubits\s*-\s*1\s*-\s*qubit'
+    match: not_contains
+  - name: caller-compensation-removed
+    type: llm
+    weight: 2
+    focus: {source: file, path: qlite/observables.py}
+    criteria: >-
+      Context: in this library qubit 0 is the least significant bit of a basis-state index. A helper qubit_bit(index, qubit, n_qubits) in bits.py originally returned (index >> (n_qubits - 1 - qubit)) & 1, counting from the wrong end, and expectation_z in the file below compensated by calling qubit_bit(i, n - 1 - qubit, n) with a comment about mirroring the index. The correct end state fixes qubit_bit to return (index >> qubit) & 1 and makes expectation_z read the bit of `qubit` directly. PASS if expectation_z reads bit `qubit` directly, for example qubit_bit(i, qubit, n), qubit_bit(i, qubit) or (i >> qubit) & 1, with no n - 1 - qubit mirroring and no comment about compensating for qubit_bit. FAIL if it still mirrors the qubit index or still carries the compensation comment.
+  - name: readme-example-updated
+    type: regex
+    target: {source: file, path: README.md}
+    pattern: '\{\(0,\):\s*1\.0,\s*\(1,\):\s*0\.0\}'
+    match: not_contains
+  - name: root-cause-and-callers-reported
+    type: llm
+    criteria: >-
+      Context: a user reported that marginal(probs, [0]) on a two-qubit state with qubit 0 in |1> returned {(0,): 1.0, (1,): 0.0}. The root cause is the shared helper qubit_bit in bits.py, which counted qubits from the most significant bit although the library makes qubit 0 the least significant bit. Another caller, expectation_z in observables.py, mirrored the qubit index to compensate, so fixing qubit_bit alone would silently break expectation_z, and the existing tests used only symmetric states that could not detect either error. The text below is the agent's final report. PASS if it says the fix was made in qubit_bit (bits.py) rather than only in marginal, and says that expectation_z's compensating mirror was removed or adjusted as part of the fix. FAIL if either is missing, or if the fix was applied only inside marginal.
+  - name: regression-failed-before
+    type: llm
+    criteria: >-
+      Context: the agent fixed a qubit bit-order bug that made marginal(probs, [0]) return {(0,): 1.0, (1,): 0.0} for a two-qubit state with qubit 0 in |1>; the correct result is {(0,): 0.0, (1,): 1.0}. The text below is the agent's final report. The agent could not execute commands in this environment, so a test run cannot be reported. PASS if it reports a regression test on an asymmetric state (for example X applied to qubit 0 of two qubits) and explains that this test would fail on the code before the fix, for example because the old code returns {(0,): 1.0, (1,): 0.0}, without claiming to have run it. FAIL if it only says tests were added, does not tie the new test to the old wrong output, or claims a test run.

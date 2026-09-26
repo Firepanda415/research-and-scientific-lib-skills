@@ -1,0 +1,55 @@
+schema_version: "1.1"
+name: rethink-benchmark-metric-not-pivot
+description: >-
+  A request to turn an "incremental" benchmark paper into a large framework, where the evidence shows the limiting choice is the reported metric and the current direction serves the goal.
+tags: [quality, tier3, rethink-design]
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Reviewer 2 说我们的 benchmark paper "incremental"。我在想要不要把格局做大：把这篇从 "benchmark of four phase-estimation algorithms" 改成一个 end-to-end framework，包括 ML-based algorithm selector、distributed multi-QPU execution 和一个 web dashboard。下面是 context，帮我判断该怎么走。English reply, at most 450 words.
+
+    Group goal for this paper: become the reference people use to pick a phase-estimation method for a given early-FTQC budget.
+
+    Current paper: compares textbook QPE, RWPE, QCELS and a Bayesian PE on 9 molecular Hamiltonians (8 to 20 qubits). Main figure (Fig. 3): the maximal circuit depth each method needs to reach energy error 1.6 mHa. Conclusion: QCELS needs the shallowest circuits.
+
+    Reviewer 2, main points verbatim:
+    (a) "Depth alone is not what a practitioner pays. QCELS reaches the target with shallow circuits but, per your Table S3, uses 40x more total shots than RWPE. A reader choosing a method under a budget cannot use Fig. 3."
+    (b) "QCELS is run with the authors' own tuned settings, while RWPE uses the defaults from its original paper. Please tune both within a stated budget."
+    (c) "Given (a) and (b), the contribution feels incremental."
+
+    What we already have: the raw logs of every run store the max circuit depth, the total evolution time sum_k t_k, the number of shots, and the achieved energy error. The distributed-execution idea has no data yet, and we have no multi-QPU access.
+graders:
+  - name: loads-rethink-design
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?rethink-design"'
+    min: 1
+  - name: reads-rethink-design
+    type: tool_used
+    tool: Read
+    input_match: 'skills/rethink-design/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-benchmark-direction
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: a group wants its phase-estimation benchmark paper to become the reference for choosing a method under an early-FTQC budget. A reviewer called it incremental because (a) the main figure reports only maximal circuit depth although one method uses 40x more total shots, and (b) the methods were tuned unequally. The author proposes pivoting to an end-to-end framework with an ML algorithm selector, distributed multi-QPU execution and a web dashboard. The group has no multi-QPU access and no data for the distributed idea.
+      PASS if the response recommends keeping the benchmark direction (possibly with a revised scope or framing) rather than pivoting to the framework, and gives a reason tied to this evidence, such as that the reviewer's objections concern the reported metric and tuning rather than scope, or that the framework depends on unavailable multi-QPU access and has no data. FAIL if it recommends the framework pivot, or presents the ML selector, distributed execution or dashboard as the main next step.
+  - name: names-metric-as-limiting-choice
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: a phase-estimation benchmark reports only the maximal circuit depth needed to reach 1.6 mHa, while a practitioner choosing a method pays in total cost as well, such as total evolution time and number of shots. One method (QCELS) has the shallowest circuits but uses 40x more shots than another (RWPE).
+      PASS if the response identifies the reported quantity (depth alone) as the choice that limits the paper's usefulness, and proposes reporting cost to reach the target in a form that supports a decision under a budget, for example a Pareto frontier of max depth against total evolution time or shots, or a map of which method wins for each budget. FAIL if it treats the metric as a minor presentation fix while the main recommendation is something else, or does not address the metric.
+  - name: uses-existing-logs
+    type: llm
+    criteria: >-
+      Background: the group's raw logs already store, for every run, the max circuit depth, the total evolution time, the number of shots and the achieved energy error.
+      PASS if the response states that the proposed cost-to-target or budget analysis can be computed from these existing logs without new quantum runs (new runs may still be proposed for fair re-tuning of RWPE, provided the budget analysis itself is described as coming from existing data). FAIL if it proposes the analysis only through new experiments, or never says where the data for it would come from.
+  - name: names-reversing-uncertainty
+    type: llm
+    criteria: >-
+      PASS if the response names at least one concrete observation that could reverse or weaken its recommendation, such as: after fair tuning of RWPE, or after recomputing cost-to-target from the logs, one method dominates at every budget (so a budget-dependent decision guide adds little), or the ranking does not change with the budget. FAIL if it gives no uncertainty or only generic caveats (for example "results may vary") without saying what finding would change the advice.

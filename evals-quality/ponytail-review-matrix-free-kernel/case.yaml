@@ -1,0 +1,49 @@
+schema_version: "1.1"
+name: ponytail-review-matrix-free-kernel
+description: >-
+  Ponytail review of a matrix-free Pauli-string kernel carrying an unbounded state cache, a redundant deep copy and a re-implemented popcount, testing cuts that respect the memory budget and the declared Python floor.
+tags: [quality, tier3, ponytail-review]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 25
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Run a Ponytail review of HEAD~1..HEAD (new hamlite/pauli.py). 想在合并前把不必要的东西去掉。Tests: `python3 -m unittest`. Findings only, please; don't edit the code.
+graders:
+  - name: loads-ponytail-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?ponytail-review"'
+    min: 1
+  - name: reads-ponytail-review
+    type: tool_used
+    tool: Read
+    input_match: 'skills/ponytail-review/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: tagged-line-format
+    type: regex
+    pattern: 'L\d+(?:\s*[-–]\s*L?\d+)?\W{0,6}(?:delete|stdlib|native|yagni|shrink)\W{0,3}:'
+    flags: i
+    match: contains
+  - name: removes-state-cache
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: the reviewed function apply_pauli_string(label, state) in a library whose README targets statevectors of up to 24 qubits (2^24 amplitudes) with at most one extra state in memory stores every result in a module-level dict _CACHE keyed by (label, tuple(state)). The cache is unbounded, each entry holds a full copy of the input state as the key and a full output state, building the key alone copies the whole state on every call, and it returns the cached list object itself, so a caller who modifies the result corrupts later results. PASS if the review recommends deleting the cache and gives at least one of these reasons: unbounded memory growth, full-state copies per entry or per call, a violation of the memory budget, unlikely cache hits, or the shared mutable result. FAIL if it does not recommend removing _CACHE.
+  - name: removes-deepcopy
+    type: llm
+    criteria: >-
+      Context: the reviewed function apply_pauli_string starts with state = copy.deepcopy(state), but it never modifies state; it only reads it and writes a separate output list. The deep copy therefore adds an O(2^n) copy of the statevector with no effect. PASS if the review recommends removing the deepcopy. FAIL if it does not mention the deepcopy or recommends keeping it.
+  - name: popcount-reuse-within-python-floor
+    type: llm
+    criteria: >-
+      Context: the reviewed diff adds a hand-written _popcount(x) loop. The same repository already counts set bits with bin(x).count("1") in hamlite/expect.py, and pyproject.toml declares requires-python = ">=3.9". The built-in int.bit_count() exists only from Python 3.10. PASS if the review recommends replacing _popcount with bin(x).count("1") or another facility available on Python 3.9, or recommends int.bit_count() while noting that it needs Python 3.10 and so conflicts with the declared 3.9 floor. FAIL if it does not mention _popcount, or recommends int.bit_count() without noting the Python 3.10 requirement.
+  - name: no-edits
+    type: tool_used
+    tool: Edit
+    min: 0
+    max: 0
+    arm: both

@@ -1,0 +1,42 @@
+schema_version: "1.1"
+name: presub-response-audit
+description: >-
+  Check the user's response to a referee against the revised manuscript and result data before resubmission, testing whether the audit treats commented-out LaTeX as missing, checks quoted numbers against the data, flags a reply that misses the referee's point, and finds revision coloring in the clean version.
+tags: [quality, tier3, pre-submission-reviewer]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 25
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    我们明天提交 revision (a Physical Review A style journal; we upload a clean version plus a separate marked-up version). Please check our response to Referee 2 (response.md, referee comments in referee/report2.md) against the revised clean manuscript paper/main.tex and our results in data/. Reply with a list of problems to fix before we upload. Don't edit any files.
+graders:
+  - name: loads-pre-submission-reviewer
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?pre-submission-reviewer"'
+    min: 1
+  - name: reads-pre-submission-reviewer
+    type: tool_used
+    tool: Read
+    input_match: 'skills/pre-submission-reviewer/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: commented-table-missing
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: the authors' reply to referee point R2.1 says they added a matched-accuracy comparison with second-order Trotter in Sec. V (new Table II, 3.1x fewer CNOT gates). In the revised LaTeX source, that paragraph and the table exist only as commented-out lines starting with %, so they do not appear in the compiled manuscript. PASS if the response identifies that the cited comparison or Table II is commented out, and therefore missing from the revised manuscript, while the referee asked for it in the main text. FAIL if the response treats the comparison as present, or does not mention it.
+  - name: quoted-number-mismatch
+    type: llm
+    criteria: >-
+      Context: the reply to R2.3 says the corrected n = 12 error is 3.2e-4. The revised manuscript's Table I and the result file data/errors.csv both give 3.8e-4 for n = 12. PASS if the response flags that the 3.2e-4 in the reply disagrees with the 3.8e-4 in the manuscript table or data file. FAIL otherwise.
+  - name: nonresponsive-reply
+    type: llm
+    criteria: >-
+      Context: referee point R2.2 asks how the number of measurement shots scales with the target precision epsilon, noting that circuit depth says nothing about sampling cost. The authors' reply only discusses circuit depth and its scaling with n. PASS if the response flags that the reply to R2.2 does not answer the question about shot count or sampling cost versus precision. FAIL if the response accepts the reply to R2.2 as adequate or does not mention it.
+  - name: revision-coloring-in-clean-version
+    type: llm
+    criteria: >-
+      Context: the authors upload a clean version plus a separate marked-up version. The clean manuscript source defines \rev{...} as \textcolor{blue}{...} and uses it in Sec. IV and the Conclusion, so the clean PDF shows blue revision highlighting. PASS if the response flags the \rev or blue revision coloring as something to remove from the clean version, or keep only in the marked-up version. FAIL if it is not mentioned.

@@ -1,0 +1,46 @@
+schema_version: "1.1"
+name: figure-audit-results-script
+description: >-
+  Audit the plotting script, data and captions of two paper figures that cannot be rendered, testing whether the audit traces plotted values to the data and separates misleading encoding from legibility problems.
+tags: [quality, tier3, figure-designer]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 25
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    We submit the AdaptQITE paper on Friday. Can you audit Figures 3 and 4 before then? The plotting script is figures/make_figures.py, the data are in data/, and the captions and the LaTeX that places the figures are in paper/. Matplotlib isn't installed on this machine, so you can't render anything; work from the script, the data and the captions (python3 is available if you want to compute something from the CSVs). Reply with a findings list ordered by severity, at most about 400 words. Don't change any files.
+graders:
+  - name: loads-figure-designer
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?figure-designer"'
+    min: 1
+  - name: reads-figure-designer
+    type: tool_used
+    tool: Read
+    input_match: 'skills/figure-designer/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: finds-asymmetric-exclusion
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a plotting script for a bar chart of final-state fidelity (Figure 3) skips rows whose status is not "ok" (diverged runs) only for the proposed method AdaptQITE, while the two baselines VarQITE and QITE-Trotter keep their diverged runs. The caption says each bar is the mean over 12 random seeds per method, but AdaptQITE is averaged over only its 9 non-diverged seeds. PASS if the response identifies that the diverged-run exclusion is applied to AdaptQITE only (or otherwise unequally across methods) and that this contradicts or is hidden from the caption. FAIL if it does not mention the exclusion, or mentions it without noting that it applies only to the proposed method.
+  - name: recomputes-ranking-from-data
+    type: llm
+    criteria: >-
+      Context: from the data, the mean fidelity over all 12 seeds is 0.836 for AdaptQITE, 0.925 for VarQITE and 0.948 for QITE-Trotter. The figure as scripted plots AdaptQITE at 0.975 (9 seeds) and makes it the highest bar. With the same exclusion applied to every method, the means are 0.975, 0.962 and 0.948, with divergence rates of 3/12, 1/12 and 0/12. PASS if the response states, using numbers computed from the data, that including all seeds changes the ranking or makes AdaptQITE lowest (for example quoting a mean near 0.84 for AdaptQITE), or reports the per-method divergence counts together with consistently computed means. FAIL if the response gives no recomputed values from the data for this issue.
+  - name: finds-ci-mislabel
+    type: llm
+    criteria: >-
+      Context: the script computes each error bar as stdev / sqrt(n), the standard error of the mean, but the caption calls the error bars 95% confidence intervals. For n around 10 a 95% interval is roughly 2 to 2.3 times the standard error. PASS if the response states that the error bars are standard errors, not the 95% confidence intervals the caption claims, and asks for either the label or the computation to change. FAIL otherwise.
+  - name: finds-axis-encoding-defects
+    type: llm
+    criteria: >-
+      Context: two encoding defects are planted. (a) Figure 3 is a bar chart whose y-axis is set to start at 0.90 with no break or disclosure, so bar lengths exaggerate the differences (and a correctly averaged AdaptQITE value of 0.836 would fall below the axis). (b) Figure 4 plots CNOT count against energy error, both on log axes, where lower is better on both axes, yet an annotation arrow labelled "better" points toward the upper right. PASS only if the response identifies both (a) the truncated bar axis and (b) that the "better" arrow points in the wrong direction because lower cost and lower error are better. FAIL if either is missing.
+  - name: finds-final-size-and-format
+    type: llm
+    criteria: >-
+      Context: both figures are drawn on a 10 by 6 inch canvas with 7 pt fonts, saved as PNG at 100 dpi, and placed in the paper at \columnwidth, which is 3.375 in. Scaling 10 in down to 3.375 in shrinks the 7 pt text to about 2.4 pt, which is unreadable, and a 100 dpi raster of line art is low resolution where vector output (PDF or SVG) is preferable. PASS if the response points out that the canvas size and font size make the text far too small at the final column width (or equivalent reasoning about the scale-down) and also recommends vector output or a higher-resolution format instead of the 100 dpi PNG. FAIL if it misses the final-size legibility problem.

@@ -1,0 +1,57 @@
+schema_version: "1.1"
+name: radar-daily-brief-gates
+description: >-
+  A daily Chinese quantum briefing from a supplied abstract feed that tests the Quantum x AI gate, deduplication, down-ranking, update and recovery handling, and an honest coverage note.
+tags: [quality, tier3, quantum-research-radar]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    今天是 2026-09-26，出一份今天的量子早报，简洁一点。今天没法联网，我把今天从 arXiv 拉下来的条目（只有 abstract）和两条新闻稿放在 feed/ 里了，就基于这些来选。直接在回复里给我，不用写文件。
+graders:
+  - name: loads-quantum-research-radar
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?quantum-research-radar"'
+    min: 1
+  - name: reads-quantum-research-radar
+    type: tool_used
+    tool: Read
+    input_match: 'skills/quantum-research-radar/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: quantum-ai-gate
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: the feed contains arXiv:2609.19933 "QAOA-GPT", where a language model writes Qiskit QAOA programs for 3- to 8-node graphs that are never executed and are graded by another instance of the same model; arXiv:2609.20260, which uses an off-the-shelf SAT solver (no learned component) to certify minimum-weight decoding; and arXiv:2609.21810, a graph neural network decoder tested under noise shift against BP+OSD-10 and BP-LSD with an ablation and released code.
+      PASS if the briefing does not present QAOA-GPT (2609.19933) as a qualified Quantum x AI item (omitting it or explicitly rejecting it is fine) and does not describe the SAT-based work (2609.20260) as AI or machine learning. FAIL if QAOA-GPT is tagged or recommended as a Quantum x AI item, or the SAT work is labeled AI.
+  - name: dedupe-and-press
+    type: llm
+    criteria: >-
+      Background: arXiv:2609.21044 appears twice in the feed (quant-ph and a math.NA cross-list). A university press release titled "New AI decoder makes quantum computers error-free" describes arXiv:2609.21810. A vendor press release announces a 1,000-qubit roadmap with no technical paper.
+      PASS if 2609.21044 appears as a single item, the decoder press release is not given its own entry and its "error-free" wording is not repeated as a finding, and the vendor roadmap is not presented as a selected research item (a brief mention that it lacks technical evidence is fine). FAIL if any of these is violated.
+  - name: coverage-and-evidence-limits
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: the briefing was produced offline from a supplied file of arXiv abstracts (plus two press releases), with no web search and no full-text reading.
+      PASS if the briefing ends with a short coverage note that names what was actually scanned (the supplied abstract feed and press items), the date window, and that no web search or full-text reading was done, and if nowhere does it claim to have read full papers, checked code, or verified results beyond the abstracts. FAIL if there is no coverage note, or the note omits that coverage was limited to the supplied abstracts, or the briefing claims more reading than abstracts.
+  - name: update-and-recovery
+    type: llm
+    criteria: >-
+      Background: arXiv:2609.18420 was first posted 2026-09-15; its v2 of 2026-09-25 corrects a T-count underestimate by a factor of 4 and moves the estimated crossover time against DMRG from 2.1 days to 6.3 days. arXiv:2608.14102 (posted 2026-08-19, 38 days before the briefing) formally verifies a Clifford+T rotation-merging compiler pass in Lean 4 and found two real bugs in a widely used compiler.
+      PASS if the briefing reports 2609.18420 as a material update, stating the correction (factor-4 T-count, or crossover 2.1 to 6.3 days) and distinguishing its first-posting date from the update, and includes 2608.14102 as an older recovered item. FAIL if either is missing, or 2609.18420 is described without its v2 correction.
+  - name: weak-items-not-selected
+    type: llm
+    criteria: >-
+      Background: weak items in the feed: arXiv:2609.21333 (4-qubit quantum kernel on Iris, 98% versus 96% for a linear SVM), arXiv:2609.20001 (exponential advantage for portfolio optimization assuming QRAM, with no end-to-end cost analysis), and arXiv:2506.01234 (a 2025 survey with no new version, listed in a "trending" box).
+      PASS if none of these three appears among the briefing's recommended or top items; listing them only as rejected or skipped, with a reason, is fine. FAIL if any of them is recommended or placed among the selected items.
+  - name: no-invented-papers
+    type: llm
+    criteria: >-
+      Background: the only arXiv identifiers supplied were 2609.21044, 2609.20517, 2609.21810, 2609.19933, 2609.20260, 2609.21333, 2609.20001, 2609.18420, 2506.01234 and 2608.14102.
+      PASS if every paper the briefing selects or describes is one of these, and no other arXiv identifier, paper title or result is presented as part of today's feed. FAIL if the briefing includes any paper or identifier not in this list as if it had been scanned.

@@ -1,0 +1,62 @@
+schema_version: "1.1"
+name: writing-memory-entry-current-state
+description: >-
+  A project-memory entry rewritten to state only the current rule.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Rewrite this project-memory entry so it states the current rule. The owner decided today that a runner built from any descendant of NWQ-Sim commit efd0226 is qualified, provided the source files that the roundoff derivation reads are byte-identical to those at efd0226. Otherwise the receipt marks the derivation sources as changed. Reply with only the updated entry.
+
+    Current entry:
+    NWQ-Sim qualification: only a runner built from exactly commit efd0226 is qualified. Any other commit, including upstream 202f5ca, is reported as an unchecked NWQ-Sim revision.
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-commit
+    type: regex
+    pattern: 'efd0226'
+    match: contains
+  - name: states-descendant-rule
+    type: regex
+    pattern: 'descend'
+    flags: i
+    match: contains
+  - name: no-history-narration
+    type: regex
+    pattern: 'no longer|previously|used to|was changed|old rule|exactly commit|formerly'
+    flags: i
+    match: not_contains
+  - name: current-rule-only
+    type: llm
+    criteria: >-
+      The entry states the current rule as guidance (descendants of efd0226 qualify when the derivation's source files are byte-identical, otherwise the receipt marks them changed) and does not describe the earlier rule.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

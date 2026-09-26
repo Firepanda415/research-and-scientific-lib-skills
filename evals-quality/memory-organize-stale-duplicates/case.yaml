@@ -1,0 +1,45 @@
+schema_version: "1.1"
+name: memory-organize-stale-duplicates
+description: >-
+  Organizing a project memory with conflicting duplicate tolerance entries, a finished job-status entry, a skill cache path, a moved document and a user-wide preference, testing verification against live source, deletion of stale state, catalog skill names and a proposal to move the user-wide rule.
+tags: [quality, tier2, maintain-project-memory]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    project memory 有点乱了，帮我整理一下 memory/ (duplicates, stale stuff). Keep what we still need, and tell me what you changed.
+graders:
+  - name: loads-maintain-project-memory
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?maintain-project-memory"'
+    min: 1
+  - name: reads-maintain-project-memory
+    type: tool_used
+    tool: Read
+    input_match: 'skills/maintain-project-memory/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: index-reconciled
+    type: llm
+    weight: 2
+    focus: {source: file, path: memory/INDEX.md}
+    criteria: >-
+      Context: this is a project-memory index. Before the cleanup it listed four entries: Tolerances (tolerances.md, which claimed a default tolerance of 1e-8), Numerics (numerics.md, which gives the current value 1e-10 with evidence), Sampler refactor (sampler-refactor.md, an in-progress status for a sampler rewrite that has since been merged), and Workflow (workflow.md). PASS if the index now has only one entry covering the default tolerance (not both a Tolerances and a Numerics entry for the same decision), no longer lists the sampler-refactor status, and does not describe removed entries with words such as removed, obsolete, deprecated or no longer. FAIL otherwise.
+  - name: tolerance-conflict-resolved-from-source
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: two project-memory entries conflicted: tolerances.md said the default tolerance DEFAULT_ATOL is 1e-8, and numerics.md said it is 1e-10, with evidence that 1e-8 missed a known 3e-9 phase error (results/qft-atol.log). The live source qlite/config.py sets DEFAULT_ATOL = 1e-10. The text below is the agent's report of its memory cleanup. PASS if the report says the two tolerance entries conflicted or duplicated each other and that it kept 1e-10 as the current value after checking qlite/config.py or the evidence log, removing the 1e-8 claim. FAIL if it keeps 1e-8, keeps both values as current, or merges the entries without saying which value is current.
+  - name: user-wide-preference-flagged
+    type: llm
+    criteria: >-
+      Context: a project-memory file said: "Replies: the user prefers answers in Chinese with English technical terms, in every project." Project memory loads only in its own project, so a preference for every project belongs in the user's global instructions. The text below is the agent's report of its memory cleanup. PASS if the report identifies this preference as user-wide rather than specific to this project and proposes moving it to the user's global or user-level instructions, leaving the move for the user to approve or do. FAIL if the report does not raise its scope, says it deleted the preference without it being moved, or claims to have edited global instructions.
+  - name: workflow-links-current
+    type: llm
+    focus: {source: file, path: memory/workflow.md}
+    criteria: >-
+      Context: this project-memory file previously pointed to the experiment-log skill through an installation cache path, ~/.claude/plugins/cache/research-skills/research-skills/0.1.0-claude.3f2a9c1/skills/write-research-log/SKILL.md, and to docs/old_benchmarks.md for the benchmark summary, which has moved to docs/benchmarks/README.md. PASS if the file refers to the experiment-log skill by its catalog name, research-skills:write-research-log or write-research-log, with no plugins/cache or other installation path, and points to docs/benchmarks/README.md, not docs/old_benchmarks.md, for the benchmark summary. FAIL otherwise, including when the file is empty or missing.

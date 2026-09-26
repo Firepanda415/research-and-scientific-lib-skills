@@ -1,0 +1,47 @@
+schema_version: "1.1"
+name: jobprompt-plan-to-job-series
+description: >-
+  Turning an agent-written, strictly serial remediation plan into implementer jobs, testing that every review finding is mapped (including one the plan dropped), the user's deferral is recorded, an inseparable rename stays in one job, the bit-order job includes the compensating caller, and independent jobs are not serialized.
+tags: [quality, tier2, write-implementation-job-prompts]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 25
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Turn plans/remediation-plan.md into jobs for implementer agents. R5 can wait until after the March 15 deadline, so don't schedule it. For each job give the outcome, what it depends on, the files it touches and its acceptance check. Keep it compact, a table or short list; I'll ask for the full prompts later. Reply in chat and don't change any files.
+graders:
+  - name: loads-write-implementation-job-prompts
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?write-implementation-job-prompts"'
+    min: 1
+  - name: reads-write-implementation-job-prompts
+    type: tool_used
+    tool: Read
+    input_match: 'skills/write-implementation-job-prompts/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: maps-every-finding
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a code review produced six findings. R1: sample_counts ignores its seed above 10000 shots. R2: qubit_bit counts qubits from the wrong end. R3: the public parameter nqubits should be renamed n_qubits. R4: the README example output is wrong because of R2. R5: postselect lacks a renormalization test. R6: the second-order Trotter step in qlite/evolve.py applies H_B for dt/2 instead of dt. A remediation plan covered R1 to R5 and omitted R6. The user deferred R5 until after a March 15 deadline. The text below is a job series for implementer agents. PASS if every finding R1 to R6 is either assigned to a job or given an explicit disposition, and R6 in particular is either scheduled as a job or explicitly flagged as missing from the plan and needing a decision. FAIL if any finding, especially R6, is silently absent.
+  - name: rename-kept-together
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: finding R3 renames the parameter nqubits to n_qubits in zero_state and random_state in qlite/state.py. Its callers (qlite/circuits.py, examples/demo.py, tests/test_state.py and the README) pass the argument by keyword, as nqubits=..., so renaming the definition without updating the callers in the same change breaks them. A plan split this into one job renaming the definition and a later job updating the callers. The text below is a job series. PASS if the rename of the definition and the update of all its keyword callers are in the same job, or the split is kept only together with a temporary compatibility alias that keeps the intermediate state working and a named job that removes it. FAIL if the definition rename and the caller updates are separate jobs with no compatibility path, or if R3 is not addressed.
+  - name: bit-order-job-includes-compensating-caller
+    type: llm
+    criteria: >-
+      Context: finding R2 says qubit_bit in qlite/bits.py counts qubits from the most significant bit, and that expectation_z in qlite/observables.py compensates by mirroring the qubit index, so it must drop that mirror when qubit_bit is fixed. A plan listed only qlite/bits.py for this job. The text below is a job series. PASS if the job for R2 includes qlite/observables.py or expectation_z (removing its mirror) in its files or acceptance check. FAIL if the R2 job covers only bits.py and never mentions expectation_z or observables.py.
+  - name: real-dependencies-only
+    type: llm
+    criteria: >-
+      Context: a plan required six jobs to run strictly one after another. In the code, R1 (seeding in qlite/sampling.py), R2 (bit order in qlite/bits.py and qlite/observables.py) and R6 (Trotter step in qlite/evolve.py) touch separate files and do not depend on each other. R4 (README example output) depends on the R2 fix, because the corrected output only exists after it. The text below is a job series. PASS if it lets R1 and R2 (and R6, if scheduled) proceed independently or in parallel rather than in a forced sequence, and places the README output update of R4 after or together with the R2 fix. FAIL if it keeps every job in one strict sequence, or schedules R4 before or independently of R2.
+  - name: user-deferral-recorded
+    type: llm
+    criteria: >-
+      Context: the user said finding R5 (a missing test for postselect renormalization) can wait until after the March 15 deadline and should not be scheduled. The text below is a job series. PASS if R5 is not scheduled as a job and is listed as deferred by the user's decision, for example until after March 15. FAIL if R5 is scheduled as a job, or if it is silently omitted without being listed as deferred.

@@ -1,0 +1,54 @@
+schema_version: "1.1"
+name: baselines-ablation-design-budget
+description: >-
+  Design of an ablation study for a qLDPC decoder under a GPU-hour budget, where the baseline uses a weaker OSD order than the proposed pipeline.
+tags: [quality, tier3, stress-test-baselines]
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    We're revising our qLDPC decoder paper and a reviewer asked for an ablation study.
+
+    Our pipeline, PRISM-BP, has three components: (i) a learned prior, a small GNN that reweights the channel LLRs from the syndrome history; (ii) a new layered BP schedule; (iii) OSD post-processing at order 10 (OSD-CS). Headline result: on the [[144,12,12]] bivariate bicycle code under circuit-level noise p = 0.1%, PRISM-BP's logical error rate per round is 2.1x lower than the baseline. The baseline is flooding BP with 100 iterations plus OSD-0, the decoder used in the original code paper.
+
+    Budget: 600 GPU-hours in total for new runs. Cost per data point, with enough shots for about 10% relative error on the logical error rate: [[72,12,6]] 5 GPU-h, [[90,8,10]] 15 GPU-h, [[144,12,12]] 40 GPU-h, roughly independent of p over 0.05% to 0.3%. The learned prior must be retrained for each code at 30 GPU-h per code; the trained prior for [[144,12,12]] already exists.
+
+    Design the ablation study: which runs, in what order, and what would make us stop. Don't run anything; a plan of at most 450 words in English is enough.
+graders:
+  - name: loads-stress-test-baselines
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?stress-test-baselines"'
+    min: 1
+  - name: reads-stress-test-baselines
+    type: tool_used
+    tool: Read
+    input_match: 'skills/stress-test-baselines/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: osd-order-confound-first
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: a decoder pipeline PRISM-BP (learned prior + layered BP schedule + OSD order 10) is reported 2.1x better than a baseline of flooding BP + OSD order 0. The OSD order alone differs between them and could explain much of the gain.
+      PASS if the response identifies the OSD-order mismatch (order 10 versus order 0) as a confound and makes a baseline with the same OSD post-processing (for example flooding BP + OSD-10 / OSD-CS order 10) the first or highest-priority run. FAIL if it does not notice the mismatch, or includes a matched-OSD baseline only as one run among many without noting that it could explain the headline gain.
+  - name: fits-budget-with-arithmetic
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: the budget is 600 GPU-hours. Costs per data point are 5 GPU-h on [[72,12,6]], 15 GPU-h on [[90,8,10]] and 40 GPU-h on [[144,12,12]]; retraining the learned prior costs 30 GPU-h per code, and the [[144,12,12]] prior already exists. A full factorial over the 3 on/off components (8 configurations) on all three codes at even 3 noise rates would cost 8 x (5 + 15 + 40) x 3 = 1440 GPU-h plus retraining, well over budget.
+      PASS if the response gives a concrete run list with explicit cost arithmetic that totals at most 600 GPU-h (retraining counted where used), and does not propose a full factorial sweep over components, codes and noise rates. FAIL if no total is computed, the total exceeds 600 GPU-h, or the plan is a full factorial without justification.
+  - name: stopping-rule
+    type: llm
+    criteria: >-
+      PASS if the plan states at least one concrete stopping or decision rule tied to results, for example: if the matched-OSD baseline closes most of the 2.1x gap, stop further component ablations and narrow the claim; or stop a stage when differences are within the roughly 10% statistical error. A rule that only says "stop when the budget runs out" does not count. FAIL otherwise.
+  - name: regime-and-cheap-screening
+    type: llm
+    criteria: >-
+      Background: the headline 2.1x result is at a single operating point, the [[144,12,12]] code at p = 0.1%. Runs on [[72,12,6]] cost 5 GPU-h per point, versus 40 GPU-h on [[144,12,12]].
+      PASS if the plan checks the claim at more than one operating point where the ranking could change (another physical error rate or another code) or uses the cheap small code to screen component contributions or interactions before spending on the expensive code. FAIL if every run is at the single point [[144,12,12]], p = 0.1%, with no screening on cheaper codes.
+  - name: tuning-budget-all-methods
+    type: llm
+    criteria: >-
+      Context: an ablation plan for a qLDPC decoder study. The proposed pipeline, PRISM-BP, combines a learned prior, a layered BP schedule and OSD post-processing at order 10. The baseline is flooding BP with 100 iterations plus OSD-0, the settings used in the original code paper. PASS if the plan gives the baseline a stated tuning budget or search space (for example BP iteration count, damping or scaling factor, schedule, or OSD order) and states that PRISM-BP's own settings are chosen or reported the same way, rather than tuning only the proposed method or leaving the baseline at the original paper's settings. FAIL if the baseline's settings are not tuned or discussed.

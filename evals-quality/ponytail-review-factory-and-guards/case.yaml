@@ -1,0 +1,50 @@
+schema_version: "1.1"
+name: ponytail-review-factory-and-guards
+description: >-
+  Ponytail review of a diff that adds a one-backend factory, unread config fields and a hand-rolled mean next to a boundary check and compensated summation that must stay, testing the tagged line format and cuts that preserve validation and accuracy.
+tags: [quality, tier3, ponytail-review]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 25
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    /ponytail-review the last commit (HEAD~1..HEAD), which adds vqe_lite/estimator.py. Tests: `python3 -m unittest`. Just list the findings in chat, don't change anything.
+graders:
+  - name: loads-ponytail-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?ponytail-review"'
+    min: 1
+  - name: reads-ponytail-review
+    type: tool_used
+    tool: Read
+    input_match: 'skills/ponytail-review/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: tagged-line-format
+    type: regex
+    pattern: 'L\d+(?:\s*[-–]\s*L?\d+)?\W{0,6}(?:delete|stdlib|native|yagni|shrink)\W{0,3}:'
+    flags: i
+    match: contains
+  - name: collapses-factory-and-config
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: the reviewed diff adds an abstract base class BaseEstimator, a single implementation PythonEstimator, and an EstimatorFactory whose registry holds only "python". It also adds a dataclass EstimatorConfig with fields backend, shots, seed, use_gpu and cache_dir; only backend is ever read (to look up the factory registry), and shots, seed, use_gpu and cache_dir are never read anywhere. PASS if the review recommends removing or collapsing the base class and factory into a plain function (or equivalent direct call) and recommends removing the unread configuration fields or the config class. FAIL if it misses either the factory/base-class layer or the unread config fields.
+  - name: preserves-validation-and-fsum
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: the reviewed diff has two pieces that must be kept. _check_hamiltonian validates user-supplied Hamiltonians at the public boundary (state length a power of two, real coefficients, Pauli labels of the right length and alphabet). math.fsum sums the energy terms; a test in the same diff, test_large_coefficients_cancel, uses terms 1e16, 1.0 and -1e16 and expects exactly 1.0, which plain sum() would return as 0.0, and the README says users paste Hamiltonians whose coefficients cancel. PASS if the review neither recommends removing _check_hamiltonian (or its checks) nor recommends replacing math.fsum with sum() or another uncompensated summation. Mentioning either as correct or worth keeping is fine. FAIL if it recommends removing the validation or replacing math.fsum with a plain sum.
+  - name: stdlib-mean
+    type: llm
+    criteria: >-
+      Context: the reviewed diff adds a hand-rolled _mean function that loops to accumulate a total and a count and returns total / count. PASS if the review recommends replacing it with a standard-library facility such as statistics.fmean or statistics.mean, or with sum(values) / len(values) (or math.fsum(values) / len(values)). FAIL if it does not mention _mean.
+  - name: no-edits
+    type: tool_used
+    tool: Edit
+    min: 0
+    max: 0
+    arm: both

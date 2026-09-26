@@ -1,0 +1,46 @@
+schema_version: "1.1"
+name: physics-kerr-note-convention-check
+description: >-
+  Check another agent's transmon-to-Kerr derivation and map it onto a simulator that uses a different Kerr convention, testing statement status labels, unit and convention tracking, validity conditions and a numerically correct parameter mapping.
+tags: [quality, tier3, physics-from-math-explainer]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Another agent wrote notes/transmon_to_kerr.md for me, deriving the Kerr oscillator model of our transmon. I come from numerical analysis, so the physics steps aren't obvious to me. Please check the derivation, explain what each step really is, and tell me exactly which omega and chi to pass to kerr_oscillator_hamiltonian in sim/kerr.py for the device in params.toml, and how many Fock levels of the result I can trust. Reply here in English; don't modify any files.
+graders:
+  - name: loads-physics-from-math-explainer
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?physics-from-math-explainer"'
+    min: 1
+  - name: reads-physics-from-math-explainer
+    type: tool_used
+    tool: Read
+    input_match: 'skills/physics-from-math-explainer/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: correct-simulator-parameters
+    type: llm
+    weight: 2
+    criteria: >-
+      Facts: E_J/h = 12.5 GHz and E_C/h = 0.25 GHz, so the plasma frequency is omega_p/2pi = sqrt(8 E_J E_C)/h = 5 GHz. The correct effective model is H/hbar = omega_01 N + (K/2) N(N-1) with omega_01/2pi = 4.75 GHz and K/2pi = -0.25 GHz. The simulator function uses H = omega N + chi N^2 with hbar = 1 and angular frequencies in rad/ns. Rewriting (K/2) N(N-1) = (K/2) N^2 - (K/2) N gives chi = K/2 and omega = omega_01 - K/2, so omega/2pi = 4.875 GHz, which is omega of about 30.63 rad/ns, and chi/2pi = -0.125 GHz, which is chi of about -0.785 rad/ns. PASS if the response gives omega of about 30.6 rad/ns (or states 2pi x 4.875 GHz in rad/ns form) and chi of about -0.785 rad/ns (or 2pi x -0.125 GHz), and explains that the linear term shifts because the simulator uses N^2 rather than N(N-1). FAIL if it recommends omega = omega_01 (29.85 rad/ns or 4.75 GHz) for this function, gives values in GHz without the 2pi conversion to rad/ns, or gives a different chi.
+  - name: finds-kerr-factor-error
+    type: llm
+    criteria: >-
+      Context: the supplied note matched H/hbar = omega_01 N + (K/2) N(N-1) to a quartic term -(E_C/2) N(N-1) and concluded K = -E_C/(2 hbar), and it also stated that the anharmonicity is alpha = 2K. With that convention the correct results are K = -E_C/hbar and alpha = omega_12 - omega_01 = K. PASS if the response states that the note's K = -E_C/(2 hbar) is wrong by a factor of 2 and gives K = -E_C/hbar (K/2pi = -0.25 GHz here), or equivalently identifies both that K = -E_C/hbar and that alpha = K in this convention. FAIL if the response accepts K = -E_C/(2 hbar).
+  - name: flags-exact-vs-rwa-and-units
+    type: llm
+    criteria: >-
+      Context: the supplied note wrote "(a + a^dagger)^4 = 6N(N-1) + 12N + 3" as an exact equality after "expanding and normal ordering", and later wrote "H/hbar = (omega_p - E_C) N - (E_C/2) N(N-1)", subtracting an energy E_C from an angular frequency. In fact the full expansion of (a + a^dagger)^4 also contains terms such as a^4, a^dagger^4, a^dagger^3 a and a^dagger a^3 that change the excitation number, and the equality holds only after a rotating-wave approximation (RWA) drops them. After dividing by hbar every coefficient should read E_C/hbar. PASS if the response identifies both issues: that the (a + a^dagger)^4 step is an RWA or approximate replacement rather than an exact identity, and that the Step 4 expression mixes energy and angular-frequency units. FAIL if either is missed.
+  - name: validity-and-trusted-levels
+    type: llm
+    criteria: >-
+      Context: the supplied note claimed validity in the charge regime E_J/E_C << 1, which is reversed; the expansion needs E_J/E_C >> 1 (here E_J/E_C = 50). The quartic expansion also needs small phase fluctuations, and the phase variance in Fock state n is about sqrt(2 E_C/E_J)(2n + 1), which is 0.2(2n + 1) here, so it grows quickly with n; neglected higher-order terms change K at relative order of roughly sqrt(E_C/E_J), about 0.1 to 0.2 here. PASS if the response corrects the regime to E_J/E_C >> 1 and states that the Kerr model is trustworthy only for the lowest few Fock levels (giving a reason tied to excitation number, phase fluctuations or higher-order corrections), rather than for all n_levels of the truncation. FAIL if it misses the reversed regime or gives no excitation-number limit.
+  - name: labels-statement-status
+    type: llm
+    criteria: >-
+      PASS if the response explains the derivation step by step and labels the status of the main steps, distinguishing at least three of these kinds: a Taylor or low-energy approximation (the cosine expansion), a definition (the ladder operators), an exact identity (the quadratic part becoming hbar omega_p (N + 1/2)), an RWA or effective replacement (keeping only number-conserving quartic terms), and a convention (the form of the Kerr term or dropping constants). FAIL if it presents the steps without distinguishing exact from approximate or conventional statements.

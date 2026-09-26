@@ -1,0 +1,55 @@
+schema_version: "1.1"
+name: animation-fix-reviewer-comments
+description: >-
+  Fix two timestamped reviewer comments on an explainer video in a shared rendering pipeline that cannot be run here, testing whether the fix addresses the cause and the response extends the recheck to every affected formula, subtitle and video.
+tags: [quality, tier3, research-explainer-animation]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 35
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Two reviewer comments on kerr_intro v3:
+
+    1. "1:12, in K = -E_C/ħ there is no fraction bar; E_C just floats above ħ."
+    2. "2:05, the subtitle 'We compare KERRSIM-DENSE, WIGNER-MPS and HQM-TEBD at N = 40 levels.' runs off the right edge of the frame."
+
+    Manim, Typst and ffmpeg are only on the render workstation, so you can't re-render here. Please fix the cause in the pipeline code, keep the unit tests passing (python3 -m unittest discover -s tests), and tell me what I need to re-check when I re-render.
+graders:
+  - name: loads-research-explainer-animation
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-explainer-animation"'
+    min: 1
+  - name: reads-research-explainer-animation
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-explainer-animation/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: fraction-bar-import-fixed
+    type: llm
+    weight: 2
+    focus: {source: file, path: explainer/mathsvg.py}
+    criteria: >-
+      Context: this module imports Typst SVG formulas. Typst draws a fraction bar as a path such as d="M 22 14 L 34 14" with fill="none", stroke="#000000" and stroke-width="0.6". The original code imported every shape with fill only when fill is not "none" and forced stroke_width to 0, so fraction bars became invisible. PASS if the module now makes such stroked, unfilled lines visible, for example by converting a stroked horizontal line into a filled rectangle whose height equals the stroke width, or by keeping a nonzero stroke for stroked shapes. FAIL if stroked unfilled paths are still imported with no fill and zero stroke width.
+  - name: subtitle-width-measured
+    type: llm
+    focus: {source: file, path: explainer/subtitles.py}
+    criteria: >-
+      Context: this module splits narration sentences into burned-in subtitle lines that must fit a 1760 px box at 1080p in IBM Plex Sans at 46 px (raised from 40 px). The original code split only by a 70-character limit, so a 67-character line of mostly capital letters overflowed. PASS if the line-breaking decision now depends on the rendered width of the text in the subtitle font and size (for example Pillow ImageFont.getlength, font advance widths, or an injected measuring function) compared with the pixel limit. FAIL if line breaking still depends only on a character count, including a reduced character limit.
+  - name: regression-test-for-bar
+    type: llm
+    focus: {source: file, path: tests/test_mathsvg.py}
+    criteria: >-
+      Context: tests/data/kerr_K.svg contains four filled glyph paths and one fraction bar drawn as a stroked path with fill="none" and stroke-width="0.6". PASS if this test file contains a test asserting that the fraction bar is imported as a visible shape (for example that it becomes a filled rectangle, has a fill color with nonzero opacity, or keeps a nonzero stroke width). FAIL if no test checks the fraction bar's visibility.
+  - name: recheck-scope-covers-all-videos
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: both videos, kerr_intro (in review) and lchs_overview (already published), are built with the same shared formula importer and subtitle splitter. kerr_intro has other formulas with fractions besides the one at 1:12 (K/2 in the Hamiltonian and a relative-error ratio), lchs_overview has fractions such as d/(dt) and 1/(pi(1 + k^2)), and the subtitle font size change applies to every line. PASS if the response tells the user to re-check every formula with a fraction bar or rule (not only the 1:12 frame) and explicitly includes the published lchs_overview video as possibly affected by the same missing-bar defect, and also to re-check subtitle lines beyond the single 2:05 line. FAIL if the re-check covers only the two reported timestamps or only kerr_intro.
+  - name: explains-causes
+    type: llm
+    criteria: >-
+      PASS if the response explains both causes: (1) Typst draws fraction bars as stroked lines without fill, and the importer's zero stroke width (with no fill) made them invisible; (2) a character-count limit does not bound the rendered width of a subtitle line, especially with wide capital letters and after the font size was raised from 40 px to 46 px. FAIL if either cause is missing or misidentified.

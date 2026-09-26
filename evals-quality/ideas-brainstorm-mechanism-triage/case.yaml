@@ -1,0 +1,51 @@
+schema_version: "1.1"
+name: ideas-brainstorm-mechanism-triage
+description: >-
+  Triage of a brainstormed list of phase-estimation directions where several items share one mechanism and one novelty claim rests on an empty keyword search.
+tags: [quality, tier3, develop-research-ideas]
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    我们组上周 brainstorm 了一轮 early-FTQC phase estimation 的后续方向，下面是白板上的 6 条。我们现在的工作是 RWPE（robust phase estimation with a Lorentzian filter），在 12–20 logical qubits、max evolution time T_max <= 200/||H|| 的 budget 下估计 ground-state energy，用固定的 geometric schedule 选 evolution times。帮我判断哪些值得做、先做哪个；如果你觉得有更好的方向也可以补。English reply, at most 500 words.
+
+    1. Replace the Lorentzian filter in RWPE with a Gaussian filter.
+    2. Replace the Lorentzian filter with a Kaiser window.
+    3. Apply RWPE, unchanged, to FeMoco active spaces instead of our Hubbard models.
+    4. Use a single bosonic qumode as the phase-kickback register instead of the qubit ancilla, so one homodyne measurement replaces many repeated binary shots. Mei searched arXiv for "qumode ancilla phase estimation" and "CV ancilla QPE" and found nothing, so this is novel.
+    5. Post-process the same RWPE time series with a classical subspace (Krylov-type) fit that extracts several eigenvalues instead of only the ground state.
+    6. Choose evolution times adaptively from a Bayesian posterior over the eigenphase instead of the fixed geometric schedule.
+graders:
+  - name: loads-develop-research-ideas
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?develop-research-ideas"'
+    min: 1
+  - name: reads-develop-research-ideas
+    type: tool_used
+    tool: Read
+    input_match: 'skills/develop-research-ideas/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: merges-same-mechanism-items
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: a brainstorm list for robust phase estimation (RWPE) contains item 1 "replace the Lorentzian filter with a Gaussian filter", item 2 "replace the Lorentzian filter with a Kaiser window", and item 3 "apply RWPE unchanged to FeMoco instead of Hubbard models".
+      PASS if the response treats items 1 and 2 as one direction (a choice of filter or window within the same method, not two distinct mechanisms) and treats item 3 as a change of application target that is not a new method by itself. Both parts are required. FAIL if items 1 and 2 are assessed as separate, independent research directions, or item 3 is presented as a methodological direction without noting that the method is unchanged.
+  - name: rejects-empty-search-novelty
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: item 4 of a brainstorm list proposes using a bosonic qumode (oscillator) as the phase-kickback register in phase estimation, read out by homodyne measurement. A group member searched arXiv for "qumode ancilla phase estimation" and "CV ancilla QPE", found nothing, and concluded the idea is novel.
+      PASS if the response says that this empty keyword search does not establish novelty, and indicates that related work may exist under other terminology or mechanisms (for example oscillator or pointer-based measurement, continuous-variable or GKP-type phase estimation) that must be checked before claiming novelty. FAIL if it accepts or repeats the novelty claim, calls the idea new or first on the strength of the search, or does not comment on the novelty claim at all.
+  - name: item4-load-bearing-assumptions
+    type: llm
+    criteria: >-
+      Background: item 4 proposes replacing a qubit ancilla in phase estimation with a single bosonic qumode read out by one homodyne measurement, claiming that one CV measurement replaces many repeated binary shots.
+      PASS if the response identifies at least one load-bearing physical or resource assumption behind this claim and explains its consequence, for example: finite squeezing or oscillator energy limits the precision of a single homodyne shot, a controlled interaction between the system Hamiltonian and the oscillator (such as a conditional displacement) must be implemented and costs resources, or loss and homodyne inefficiency degrade the estimate. FAIL if it accepts "one homodyne replaces many shots" without examining what it requires.
+  - name: leads-with-recommendation
+    type: llm
+    criteria: >-
+      Context: the response triages six follow-up directions for RWPE, a robust phase-estimation method with a Lorentzian filter and a fixed geometric schedule of evolution times: (1) a Gaussian filter, (2) a Kaiser window, (3) the unchanged method on FeMoco active spaces, (4) a bosonic qumode as the phase-kickback register, (5) a classical subspace fit that extracts several eigenvalues from the same time series, (6) adaptive evolution times from a Bayesian posterior. PASS if the response states early (in its first paragraph or first section) which direction it recommends pursuing first and the decisive reason, and any directions it adds beyond these six each differ in mechanism from them (not merely another filter, window, parameter or application target). FAIL if the recommendation appears only at the end or is absent, or if any added direction is only a new filter, window, parameter setting or application target.

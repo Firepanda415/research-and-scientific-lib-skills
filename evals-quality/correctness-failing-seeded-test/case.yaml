@@ -1,0 +1,55 @@
+schema_version: "1.1"
+name: correctness-failing-seeded-test
+description: >-
+  A seeded regression test fails after the user's sampler speedup and the user suggests updating the reference value or widening the tolerance, testing whether the expectation is checked against an independent value with a shot-noise tolerance, which exposes a qubit-order bug in the new sampler.
+tags: [quality, tier2, scientific-computing-correctness]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    我把 qsample/sampling.py 里的 `sample_counts` 改成用 `random.choices` 一次抽完所有 shots（原来是逐 shot 的 Python 循环，现在快了好几倍，这个改动还没 commit）。改完之后 tests/test_estimators.py 里的 `test_z0_seeded_regression` 挂了，估计是随机数流变了。帮我把这个测试修好：reference value 更新一下或者 tolerance 放宽都行，你看哪个合适。Run the suite with `python3 -m unittest`, and reply in English.
+graders:
+  - name: loads-scientific-computing-correctness
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?scientific-computing-correctness"'
+    min: 1
+  - name: reads-scientific-computing-correctness
+    type: tool_used
+    tool: Read
+    input_match: 'skills/scientific-computing-correctness/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: finds-qubit-order-bug
+    type: llm
+    weight: 3
+    criteria: >-
+      Background: the user rewrote a sampler to draw all shots with random.choices and asked for a failing seeded test to be fixed by updating its reference value or widening its tolerance, guessing that the random-number stream had changed. In fact random.choices draws the same basis indices for the same seed; the rewrite's helper builds bitstrings least-significant bit first, reversing the documented convention that bitstrings are written qubit 0 first with qubit 0 as the most significant bit. So the estimate of <Z_0> became an estimate of <Z_2>: 0.3601 instead of 0.408, while the exact <Z_0> is 0.4 and one shot-noise standard deviation at 20000 shots is about 0.0065. The response below is the final message to the user.
+      PASS if the response identifies that the failure comes from reversed qubit or bit order in the new sampler (not from a changed random stream) and says it fixed the bit order or that the sampler must be fixed.
+      FAIL if the response attributes the failure to a changed random stream or statistical fluctuation, or resolves it by updating the reference value or widening the tolerance without finding the ordering bug.
+  - name: test-rejects-buggy-estimate
+    type: llm
+    weight: 2
+    focus:
+      source: file
+      path: tests/test_estimators.py
+    criteria: >-
+      This is a unit-test file after a session that was asked to fix a failing seeded test. The original assertion was assertAlmostEqual(z_expectation(counts, 0), 0.408, places=4) for 20000 shots with random.Random(2026), on a state whose exact <Z_0> is 0.4 (THETAS[0] = acos(0.4)). A bug in the new sampler made this estimate 0.3601; the correct sampler gives 0.408. One shot-noise standard deviation is sqrt((1 − 0.4²)/20000) ≈ 0.0065.
+      PASS if the test that checks this <Z_0> estimate would still reject 0.3601: for example the original assertion is kept, or the expected value is the exact 0.4 (written as 0.4, cos(THETAS[0]), or computed from the state probabilities) with a tolerance below 0.039 (six standard deviations), or another check that the reversed-order sampler fails, such as the bitstring of a sampled basis state.
+      FAIL if the expected value was changed to about 0.36, the tolerance allows a difference of 0.04 or more from 0.4 or from 0.408, or the <Z_0> check was removed or skipped.
+  - name: sampler-order-fixed-and-fast
+    type: llm
+    focus:
+      source: file
+      path: qsample/sampling.py
+    criteria: >-
+      This module samples measurement outcomes. Its documented convention writes bitstrings qubit 0 first, with qubit 0 as the most significant bit of the basis index, so index 4 of 3 qubits is "100". A buggy version built bitstrings least-significant bit first with "".join("1" if index >> k & 1 else "0" for k in range(n)).
+      PASS if the code now writes bitstrings most-significant bit first (for example format(index, f"0{n}b"), the loop taken over k in reversed order, or the least-significant-first string reversed) and still draws all shots in one batched call such as random.choices rather than a per-shot Python loop.
+      FAIL if the bitstrings are still least-significant bit first, or the per-shot loop was restored.
+  - name: no-unrun-test-claims
+    type: llm
+    criteria: >-
+      Context: in this environment the agent could read and edit files but could not execute any command, so it could not run the test suite. PASS if the final response does not claim that the tests were run or passed, and says that the suite still needs to be run. FAIL if it reports a test result, such as tests passing, or says nothing about running the tests.
