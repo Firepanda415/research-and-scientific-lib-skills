@@ -85,6 +85,13 @@ and user-owned files.
 Do not delete raw research evidence merely because a summary now exists.
 Archive or delete a report only after its intended reader has read it, unless
 the user decides otherwise.
+When a piece of work ends and its temporary folder is cleared, move the material
+that later decisions rest on into the project's archive with an index entry,
+such as final reports, review findings with their dispositions, user decisions,
+the measured evidence behind a decision, and scientific originals. A final
+report also stays where its reader will look for it until the reader has read
+it. Move lasting rules and decisions into their owners. Delete briefs, progress
+logs, scratch copies and backups whose content lives on elsewhere.
 If the user authorizes pruning evidence, keep the remaining originals unmodified
 and record their sources, with hashes when later readers must check integrity.
 Mark claims resting only on a summary as no longer re-checkable.
@@ -118,7 +125,10 @@ outside that scope.
 
 Check that the updated entry reaches the current owners, referenced evidence and
 protected artifacts exist where claimed, superseded instructions no longer steer
-new work, and unresolved obligations remain visible. Before recording an
+new work, and unresolved obligations remain visible. Check that each user
+decision, approved rule and kept capability from the work reached its owner. A
+decision recorded only in a temporary report or the conversation is lost to
+later sessions, which may then propose the rejected option again. Before recording an
 artifact as protected or reusable, confirm that its location survives restarts
 and routine cleanup. For a temporary location, record how to rebuild the
 artifact or that it cannot be rebuilt. Do not mark a finding resolved from a

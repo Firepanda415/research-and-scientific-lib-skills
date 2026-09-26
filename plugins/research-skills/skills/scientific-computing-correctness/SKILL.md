@@ -15,6 +15,8 @@ Discarding information does not by itself justify a stronger claim or greater ce
 
 For implementation, optimization, refactoring, or proposed structural changes, load and apply [Ponytail](../ponytail/SKILL.md) unless it is off. Choose the simplest design that meets the scientific and resource contract established here. Pure verification of a specified result without code-design decisions does not need that additional route.
 
+End implementation or validation work with the [review before completion](#review-before-completion).
+
 ## Authority of project records
 
 When a plan, policy, framework, constants registry, review report, or prior
@@ -34,6 +36,9 @@ authority the user or project assigns:
 Only the user or a delegated project owner designates constitutional status.
 Do not infer it from a filename, location, tone, age, test, or prior agent's
 wording. No document establishes mathematical or numerical truth by assertion.
+Neither does a derivation supplied by another agent or model. Check the steps
+that later work depends on with a small independent numerical or symbolic
+calculation before relying on them.
 When an undesignated or living record conflicts with current evidence, decide
 from the intended quantity and first principles whether the code, the record,
 or both must change. Ask the user only when the classification or amendment
@@ -77,7 +82,10 @@ For paper-derived implementations, proof-assistant formalizations, or equation/r
 ## Approximation and decision safety
 
 - An exact path must not silently discard, threshold, round, clip, or substitute
-  nonzero information.
+  nonzero information, including inside a dependency call such as a synthesis
+  routine with an internal fidelity target. Before documenting such a
+  construction as exact, measure the error of what it actually builds on small
+  instances.
 - Derive acceptance thresholds from the intended quantity, method, or error
   budget. Do not fit or widen them after observing failures merely to pass a
   gate. Dependence on scale, dimension, or conditioning needs a derivation or
@@ -128,7 +136,20 @@ For paper-derived implementations, proof-assistant formalizations, or equation/r
 
 - Give each scientific fact, status vocabulary, and lifecycle transition one
   semantic owner. Trace every producer, transform, caller, sibling path, and
-  consumer before changing a shared owner.
+  consumer before changing a shared owner, including extension implementations
+  written against a documented protocol. Targeted tests can miss those
+  implementations, so a change to an entry point that they all pass through
+  runs the project's standard full test suite before integration.
+- Document each formula or numerical rule that the work adds or changes where
+  it is defined, in its docstring or in a comment above the line. Give the
+  derivation steps a reader needs to reproduce it, its assumptions, its error
+  bound when it has one, and its source with a stable identifier. Copy a derivation prepared elsewhere, such as in a
+  report or another agent's answer, into the code or the project's existing
+  algorithm documentation, because such records may not last. Owners that share
+  one derivation name each other, and a test that asserts a derived bound names
+  the owner that derives it. When documenting existing code, derive what each
+  step computes. Report a step that contradicts the derivation as a finding,
+  because an assumed reason for it would hide a defect.
 - When a public record is affected, define the field's meaning and the units,
   population, event, or cross-field relations needed to interpret it. Do not
   introduce a new status schema or bookkeeping layer for an unchanged contract.
@@ -195,7 +216,9 @@ cannot provide missing human approval.
 - Check peak live memory as well as final output size, including temporary
   copies, accumulated per-iteration records, and repeated report serialization.
   Resource records must not trigger unnecessary construction or execution merely
-  to describe it. Include affected tests and examples in this cost check.
+  to describe it. Include affected tests and examples in this cost check. A
+  statement that a resource quantity is absent or unknown holds only in the
+  context where it was checked, such as the gate basis. Name that context.
 - Validate fixed assumptions at input or representation boundaries. Keep
   expensive checks, dense reference constructions, repeated scans, copies, and
   diagnostic serialization out of hot loops unless the algorithm requires them.
@@ -284,9 +307,19 @@ evidence. Small coefficients or large raw outputs alone do not justify deletion.
   that makes the decision, and keep the natural case as supplementary evidence.
   A passing retry does not resolve a deterministic counterexample. Attribute
   the variation to a dependency only after isolating it.
+- A result can depend on an arbitrary sign or phase that a dependency returns,
+  such as eigenvector signs from LAPACK, and then differ across platforms. Fix
+  the convention where the object is built, with a rule that ties cannot
+  decide, such as making the first component above a relative threshold
+  positive. A largest-component rule leaves equal components to roundoff, and a
+  sign rule does not fix the basis within a degenerate subspace. Test the
+  convention by flipping that sign or phase in a case where the flip changes
+  the downstream result, because symmetric cases can hide the dependence.
 - Before classifying a failure or reporting a measured result, confirm the
   interpreter, dependency versions and import origin the project declares (or
   those actually used when none is declared), and state them with the result.
+  Report separately executed test runs separately, with the revision each ran
+  on, rather than as one combined total.
 - A green build, regenerated notebook, mutation kill, or full test suite proves
   only the invariants that its checks can falsify. Use an additional independent
   pass when unresolved scientific risk warrants it; do not rerun settled checks
@@ -299,6 +332,39 @@ When work is intended to close earlier scientific-review findings, read
 editing. Its closure-ledger, original-falsifier, shared-record, integration,
 evidence-deletion, and environment rules are mandatory for that remediation
 mode. Ordinary scientific-computing tasks do not load this reference.
+
+## Review before completion
+
+Before reporting implementation or validation work, check the final diff and the
+draft report against the items below, in a pass separate from writing them.
+The pass covers these items. It does not repeat verification the work already
+did or add runs beyond the checks the task requires. Fix what fails within
+scope and recheck only what changed.
+
+- Each claim in the report or documentation, such as fixed, verified, exact,
+  unchanged, absent or unknown, rests on evidence that applies to the final
+  revision and was checked in the context the claim names. The evidence can
+  come from this work or be reused because it still applies. A claim without
+  such evidence is removed or marked unverified.
+- Each new or changed formula or numerical rule is documented at its
+  definition, with its derivation, assumptions and source, and its error bound
+  when it has one.
+- Each new or changed test names its independent expected relation, and a
+  fix's regression check failed on the pre-change code.
+- No tolerance, threshold or cap was widened after a failure without a
+  derivation, and no unknown, not-run or suppressed evidence became zero,
+  false or passed.
+- An entry point that extension implementations pass through was checked
+  against them, and the full test suite ran before integration or is named as
+  outstanding for whoever integrates.
+- The default runtime path gained no extra expensive computation without
+  approval, and resource comparisons use matched workloads.
+- Each measured value or test result in the report states the interpreter,
+  dependency versions and revision that produced it, and each status label
+  comes with the quantities that decide it.
+
+When another applied skill, such as Ponytail, has its own review, combine the
+reviews in this pass.
 
 ## Completion
 

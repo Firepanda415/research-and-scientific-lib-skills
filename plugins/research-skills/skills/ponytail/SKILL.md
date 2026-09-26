@@ -23,7 +23,8 @@ even when no edit is requested. When `deep-code-review`,
 that skill first and apply Ponytail within its correctness, evidence, and resource
 requirements. Reuse a skill already loaded in the current context.
 
-Use the ladder inside the existing task. Loading Ponytail does not start another
+Use the ladder inside the existing task, and end implementation work with the
+[diff review](#review-the-diff-before-reporting). Loading Ponytail does not start another
 audit, authorize edits, or require the other Ponytail components. Choose
 `ponytail-review` or `ponytail-audit` only when their distinct review format fits
 the request. A factual explanation of existing code needs none of these routes.
@@ -86,7 +87,8 @@ at that owner instead of patching the same symptom separately in each caller.
 - Deletion over addition. Boring over clever, clever is what someone decodes at 3am.
 - Delete completely. After a removal, code, comments, docs, and tests describe only what exists. Version control holds the history, and a changelog or migration note records it when users must act. A `removed` or `no longer` comment or a stub needs a stated reason the item must stay absent, such as a measured failure or an explicit user request. A test of its absence needs a product, security, or compatibility contract, such as a secret that must never reach logs, or an explicit user request.
 - Minimize the change after satisfying the actual scientific and engineering contract. Do not trade required behavior or performance for a smaller diff.
-- Complete the authorized task. Resolve routine choices from context; ask only when a missing fact materially changes the result or authority.
+- Complete the authorized task. Resolve routine choices from context, and ask only when a missing fact materially changes the result or authority. Follow-through that the change implies needs no separate approval within the authorized workload, such as refreshing generated metadata after a version bump, re-executing affected notebooks, updating stale tests or docs, and removing build outputs the change made stale.
+- When a display for people lists entries that users define themselves, such as custom gate names, show them as they are, for example as a plain mapping from name to count. Classification, whitelists, cost equivalents and `unknown` labels for such entries need a program that reads them, because users know what their own entries mean.
 - Choose algorithms by their relevant failure modes and resource costs, not by line count.
 - Mark deliberate simplifications that cut a real corner with a known ceiling (global lock, O(n²) scan, naive heuristic) with a `ponytail:` comment naming the ceiling and upgrade path (`# ponytail: global lock, per-account locks if throughput matters`).
 
@@ -175,6 +177,20 @@ and serialized output when affected. Keep sufficient evidence for the claim
 and reproduction needs, without duplicating full states or executing work
 only to populate a report. Use existing measurements or a bounded check when
 performance is uncertain.
+
+## Review the diff before reporting
+
+Before reporting implementation work, check the final diff against these items
+in a pass separate from writing it. Fix what fails, and combine this pass with
+the review of a correctness or review skill that also applies.
+
+- Each added abstraction, option, helper, configuration or compatibility path
+  has a current consumer or requirement.
+- After a removal, no reference, stub, `removed` or `no longer` comment, or
+  absence test remains without a stated reason.
+- Each added test protects a current obligation. Before-and-after evidence for
+  a fix stays in the report when the test would protect nothing else.
+- A deliberate shortcut with a known ceiling carries a `ponytail:` comment.
 
 ## Boundaries
 

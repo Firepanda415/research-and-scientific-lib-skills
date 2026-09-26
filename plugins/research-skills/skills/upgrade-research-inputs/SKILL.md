@@ -49,6 +49,20 @@ and distinctions between claims and evidence. For source-to-code work, use
 `scientific-computing-correctness` to resolve result-sensitive conventions and
 validate the computation. A literature search does not replace that checking.
 
+## Check before delivering
+
+Before delivering a synthesis, answer or comparison, check the draft against
+these items using the sources already inspected, in a pass separate from
+writing it, and fix what fails.
+
+- Each load-bearing claim cites a primary source that was inspected, with a
+  location when the detail matters.
+- A detailed method, proof, resource or experiment claim that rests on an
+  abstract alone is marked unverified.
+- Each claim keeps the source's scope, conditions, magnitude and comparison.
+- A novelty or improvement judgment names the closest alternative found and
+  the limits of the search.
+
 ## Deliverable and retention
 
 Return the requested synthesis, answer, reading list, or comparison with citations

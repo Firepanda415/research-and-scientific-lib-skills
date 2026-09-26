@@ -1,6 +1,6 @@
 # Adversarial review before delivery
 
-Read this reference for the parent's mandatory review stage and for review-only requests. Review the text that exists. Do not generate another version merely to have something to compare, and do not rewrite a sound passage to demonstrate effort. The shared criteria remain in [durable prose](durable-prose.md).
+Read this reference for the parent's mandatory review stage and for review-only requests. Review the text that exists. Do not generate another version merely to have something to compare, and do not rewrite a sound passage to demonstrate effort. The shared criteria remain in [durable prose](durable-prose.md). The parent's mandatory final gate lists the checks that every deliverable must pass. This reference explains how to judge the document as a whole and when to use an independent reviewer.
 
 The reader-oriented diagnostics here draw on Joseph M. Williams and Joseph Bizup, *Style: Lessons in Clarity and Grace*, 11th edition, Pearson, copyright 2014, ISBN 978-0-321-89868-5. Page references below use the book's printed numbering. This is an independently written review procedure informed by the book's ideas and this collection's requirements, not a reproduction of its lessons, examples, or exercises. The book treats its principles as aids to diagnosis rather than universal prescriptions (Preface, p. vii).
 
@@ -47,7 +47,7 @@ Exceptions must follow the artifact's purpose. A requested conversation record, 
 
 ### Recover the context
 
-Establish the source and role of the material before treating it as the author's prose. Publisher covers, advertisements, recommendations, and running headers or footers may accompany an article without belonging to it. Distinguish body paragraphs from captions, table cells, and displayed mathematics. Keep a source locator for each finding. Exclude unrelated material from an article review, but preserve captions and definitions needed to understand the article.
+When the text under review comes from a supplied file, an extraction, or an excerpt, establish its source and role before treating it as the author's prose. Publisher covers, advertisements, recommendations, and running headers or footers may accompany an article without belonging to it. Distinguish body paragraphs from captions, table cells, and displayed mathematics. Keep a source locator for each finding. Exclude unrelated material from an article review, but preserve captions and definitions needed to understand the article.
 
 Read the containing paragraph and the relevant preceding and following paragraphs before judging an excerpt. Follow necessary definitions, equations, figures, tables, and citations to recover its referents, comparison baseline, and scope. Check the rendered source when columns, page breaks, floating tables, OCR, or copied selections may have joined different units or interrupted a sentence. Restore the actual reading order in the working transcription. If a passage cannot be recovered reliably, report that extraction uncertainty rather than inventing a correction to the author's meaning. If the needed context is unavailable, distinguish a question to verify from a demonstrated omission. Do not expand a local review beyond the context needed to assess it.
 

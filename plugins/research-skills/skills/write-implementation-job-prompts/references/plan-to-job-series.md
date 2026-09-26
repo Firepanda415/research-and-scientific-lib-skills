@@ -17,7 +17,13 @@ acceptance of the actual implementation at a fixed revision. They answer differe
 questions. For consultation, provide the concrete uncertainty, relevant evidence,
 attempted remedies when applicable, and the decision another perspective could
 change. The principal adjudicates the answer and proceeds; do not seek repeated
-agreement or READY tokens, or consult on every ordinary prompt revision.
+agreement or READY tokens, or consult on every ordinary prompt revision. When
+jobs depend on a derivation from a consultation, check its load-bearing steps
+with a small independent numerical or symbolic calculation before dispatch.
+When the consultation runs in a separate application whose answer the principal
+cannot read back directly, exchange the request and the answer as files in the
+task's working folder outside the repository, so that each answer stays with
+the question it answered.
 
 Choose expertise by the task and unresolved failure modes, not permanent model
 brand roles. Model agreement is not independent scientific evidence. Consultation

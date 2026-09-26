@@ -110,6 +110,11 @@ as an extra solver call), or additional mutation probe is useful when output
 equality could conceal a wrong algorithm or hidden cost. It is not a field
 required on every acceptance row.
 
+When the job changes an entry point that every plugin or extension
+implementation passes through, acceptance includes the tests of that extension
+protocol and the project's standard full test suite before integration, because
+targeted tests can miss extensions that the job's own paths do not exercise.
+
 For scientific changes, state which assumptions, numeric conventions, error
 criteria, and output semantics must hold. Test small analytical or trusted
 instances first when useful. Do not add simulation, transpilation, dense

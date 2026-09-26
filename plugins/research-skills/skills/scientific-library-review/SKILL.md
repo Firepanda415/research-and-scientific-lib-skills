@@ -19,7 +19,7 @@ Default to current correctness within the requested surface. The diff locates ch
 
 ## Start from the scientific contract
 
-Trace representative valid public inputs and options through the selected method, actual execution, requested output, downstream decisions and saved/read-back result where applicable. Inspect shared owners and sibling paths when they can change the relation. When responsibility moves between owners or a shared contract changes, inventory the callers and existing tests that assert the old contract. A passing new test selection does not show that existing tests still match it. Classical, analytical and native execution paths have different obligations.
+Trace representative valid public inputs and options through the selected method, actual execution, requested output, downstream decisions and saved/read-back result where applicable. Inspect shared owners and sibling paths when they can change the relation. When responsibility moves between owners or a shared contract changes, inventory the callers and existing tests that assert the old contract, including extension implementations written against a documented protocol. A passing new test selection does not show that existing tests still match it. Classical, analytical and native execution paths have different obligations.
 
 When examples, notebooks, reports, error messages or public task completion are
 affected, read [user workflow acceptance](references/user-workflow-acceptance.md).

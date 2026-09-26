@@ -88,6 +88,22 @@ Stop adding comparisons when the requested decision is supported, the authorized
 budget is reached, or the remaining uncertainty is better handled by narrowing
 the claim. A bounded negative or inconclusive result is a valid outcome.
 
+## Check before reporting
+
+Before reporting a design or result, review the comparison against these items
+in a pass separate from building it, and fix what fails. In an assessment of an
+existing comparison, report which items it lacks.
+
+- Every compared method, the proposed one included, has a stated tuning budget,
+  search space and selected setting.
+- A configuration claimed across instances was chosen by a stated rule, or its
+  per-instance selection falls under one of the exceptions described above.
+- The compared outputs answer the same task, such as values at common
+  observation times when that is the task.
+- A selection close to an acceptance threshold was checked against a nearby
+  threshold using the existing records.
+- Planned or unrun comparisons are labeled as planned.
+
 ## Report
 
 State the surviving claim, comparison and budget evidence, plausible alternative

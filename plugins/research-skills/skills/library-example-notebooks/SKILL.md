@@ -5,7 +5,7 @@ description: "Write, restructure, or review example notebooks and tutorials for 
 
 # Library example notebooks
 
-Design for a reader who gives an example notebook about one screen before deciding whether to continue. Within that screen, show what the library computes for this kind of problem and how the reader can substitute their own. Apply `research-writing-style` to the notebook's prose and `figure-designer` to its main figure. When notebooks are reviewed as part of a library review, `scientific-library-review` and its user-workflow acceptance reference own the execution and scientific checks. A review request reports findings without editing the notebooks.
+Design for a reader who gives an example notebook about one screen before deciding whether to continue. Within that screen, show what the library computes for this kind of problem and how the reader can substitute their own. Apply `research-writing-style` to the notebook's prose and `figure-designer` to its main figure. When notebooks are reviewed as part of a library review, `scientific-library-review` and its user-workflow acceptance reference own the execution and scientific checks. A review request reports findings without editing the notebooks. Finish written or revised notebooks with the [review before delivery](#review-before-delivery).
 
 ## What every example provides
 
@@ -47,10 +47,23 @@ A notebook derived from a paper gives the answer first, then the paper's scope a
 
 ## Keep examples light and current
 
+- Name an introductory notebook by its algorithm and the mathematical problem it solves, such as `<algorithm>_<problem>_intro`, so that a reader from another field with the same mathematical problem finds it. Merge variants of one algorithm, such as its kernels, state preparations or input routes, into one notebook.
+- Show the method in a setting where it works, say why that setting matters, and state where the method stops working. A default whose result is negative gives a newcomer no reason to try the library.
+- Keep the example code to the call and its result. Defensive checks that repeat the library's own validation, and dumps of raw records or JSON, bury the result.
 - Run demonstrations on the smallest system that shows the point, within the library's default resource limits, because cost can grow steeply with problem size. Give larger sizes as planning numbers, labeled as not executed.
 - Compute the result card's sentence from the run. Check it by swapping in another problem, such as another molecule, so that the text cannot silently go stale.
 - When notebooks compare the library with other packages, put the comparison on one dated page that states the scope of each claim. Notebooks link to it and give only their own concrete reasons.
 
 ## Rewriting a set of notebooks
 
-Start from an adopter review that reads the notebooks as a newcomer and tests their claims with small scripts. Reviews by different models can find different problems, so when more than one adopter review is authorized, merge their findings into one plan. Pilot the planned changes on one notebook and check it as rendered HTML before applying them to the others, which can then proceed in parallel. When the user or project asks to approve the changes, get that approval on the rendered pilot first. Check each rendered first screen, including what appears before the first result and whether collapsed blocks render collapsed. Re-execute each notebook whose code, cell order, or outputs changed, within the authorized workload. When the project tests its notebooks, keep an independent reference check for each one.
+Start from an adopter review that reads the notebooks as a newcomer and tests their claims with small scripts. Reviews by different models can find different problems, so when more than one adopter review is authorized, merge their findings into one plan. Pilot the planned changes on one notebook and check it as rendered HTML before applying them to the others, which can then proceed in parallel. When the user or project asks to approve the changes, get that approval on the rendered pilot first. Re-execute each notebook whose code, cell order, or outputs changed, within the authorized workload. When the project tests its notebooks, keep an independent reference check for each one.
+
+## Review before delivery
+
+Review each written or revised notebook as rendered, in a pass separate from writing it, and combine this pass with the writing gate for its prose and the check of its main figure. Fix what fails and recheck the affected cells.
+
+- The first screen shows the problem, the minimal call and the result before any long explanation. Collapsed Markdown blocks render collapsed, and where a renderer expands a hidden cell, the problem and the call still come first.
+- The template cell runs on its own with its own variable names, next to its input format, size limits and the meaning of the returned value.
+- Each main figure and key number names its output quantity and, where the library has several, its execution mode. The result card's sentence comes from the run.
+- The code holds no defensive checks that repeat the library's validation, no raw record or JSON dumps, and no text addressed to the conversation or its instructions.
+- The notebook ran after its last code change within the default resource limits, and its stored outputs come from that run.

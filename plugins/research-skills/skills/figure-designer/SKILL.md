@@ -24,6 +24,8 @@ Load only relevant references:
 
 ## Scientific and visual checks
 
+Apply these points while designing. Before delivery, check the rendered figure at its intended size against the points that show there, in a pass separate from producing it, and fix what fails. An audit applies them to each supplied figure.
+
 - Trace plotted values, transformations, and selections to data or explicitly labeled illustrative inputs. Never alter data to improve appearance.
 - Use meaningful axes, units, scales, and ranges. Bars generally need their length baseline at zero; use a point or line plot when a focused nonzero range is scientifically useful. Show breaks or clipping explicitly.
 - Show uncertainty or distributions when they bear on the claim, and label the statistic, sample unit, and number of independent runs. Do not run extra simulations merely to decorate a plot with error bars.

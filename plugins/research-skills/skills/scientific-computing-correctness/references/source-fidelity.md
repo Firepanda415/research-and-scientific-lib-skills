@@ -18,6 +18,22 @@ and the missing fact. Prototype status reduces implementation scope, not fidelit
 to the chosen mathematical specification. Use a small independent reference
 case before scaling; a successful run alone does not establish reproduction.
 
+A source can be wrong beyond a typo. A step may contradict the paper's own
+equations, or a bound may hold only for a special construction, such as
+Chebyshev nodes rather than equally spaced points. Decide with the source's own
+definitions and a small independent calculation. When the implementation is
+right, keep it and record the erratum at the formula with the paper's version.
+When the PDF and HTML versions number equations differently, give the version
+and both numbers.
+
+When the task replicates a paper whose code is available, first establish what
+the authors' code actually computes, and record every difference between the
+code and the paper's text. Replicate the computation the code performs unless
+the task specifies otherwise. Code written for one study, such as a research
+prototype, is evidence of the settings, equations and outputs it used. When the
+destination has its own quality standard, implement from the mathematics and
+the method's reference software rather than copying the prototype's structure.
+
 When a task audits, implements or relies on a proof-assistant formalization of
 paper claims, a successful build establishes only the formal statements as
 written, under their hypotheses and axioms. Check the current proof sources

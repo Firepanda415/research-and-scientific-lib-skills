@@ -49,34 +49,36 @@ python3 scripts/install-claude.py
 
 同一 skill 分为两个阶段。生成和编辑阶段在写作时落实句子结构与用词要求，完整成稿随后必须经过[对抗性审阅](plugins/research-skills/skills/research-writing-style/references/prose-review.md)才能交付。审阅重点检查全文结构、段落功能、上下文和推理。先确认提取材料的来源与文档角色，再结合上下文核对证据、读者理解障碍，以及混入正文的对话和 prompt。用户要求“不要讨论 X”，不能变成对写作对象缺乏依据的断言。只要求 review 时，直接检查现有文字并报告有依据的问题，不自动重写。检测器标签本身不要求修改。用户明确要求按检测结果改写时，启用可选的[检测实验流程](plugins/research-skills/skills/research-writing-style/references/detector-evaluation.md)，保全含义并记录实测对比。普通写作不要求检测。复测中关于选择依据、能力与操作的联系、限定归属及上下文衔接的写作经验，已纳入默认生成和审阅规则。[来源采纳审计](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md)记录完整覆盖范围、限定采用及未采用的建议。
 
-该 skill 默认的写作风格是正文不用分号、破折号或连接独立分句的冒号，除已成型的技术术语外也不用 `retain`、`honest` 及其变形。用户的明确要求或文字去向的格式规定（如期刊格式指南）优先于这些默认规则。
+该 skill 默认的写作风格是正文不用分号、破折号或连接独立分句的冒号，除已成型的技术术语外也不用 `retain`、`honest` 及其变形。用户的明确要求或文字去向的格式规定（如期刊格式指南）优先于这些默认规则。交付前，该 skill 的最终检查会扫描新写的正文中有没有分号、破折号和这几个词，并列出每份交付物都要通过的其他检查，例如 prompt 泄漏、含义、术语、引用和变更记录。
+
+另有几个 skill 在完成工作后单独做一次简短的 review，包括代码方面的 `scientific-computing-correctness` 和 `ponytail`、notebook 方面的 `library-example-notebooks`、渲染后插图的 `figure-designer`、比较实验的 `stress-test-baselines`、文献综述的 `upgrade-research-inputs`，以及项目记录的 `maintain-project-memory`。每个 review 核对的是该 skill 生成阶段已经规定的条目，主要挑选生成时容易漏掉、又能在成品上核对的项目，例如每个新公式旁的推导、说某个量是精确的或不存在时所依据的语境，以及把尚未运行的比较标为计划。Review 只核对列出的条目，不重复先前的验证，除任务本身要求的检查外也不增加运行。这一设计的参考来源见 [15](#credit-15)。
 
 | 技能 | 用途 | Credits |
 |---|---|---|
 | [develop-research-ideas](plugins/research-skills/skills/develop-research-ideas/SKILL.md) | 探索研究方向，评估研究方案，寻找可以借鉴的跨领域方法。 | [1](#credit-1) |
 | [rethink-design](plugins/research-skills/skills/rethink-design/SKILL.md) | 跳出过于保守的思路，重新思考研究问题或设计方向。 | [2](#credit-2) |
-| [upgrade-research-inputs](plugins/research-skills/skills/upgrade-research-inputs/SKILL.md) | 查找相关论文和一手资料，核对创新点与有争议的论断。 | [11](#credit-11) |
-| [stress-test-baselines](plugins/research-skills/skills/stress-test-baselines/SKILL.md) | 设计公平的基线比较、消融实验和稳健性检查。 | — |
+| [upgrade-research-inputs](plugins/research-skills/skills/upgrade-research-inputs/SKILL.md) | 查找相关论文和一手资料，核对创新点与有争议的论断。 | [11](#credit-11), [15](#credit-15) |
+| [stress-test-baselines](plugins/research-skills/skills/stress-test-baselines/SKILL.md) | 设计公平的基线比较、消融实验和稳健性检查。 | [15](#credit-15) |
 | [write-research-log](plugins/research-skills/skills/write-research-log/SKILL.md) | 记录研究进展、实验观察、假设与预测。 | — |
 | [research-watchdog-protocol](plugins/research-skills/skills/research-watchdog-protocol/SKILL.md) | 跟进长时间运行的任务，并在新会话中接续进行中的研究。 | — |
-| [maintain-project-memory](plugins/research-skills/skills/maintain-project-memory/SKILL.md) | 整理 project memory，保留 decision rationale、可复用经验与 evidence 范围，支持后续 session 接续工作。 | [6](#credit-6), [7](#credit-7), [12](#credit-12) |
+| [maintain-project-memory](plugins/research-skills/skills/maintain-project-memory/SKILL.md) | 整理 project memory，保留 decision rationale、可复用经验与 evidence 范围，支持后续 session 接续工作。 | [6](#credit-6), [7](#credit-7), [12](#credit-12), [15](#credit-15) |
 | [quantum-research-radar](plugins/research-skills/skills/quantum-research-radar/SKILL.md) | 生成中文量子研究简报和针对某一主题的近期工作扫描，关注量子计算与人工智能等相关方向。 | — |
 | [physics-from-math-explainer](plugins/research-skills/skills/physics-from-math-explainer/SKILL.md) | 从数学出发解释物理，补充物理直觉，讲清符号和约定。 | — |
 | [tech-paper-template](plugins/research-skills/skills/tech-paper-template/SKILL.md) | 组织技术论文的论点、引言和章节结构。 | [1](#credit-1) |
 | [benchmark-paper-template](plugins/research-skills/skills/benchmark-paper-template/SKILL.md) | 规划或评估自己的基准测试论文，包括评估缺口、构建、测量设计和结论，不限领域。 | [1](#credit-1) |
-| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) | 起草、编辑和对抗性审阅长期使用及可直接粘贴的文字，交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10), [12](#credit-12) |
-| [figure-designer](plugins/research-skills/skills/figure-designer/SKILL.md) | 设计论文插图、方法示意图和可复现的数据图表。 | [1](#credit-1) |
+| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) | 起草、编辑和对抗性审阅长期使用及可直接粘贴的文字，交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10), [12](#credit-12), [15](#credit-15) |
+| [figure-designer](plugins/research-skills/skills/figure-designer/SKILL.md) | 设计论文插图、方法示意图和可复现的数据图表。 | [1](#credit-1), [15](#credit-15) |
 | [research-explainer-animation](plugins/research-skills/skills/research-explainer-animation/SKILL.md) | 为论文和代码制作带配音和字幕的讲解动画，画面与旁白中的数字都可追溯到原始来源，交付前逐帧检查。 | — |
 | [pre-submission-reviewer](plugins/research-skills/skills/pre-submission-reviewer/SKILL.md) | 投稿或返修前检查论文的科学主张、证据、写作、LaTeX 排版、图表以及审稿回复。 | [1](#credit-1) |
 | [journal-cover-letter](plugins/research-skills/skills/journal-cover-letter/SKILL.md) | 起草和修改期刊投稿附信。 | — |
 | [quantum-computing-review](plugins/research-skills/skills/quantum-computing-review/SKILL.md) | 为他人的技术论文撰写或核查审稿意见，不限领域，遵守期刊规则与保密要求，并对量子计算与量子技术论文增加专项检查。 | — |
-| [scientific-computing-correctness](plugins/research-skills/skills/scientific-computing-correctness/SKILL.md) | 实现、调试、优化和独立验证科学计算，关注计算精度与资源开销。 | — |
+| [scientific-computing-correctness](plugins/research-skills/skills/scientific-computing-correctness/SKILL.md) | 实现、调试、优化和独立验证科学计算，关注计算精度与资源开销。 | [15](#credit-15) |
 | [scientific-library-review](plugins/research-skills/skills/scientific-library-review/SKILL.md) | 审查科学软件库的数学含义、使用流程、执行行为与资源开销。 | [7](#credit-7) |
-| [library-example-notebooks](plugins/research-skills/skills/library-example-notebooks/SKILL.md) | 编写或审阅科学软件库的示例 notebook 和教程，让读者在第一屏看到计算结果，以及如何换成自己的问题。 | — |
+| [library-example-notebooks](plugins/research-skills/skills/library-example-notebooks/SKILL.md) | 编写或审阅科学软件库的示例 notebook 和教程，让读者在第一屏看到计算结果，以及如何换成自己的问题。 | [15](#credit-15) |
 | [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | [12](#credit-12) |
 | [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据。 | [4](#credit-4), [12](#credit-12) |
 | [write-implementation-job-prompts](plugins/research-skills/skills/write-implementation-job-prompts/SKILL.md) | 将需求或审查结果整理为清晰、可执行的开发任务提示词。 | [12](#credit-12) |
-| [ponytail](plugins/research-skills/skills/ponytail/SKILL.md) | 在满足正确性和性能要求的前提下，选择简单的实现。 | [5](#credit-5), [12](#credit-12) |
+| [ponytail](plugins/research-skills/skills/ponytail/SKILL.md) | 在满足正确性和性能要求的前提下，选择简单的实现。 | [5](#credit-5), [12](#credit-12), [15](#credit-15) |
 | [ponytail-review](plugins/research-skills/skills/ponytail-review/SKILL.md) | 审查代码变更，提出有依据的简化建议。 | [5](#credit-5) |
 | [ponytail-audit](plugins/research-skills/skills/ponytail-audit/SKILL.md) | 以精简的只读审查报告列出整个仓库中可以删除或简化的代码。 | [5](#credit-5) |
 | [ponytail-debt](plugins/research-skills/skills/ponytail-debt/SKILL.md) | 汇总代码中标记的简化取舍，以及需要重新处理这些取舍的条件。 | [5](#credit-5) |
@@ -116,6 +118,13 @@ python3 scripts/install-claude.py
 14. <a id="credit-14"></a>写作钩子中范围规则的参考来源。规则由本项目编写，采用本项目的 **MIT** license，不包含来源的文字。
     - Anthropic。[Prompting Claude Opus 5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5) 中关于书面交付物长度以及任务范围与过度验证的部分，查阅于 2026-09-25。[Prompting Claude Opus 5.5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5) 说明这些做法对该模型仍是合理的起点。
     - OpenAI。[Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra.md) 中关于 initiative and follow-through 的部分，查阅于 2026-09-25。其中的示例 prompt 要求模型从指令和之前的对话推断用户的意图和任务范围。
+
+15. <a id="credit-15"></a>review 阶段的参考来源。`scientific-computing-correctness`、`ponytail`、`library-example-notebooks`、`figure-designer`、`stress-test-baselines`、`upgrade-research-inputs` 和 `maintain-project-memory` 中新增的 review 文字，以及 `research-writing-style` 最终检查中的清单，都由本项目编写。每处文字沿用所在文件的 license，`figure-designer` 中为 **CC BY-NC-SA 4.0**，其余为 **MIT**。不包含来源的文字。
+    - Anthropic。[Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) 中关于 workflows 与 feedback loops 的部分，查阅于 2026-09-26。草稿对照一份可核对的简短清单检查，修改到全部通过为止。
+    - Anthropic。Claude Code 的 [Code Review](https://code.claude.com/docs/en/code-review) 文档，查阅于 2026-09-26。只用于 review 的规则写在 `REVIEW.md` 中，会直接交给每个查找和核实问题的 agent，因此比写在很长的 `CLAUDE.md` 里的同样规则更可靠地得到执行。`REVIEW.md` 过长则会冲淡最重要的规则。
+    - Anthropic。[Prompting Claude Opus 5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5) 中关于任务范围与过度验证的部分，查阅于 2026-09-26。它建议删除要求增加验证步骤的明确指令，因为模型本身已经会验证自己的工作。这里的 review 只保留能在成品上核对的具体条目，也不增加运行。[anthropics/skills](https://github.com/anthropics/skills) 中 `pptx` skill 的 QA 部分对照列出的缺陷检查渲染结果，只复查改动过的部分。
+    - OpenAI。[Custom code review rules for Codex](https://developers.openai.com/blog/custom-code-review-rules-for-codex)，查阅于 2026-09-26。文章建议先写两三条后果重大并说明安全做法的规则，机械性检查交给 CI。在其评测中，按规则 review 找回了 98% 应找出的自定义问题，基线对照为 58.3%。
+    - OpenAI。[openai/skills](https://github.com/openai/skills) 中的 `playwright-interactive` skill 的 QA 清单涵盖最终回复将提出的说法。[Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra.md) 中关于 testing and verification 的部分按改动规模确定检查范围。两者均查阅于 2026-09-26。
 
 各部分的条款见 [LICENSE.md](LICENSE.md)，来源与修改说明见 [NOTICE.md](plugins/research-skills/NOTICE.md)。
 
