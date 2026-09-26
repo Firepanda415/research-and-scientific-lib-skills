@@ -68,7 +68,10 @@ maintenance obligations, and the capability or independent evidence that would
 be lost. An effective test or callable public API does not by itself require
 keeping a feature. No internal callers does not by itself prove dead code.
 Distinguish removing an unused implementation from deliberately retiring a
-working capability, and carry the user's authority for the latter.
+working capability. The latter carries the user's authority and, for a
+scientific capability, a mathematical or scientific reason such as an order of
+accuracy or error bound, a bias, a broken invariance, a measured failure or a
+better alternative.
 
 Read the relevant implementation and callers before choosing a fix. Widen the
 trace when a shared owner or scientific transformation can affect other paths.
@@ -82,13 +85,12 @@ at that owner instead of patching the same symptom separately in each caller.
 
 ## Rules
 
-- No unrequested abstractions: avoid interfaces, factories, helpers, configuration, and compatibility paths without a current consumer or requirement.
+- No unrequested abstractions: avoid interfaces, factories, helpers, classifications, configuration, and compatibility paths without a current consumer or requirement. A display of entries that users define themselves, such as custom gate names, shows them as they are, because users know what their own entries mean.
 - No boilerplate, no scaffolding "for later", later can scaffold for itself.
 - Deletion over addition. Boring over clever, clever is what someone decodes at 3am.
 - Delete completely. After a removal, code, comments, docs, and tests describe only what exists. Version control holds the history, and a changelog or migration note records it when users must act. A `removed` or `no longer` comment or a stub needs a stated reason the item must stay absent, such as a measured failure or an explicit user request. A test of its absence needs a product, security, or compatibility contract, such as a secret that must never reach logs, or an explicit user request.
 - Minimize the change after satisfying the actual scientific and engineering contract. Do not trade required behavior or performance for a smaller diff.
 - Complete the authorized task. Resolve routine choices from context, and ask only when a missing fact materially changes the result or authority. Follow-through that the change implies needs no separate approval within the authorized workload, such as refreshing generated metadata after a version bump, re-executing affected notebooks, updating stale tests or docs, and removing build outputs the change made stale.
-- When a display for people lists entries that users define themselves, such as custom gate names, show them as they are, for example as a plain mapping from name to count. Classification, whitelists, cost equivalents and `unknown` labels for such entries need a program that reads them, because users know what their own entries mean.
 - Choose algorithms by their relevant failure modes and resource costs, not by line count.
 - Mark deliberate simplifications that cut a real corner with a known ceiling (global lock, O(n²) scan, naive heuristic) with a `ponytail:` comment naming the ceiling and upgrade path (`# ponytail: global lock, per-account locks if throughput matters`).
 

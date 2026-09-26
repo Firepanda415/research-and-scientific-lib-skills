@@ -33,6 +33,13 @@ WRITING_HOOKS = {
     "SubagentStart": [{"hooks": [writing_handler("SubagentStart")]}],
 }
 WRITING_HOOK_FILES = {"hooks.json", "writing-style-routing.js"}
+# Claude Code keeps only the first 5,000 tokens of an invoked skill after compaction
+# (https://code.claude.com/docs/en/skills#skill-content-lifecycle, checked 2026-09-26).
+# At about 3.5 English characters per Claude token
+# (https://platform.claude.com/docs/en/about-claude/glossary, same date), that is about
+# 17,500 characters. The limit leaves about 10% for Markdown and code, which use more
+# tokens per character. AGENTS.md records the same limit and sources.
+MAX_SKILL_CHARS = 16_000
 
 
 def relative_links(doc):
@@ -106,7 +113,10 @@ def main():
     skill_root = package / manifest["skills"]
     names = set()
     for skill in sorted(skill_root.glob("*/SKILL.md")):
-        match = re.match(r"\A---\n(.*?)\n---(?:\n|$)", skill.read_text(), re.S)
+        text = skill.read_text()
+        assert len(text) <= MAX_SKILL_CHARS, (
+            f"{skill} has {len(text)} characters, over {MAX_SKILL_CHARS}. Move topic detail to a reference.")
+        match = re.match(r"\A---\n(.*?)\n---(?:\n|$)", text, re.S)
         assert match, f"invalid frontmatter: {skill}"
         metadata = yaml.safe_load(match[1])
         name = metadata["name"]

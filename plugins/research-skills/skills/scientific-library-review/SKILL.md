@@ -7,7 +7,7 @@ description: "Review scientific libraries and numerical software using Scientifi
 
 Deliver an integrated review using scientific independent verification and validation (Scientific IV&V). Judge the requested scientific quantity and actual user workflow, engineering behavior and material resource costs. Independently derive expected relations rather than accepting a plan, implementation, test oracle or successful execution as its own justification.
 
-When the review judges a simplification or deletion proposal, API/schema retirement, replacement architecture, or remediation design, load and apply [Ponytail](../ponytail/SKILL.md) unless it is off. Use it to compare maintenance obligations and alternatives in this same review. This skill continues to own scientific meaning, evidence and resource limits, and a review-only request remains read-only.
+When the review judges a simplification or deletion proposal, API/schema retirement, replacement architecture, or remediation design, load and apply [Ponytail](../ponytail/SKILL.md) unless it is off. Use it to compare maintenance obligations and alternatives in this same review. This skill continues to own scientific meaning, evidence and resource limits.
 
 ## Scope and project specialization
 
@@ -47,21 +47,13 @@ Every substantive review must assess these families and complete necessary check
 | Convergence / sensitivity | Approximation, precision, estimator and stopping changes need the method's justified control-to-error or uncertainty relation at the requested quantity. Reuse a valid derivation or convergence witness, otherwise select a bounded discriminating refinement. Do not impose a universal monotonicity rule. |
 | Ablation / controlled comparisons | Claims of improvement from a component, heuristic, fallback or optimization require valid controls and matched workload, accuracy and total cost. Use an ablation study when the contribution is empirical. An independently justified operation-count reduction may need only event-count evidence. Ordinary correctness fixes do not automatically require a study. |
 
-Qualify detector evidence against the specific claim. Establish that the witness exercises the affected execution path and that the falsifier fails its relevant assertion. A failure elsewhere in the selected suite does not establish that a numerical or lifecycle witness detects the defect. A test that cannot fail for the claimed defect is not detector evidence. Examples are a test whose expected value comes from the code path under test and a check that only finds a string, symbol, file or key when that text or artifact is not itself the contract. A labeled characterization test recorded from the pre-change code is an exception when the claim is that behavior did not change. Reuse a demonstrated pre-fix failure or applicable mutation, and add instrumentation only when the exercised path remains uncertain.
+Qualify detector evidence against the specific claim. Establish that the witness exercises the affected execution path and that the falsifier fails its relevant assertion. A failure elsewhere in the selected suite does not establish that a numerical or lifecycle witness detects the defect. A test that cannot fail for the claimed defect is not detector evidence, by the criteria in [test evidence](../scientific-computing-correctness/references/test-evidence.md). Reuse a demonstrated pre-fix failure or applicable mutation, and add instrumentation only when the exercised path remains uncertain.
 
 Review the necessity of added and changed tests as part of ordinary review. Connect their assertions to current user obligations and the failures they distinguish from existing checks. Apply the shared [Ponytail test-necessity criteria](../ponytail/SKILL.md#test-necessity) unless Ponytail is off. Report supported opportunities to replace or consolidate tests within the requested scope. A read-only review recommends changes without applying them.
 
 Use lint, type and dependency checks as the applicable engineering baseline. Investigate actionable dead code, duplicated ownership or accidental complexity using actual callers and reachability, not stylistic preference. Formal verification is selective for stable, important and precisely stated properties. None of these replaces the scientific relation.
 
-### Transformation premises
-
-Check each transformation's common supported domain, physical frame and numerical representability. For linear solves, simultaneous nonzero scaling of operator and RHS preserves the exact solution only when both transformed inputs satisfy the selected method's premises. RHS-only scaling changes the physical solution linearly. A fixed-observable quadratic form scales by the squared magnitude, while the normalized expectation is invariant only for nonzero states. A complex scaling can leave a Hermitian-only domain.
-
-Compare approximate outputs within propagated errors, not bitwise equality. Representation changes may alter approximation parameters, spectral enclosures or costs even when they encode the same exact problem. A representation-consistency check can share a common defect, so add an independent anchor when needed.
-
-For basis or wire changes, transform input, action and readout together and compare the mapped ordered output. A sum or norm alone can hide a permutation defect. For control, inverse or workspace reuse, exercise the documented action on discriminating inputs and superpositions. All-zero preparation is insufficient, and global phase can become relative phase under control.
-
-Finite-shot errors need not decrease for each seed as shots increase. Use the actual sampling model and population, including pilot costs and adaptive selection. Lower iterative energy alone establishes neither correctness nor ground-state identification. Tolerances follow the oracle, method error and statistical assumptions and must not be widened after seeing a failure just to pass.
+For scaling, representation, basis or wire order, control, inverse or workspace reuse, finite-shot changes, or iterative-energy claims, read [transformation premises](references/transformation-premises.md).
 
 ## Cost and evidence boundaries
 

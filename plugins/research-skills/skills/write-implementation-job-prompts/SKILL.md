@@ -87,23 +87,15 @@ Use the current project's supplied guidance to identify required reading and its
 ## Proportional acceptance
 
 Choose checks that could detect the plausible defect. A fix's regression test
-must fail on the pre-change code and pass after the fix. An earlier reproduction
-of that failure can be reused while it still applies to the current code. For
-other checks, request a new deliberate small breakage only when a plausible
-defect could still pass the checks unnoticed and the cost is justified. The
-number of changed tests does not decide this. Evidence still valid for the
-current code and behavior can be reused, and one breakage can support several
-tests when the report names the property it covers. A rename or reorganization
-that leaves what every assertion checks unchanged needs no new failure
-demonstration. An import or missing-symbol failure on the pre-change code is
-valid evidence when importability or that public export is the contract.
-Otherwise a failure caused only by the feature's absence, or by deleting text
-that is not itself the contract, does not show that a behavior check works. A
-labeled characterization test written before a refactor may record its expected
-values from the pre-change code. When a test is expensive, demonstrate its
-failure on a small instance, and extra expensive computation still needs the
-approval described above. Use the concrete public path, input, relation, and
-tolerance when those determine correctness. A separate independent oracle
+must fail on the pre-change code and pass after the fix, and an earlier
+reproduction of that failure can be reused while it still applies to the
+current code. The
+[test evidence](../scientific-computing-correctness/references/test-evidence.md)
+reference says when other tests need a new failure demonstration and which
+failures count, and the handoff requests that evidence. When a test is expensive, demonstrate its failure on a
+small instance, and extra expensive computation still needs the approval
+described above. Use the concrete public path, input, relation, and tolerance
+when those determine correctness. A separate independent oracle
 computation, owner-call count (how many times the owning routine runs),
 forbidden-work sentinel (a check that detects disallowed extra computation, such
 as an extra solver call), or additional mutation probe is useful when output

@@ -27,12 +27,28 @@ When the PDF and HTML versions number equations differently, give the version
 and both numbers.
 
 When the task replicates a paper whose code is available, first establish what
-the authors' code actually computes, and record every difference between the
-code and the paper's text. Replicate the computation the code performs unless
-the task specifies otherwise. Code written for one study, such as a research
+the authors' code actually computes, record every difference between the code
+and the paper's text, and replicate the computation the code performs unless
+the task specifies otherwise. A replication cross-checks the destination's
+implementation from another perspective and certifies neither side. When
+results differ, record the difference and the basis of each side rather than
+deferring to the paper. When the authors' data or code for a result is
+unavailable, record that result's replication as not established rather than
+searching settings to reproduce it. Code written for one study, such as a research
 prototype, is evidence of the settings, equations and outputs it used. When the
 destination has its own quality standard, implement from the mathematics and
 the method's reference software rather than copying the prototype's structure.
+
+When the destination implements a method rather than replicating it, examine
+each source choice that may serve only the authors' benchmark, such as
+subtracting a known optimum. State the problem the choice addresses, whether
+the destination's design already covers that problem for its users' inputs,
+and what would serve those users better. Adopting, modifying or
+declining it needs a mathematical or scientific reason, such as an order of
+accuracy or error bound, a bias, a broken invariance, a measured failure or a
+better alternative. Without
+one, run a small discriminating check first. When the destination's own method
+gives better results for its users, present that method.
 
 When a task audits, implements or relies on a proof-assistant formalization of
 paper claims, a successful build establishes only the formal statements as
