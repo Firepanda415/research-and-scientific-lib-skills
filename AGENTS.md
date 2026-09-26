@@ -1,44 +1,51 @@
 # Maintaining this collection
 
-This repository is the source for the `research-skills` Codex and Claude Code plugin. Keep its
-skills, references, scripts, and writing hook together under
-`plugins/research-skills/`. Do not edit installed plugin caches as source.
+Edit the `research-skills` Codex and Claude Code plugin in
+`plugins/research-skills/`, including its skills, references, scripts, and writing
+hook. Installed plugin caches are not source files.
 
-Keep reusable skills independent of individual projects. Abstract transferable decision rules into skills, and keep a user's project-specific paths, document layout, environment commands, and work-in-progress state in that project's own guidance. Skills consume that guidance when the current task requires it.
+Keep skills reusable across projects. Project-specific paths, document layout,
+environment commands, and work-in-progress state belong in the project's own
+guidance, which skills read when needed.
 
-Before adding a rule to a skill, check whether an existing sentence already covers it, and extend that sentence instead. A lesson from one incident becomes a general rule with at most one short example. Keep each SKILL.md under 16,000 characters, because Claude Code keeps only the first 5,000 tokens of an invoked skill after compaction and all re-attached skills share 25,000 tokens. The source is the "Skill content lifecycle" section of the [Claude Code skills documentation](https://code.claude.com/docs/en/skills#skill-content-lifecycle), checked on 2026-09-26. Anthropic's [glossary](https://platform.claude.com/docs/en/about-claude/glossary), checked the same day, puts a Claude token at about 3.5 English characters, so 5,000 tokens is about 17,500 characters. The limit leaves about 10% for Markdown and code, which use more tokens per character. When either figure changes, update this paragraph and `MAX_SKILL_CHARS` in `scripts/check-package.py` together. Move topic-specific detail into a reference that SKILL.md names together with the condition for reading it, and keep checks that must not be missed in the skill's review section. `scripts/check-package.py` fails when a SKILL.md exceeds this size.
+Extend an existing rule when it already covers the issue. Generalize lessons
+from individual incidents, with at most one short example. Put topic-specific
+detail in references, state when to read them, and keep required checks in the
+skill's review section.
 
-When asked to install this repository, follow README.md's plugin installation
-for the requested host. Install the single `research-skills@research-skills` plugin.
-Both hosts receive every skill and the writing hook.
-Do not copy only SKILL.md files or install a second
-Ponytail plugin. Let Codex handle hook trust, and do not bypass or manufacture it.
+Keep each `SKILL.md` at most 16,000 characters, enforced by
+`scripts/check-package.py`. Claude Code's [skill lifecycle documentation](https://code.claude.com/docs/en/skills#skill-content-lifecycle)
+specifies 5,000 tokens per invoked skill after compaction and 25,000 shared across
+re-attached skills. Its [glossary](https://platform.claude.com/docs/en/about-claude/glossary)
+estimates 3.5 English characters per token, so the character limit leaves about
+10% below 17,500 for Markdown and code. Both sources were checked on 2026-09-26.
+If these figures change, update this paragraph and `MAX_SKILL_CHARS` together.
 
-Codex keys hook trust by each handler's position (event, matcher group, and
-handler index) and hashes each handler's registration fields (command, matcher,
-timeout, statusMessage, and async), not the script body. Add new handlers or
-matcher groups at the end of an event. Do not insert them before existing
-handlers or reorder existing handlers. A change to a registration field or to
-handler order needs a release note telling users to trust the research-skills
-hooks again in `/hooks`.
+Follow `README.md` for installation on the requested host. Install the single
+`research-skills@research-skills` plugin, including every skill and the writing
+hook, without a separate Ponytail plugin. Let Codex manage hook trust without
+bypassing or manufacturing it.
 
-Preserve upstream notices and the component license boundaries in LICENSE.md.
-Keep README.md and README.zh-CN.md in sync, including every skill and its source.
-Document third-party sources and modifications in the plugin NOTICE.md, and
-update its LICENSE.md when the applicable terms differ.
+Append new hook handlers and matcher groups without reordering existing entries.
+Codex keys trust by event, matcher group, and handler index, and hashes the
+registration fields `command`, `matcher`, `timeout`, `statusMessage`, and `async`.
+Script bodies are outside that hash. Changes to registration fields or handler
+order require a release note telling users to trust the hooks again in `/hooks`.
 
-For package changes, run `node --test plugins/research-skills/tests/*.test.js`
-and `python3 scripts/check-package.py`. The latter needs PyYAML from
-`requirements-dev.txt` in the interpreter that runs it, and it also builds the
-Claude package offline in a temporary directory. For changes to the job-prompt
-linter, also run
+Preserve upstream notices and license boundaries in `LICENSE.md`. Keep
+`README.md` and `README.zh-CN.md` in sync, including every skill and its source.
+Record third-party sources and modifications in the plugin's `NOTICE.md`, and
+update its `LICENSE.md` when applicable terms differ.
+
+For package changes, run `node --test plugins/research-skills/tests/*.test.js` and
+`python3 scripts/check-package.py`. The Python check needs PyYAML from
+`requirements-dev.txt` and builds the Claude package offline in a temporary
+directory. For job-prompt linter changes, also run
 `(cd plugins/research-skills/skills/write-implementation-job-prompts/scripts && python3 -B -m unittest test_lint_job_prompt)`.
-Use the existing local script checks when their implementation changes. Do not
-run LLM benchmarks merely to validate packaging.
+Run existing local script checks when their implementations change. Do not run
+LLM benchmarks for packaging validation.
 
-Once per release, run `python3 scripts/install-local.py --prepare-only` so
-installed caches can refresh, then run `python3 scripts/check-package.py --release`.
-Without `--release`, the check only warns when the content version is stale.
-Keep the `version` in `plugins/research-skills/package.json` equal to the base
-version in `plugins/research-skills/.codex-plugin/plugin.json`, because the
-package check fails when they differ.
+Once per release, run `python3 scripts/install-local.py --prepare-only` to refresh
+the content version, then `python3 scripts/check-package.py --release` to enforce
+it. Keep `plugins/research-skills/package.json`'s version equal to the base version
+in `plugins/research-skills/.codex-plugin/plugin.json`.
