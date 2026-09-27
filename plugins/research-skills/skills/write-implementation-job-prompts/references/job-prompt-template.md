@@ -29,4 +29,5 @@ Delivery:
 Add exact starting SHA, closed file surface, owner counts, forbidden-work checks, additional mutation probes and their restoration, cumulative baseline, or plan-clause coverage when the project or failure mechanism needs them. Do not require these fields for an ordinary handoff.
 
 An unfinished placeholder draft is not dispatchable. A short complete prompt
-does not need to pass the optional contract-style linter's larger format.
+does not need to pass the optional linter, which targets long, sectioned
+handoffs.

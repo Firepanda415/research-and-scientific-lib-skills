@@ -3,7 +3,8 @@ name: ponytail-review
 description: >
   Review a diff for over-engineering and justified simplifications while
   preserving behavior, scientific meaning, and resource constraints. Use for
-  simplification reviews or /ponytail-review. Report findings without applying fixes.
+  simplification reviews or an explicit ponytail-review request. Report findings
+  without applying fixes.
 ---
 
 Review diffs for unnecessary complexity. Trace relevant callers and obligations

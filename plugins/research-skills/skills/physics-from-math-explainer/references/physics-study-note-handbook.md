@@ -22,9 +22,7 @@ Key judgment points once the skill is triggered:
 
 ## Output language and terminology
 
-If the conversation is in Chinese, answer in Chinese but keep advanced technical terms in English.
-
-Keep all technical terms from quantum mechanics, operator theory, and superconducting circuits in English by default (e.g. operator, commutator, Fock state, rotating frame, RWA, effective Hamiltonian, detuning, anharmonicity). Only translate elementary mathematical words into Chinese.
+Write in the user's language. In a non-English answer, keep technical terms from quantum mechanics, operator theory, and superconducting circuits in English by default (e.g. operator, commutator, Fock state, rotating frame, RWA, effective Hamiltonian, detuning, anharmonicity), unless the user prefers translated terms. Translate ordinary and elementary mathematical words.
 
 ---
 
@@ -41,9 +39,9 @@ If the gap is manageable, state what hidden assumptions need to be made explicit
 Example structure:
 
 ```markdown
-## 0. 知识 gap 判断
+## 0. Knowledge gap assessment
 
-不算过大，但需要先补几个物理里默认不说清楚的前提：
+Not too large, but a few premises that physics texts usually leave implicit need stating first:
 
 1. ...
 2. ...
@@ -61,9 +59,9 @@ Give the usable result before the derivation.
 For example:
 
 ```markdown
-## 1. 结论
+## 1. Conclusion
 
-在 static single-mode、无 pump、以 $H_0=\omega N$ 为 rotating frame 的情况下，RWA 的简化规则是：
+For a static single mode with no pump, in the rotating frame of $H_0=\omega N$, RWA reduces to the rule:
 
 $$
 (a^\dagger)^r a^s \mapsto \text{keep only if } r=s.
@@ -73,7 +71,7 @@ $$
 Then immediately state the limitation:
 
 ```markdown
-更一般的标准不是 $r=s$，而是 term 在 chosen rotating frame 中是否 slow / resonant。
+The general criterion is not $r=s$ but whether the term is slow, or resonant, in the chosen rotating frame.
 ```
 
 ---
@@ -85,7 +83,7 @@ Before any formula, define every symbol that appears in it.
 Use compact tables:
 
 ```markdown
-| 符号 | 含义 |
+| Symbol | Meaning |
 |---|---|
 | $a$ | annihilation operator |
 | $a^\dagger$ | creation operator |
@@ -112,7 +110,7 @@ Always label the status of equations:
 Use wording such as:
 
 ```markdown
-这不是 exact operator equality，而是在 chosen rotating frame 里做 RWA 后的 effective replacement。
+This is not an exact operator equality. It is the effective replacement after RWA in the chosen rotating frame.
 ```
 
 Use arrows carefully:
@@ -132,7 +130,7 @@ Do not present approximation arrows as algebraic equality.
 For physics approximations, explicitly list assumptions:
 
 ```markdown
-这一步默认：
+This step assumes:
 
 1. single mode
 2. weak nonlinearity
@@ -145,7 +143,7 @@ For physics approximations, explicitly list assumptions:
 For RWA, state the actual scale condition:
 
 ```markdown
-如果 dropped term 的 rotating frequency 是 $\Omega$，term strength 是 $g$，需要：
+If the dropped term rotates at frequency $\Omega$ and has strength $g$, the step requires:
 
 $$
 \lvert g\rvert \ll \lvert \Omega\rvert.
@@ -251,17 +249,17 @@ After deriving an equation, add a short interpretation.
 Example:
 
 ```markdown
-数学上，这是 $N$ 的 eigenvalue 被 $a$ 降低 1。
+Mathematically, $a$ lowers the eigenvalue of $N$ by 1.
 
-物理上，$a$ removes one excitation, so $N$ counts one fewer excitation after $a$ acts.
+Physically, $a$ removes one excitation, so $N$ counts one fewer excitation after $a$ acts.
 ```
 
 For circuit variables:
 
 ```markdown
-$\varphi$ 是 coordinate-like / position-like variable。
-$n_q$ 是 momentum-like / charge-like variable。
-这里的 $n_q$ 不是 Fock number operator $N=a^\dagger a$。
+$\varphi$ is a coordinate-like (position-like) variable.
+$n_q$ is a momentum-like (charge-like) variable.
+Here $n_q$ is not the Fock number operator $N=a^\dagger a$.
 ```
 
 ---
@@ -271,7 +269,7 @@ $n_q$ 是 momentum-like / charge-like variable。
 When the user's statement is almost right but has one important flaw, use:
 
 ```markdown
-你的理解基本正确，需要修正一点：
+Your understanding is essentially right, with one correction:
 ```
 
 Then state the correction.
@@ -279,11 +277,11 @@ Then state the correction.
 Examples:
 
 ```markdown
-$4E_Cn_q^2$ 不是不重要。它和 $\frac{E_J}{2}\varphi^2$ 一起构成 harmonic oscillator。
+$4E_Cn_q^2$ is not negligible. Together with $\frac{E_J}{2}\varphi^2$ it forms a harmonic oscillator.
 ```
 
 ```markdown
-$r=s$ 不是 RWA 的根本定义，只是 static single-mode 情况下的简化规则。
+$r=s$ is not the definition of RWA. It is the simplified rule for the static single-mode case.
 ```
 
 ---
@@ -293,7 +291,7 @@ $r=s$ 不是 RWA 的根本定义，只是 static single-mode 情况下的简化�
 End substantial explanations with a compact summary:
 
 ```markdown
-## 最小记忆版
+## Minimal memory version
 
 1. ...
 2. ...
@@ -314,17 +312,15 @@ The minimal memory version should contain only equations and rules the user shou
 
 ## Markdown formatting rules
 
-Keep Markdown notes copy-paste safe for a Markdown editor with math rendering, such as VS Code.
+Keep Markdown notes copy-paste safe for the user's target renderer. By default, target a Markdown editor with `$`-delimited math rendering, such as VS Code. When the target renderer needs other math delimiters, such as `\(...\)` and `\[...\]`, use those in place of the defaults below and keep the other rules.
 
 ### Inline math
 
-Use `$...$` for inline math. Do not use `\(...\)`.
+Use `$...$` for inline math by default, rather than `\(...\)`.
 
 ### Display math
 
-Use `$$...$$` for all display equations.
-
-Do not use `\[...\]`.
+Use `$$...$$` for all display equations by default, rather than `\[...\]`.
 
 Correct:
 
@@ -334,7 +330,7 @@ N\lvert n\rangle=n\lvert n\rangle.
 $$
 ```
 
-Incorrect:
+Incorrect for the default target:
 
 ```markdown
 \[
@@ -394,7 +390,7 @@ $$
 Prefer:
 
 ```markdown
-12. RWA 后得到 Kerr-type nonlinearity：
+12. RWA gives a Kerr-type nonlinearity:
 
 $$
 H_{\mathrm{Kerr}}=\omega_{\mathrm{eff}}N+\frac{K}{2}N(N-1).
@@ -454,32 +450,32 @@ Avoid:
 ### Template A: Operator identity
 
 ```markdown
-## 1. 结论
+## 1. Conclusion
 
 $$
 \text{target identity}
 $$
 
-这一步是 exact operator identity / definition / effective approximation。
+This step is an exact operator identity / a definition / an effective approximation.
 
-## 2. 变量定义
+## 2. Variables
 
-| 符号 | 含义 |
+| Symbol | Meaning |
 |---|---|
 
-## 3. 在 basis 上检查
+## 3. Check on a basis
 
 ...
 
-## 4. 用 operator algebra 推导
+## 4. Derivation by operator algebra
 
 ...
 
-## 5. 物理直观
+## 5. Physical intuition
 
 ...
 
-## 6. 最小记忆版
+## 6. Minimal memory version
 
 ...
 ```
@@ -487,11 +483,11 @@ $$
 ### Template B: Approximation such as RWA
 
 ```markdown
-## 0. 知识 gap 判断
+## 0. Knowledge gap assessment
 
 ...
 
-## 1. 结论
+## 1. Conclusion
 
 ...
 
@@ -503,19 +499,19 @@ $$
 
 ...
 
-## 4. 保留条件
+## 4. Condition for keeping a term
 
 ...
 
-## 5. 被丢掉的项和保留的项
+## 5. Dropped and kept terms
 
 ...
 
-## 6. 失效条件
+## 6. Failure conditions
 
 ...
 
-## 7. 最小记忆版
+## 7. Minimal memory version
 
 ...
 ```
@@ -523,15 +519,15 @@ $$
 ### Template C: Hamiltonian reduction
 
 ```markdown
-## 0. 知识 gap 判断
+## 0. Knowledge gap assessment
 
 ...
 
-## 1. 原始 Hamiltonian
+## 1. Raw Hamiltonian
 
 ...
 
-## 2. 变量与 commutator
+## 2. Variables and commutators
 
 ...
 
@@ -563,7 +559,7 @@ $$
 
 ...
 
-## 10. 最小逻辑链
+## 10. Minimal logic chain
 
 ...
 ```
@@ -578,11 +574,11 @@ Before finalizing an answer, check:
 2. Did the answer say whether equations are exact or approximate?
 3. Are hidden assumptions listed?
 4. Is RWA described as a frame-dependent effective approximation?
-5. Are advanced terms kept in English?
-6. Are display equations using `$$...$$`?
-7. Is inline math written with `$...$`?
+5. Is each technical term used in one consistent form, following the terminology rule above?
+6. Are display equations using `$$...$$`, or the target renderer's delimiters?
+7. Is inline math written with `$...$`, or the target renderer's delimiters?
 8. Is ket notation written with `\lvert ...\rangle`?
 9. Is there no standalone `=` line?
 10. Is there no raw `|n\rangle` inside Markdown tables?
 11. Is there a minimal memory version?
-12. If the user asks for Markdown notes, is the output copy-paste safe for the target Markdown editor, such as VS Code?
+12. If the user asks for Markdown notes, is the output copy-paste safe for the target renderer?

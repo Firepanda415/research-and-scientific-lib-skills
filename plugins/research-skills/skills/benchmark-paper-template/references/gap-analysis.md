@@ -20,7 +20,7 @@ Fill each cell from the cited source. Use ✓, partial, or ✗ as the evidence s
 Answer these questions from the available sources. Ask the user only for what the sources cannot determine:
 - What mainstream benchmarks already exist in this area, and what does each one evaluate?
 - What implicit assumption do they share, and does that assumption hold in realistic scenarios?
-- If a model scored perfectly on every existing benchmark, would it really have mastered the underlying capability?
+- If a method, such as a model or solver, scored perfectly on every existing benchmark, would it really have mastered the underlying capability?
 
 ## Identify the Blind Spot
 

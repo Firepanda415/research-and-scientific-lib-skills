@@ -1,8 +1,8 @@
 schema_version: "1.1"
 name: writing-subagent-brief
 description: >-
-  A brief passed from this session to its own subagent. No person will keep or send
-  it, so the writing route for human text should stay out.
+  A brief passed from this session to its own subagent. Text for agents stays outside
+  the writing route.
 tags: [routing, handoff-writing]
 execution:
   max_turns: 8

@@ -5,15 +5,17 @@ declared work or memory limit, or a resource claim, or when extra computation
 needs the approval that the parent skill requires.
 
 When asking for that approval, count target scale and repetition, including
-classical work alongside quantum execution. Disclose unknown cost without first
+every stage of a hybrid workflow, such as classical work alongside quantum
+execution. Disclose unknown cost without first
 launching an expensive measurement. Approval for one bounded check does not
 authorize a recurring production check or new selection or termination
 behavior. Make the request brief, with a bold statement of the concrete added
 work, its cost and frequency, its effect on results, and a recommendation.
 
-- Define the affected resource envelope: circuit counts, depth and two-qubit
-  gates, per-circuit and total shots, backend calls, expensive-kernel calls,
-  peak live memory, stored and serialized bytes, or cache/output growth.
+- Define the affected resource envelope: expensive-kernel, solver or backend
+  calls, iterations, communication, peak live memory, stored and serialized
+  bytes, or cache/output growth, and for quantum workloads circuit counts,
+  depth and two-qubit gates, and per-circuit and total shots.
   Select relevant quantities, their populations, and their growth with problem
   size and iterations. Compare the same workload, accuracy target, execution
   mode, and environment, and distinguish measured values from projections.

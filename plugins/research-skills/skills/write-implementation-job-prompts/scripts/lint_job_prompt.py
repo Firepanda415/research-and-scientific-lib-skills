@@ -336,7 +336,7 @@ def lint_prompt(
             findings.append(
                 Finding(
                     "WARNING",
-                    "plan-derived series prompt has no source plan version or digest",
+                    "job-series prompt names no version or digest of its source plan",
                 )
             )
         prerequisite_record = re.search(
@@ -350,8 +350,10 @@ def lint_prompt(
             findings.append(
                 Finding(
                     "WARNING",
-                    "plan-derived series prompt has no accepted prerequisite revision "
-                    "or seam",
+                    "job-series prompt records no prerequisite: name the accepted "
+                    "revision of each earlier job it builds on, or the seam (the "
+                    "interface or invariant an earlier job provides to this one), "
+                    "or state that there is none",
                 )
             )
         if not re.search(
@@ -362,8 +364,8 @@ def lint_prompt(
             findings.append(
                 Finding(
                     "WARNING",
-                    "if this project uses a clause ledger, the plan-derived series "
-                    "prompt has no plan-clause coverage record",
+                    "if the project records which job covers each plan clause, this "
+                    "job-series prompt has no plan-clause coverage record",
                 )
             )
 
@@ -377,8 +379,8 @@ def lint_prompt(
             findings.append(
                 Finding(
                     "WARNING",
-                    "if this project requires a closure owner, the targeted battery "
-                    "has no named closure job or full-battery owner",
+                    "if the project requires a full test run after targeted tests, "
+                    "the prompt names no job or step that runs the full suite",
                 )
             )
 
@@ -389,7 +391,8 @@ def lint_prompt(
                 Finding(
                     "WARNING",
                     f"line {_line_number(prose, date_match.start())}: date stamp "
-                    "in prompt prose; contracts carry no date stamps",
+                    "in job prompt prose: state current requirements and identify "
+                    "versions by revision rather than date",
                 )
             )
     agent_match = AGENT_NAME_RE.search(prose)
@@ -420,7 +423,7 @@ def lint_prompt(
             "name the verified semantic owner"
         ),
         r"\bfix (?:all|every) (?:issue|problem|finding)s?\b": (
-            "freeze a closed finding set and authority rule"
+            "list the findings the job covers and who decides on any others"
         ),
         r"\bignor(?:e|ing) (?:any|all|volatile)\b": (
             "name per-line nondeterminism exemptions exactly"
@@ -429,11 +432,13 @@ def lint_prompt(
             "enumerate which existing tests move and why"
         ),
         r"\bappend every new test module\b": (
-            "freeze the exact current-tree selector before dispatch"
+            "name the exact test files or selector from the current tree "
+            "before dispatch"
         ),
         r"\b(?:callers?|call sites) (?:the |your )?(?:overlap )?audit "
         r"(?:finds|lists|discovers)\b": (
-            "resolve and enumerate the authorized surface before dispatch"
+            "list the callers and files the job may edit (its edit surface) "
+            "before dispatch instead of leaving them to a later search"
         ),
     }
     for pattern, message in risky_patterns.items():
@@ -454,9 +459,9 @@ def lint_prompt(
         findings.append(
             Finding(
                 "WARNING",
-                f"line {_line_number(prose, open_test_surface.start())}: if this "
-                "project uses a closed test surface, replace 'new test modules' "
-                "with a frozen current-tree list or name the permitted test paths",
+                f"line {_line_number(prose, open_test_surface.start())}: if the "
+                "project limits which test files a job may add, replace 'new test "
+                "modules' with the permitted test paths",
             )
         )
 

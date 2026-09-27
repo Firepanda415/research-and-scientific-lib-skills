@@ -48,8 +48,10 @@ revision, the macro is the only edit required.
 
 ## 3. Citations
 
-Rule L1: always use the non-breaking tilde between a word and its
-citation, to prevent awkward line breaks.
+Rule L1: put a non-breaking tilde between a word and an inline
+citation, such as a bracketed number, to prevent awkward line
+breaks. With a superscript citation style, follow the template's
+placement.
 
 | Bad | Good |
 |---|---|
@@ -109,11 +111,13 @@ Rule L10: use equation numbers when they help citation or navigation, and give e
 
 ## 7. Quotation marks and dashes
 
-Rule L12: use the LaTeX convention for quotation marks.
+Rule L12: in English prose, use the LaTeX convention for quotation
+marks unless the template sets another, such as `csquotes`.
 
 - Double quotes: use `` `` `` for open, `` '' `` for close.
 - Single quotes: use `` ` `` for open, `` ' `` for close.
-- Never use the straight ASCII typewriter `"` character.
+- Replace the straight ASCII typewriter `"` character in prose.
+  Leave it in code, URLs, and babel shorthands, where it is correct.
 
 Rule L13: distinguish the three dash types. Whether authored prose
 uses em dashes, and what replaces them, follows the punctuation rules

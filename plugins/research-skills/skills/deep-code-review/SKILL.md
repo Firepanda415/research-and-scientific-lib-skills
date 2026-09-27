@@ -34,7 +34,10 @@ Mutation and fault-injection probes follow the isolation rule in
 
 This skill authorizes read-only subagent delegation within the user's review
 scope when delegation is available. It does not authorize implementation or any
-external action.
+external action. Delegated finders and reviewers return their results to this
+review. When this review itself runs as a delegated agent on a host that would
+send a background agent's result to another session, run them in the
+foreground, as [independent review](references/independent-review.md) explains.
 
 ## Establish the boundary first
 
@@ -45,8 +48,12 @@ Before delegation:
 2. Record the current revision, worktree status, changed-file inventory, and
    category-level diff size. Do not let concurrent work silently change the
    endpoint.
-3. Verify interpreter, dependency context, and import origin before classifying
-   runtime failures.
+3. Before classifying runtime failures, use the interpreter and dependencies the
+   project declares, for example in lock, environment or version files or its
+   documentation, and record those actually used when none is declared. Confirm
+   that tests import the reviewed checkout. A failure caused by the host's
+   sandbox, network or permissions is an environment limit to report, not a
+   finding.
 4. If the range is remediation, read the prior findings and accepted/deferred
    decisions, then create a closure ledger before judging the new diff. Mark
    each in-scope prior item resolved, partial, open, deferred, rejected, or
@@ -119,7 +126,9 @@ and include them as residual context only when useful.
 For an exhaustive review or consequential unresolved cross-angle risk, run an
 independent gap sweep after initial verification. Otherwise inspect remaining
 gaps locally. Give an independent reviewer the frozen boundary and coverage
-record, without asking it merely to confirm accepted findings. Look for:
+record, without asking it merely to confirm accepted findings. Without a
+separate reviewer, run the sweep yourself as a distinct pass from the frozen
+coverage record, and report that it was not independent. Look for:
 
 - changed files, callers, consumers, or interaction cells no lane actually
   covered;
@@ -150,7 +159,8 @@ Do not stop because findings already look substantial. Stop only when:
 
 - every applicable angle, changed surface, and relevant unchanged owner has an
   explicit disposition, including material exclusions;
-- every high-risk candidate has independent verification;
+- every high-risk candidate is verified by an independent oracle or observable
+  event;
 - prior findings have closure states when remediation is in scope;
 - the appropriate final gap check is complete;
 - every accepted finding meets its claim-specific evidence standard, with
@@ -173,7 +183,9 @@ For each issue give the smallest current location, trigger, effect, origin,
 verification evidence, and concrete repair direction. Keep open, resolved,
 deferred, and unverified items distinct. For scientific issues, state the affected
 quantity, demonstrated error, and preserved paths. Resource severity follows the
-measured or bounded impact, not an automatic low-priority cleanup label.
+measured or bounded impact, not an automatic low-priority cleanup label. Report
+each executed check with its command, environment, revision, and pass, failure
+and skip counts, so that a reader can interpret or rerun it.
 
 Deliver all accepted findings in one review. A requested durable report contains
 the full findings, relevant prior-issue closure, coverage, checks, and material

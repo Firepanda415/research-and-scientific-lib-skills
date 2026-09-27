@@ -31,6 +31,9 @@ Use current primary sources for technical claims. Social posts, aggregators,
 rankings, and press coverage can aid discovery but do not replace the paper,
 supplement, repository, proof artifact, or technical report. Never claim full
 reading, reproduction, or validation when only a smaller source was inspected.
+When web retrieval is unavailable and the user has not supplied the listings or
+papers, say so and stop, because a briefing written from memory cannot meet this
+source standard.
 
 Choose relevant search lanes: fresh quantum work, the user's topics, adjacent
 methods, Quantum × AI, and scientific software or hardware. Broad briefs should
@@ -65,9 +68,8 @@ relevant. Do not fill weak sections, impose paper counts, or repeat full summari
 End with a one-line coverage note: listings or queries actually fetched, date windows,
 lanes skipped, and retrieval limits.
 Use `references/output-template.md` for a requested full briefing, adapting its
-optional sections to the evidence. Briefings are kept and reread, so their prose
-follows `research-writing-style`, including its review before delivery. The concise
-default above and `references/output-template.md` still set the structure.
+optional sections to the evidence. Together, the concise default above and
+`references/output-template.md` set the briefing's structure.
 
 Use an existing coverage ledger only when prior coverage is relevant and available.
 Never infer that a paper was previously covered from memory alone. Revisit for a

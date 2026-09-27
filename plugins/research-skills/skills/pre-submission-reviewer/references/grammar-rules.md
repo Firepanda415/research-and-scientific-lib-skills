@@ -8,7 +8,7 @@
 4. Sentence complexity
 5. Which versus that
 6. Passive voice
-7. Chinglish patterns
+7. Literal-translation patterns
 8. Punctuation in quotations
 
 ## 1. Article usage
@@ -105,22 +105,22 @@ Replace a passive construction when it hides an actor the reader
 needs to know. Keep it when the operation or object is the point
 or the actor is unknown.
 
-## 7. Chinglish patterns
+## 7. Literal-translation patterns
 
-Common Chinglish patterns to flag:
+Flag wording carried over literally from the author's first
+language, for example from a Chinese draft:
 
-- Direct translation of Chinese idioms that do not carry in
-  English.
-- Overuse of "very", a common carry-over from Chinese; often
+- Direct translation of idioms that do not carry into English.
+- Habitual intensifiers such as "very", which are often
   unnecessary.
 - Awkward repetition of general-purpose words where restructuring
   would be clearer. Do not vary defined technical terms merely to
   avoid repetition; terminology consistency takes precedence.
 - Over-hedged statements ("it may be the case that perhaps the
   method possibly") when a direct statement is clearer.
-- Idioms, collocations, and word order typical of literal
-  translation from a Chinese draft. Flag the specific phrase and
-  give an idiomatic English wording with the same meaning.
+- Collocations and word order carried over by literal
+  translation. Flag the specific phrase and give an idiomatic
+  English wording with the same meaning.
 
 ## 8. Punctuation in quotations
 

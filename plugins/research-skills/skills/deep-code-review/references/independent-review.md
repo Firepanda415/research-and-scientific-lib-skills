@@ -23,6 +23,13 @@ required.
 - Start independent lanes in parallel up to the available concurrency limit.
   Cover remaining angles locally or in additional waves when needed; preserve
   coverage without turning the matrix into a staffing quota.
+- Finder and reviewer results return to this review, which acts on them. When
+  this review itself runs as a delegated agent, start them in the foreground.
+  In Claude Code as of September 2026, a background agent started by a
+  delegated agent reports its completion to the top-level session, so the
+  review would wait for results that never arrive. Foreground agents started in
+  the same turn still run in parallel there. A host that returns results to the
+  agent that started them needs no change.
 - Finder agents are leaf reviewers. They remain read-only and return candidates,
   reviewed surfaces, checks run, and residual uncertainty. They do not edit,
   plan fixes, or approve their own findings.

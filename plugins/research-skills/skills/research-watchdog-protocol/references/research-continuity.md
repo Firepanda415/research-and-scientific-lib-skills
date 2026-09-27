@@ -12,8 +12,7 @@ lessons with `maintain-project-memory`, and observations or predictions with
 
 Retain the objective and scope, current result or unresolved uncertainty,
 evidence/configuration locations, next action, actual blocker, and remaining
-limits where relevant. Do not create a fixed family of state files or duplicate
-the same facts across logs, maps, and verification queues.
+limits where relevant. Keep each fact in one place.
 
 Keep prospective predictions distinct from exploratory findings when that
 distinction matters. An ordinary reading or experiment does not require
@@ -36,9 +35,11 @@ worker commits its finished part on its task branch when the job allows
 commits, leaves unfinished edits in its worktree, and stops. A worker whose
 commits and worktree do not show the next step first writes a compact resume
 note in a location that survives a restart. On resumption, a message tells
-each worker to read its note, if any, and continue. This relies on a host that
-can resume a stopped agent with its context. Committed work also survives an
-unplanned restart.
+each worker to read its note, if any, and continue. That message needs a host
+that can resume a stopped agent with its context. Where the host cannot, each
+worker writes the resume note before stopping, because a fresh agent started
+for the task sees only the commits, the worktree, and the note. Committed work
+also survives an unplanned restart.
 
 Existing deployments may already have progress, hypothesis, finding, evidence,
 decision, and verification files. Preserve their consumers and actual schemas

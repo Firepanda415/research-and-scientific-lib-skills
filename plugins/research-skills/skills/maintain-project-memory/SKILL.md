@@ -11,13 +11,21 @@ future work, rather than a transcript of activity.
 
 ## Find the current owners
 
-An owner is the authoritative record for a fact or decision. Read the user's
-request, the existing project entry and the records relevant to the requested
+An owner is the authoritative record for a fact or decision. The project entry
+is the record a new session reads first, such as a per-project memory index
+that the host provides or the project's agent instruction file. When none
+exists, use a location the user or the project's instructions name, and
+otherwise propose a location and its readers before creating the entry,
+because the location decides who sees it, for example every collaborator of a
+shared repository. Read the user's request, the existing project entry and
+the records relevant to the requested
 update. Verify important current claims against live source, configuration,
 decisions or evidence. Follow replacement links when old paths have moved; a
 remembered filename is not a reason to recreate a retired file. When a record
 routes work through a skill or other host-installed workflow, refer to it by
-catalog name, such as `plugin:skill`, and let the host resolve it. When
+the name the host lists, such as `plugin:skill` in Claude Code or `$skill` in
+Codex, or by the bare skill name when several hosts read the record, and let
+the host resolve it. When
 reconciling such a record, replace an install or cache path with that name.
 Project source paths are outside this rule. Report a missing owner or evidence
 source without inventing its contents.
@@ -86,9 +94,11 @@ Do not delete raw research evidence merely because a summary now exists.
 Archive or delete a report only after its intended reader has read it, unless
 the user decides otherwise.
 When a piece of work ends and its temporary folder is cleared, move the material
-that later decisions rest on into the project's archive with an index entry,
-such as final reports, review findings with their dispositions, user decisions,
-the measured evidence behind a decision, and scientific originals. A final
+that later decisions rest on into the place where the project keeps lasting
+records, such as an archive, decision log or docs folder, linked from its index
+or entry. This material includes final reports, review findings with their
+dispositions, user decisions, the measured evidence behind a decision, and
+scientific originals. A final
 report also stays where its reader will look for it until the reader has read
 it. Move lasting rules and decisions into their owners. Delete briefs, progress
 logs, scratch copies and backups whose content lives on elsewhere.
@@ -110,8 +120,10 @@ where the project makes that distinction.
 Project memory loads only in its own project. Flag records you read during the
 update whose scope exceeds the project, such as a user-wide preference, a model
 or tool default, or host behavior, and propose moving them to global
-instructions. After an authorized move, replace the project copy with a pointer.
-A record explicitly limited to this project stays in project memory.
+instructions. After an authorized move, replace the project copy with a pointer
+when the project's readers can reach the new location. Otherwise remove the
+copy, or keep it when collaborators rely on it. A record explicitly limited to
+this project stays in project memory.
 
 Write only within the user's requested memory scope and the host's persistence
 rules. If the host requires proposed update notes instead of direct memory
@@ -140,10 +152,11 @@ For a substantial reorganization, consider a bounded cold-start handoff check:
 give a fresh session the entry and a realistic next task, then inspect whether
 it finds the right owners, evidence limits and action boundaries. Use delegation
 only when available and authorized; otherwise inspect the same path locally. A
-delegate should load the project instructions a new session would (in Claude
-Code, not the built-in Explore or Plan agents, which skip the project
-instruction file), receive only the entry and the task, and report which
-instruction sources it had. A subagent only approximates a new session. Do not
+delegate should load the project instructions a new session would, receive
+only the entry and the task, and report which instruction sources it had. Some
+built-in read-only agent types skip the project instruction file. Claude
+Code's subagent documentation, checked on 2026-09-27, lists its Explore and
+Plan agents among them. A subagent only approximates a new session. Do not
 launch the underlying experiment just to test the memory.
 
 Report the actual records changed, important corrections, retained uncertainties

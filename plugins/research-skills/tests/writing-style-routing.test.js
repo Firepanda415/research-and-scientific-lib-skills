@@ -54,12 +54,11 @@ test('writing routing reaches sessions and subagents with stdin open', async () 
     ];
     for (const file of routed) {
       assert.ok(fs.existsSync(file), `missing routed file ${file}`);
-      assert.ok(context.includes(JSON.stringify(file)));
+      assert.ok(context.includes(JSON.stringify(file.split(path.sep).join('/'))));
     }
-    assert.match(context, /Temporary chat summaries and progress updates alone do not trigger it/);
-    assert.match(context, /analyses answered in chat for the requester's own decision do not trigger it either/);
-    assert.match(context, /paste-ready text delivered in chat/);
-    assert.match(context, /returned to another agent or a program/);
+    assert.match(context, /a document whose readers include people other than the user and agents/);
+    assert.match(context, /When the readers are unclear, treat the text as the user's own/);
+    assert.match(context, /code comments, docstrings, commit messages and pull-request descriptions/);
   }
   const invalid = spawnSync(process.execPath, [script, 'InvalidEvent'], { encoding: 'utf8' });
   assert.equal(invalid.status, 1);

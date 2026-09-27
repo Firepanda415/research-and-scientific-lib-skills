@@ -262,11 +262,11 @@ class NewHygieneChecks(unittest.TestCase):
     def test_series_prompt_requires_lineage_prerequisites_and_coverage(self) -> None:
         text = "# Change Set A\n\nThis serial job reaches program closure. Report deviations.\n"
         result = messages(text)
-        self.assertTrue(any("source plan version or digest" in m for m in result))
-        self.assertTrue(any("accepted prerequisite" in m for m in result))
+        self.assertTrue(any("version or digest of its source plan" in m for m in result))
+        self.assertTrue(any("records no prerequisite" in m for m in result))
         self.assertTrue(
             any(
-                m.startswith("if this project uses a clause ledger")
+                m.startswith("if the project records which job covers each plan clause")
                 and "plan-clause coverage" in m
                 for m in result
             )
@@ -281,8 +281,8 @@ Accepted prerequisite contracts: job-1@r2.
 Plan clause coverage ledger: clause P1 is owned here.
 """
         result = messages(text)
-        self.assertFalse(any("source plan version or digest" in m for m in result))
-        self.assertFalse(any("accepted prerequisite" in m for m in result))
+        self.assertFalse(any("version or digest of its source plan" in m for m in result))
+        self.assertFalse(any("records no prerequisite" in m for m in result))
         self.assertFalse(any("plan-clause coverage" in m for m in result))
 
     def test_series_prerequisites_none_is_an_explicit_record(self) -> None:
@@ -293,33 +293,33 @@ Source bundle: plan.md version 3, sha256 abc123.
 Prerequisites: none.
 Plan clause coverage ledger: clause P1 is owned here.
 """
-        self.assertFalse(any("accepted prerequisite" in m for m in messages(text)))
+        self.assertFalse(any("records no prerequisite" in m for m in messages(text)))
 
     def test_standalone_integration_gate_does_not_trigger_series_warnings(self) -> None:
         text = "# Gate\n\nRun the integration gate and report deviations.\n"
         result = messages(text)
-        self.assertFalse(any("plan-derived series" in m for m in result))
+        self.assertFalse(any("job-series prompt" in m for m in result))
 
     def test_change_set_identifier_alone_triggers_series_warnings(self) -> None:
         for heading in ("# Change Set A", "# Change Set 2"):
             with self.subTest(heading=heading):
                 text = f"{heading}\n\nFix the parser. Report deviations.\n"
                 result = messages(text)
-                self.assertTrue(any("source plan version or digest" in m for m in result))
+                self.assertTrue(any("version or digest of its source plan" in m for m in result))
 
     def test_change_set_prose_does_not_trigger_series_warnings(self) -> None:
         text = "# Fix parser\n\nThe change set touches src/a.py only. Report deviations.\n"
-        self.assertFalse(any("plan-derived series" in m for m in messages(text)))
+        self.assertFalse(any("job-series prompt" in m for m in messages(text)))
 
     def test_change_set_heading_before_capitalized_paragraph_does_not_warn(self) -> None:
         text = "# Fix parser\n\n## Change Set\n\nA single file changes. Report deviations.\n"
-        self.assertFalse(any("plan-derived series" in m for m in messages(text)))
+        self.assertFalse(any("job-series prompt" in m for m in messages(text)))
 
     def test_unowned_targeted_battery_warns_conditionally(self) -> None:
         text = "# T\n\nRun the targeted test battery. Report deviations.\n"
         self.assertIn(
-            "if this project requires a closure owner, the targeted battery "
-            "has no named closure job or full-battery owner",
+            "if the project requires a full test run after targeted tests, "
+            "the prompt names no job or step that runs the full suite",
             messages(text),
         )
 
@@ -328,7 +328,7 @@ Plan clause coverage ledger: clause P1 is owned here.
             "# T\n\nRun the targeted test battery, then the full suite in this job. "
             "Report deviations.\n"
         )
-        self.assertFalse(any("targeted battery" in m for m in messages(text)))
+        self.assertFalse(any("runs the full suite" in m for m in messages(text)))
 
     def test_open_test_and_audit_discovered_surfaces_warn(self) -> None:
         text = """# T
@@ -339,21 +339,21 @@ Allowed: new test modules and callers your overlap audit lists.
         result = messages(text)
         self.assertTrue(
             any(
-                "if this project uses a closed test surface" in m
-                and "name the permitted test paths" in m
+                "if the project limits which test files a job may add" in m
+                and "with the permitted test paths" in m
                 for m in result
             )
         )
         self.assertFalse(any("surface-conflict" in m for m in result))
-        self.assertTrue(any("authorized surface" in m for m in result))
+        self.assertTrue(any("edit surface" in m for m in result))
 
     def test_explicit_no_new_test_modules_does_not_warn(self) -> None:
         text = "# T\n\nReport deviations. Do not add new test modules.\n"
-        self.assertFalse(any("frozen current-tree list" in m for m in messages(text)))
+        self.assertFalse(any("permitted test paths" in m for m in messages(text)))
 
     def test_no_restriction_does_not_suppress_open_test_surface_warning(self) -> None:
         text = "# T\n\nThere is no restriction on new test modules; report deviations.\n"
-        self.assertTrue(any("frozen current-tree list" in m for m in messages(text)))
+        self.assertTrue(any("permitted test paths" in m for m in messages(text)))
 
     def test_date_stamp_in_job_prose_warns(self) -> None:
         text = "# T\n\nAuthored 2026-07-14. Report deviations.\n"

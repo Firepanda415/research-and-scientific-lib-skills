@@ -3,8 +3,9 @@ name: ponytail-audit
 description: >
   Compact Ponytail-format audit of over-engineering and justified deletions
   across a repository, preserving behavior, scientific meaning and resource
-  constraints. Use for $ponytail-audit, /ponytail-audit or an explicitly
-  requested Ponytail audit. Returns a compact read-only report. For an
+  constraints. Use for $ponytail-audit in Codex,
+  /research-skills:ponytail-audit in Claude Code or an explicitly requested
+  Ponytail audit. Returns a compact read-only report. For an
   evidence-backed simplification survey or authorized cleanup, use
   simplify-codebase.
 ---

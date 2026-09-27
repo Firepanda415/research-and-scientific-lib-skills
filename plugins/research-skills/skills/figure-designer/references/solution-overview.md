@@ -9,16 +9,18 @@
 5. Design principles
 6. Tool recommendations
 
-The named paper figures cited below (with venue and year) were
-representative examples at the time of writing; substitute newer
-top-venue examples from the user's field where available, and do
-not assert visual details of these figures beyond what is
-described here.
+The named paper figures cited below (with venue and year) come from
+machine-learning and database venues and illustrate layouts only.
+An example from the user's field serves better when the user
+supplies it or its figure can be inspected. Describe the named
+figures only as far as this file describes them.
 
 ## 1. Why the Overview matters
 
-The Solution Overview figure sits at the top of the Methodology
-section (typically Figure 2 or the first figure of Section 3). Its
+The Solution Overview figure usually sits where the method is first
+explained, often at the top of the Methodology section (Figure 2 or
+the first figure of Section 3 in many two-column conference papers,
+while some journals place Methods at the end). Its
 job is to give a reader who skips prose a complete mental map of
 the method: what the inputs are, what the stages are, what the
 outputs are, and how components interact.
@@ -35,7 +37,9 @@ stage is a named box; sub-modules fit inside the box.
 
 ### Layout
 
-- Canvas: wide, two to three times as wide as tall.
+- Canvas: typically wide, for a full-width float, with the aspect
+  ratio set by the venue's column layout (often two to three times
+  as wide as tall in a two-column paper).
 - Three to five large stage boxes from left to right.
 - Each stage box contains sub-modules as small boxes.
 - Arrows between stages indicate data flow; labelled arrows
@@ -128,5 +132,7 @@ arrows show data flow.
 
 ## 6. Tool recommendations
 
-Primary: draw.io (diagrams.net). Alternatives: PowerPoint, TikZ.
-See tools.md for the full matrix, trade-offs, and tools to avoid.
+The agent produces an editable source that a tool in the environment
+can render, such as draw.io XML, TikZ, or SVG. The user may polish
+it in draw.io or a slide editor they already use. See tools.md for
+the full matrix, trade-offs, and tools to avoid.

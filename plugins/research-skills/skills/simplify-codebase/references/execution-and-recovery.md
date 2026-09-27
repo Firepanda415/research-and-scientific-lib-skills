@@ -48,7 +48,7 @@ When the simplification claims a latency, throughput, memory, startup, or other 
 Summarize routine checks. Distinguish material untested boundaries when they
 limit the claim; passing a unit test does not establish deployment or acceptance.
 
-If a post-change check fails, compare it with the baseline and decide whether the failure was pre-existing, the implementation is incomplete, or the candidate was load-bearing. Repair the current batch or undo it using the recorded recovery path. Preserve the meaningful check and revise the proof instead of weakening the gate to make the deletion pass.
+If a post-change check fails, compare it with the baseline and decide whether the failure was pre-existing, the implementation is incomplete, or the candidate was load-bearing. A failure caused by the host's sandbox, network or permissions is an environment limit to report, not evidence about the cut. Repair the current batch or undo it using the recorded recovery path. Preserve the meaningful check and revise the proof instead of weakening the gate to make the deletion pass.
 
 ## Report the result
 
@@ -58,12 +58,12 @@ use the relevant parts of this receipt when they help review or recovery:
 
 ```text
 Scope: ownership boundary changed
-Baseline: commands and pre-existing failures
+Baseline: commands, environment, revision and pre-existing failures
 Retired obligation: contract, state, layer, or dependency removed
 Artifacts: files and generated outputs changed
 Realized net effect: concepts, artifacts, lines, and dependencies removed minus replacement or migration machinery added, where measurable
 Behavior: preserved and intentionally changed observations
-Verification: exact commands, probes, and results
+Verification: exact commands, environment, revision, probes, and results
 Residual risk: untested boundaries or external uncertainty
 Retained candidates: high-value items kept and why
 Undo: files or commit range to reverse and any data/config restoration required

@@ -1,6 +1,6 @@
 ---
 name: scientific-computing-correctness
-description: "Implement, debug, optimize or independently validate scientific computations and executable research results while preserving mathematical meaning, numerical accuracy and resource bounds. Use for scientific IV&V of a specified computation or result. Library reviews, including review-and-fix requests, and scientific-change acceptance use scientific-library-review. Other code reviews use deep-code-review. Exclude manuscript-only review and ordinary application code."
+description: "Implement, debug, optimize or independently validate scientific computations and executable research results while preserving mathematical meaning, numerical accuracy and resource bounds. Use for scientific IV&V (independent verification and validation) of a specified computation or result. Library reviews, including review-and-fix requests, and scientific-change acceptance use scientific-library-review. Other code reviews use deep-code-review. Exclude manuscript-only review and ordinary application code."
 ---
 
 # Scientific Computing Correctness
@@ -101,11 +101,12 @@ For paper-derived implementations, replications, proof-assistant formalizations,
   written against a documented protocol. Targeted tests can miss those
   implementations, so a change to an entry point that they all pass through
   runs the project's standard full test suite before integration.
-- Document each formula or numerical rule that the work adds or changes at its
-  definition, in the docstring or a comment above the line, with the derivation
-  steps a reader needs, its assumptions, its error bound when it has one, and
-  its source with a stable identifier. Copy a derivation made elsewhere, such
-  as in a report or another agent's answer, into the code or existing algorithm
+- Document each formula or numerical rule that the work adds or changes where
+  the project keeps derivations, linked from the definition, and otherwise in
+  the docstring or a comment above the definition, with the derivation steps a
+  reader needs, its assumptions, its error bound when it has one, and its
+  source with a stable identifier. Copy a derivation made elsewhere, such as in
+  a report or another agent's answer, into the code or existing algorithm
   documentation, because such records may not last. Owners sharing a
   derivation name each other, and a test asserting a derived bound names the
   owner that derives it. When documenting existing code, derive each step,
@@ -147,9 +148,10 @@ claims, and how to count extra work and phrase the request.
 
 ## Verification
 
-- For a scientific IV&V request about a specified computation or result,
-  independently assess its mathematical premises and expected behavior, not
-  just agreement with the implementation or its tests. Trace representative
+- For scientific IV&V (independent verification and validation) of a
+  specified computation or result, independently assess its mathematical
+  premises and expected behavior, not just agreement with the implementation
+  or its tests. Trace representative
   public workflows through actual execution, raw evidence and material resource
   behavior.
 - Before implementing a behavior or accepting an existing implementation, state
@@ -170,16 +172,12 @@ claims, and how to count extra work and phrase the request.
   veto and changing the test to expect termination.
 - Leave the smallest test set that protects a current scientific, resource,
   provenance, lifecycle, public-input, or serialization obligation. Temporary
-  migration and implementation-shape checks do not become permanent tests. Each
-  added or changed test observes the promised property and can fail for a
-  plausible defect in it, and a fix's regression test fails on the pre-change
-  code. When adding or changing tests or numeric assertions, or when a result
-  varies across platforms, read [test evidence](references/test-evidence.md).
+  migration and implementation-shape checks do not become permanent tests.
+  When adding or changing tests or numeric assertions, or when a result varies
+  across platforms, read [test evidence](references/test-evidence.md).
 - Before classifying a failure or reporting a measured result, confirm the
   interpreter, dependency versions and import origin the project declares (or
-  those actually used when none is declared), and state them with the result.
-  Report separately executed test runs separately, with the revision each ran
-  on, rather than as one combined total.
+  those actually used when none is declared).
 - A green build, regenerated notebook, mutation kill, or full test suite proves
   only the invariants that its checks can falsify. Use an additional independent
   pass when unresolved scientific risk warrants it, and do not rerun settled
@@ -203,8 +201,8 @@ changed.
   revision, new or reused, and was checked in the context the claim names.
   Otherwise the claim is removed or marked unverified.
 - Each new or changed formula or numerical rule is documented at its
-  definition, with its derivation, assumptions and source, and its error bound
-  when it has one.
+  definition or linked from there, with its derivation, assumptions and
+  source, and its error bound when it has one.
 - Each new or changed test names its independent expected relation, and a
   fix's regression check failed on the pre-change code.
 - No tolerance, threshold or cap was widened after a failure without a
@@ -215,8 +213,10 @@ changed.
   outstanding for whoever integrates.
 - The default runtime path gained no extra expensive computation without
   approval, and resource comparisons use matched workloads.
-- Each measured value or test result names the environment and revision that
-  produced it, and each status label comes with the quantities that decide it.
+- Each measured value or test result names the command, interpreter, dependency
+  versions, import origin where it matters, and revision that produced it,
+  separately executed test runs are reported separately rather than as one
+  total, and each status label comes with the quantities that decide it.
 
 ## Completion
 

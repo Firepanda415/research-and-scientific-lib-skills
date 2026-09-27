@@ -20,8 +20,8 @@ Distinguish verified findings from unresolved questions. For a suspected sign, f
 or notation error, reconstruct the intended convention and propagate the smallest plausible
 correction through the dependent argument and results. Call it a local typo only when the
 correction leaves the scientific conclusion intact. Uncertain consequences are unresolved,
-not automatically fatal or harmless. Paper-based implementation requires resolving such a
-discrepancy before using it, even when it would be a Minor referee comment.
+not automatically fatal or harmless. A Minor rating still leaves the displayed equation wrong
+as written, so say so in the comment when readers are likely to implement from it.
 
 Use these checks when the corresponding mechanism carries a claim:
 

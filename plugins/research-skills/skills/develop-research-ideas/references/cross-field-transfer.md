@@ -6,14 +6,15 @@ before treating similar terminology as the same method.
 
 Choose the depth that answers the user's question. Reading an original result,
 solving a representative exercise, reproducing a small case, or trying a disposable
-prototype can expose a real mismatch. Do not require all of these, a mandatory
-prototype, or a complete adopt/reject brief for ordinary field exploration.
+prototype can expose a real mismatch. One of these is often enough for ordinary
+field exploration.
 
 State what observation or derivation would support the transfer and what would
 break it. Restore the target's physical, numerical, and resource constraints after
-using an analogy. A method that is efficient under the source access model may
-lose its advantage after state preparation, measurement, communication, or storage
-is included.
+using an analogy. A method that is efficient under the source's data or query
+access may lose its advantage once input preparation or data loading (such as
+quantum state preparation), measurement or readout, communication, or storage is
+included.
 
 Keep a useful transfer, narrow it, seek a specific missing fact, or set it aside
 with a reason. Preserve artifacts only when requested or needed for ongoing work;

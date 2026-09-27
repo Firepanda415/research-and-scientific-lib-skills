@@ -2,6 +2,8 @@
 
 These defaults keep a series of explainers visually consistent. A destination with its own style module or brand overrides them.
 
+The pacing, subtitle, and voice defaults assume English narration. For another language, choose a voice that supports it and set the length and line limits for its script.
+
 ## Frame and pacing
 
 - 16:9 at 1920 by 1080 and 30 frames per second, H.264 video with AAC audio, loudness normalized to −16 LUFS.

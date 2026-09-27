@@ -26,5 +26,7 @@ Acceptance and delivery:
 Reuse an existing regression witness when it covers the defect. A new review
 comment does not automatically require a new test, owner counter, mutation, or
 ledger. Rerun evidence the correction can invalidate; retain valid unaffected
-evidence. If the project explicitly uses a closed contract, update its actual
-scope and clauses and preserve the required baseline and runner.
+evidence. If the project explicitly uses closed contracts, handoffs whose edit
+surface, commands and gates change only through a new revision, update the
+contract's actual scope and clauses and preserve the required baseline and any
+wrapper command the project prescribes for running code.

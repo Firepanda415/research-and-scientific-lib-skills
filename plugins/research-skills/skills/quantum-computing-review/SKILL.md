@@ -12,7 +12,7 @@ Prepare or assess referee reports on another author's technical manuscript in an
 Before analyzing a confidential manuscript:
 
 1. Identify the journal, article type, review model (such as single-anonymous, double-anonymous, or open), and current official reviewer policy.
-2. Check whether generative AI or external tools are permitted and whether disclosure is required. This assistant and any subagent it starts count as generative-AI use, and a venue ban on external tools covers them too, because their model runs off the machine.
+2. Check whether generative AI or external tools are permitted and whether disclosure is required. This assistant and any subagent it starts count as generative-AI use. A venue ban on external tools also covers them when their model runs off the machine, as with a hosted service.
 3. Confirm the manuscript's public status before any manuscript-specific web search.
 4. Default to `confidential-no-egress` when public status or permission is unclear.
 5. Stop if the venue forbids this assistance or requires an approved environment that is unavailable.
@@ -23,7 +23,7 @@ If the review model is double-anonymous, do not attempt to identify the authors.
 
 `confidential-no-egress` forbids sending an unpublished title, author list, project acronym, unique phrase, excerpt, figure, equation, supplementary code or data, or attachment to an external service. An external service is any tool that sends material off the machine, such as web search, URL fetching, an online converter or code runner, or another AI service. Once the first gate clears this assistance, the assistant session and the subagents it starts are not external services under this mode, but any tool they call that sends material off the machine is. Author-supplied repository and data links follow the link rule under the artifact and confidentiality rules below. Journal-policy lookup may use the journal name and public policy pages. The user remains responsible for conflict-of-interest disclosure and the final review.
 
-Pass the established confidentiality mode with its definition (the forbidden-egress list, what counts as an external service, and the author-supplied link rule), the venue-policy status, and any double-anonymous restriction to every helper and subagent brief, including `upgrade-research-inputs` and `quantum-research-radar`. A mode name alone does not tell a helper what it may send. Helper retrieval remains inside the same boundary, and delegation does not grant permission to send manuscript material elsewhere.
+Pass the established confidentiality mode with its definition (the forbidden-egress list, what counts as an external service, and the author-supplied link rule), the venue-policy status, and any double-anonymous restriction to every helper and subagent brief, including any literature-retrieval skill such as `upgrade-research-inputs`. A mode name alone does not tell a helper what it may send. Helper retrieval remains inside the same boundary, and delegation does not grant permission to send manuscript material elsewhere.
 
 Use `public-artifact` mode only after the manuscript or preprint is confirmed public and external lookup is permitted. The double-anonymous restrictions still apply in that mode. Subject to those restrictions, external lookup may then use the public version's title, authors, and content. Material absent from the public version, such as submission-only supplements or revisions, editor correspondence, other reviewers' reports, and the draft report, stays under the `confidential-no-egress` rules, and helper briefs carry that boundary. The safety rules in this file override any conflicting example in `references/reviewer-handbook.md`.
 
@@ -65,7 +65,7 @@ Apply this module in addition to the core workflow only when the manuscript's co
 
 ## Load detailed guidance conditionally
 
-`references/reviewer-handbook.md` holds the detailed protocol. List its headings with `grep -n "^#" references/reviewer-handbook.md` and read only the line ranges you need. The listing also shows headings inside the fenced report templates, which are template text. Each specialized check has its own section:
+`references/reviewer-handbook.md`, relative to this skill's directory, holds the detailed protocol. Find the heading you need, for example with `grep -n "^#"` on that file or with the host's text search where grep is unavailable, and read only that section. Headings inside the fenced report templates are template text. Each specialized check has its own section:
 
 - repository, code, or data audit: `## Mandatory Repository Discovery and Code/Data Audit`
 - manuscript locator construction: `## Mandatory Manuscript-Location Protocol`
@@ -123,7 +123,7 @@ For a full review, check the applicable items below. A focused question or publi
 - central equations and the strongest alternative explanation are checked;
 - claim, numerical-evidence, and application checks cover the requested scope;
 - the optimization metric gate is completed when a scalar performance metric carries a claim;
-- the finite-shot decoder gate is completed when sampled outputs support a result;
+- the finite-shot decoder gate is completed when a result is read out from samples through a decoding or selection rule;
 - the embedded local-objective gate is completed when a local subroutine updates a global objective;
 - the credited component's contribution is separated from application value;
 - the quantum module is applied when, and only when, the contribution involves quantum computing or quantum technology;

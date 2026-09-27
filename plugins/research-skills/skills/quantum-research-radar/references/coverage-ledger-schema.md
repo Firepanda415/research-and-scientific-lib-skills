@@ -15,7 +15,7 @@ The ledger is a **current-state JSONL store**: one JSON object per canonical pap
 
 New ledgers start empty. The installed `data/briefing-history.seed.jsonl` is an immutable calibration example whose coverage events are illustrative. Do not use it as evidence of a user's previous coverage.
 
-Resolve the permitted absolute Python interpreter and this installed skill's absolute directory before running the helper. Use a project-required checked runner when applicable. Replace both placeholders in these command templates:
+The helper needs Python 3.8 or later and uses only the standard library. Resolve the absolute path of such an interpreter and this installed skill's absolute directory before running the helper, then replace both placeholders in these command templates:
 
 ```sh
 "<absolute-interpreter>" "<absolute-skill-dir>/scripts/ledger_tool.py" path

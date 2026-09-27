@@ -9,11 +9,11 @@
 5. Design principles
 6. Tool recommendations
 
-The named paper figures cited below (with venue and year) were
-representative examples at the time of writing; substitute newer
-top-venue examples from the user's field where available, and do
-not assert visual details of these figures beyond what is
-described here.
+The named paper figures cited below (with venue and year) come from
+machine-learning and database venues and illustrate layouts only.
+An example from the user's field serves better when the user
+supplies it or its figure can be inspected. Describe the named
+figures only as far as this file describes them.
 
 ## 1. When an early figure helps
 
@@ -116,8 +116,10 @@ explaining what the reader is seeing.
 - **Sketch first (optional suggestion)**. For a complex figure,
   the agent may suggest that the user sketch it by hand and show the
   sketch to a collaborator before detailed drawing.
-- **Real entities only**. Name real queries, real datasets, real
-  outputs. Placeholder names ("Entity1", "X") undermine credibility.
+- **Concrete instances**. Name real queries, datasets, and outputs,
+  or use an exact toy model or clearly labeled synthetic case when it
+  isolates the distinction. Generic placeholders such as "Entity1"
+  undermine credibility.
 - **Quick-scan test (optional suggestion)**. The agent may suggest
   that the user show the figure to someone unfamiliar with the paper.
   If that reader cannot describe the problem after a brief scan, the
@@ -127,8 +129,11 @@ explaining what the reader is seeing.
 
 ## 6. Tool recommendations
 
-Primary: PowerPoint (draft), Figma (polish). See tools.md for the
-full matrix and trade-offs.
+The agent produces an editable source that a tool in the environment
+can render, such as SVG, TikZ, or draw.io XML. The user may polish
+it in a slide or vector editor they already use, such as PowerPoint,
+Keynote, Figma, or Inkscape. See tools.md for the full matrix and
+trade-offs.
 
 Code snippets inside the figure: prefer typeset or syntax-highlighted
 vector text. If a screenshot is necessary to preserve an interface

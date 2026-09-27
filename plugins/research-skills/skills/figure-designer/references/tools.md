@@ -14,24 +14,24 @@
 
 ## 1. Decision heuristic
 
-When the agent produces the figure itself, prefer text-based sources it can render and inspect: TikZ, standalone SVG, Graphviz/DOT, draw.io XML, or Matplotlib. GUI tools (PowerPoint, Figma, OmniGraffle, Keynote) are for the user to polish in. Hand over an editable source or a clearly labeled design spec.
+When the agent produces the figure itself, prefer a text-based source that a tool present in the environment can render for inspection, such as standalone SVG, the project's plotting library, TikZ with a TeX installation, Graphviz/DOT with Graphviz installed, or draw.io XML with the draw.io desktop exporter. GUI tools (PowerPoint, Keynote, Figma, Inkscape, OmniGraffle) are for the user to polish in when they already use one. Hand over an editable source or a clearly labeled design spec.
 
-| Figure type | Primary tool | Alternative | Reason |
+| Figure type | Source the agent produces | Editor for the user's polishing | Reason |
 |---|---|---|---|
-| Motivated Example (Figure 1) | PowerPoint | Figma | Mixed content: text, icons, code, arrows |
-| Solution Overview (pipeline, architecture, multi-layer) | draw.io | PowerPoint, TikZ | Need clear modular layout, aligned grids |
-| Experimental Results (bar, line, heatmap, scatter, etc.) | Matplotlib + Seaborn | TikZ + PGFPlots | Reproducible, scriptable, versioned |
-| Schema or relation diagrams | draw.io | TikZ | Standard database diagram conventions |
-| Icons and logos | Figma | Iconfont, Flaticon | Clean vector editing |
+| Motivated Example (Figure 1) | SVG, TikZ, or draw.io XML | A slide or vector editor the user already uses, for example PowerPoint, Keynote, Figma, or Inkscape | Mixed content: text, icons, code, arrows |
+| Solution Overview (pipeline, architecture, multi-layer) | draw.io XML, TikZ, or SVG | draw.io or a slide editor | Need clear modular layout, aligned grids |
+| Experimental Results (bar, line, heatmap, scatter, etc.) | The project's plotting library, for example Matplotlib with Seaborn, ggplot2, Makie, MATLAB, or PGFPlots | Usually none, since the script regenerates the figure | Reproducible, scriptable, versioned |
+| Schema or relation diagrams | draw.io XML, TikZ, or Graphviz | draw.io | Standard database diagram conventions |
+| Icons and logos | SVG | A vector editor, or an icon set whose license permits the use | Clean vector editing |
 
-Prefer the existing tool when it can produce the required scientific content and output. These options are examples; verify current capabilities if a new tool choice matters.
+Prefer the existing tool when it can produce the required scientific content and output. These options are examples. Tool capabilities change between versions, so when a new tool choice matters, check the installed version or its documentation, and say so when neither can be checked.
 
 ## 2. PowerPoint and Keynote
 
 - Fast iteration on layout.
 - Export as PDF preserves vector.
 - Font and alignment controls are reasonable.
-- Free on most institutional licenses.
+- Availability depends on the user's platform and license.
 
 Best for early drafts, Figure 1 designs, and any figure with mixed
 content (text blocks, icons, arrows, embedded code snippets).

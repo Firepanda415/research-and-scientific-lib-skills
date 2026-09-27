@@ -6,27 +6,28 @@
 2. Synthesis generates each sentence, trims leading and trailing silence, joins sentences with short gaps, and writes one audio file per segment together with each sentence's start and end time. A cache keyed by voice, speed, gap, and spoken text regenerates only changed segments.
 3. A scene base class reads the timing file. Its `voice(segment)` context places the segment's audio at the current scene time, records subtitle cues, offers `until(sentence, fraction)` to wait for a point in the narration, and after the body waits out the rest of the segment plus a pause.
 4. The scene renders, followed by a separate poster still.
-5. Finishing writes the subtitle cues to an ASS file, burns them in with ffmpeg's libass filter using the bundled fonts, encodes the video, normalizes loudness, checks narration coverage, and exports the poster.
+5. Finishing writes the subtitle cues to an ASS file, burns them in with ffmpeg's libass filter, passing the font files kept in the project through the filter's `fontsdir` option so that the render uses the font the subtitle widths were measured in, encodes the video, normalizes loudness, checks narration coverage, and exports the poster.
 6. Narration, scenes, copied data files, and the source of every number belong in version control. Caches and intermediate renders do not.
 
 ## Tools
 
 The `KPipeline(lang_code="a")` call, the skipped audio in `Scene.add_sound` after a cached animation, and the width-independent `Text` cache were checked on 2026-09-24 against Manim Community Edition 0.20.1 and Kokoro 0.9.4.
 
-- Manim Community Edition animates. Typst typesets mathematics when no full TeX distribution is available. The conda-forge `texlive-core` package has TeX binaries but no LaTeX packages or `dvisvgm`, so it cannot serve Manim's LaTeX path.
-- ffmpeg with libass burns subtitles and encodes. fontTools converts web fonts such as WOFF to TTF for Pango and libass.
-- Kokoro synthesizes speech locally. Its first use downloads about 330 MB of weights from Hugging Face. Use `KPipeline(lang_code="a")` for American English. Print the phoneme string of names, units, and acronyms before a full synthesis, and override a wrong pronunciation inline in the spoken text:
+- Manim Community Edition animates. Typst typesets mathematics when no full TeX distribution is available. As of September 2026, the conda-forge `texlive-core` package had TeX binaries but no LaTeX packages or `dvisvgm`, so it could not serve Manim's LaTeX path.
+- ffmpeg with libass burns subtitles and encodes. fontTools converts web fonts such as WOFF to TTF for Pango and libass. When the project keeps no font files, measure subtitle widths in the installed font that libass will use.
+- Kokoro, the default, synthesizes speech locally. As of September 2026, its first use downloaded about 330 MB of weights from Hugging Face. Use `KPipeline(lang_code="a")` for American English. Print the phoneme string of names, units, and acronyms before a full synthesis, and override a wrong pronunciation inline in the spoken text:
 
   ```text
   a dilation shared with [Schrödingerisation](/ʃɹˈOdɪŋəɹIzˈAʃən/) and qumodisation
   ```
 
   In the spoken text, also spell acronyms with spaces ("L C H S") and read symbols as words.
+- Another synthesizer, or the user's own recorded narration, fits the pipeline when it yields one audio file per sentence. Its pronunciation syntax differs from Kokoro's.
 - In a conda environment, install PyTorch from conda-forge. A pip wheel of torch next to conda's numpy loads two OpenMP runtimes and aborts.
 
 ## Known failure modes
 
-Each entry gives the symptom, the cause, and the remedy.
+Each entry gives the symptom, the cause, and the remedy. The entries record behavior seen in September 2026, with entries 1 and 4 checked against the versions named under Tools. Later versions of Manim, Typst, or Pango may behave differently.
 
 1. **Silent narration after a re-render.** Manim's `Scene.add_sound` returns without adding audio when the previous animation came from the render cache. Add audio through the renderer's file writer at the recorded time, and fail the build when any subtitle interval lacks audio.
 2. **Missing fraction bars or rules in imported mathematics.** Typst's SVG draws them as stroked paths without fill, which disappear when glyphs are imported with zero stroke width. Convert stroked horizontal rules to filled rectangles and reject any other stroked shape. After such a fix, check every formula in every video, not only the reported frame.
@@ -37,7 +38,7 @@ Each entry gives the symptom, the cause, and the remedy.
 7. **Errors without a TeX installation.** `MathTex`, `Tex`, and `DecimalNumber` need LaTeX. Use typeset SVG for mathematics and regenerated `Text` for changing numbers.
 8. **A render hangs after an exception.** Run the scene with `--dry_run` to catch errors quickly, and run long renders under a timeout.
 9. **Subtitle lines run off the frame.** A word or character limit does not bound the rendered width, and a font-size change widens every line. Measure each line in the subtitle font and size, for example with Pillow's `ImageFont.getlength`, and split it until it fits.
-10. **Plotted data come from a different experiment.** A paper's code repository can ship tutorial or benchmark data from a later run on another device. Read the device name and date in the data files before plotting them. Use such data only in sections whose narration makes no device-specific claim, and state the device, qubit, and date on screen.
+10. **Plotted data come from a different experiment.** A paper's code repository can ship tutorial or benchmark data from a later run or another setup, such as another device. Read the provenance recorded in the data files, for example device, run date, and configuration, before plotting them. Use such data only in sections whose narration makes no claim specific to that provenance, and state the provenance on screen, for example the device, qubit, and date.
 
 ## Frame with a subtitle strip
 

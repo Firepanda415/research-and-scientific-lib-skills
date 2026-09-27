@@ -25,12 +25,12 @@ These are lenses to select, not consecutive stages to complete.
   established facts, source-backed inferences, and open hypotheses. Missing
   literature is uncertainty, not proof of novelty or failure.
 - Judge scientific value and feasibility from the actual question, proof or
-  mechanism, access model, resources, and strongest alternative. A theorem,
+  mechanism, data or query access, resources, and strongest alternative. A theorem,
   explanation, negative result, or replication can be valuable without multiple
   performance improvements.
 - Account for relevant preparation, execution, measurement, memory, storage, and
-  repeated-run costs. Use the cheapest informative check when one is needed;
-  do not launch a large experiment merely to complete an evaluation form.
+  repeated-run costs. Use the cheapest informative check when one is needed,
+  and run a larger experiment only when its result could change the judgment.
 
 Use independent agents when separable evidence or judgment work improves the
 result. No fixed perspective, candidate, round, or score count is required.
@@ -58,5 +58,6 @@ Read only what the current question needs:
 
 Use `upgrade-research-inputs` when source retrieval is the missing work. Use
 `rethink-design` when the user wants to challenge an already committed direction
-or design as too limited. No prior skill verdict, formal evidence map, durable
-log, or fixed handoff is required.
+or design as too limited. Either can come before or after this one as the work
+requires. Keep durable records only when the user asks for them or ongoing work
+needs them.

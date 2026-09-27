@@ -19,7 +19,22 @@ specifies 5,000 tokens per invoked skill after compaction and 25,000 shared acro
 re-attached skills. Its [glossary](https://platform.claude.com/docs/en/about-claude/glossary)
 estimates 3.5 English characters per token, so the character limit leaves about
 10% below 17,500 for Markdown and code. Both sources were checked on 2026-09-26.
-If these figures change, update this paragraph and `MAX_SKILL_CHARS` together.
+If these figures change, update this paragraph and `MAX_SKILL_CHARS` together, and
+recompute the README cost estimates when the characters-per-token figure changes.
+
+Both READMEs estimate each skill's default load in the Skills table, from the
+characters of its `SKILL.md` and of the references it reads by default, at 3.5
+characters per token, rounded to the nearest thousand and shown as `<1k` below
+1,000. The counted references are `durable-prose.md` and `prose-review.md` for
+`research-writing-style`, `coverage-and-consequence.md` for
+`quantum-computing-review`, `user-research-profile.md` for `quantum-research-radar`,
+`production-pipeline.md` and `house-style.md` for `research-explainer-animation`,
+and Ponytail's `SKILL.md` for `simplify-codebase`. Every other skill counts its
+`SKILL.md` only. The Context cost sections estimate the skill descriptions, the
+hook text and the referee handbook the same way. When a change alters a rounded
+figure or which references a skill reads by default, recompute every token figure
+in both READMEs, including the totals and the figures repeated in the Context cost
+bullets, and check which skills those bullets name.
 
 Follow `README.md` for installation on the requested host. Install the single
 `research-skills@research-skills` plugin, including every skill and the writing

@@ -6,6 +6,19 @@
 
 **在 Codex 和 Claude Code 中，插件都提供全部 30 个 skills（包括按个人习惯修改的 Ponytail 编码模式）和写作 hook。**
 
+## 上下文成本
+
+安装插件后，每个会话在使用任何 skill 之前就占用约 5k tokens。其中约 3k 是 30 个 skills 的描述，两个宿主都会把它们留在上下文中用于选择 skill，见 [Claude Code](https://code.claude.com/docs/en/skills) 和 [Codex](https://learn.chatgpt.com/docs/build-skills) 的 skill 文档。约 2k 是写作 hook 的说明，每个 subagent 也会收到一份。skill 的完整说明只在使用时加载，之后一直留在对话中。[技能一览](#技能一览)表格中 skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，包括它的 `SKILL.md` 和默认读取的 reference 文件。只在部分任务中用到的 reference 文件会在此基础上增加。估算按每个 token 约 3.5 个英文字符计算，这是 Anthropic 在[术语表](https://platform.claude.com/docs/en/about-claude/glossary)中给出的 Claude 的数字。根据 2026 年 9 月 Codex 使用记录的测量，写作 skill 的文件比这个估算少用约 30% 的 tokens。
+
+有几个 skill 的成本明显高于其他 skill：
+
+- `research-writing-style` 每次读取约 16k tokens。写作 hook 会把有其他人阅读的文档（例如论文、审稿报告、文档、README 和信件）以及为这类文档起草的文字交给这个 skill 起草、修改和审阅，所以产出这类文字的 skill 也会带上这部分成本。你自己看的笔记和报告、写给 agent 的文字，以及代码注释、commit 和 pull request 不走这条路线。
+- `simplify-codebase` 连同它加载的 Ponytail skill 约占 6k，`quantum-computing-review`、`research-explainer-animation`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 19k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 4k）。
+
+有些流程还会增加额外成本。每个 subagent 都会各自读取一份说明和材料，所以 `research-writing-style` 为篇幅较大的文档启动的独立 reviewer 会再加载一次这个 skill，`deep-code-review` 在实质性审查中可能会启动多个并行查找问题的 agent。`quantum-research-radar` 每次运行都会把最多五条检索路线的结果放进上下文。`research-explainer-animation` 还要在本地花计算时间合成语音和渲染视频。
+
+如果只需要其中一部分，可以 clone 本仓库，让 agent 删除你不用的 skills，并按你的工作需要精简或拆分大的 skills，例如把很少用到的部分移到按需加载的 references 中。有些 skill 依赖其他 skill。写作 hook 指向 `research-writing-style` 和 `work-email`，多个代码类 skills 会加载 `ponytail` 并读取 `scientific-computing-correctness` 中的 reference 文件，`pre-submission-reviewer` 会读取 `benchmark-paper-template` 中的 checklist。除非同时修改用到它的地方，否则应保留这类 skill，删除某个 skill 后也请让 agent 检查 skill 之间的链接。然后按[安装](#安装)和[更新](#更新)中的说明从本地仓库安装。在 Codex 中也可以在 `/hooks` 里关闭写作 hook，见[停用或卸载](#停用或卸载)。
+
 ## 安装
 
 ### Codex
@@ -45,7 +58,7 @@ python3 scripts/install-claude.py
 
 可以在对话中指定级别（`lite`、`full` 或 `ultra`），例如在 Codex 中输入 `$ponytail lite`，或在 Claude Code 中输入 `/research-skills:ponytail lite`，该级别持续到你指定其他级别或关闭 Ponytail 为止。未指定级别时使用 `full`。说 `stop ponytail` 或 `normal mode`，或使用 `$ponytail off`，可关闭 Ponytail，直到你在本次对话中再次要求使用。再次开启时使用 `full`，除非你指定其他级别。其他 skills 也遵守这一 off 状态。`ponytail-help` 列出两个 host 上的调用方式。
 
-凡是供人保存、反复阅读、分享、发布、发送或粘贴到其他地方的文字，写作钩子都要求 Codex 或 Claude Code 在起草、编辑这类文字或审阅其行文前读取并应用 `research-writing-style` 和其中的 durable-prose reference。普通文档、邮件、网页正文、聊天窗口中交付的可直接粘贴文本均在范围内，不分语言和篇幅。仅用于当前聊天的总结与进度说明除外。在聊天中给出、供你自己做决定的审查结论、诊断和分析也除外，除非你要求写成需要保存、分享或提交的文字，例如审稿报告或要发布的代码审查意见。由你提供内容的简短工作邮件和消息（包括只改语法）改用轻量的 `work-email` skill，由它自己的最终检查代替完整的 review。返回给其他 agent 或程序的材料（如结构化的发现或搜索结果）也不在路由范围内，由把它整理成交付文本的 agent 应用写作规范。对任何交付物（包括代码和分析），钩子要求 agent 先推断提出要求的人的意图，以及交付物的读者或用户想从中得到什么。agent 按提出要求的人想要的范围工作，由这些读者或用户的需要决定调研、写入和实现哪些内容。参考论文、原型或他人代码中的方法或设计时，agent 先从来源本身弄清作者当初为了什么、在什么约束下做的，再按当前工作的目的判断它是否合适，目的不同就改造。保留、修改或舍弃其中影响结果的部分，都要有与当前目的相关的理由。需要满足后就停止收集材料。证据标准决定每条写入的说法核实到什么程度，但不扩大搜索范围。交给其他 agent 的任务说明要写明读者、要回答的问题或要完成的任务，以及停止条件。规则的参考来源见 [14](#credit-14)。钩子还要求文档、项目记忆、指令、代码注释和测试描述当前状态。删除某项或结束临时安排时，本次工作获准修改的文件中只因它而存在的规则、引用和测试一并删除。仍服务于兼容路径或迁移的引用保留。历史记录放在版本控制、带日期的记录、决策记录，以及用户需要操作时的变更记录或迁移说明中，例如下文的升级说明。其他地方如果要写关于已删除项的说明或禁令，必须写明该项为什么不能恢复。断言它不存在的测试，则需要有要求它不存在的合约或用户的明确要求。规则的参考来源见 [12](#credit-12)。钩子最后一部分规定，用户针对当前任务给出的明确指令，以及用户写在自己指令文件中的明确要求，都优先于本插件的指导，包括写作路由。记录或保护外部义务的规则（如期刊或会议的保密政策、许可证条款）仍然适用。本插件的某条规则让 agent 暂停、请求批准、留下未完成的工作或偏离用户的要求时，agent 先说明这一结果，再指出规则的出处并引用这条规则。这一部分的来源见 [13](#credit-13)。路由会在会话启动、压缩后和子代理启动时注入。在 Codex 中，每次安装或更新后都要打开 `/hooks` 并信任 research-skills 的钩子，获得信任前写作路由不会运行。钩子提供的是指令，不能机械保证它们得到遵守。
+凡是有其他人阅读的文档，写作钩子都要求 Codex 或 Claude Code 在起草、编辑这类文档或审阅其行文前读取并应用 `research-writing-style` 和其中的 durable-prose reference。例如论文和给审稿人的回复、审稿报告、文档、README、信件、幻灯片、网页正文和示例 notebook，以及为这类文档起草的文字（包括聊天中给出的可直接粘贴文本），不分语言。对这类文档只改一句话也算在内。只有你自己看的文字不在路由范围内，例如笔记、内部报告、研究日志、简报和聊天回答。写给 agent 的文字也不在范围内，例如 skills、prompt、交接说明和项目 memory。代码注释、docstring、commit message 和 pull request 描述同样不在范围内，这样日常编程工作不会加载 `research-writing-style`。需要对范围外的文字使用写作规范时，可以点名要求 `research-writing-style`。读者不明确时，agent 把文字当作你自己看的，除非文档类型或去向表明有其他读者。把内部材料整理成给其他人看的文档时，由负责整理的 agent 在那一步应用写作规范。由你提供内容的简短工作邮件和消息（包括只改语法）改用轻量的 `work-email` skill，由它自己的最终检查代替完整的 review。对任何交付物（包括代码和分析），钩子要求 agent 先推断提出要求的人的意图，以及交付物的读者或用户想从中得到什么。agent 按提出要求的人想要的范围工作，由这些读者或用户的需要决定调研、写入和实现哪些内容。参考论文、原型或他人代码中的方法或设计时，agent 先从来源本身弄清作者当初为了什么、在什么约束下做的，再按当前工作的目的判断它是否合适，目的不同就改造。保留、修改或舍弃其中影响结果的部分，都要有与当前目的相关的理由。需要满足后就停止收集材料。证据标准决定每条写入的说法核实到什么程度，但不扩大搜索范围。交给其他 agent 的任务说明要写明读者、要回答的问题或要完成的任务，以及停止条件。规则的参考来源见 [14](#credit-14)。钩子还要求文档、项目记忆、指令、代码注释和测试描述当前状态。删除某项或结束临时安排时，本次工作获准修改的文件中只因它而存在的规则、引用和测试一并删除。仍服务于兼容路径或迁移的引用保留。历史记录放在版本控制、带日期的记录、决策记录，以及用户需要操作时的变更记录或迁移说明中，例如下文的升级说明。其他地方如果要写关于已删除项的说明或禁令，必须写明该项为什么不能恢复。断言它不存在的测试，则需要有要求它不存在的合约或用户的明确要求。规则的参考来源见 [12](#credit-12)。钩子最后一部分规定，用户针对当前任务给出的明确指令，以及用户写在自己指令文件中的明确要求，都优先于本插件的指导，包括写作路由。记录或保护外部义务的规则（如期刊或会议的保密政策、许可证条款）仍然适用。本插件的某条规则让 agent 暂停、请求批准、留下未完成的工作或偏离用户的要求时，agent 先说明这一结果，再指出规则的出处并引用这条规则。这一部分的来源见 [13](#credit-13)。路由会在会话启动、压缩后和子代理启动时注入。在 Codex 中，每次安装或更新后都要打开 `/hooks` 并信任 research-skills 的钩子，获得信任前写作路由不会运行。钩子提供的是指令，不能机械保证它们得到遵守。
 
 同一 skill 分为两个阶段。生成和编辑阶段在写作时落实句子结构与用词要求，完整成稿随后必须经过[对抗性审阅](plugins/research-skills/skills/research-writing-style/references/prose-review.md)才能交付。审阅重点检查全文结构、段落功能、上下文和推理。先确认提取材料的来源与文档角色，再结合上下文核对证据、读者理解障碍，以及混入正文的对话和 prompt。用户要求“不要讨论 X”，不能变成对写作对象缺乏依据的断言。只要求 review 时，直接检查现有文字并报告有依据的问题，不自动重写。检测器标签本身不要求修改。用户明确要求按检测结果改写时，启用可选的[检测实验流程](plugins/research-skills/skills/research-writing-style/references/detector-evaluation.md)，保全含义并记录实测对比。普通写作不要求检测。复测中关于选择依据、能力与操作的联系、限定归属及上下文衔接的写作经验，已纳入默认生成和审阅规则。[来源采纳审计](plugins/research-skills/skills/research-writing-style/references/source-integration-audit.zh-CN.md)记录完整覆盖范围、限定采用及未采用的建议。
 
@@ -53,38 +66,40 @@ python3 scripts/install-claude.py
 
 另有几个 skill 在完成工作后单独做一次简短的 review，包括代码方面的 `scientific-computing-correctness` 和 `ponytail`、notebook 方面的 `library-example-notebooks`、渲染后插图的 `figure-designer`、比较实验的 `stress-test-baselines`、文献综述的 `upgrade-research-inputs`、项目记录的 `maintain-project-memory`，以及短邮件的 `work-email`。每个 review 核对的是该 skill 生成阶段已经规定的条目，主要挑选生成时容易漏掉、又能在成品上核对的项目，例如每个新公式旁的推导、说某个量是精确的或不存在时所依据的语境，以及把尚未运行的比较标为计划。Review 只核对列出的条目，不重复先前的验证，除任务本身要求的检查外也不增加运行。这一设计的参考来源见 [15](#credit-15)。
 
-| 技能 | 用途 | Credits |
+skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，见[上下文成本](#上下文成本)。产出供其他人阅读的文档的 skill 还会加载 `research-writing-style`。
+
+| 技能（每次使用的 tokens） | 用途 | Credits |
 |---|---|---|
-| [develop-research-ideas](plugins/research-skills/skills/develop-research-ideas/SKILL.md) | 探索研究方向，评估研究方案，寻找可以借鉴的跨领域方法。 | [1](#credit-1) |
-| [rethink-design](plugins/research-skills/skills/rethink-design/SKILL.md) | 跳出过于保守的思路，重新思考研究问题或设计方向。 | [2](#credit-2) |
-| [upgrade-research-inputs](plugins/research-skills/skills/upgrade-research-inputs/SKILL.md) | 查找相关论文和一手资料，核对创新点与有争议的论断。 | [11](#credit-11), [15](#credit-15) |
-| [stress-test-baselines](plugins/research-skills/skills/stress-test-baselines/SKILL.md) | 设计公平的基线比较、消融实验和稳健性检查。 | [15](#credit-15) |
-| [write-research-log](plugins/research-skills/skills/write-research-log/SKILL.md) | 记录研究进展、实验观察、假设与预测。 | — |
-| [research-watchdog-protocol](plugins/research-skills/skills/research-watchdog-protocol/SKILL.md) | 跟进长时间运行的任务，并在新会话中接续进行中的研究。 | — |
-| [maintain-project-memory](plugins/research-skills/skills/maintain-project-memory/SKILL.md) | 整理 project memory，保留 decision rationale、可复用经验与 evidence 范围，支持后续 session 接续工作。 | [6](#credit-6), [7](#credit-7), [12](#credit-12), [15](#credit-15) |
-| [quantum-research-radar](plugins/research-skills/skills/quantum-research-radar/SKILL.md) | 生成中文量子研究简报和针对某一主题的近期工作扫描，关注量子计算与人工智能等相关方向。 | — |
-| [physics-from-math-explainer](plugins/research-skills/skills/physics-from-math-explainer/SKILL.md) | 从数学出发解释物理，补充物理直觉，讲清符号和约定。 | — |
-| [tech-paper-template](plugins/research-skills/skills/tech-paper-template/SKILL.md) | 组织技术论文的论点、引言和章节结构。 | [1](#credit-1) |
-| [benchmark-paper-template](plugins/research-skills/skills/benchmark-paper-template/SKILL.md) | 规划或评估自己的基准测试论文，包括评估缺口、构建、测量设计和结论，不限领域。 | [1](#credit-1) |
-| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) | 起草、编辑和对抗性审阅长期使用及可直接粘贴的文字，交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10), [12](#credit-12), [15](#credit-15) |
-| [work-email](plugins/research-skills/skills/work-email/SKILL.md) | 修改简短工作邮件或消息的语法，或按你给的要点起草，保持事实、请求和语气不变。 | — |
-| [figure-designer](plugins/research-skills/skills/figure-designer/SKILL.md) | 设计论文插图、方法示意图和可复现的数据图表。 | [1](#credit-1), [15](#credit-15) |
-| [research-explainer-animation](plugins/research-skills/skills/research-explainer-animation/SKILL.md) | 为论文和代码制作带配音和字幕的讲解动画，画面与旁白中的数字都可追溯到原始来源，交付前逐帧检查。 | — |
-| [pre-submission-reviewer](plugins/research-skills/skills/pre-submission-reviewer/SKILL.md) | 投稿或返修前检查论文的科学主张、证据、写作、LaTeX 排版、图表以及审稿回复。 | [1](#credit-1) |
-| [journal-cover-letter](plugins/research-skills/skills/journal-cover-letter/SKILL.md) | 起草和修改期刊投稿附信。 | — |
-| [quantum-computing-review](plugins/research-skills/skills/quantum-computing-review/SKILL.md) | 为他人的技术论文撰写或核查审稿意见，不限领域，遵守期刊规则与保密要求，并对量子计算与量子技术论文增加专项检查。 | — |
-| [scientific-computing-correctness](plugins/research-skills/skills/scientific-computing-correctness/SKILL.md) | 实现、调试、优化和独立验证科学计算，关注计算精度与资源开销。 | [15](#credit-15) |
-| [scientific-library-review](plugins/research-skills/skills/scientific-library-review/SKILL.md) | 审查科学软件库的数学含义、使用流程、执行行为与资源开销。 | [7](#credit-7) |
-| [library-example-notebooks](plugins/research-skills/skills/library-example-notebooks/SKILL.md) | 编写或审阅科学软件库的示例 notebook 和教程，让读者在第一屏看到计算结果，以及如何换成自己的问题。 | [15](#credit-15) |
-| [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | [12](#credit-12) |
-| [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据。 | [4](#credit-4), [12](#credit-12) |
-| [write-implementation-job-prompts](plugins/research-skills/skills/write-implementation-job-prompts/SKILL.md) | 将需求或审查结果整理为清晰、可执行的开发任务提示词。 | [12](#credit-12) |
-| [ponytail](plugins/research-skills/skills/ponytail/SKILL.md) | 在满足正确性和性能要求的前提下，选择简单的实现。 | [5](#credit-5), [12](#credit-12), [15](#credit-15) |
-| [ponytail-review](plugins/research-skills/skills/ponytail-review/SKILL.md) | 审查代码变更，提出有依据的简化建议。 | [5](#credit-5) |
-| [ponytail-audit](plugins/research-skills/skills/ponytail-audit/SKILL.md) | 以精简的只读审查报告列出整个仓库中可以删除或简化的代码。 | [5](#credit-5) |
-| [ponytail-debt](plugins/research-skills/skills/ponytail-debt/SKILL.md) | 汇总代码中标记的简化取舍，以及需要重新处理这些取舍的条件。 | [5](#credit-5) |
-| [ponytail-gain](plugins/research-skills/skills/ponytail-gain/SKILL.md) | 展示 Ponytail 原项目的历史基准测试结果。 | [5](#credit-5) |
-| [ponytail-help](plugins/research-skills/skills/ponytail-help/SKILL.md) | 查看 Ponytail 的调用方式、级别、关闭和更新方法。 | [5](#credit-5) |
+| [develop-research-ideas](plugins/research-skills/skills/develop-research-ideas/SKILL.md) (~1k) | 探索研究方向，评估研究方案，寻找可以借鉴的跨领域方法。 | [1](#credit-1) |
+| [rethink-design](plugins/research-skills/skills/rethink-design/SKILL.md) (<1k) | 跳出过于保守的思路，重新思考研究问题或设计方向。 | [2](#credit-2) |
+| [upgrade-research-inputs](plugins/research-skills/skills/upgrade-research-inputs/SKILL.md) (~1k) | 查找相关论文和一手资料，核对创新点与有争议的论断。 | [11](#credit-11), [15](#credit-15) |
+| [stress-test-baselines](plugins/research-skills/skills/stress-test-baselines/SKILL.md) (~2k) | 设计公平的基线比较、消融实验和稳健性检查。 | [15](#credit-15) |
+| [write-research-log](plugins/research-skills/skills/write-research-log/SKILL.md) (<1k) | 记录研究进展、实验观察、假设与预测。 | — |
+| [research-watchdog-protocol](plugins/research-skills/skills/research-watchdog-protocol/SKILL.md) (<1k) | 跟进长时间运行的任务，并在新会话中接续进行中的研究。 | — |
+| [maintain-project-memory](plugins/research-skills/skills/maintain-project-memory/SKILL.md) (~3k) | 整理 project memory，保留 decision rationale、可复用经验与 evidence 范围，支持后续 session 接续工作。 | [6](#credit-6), [7](#credit-7), [12](#credit-12), [15](#credit-15) |
+| [quantum-research-radar](plugins/research-skills/skills/quantum-research-radar/SKILL.md) (~3k) | 生成中文量子研究简报和针对某一主题的近期工作扫描，关注量子计算与人工智能等相关方向。 | — |
+| [physics-from-math-explainer](plugins/research-skills/skills/physics-from-math-explainer/SKILL.md) (~1k) | 从数学出发解释物理，补充物理直觉，讲清符号和约定。 | — |
+| [tech-paper-template](plugins/research-skills/skills/tech-paper-template/SKILL.md) (~1k) | 组织技术论文的论点、引言和章节结构。 | [1](#credit-1) |
+| [benchmark-paper-template](plugins/research-skills/skills/benchmark-paper-template/SKILL.md) (~1k) | 规划或评估自己的基准测试论文，包括评估缺口、构建、测量设计和结论，不限领域。 | [1](#credit-1) |
+| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) (~16k) | 起草、编辑和对抗性审阅有其他人阅读的文档，交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10), [12](#credit-12), [15](#credit-15) |
+| [work-email](plugins/research-skills/skills/work-email/SKILL.md) (<1k) | 修改简短工作邮件或消息的语法，或按你给的要点起草，保持事实、请求和语气不变。 | — |
+| [figure-designer](plugins/research-skills/skills/figure-designer/SKILL.md) (~1k) | 设计论文插图、方法示意图和可复现的数据图表。 | [1](#credit-1), [15](#credit-15) |
+| [research-explainer-animation](plugins/research-skills/skills/research-explainer-animation/SKILL.md) (~5k) | 为论文和代码制作带配音和字幕的讲解动画，画面与旁白中的数字都可追溯到原始来源，交付前逐帧检查。 | — |
+| [pre-submission-reviewer](plugins/research-skills/skills/pre-submission-reviewer/SKILL.md) (~2k) | 投稿或返修前检查论文的科学主张、证据、写作、LaTeX 排版、图表以及审稿回复。 | [1](#credit-1) |
+| [journal-cover-letter](plugins/research-skills/skills/journal-cover-letter/SKILL.md) (~2k) | 起草和修改期刊投稿附信。 | — |
+| [quantum-computing-review](plugins/research-skills/skills/quantum-computing-review/SKILL.md) (~5k) | 为他人的技术论文撰写或核查审稿意见，不限领域，遵守期刊规则与保密要求，并对量子计算与量子技术论文增加专项检查。 | — |
+| [scientific-computing-correctness](plugins/research-skills/skills/scientific-computing-correctness/SKILL.md) (~5k) | 实现、调试、优化和独立验证科学计算，关注计算精度与资源开销。 | [15](#credit-15) |
+| [scientific-library-review](plugins/research-skills/skills/scientific-library-review/SKILL.md) (~5k) | 审查科学软件库的数学含义、使用流程、执行行为与资源开销。 | [7](#credit-7) |
+| [library-example-notebooks](plugins/research-skills/skills/library-example-notebooks/SKILL.md) (~3k) | 编写或审阅科学软件库的示例 notebook 和教程，让读者在第一屏看到计算结果，以及如何换成自己的问题。 | [15](#credit-15) |
+| [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) (~4k) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | [12](#credit-12) |
+| [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) (~6k) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据。 | [4](#credit-4), [12](#credit-12) |
+| [write-implementation-job-prompts](plugins/research-skills/skills/write-implementation-job-prompts/SKILL.md) (~4k) | 将需求或审查结果整理为清晰、可执行的开发任务提示词。 | [12](#credit-12) |
+| [ponytail](plugins/research-skills/skills/ponytail/SKILL.md) (~4k) | 在满足正确性和性能要求的前提下，选择简单的实现。 | [5](#credit-5), [12](#credit-12), [15](#credit-15) |
+| [ponytail-review](plugins/research-skills/skills/ponytail-review/SKILL.md) (<1k) | 审查代码变更，提出有依据的简化建议。 | [5](#credit-5) |
+| [ponytail-audit](plugins/research-skills/skills/ponytail-audit/SKILL.md) (<1k) | 以精简的只读审查报告列出整个仓库中可以删除或简化的代码。 | [5](#credit-5) |
+| [ponytail-debt](plugins/research-skills/skills/ponytail-debt/SKILL.md) (<1k) | 汇总代码中标记的简化取舍，以及需要重新处理这些取舍的条件。 | [5](#credit-5) |
+| [ponytail-gain](plugins/research-skills/skills/ponytail-gain/SKILL.md) (<1k) | 展示 Ponytail 原项目的历史基准测试结果。 | [5](#credit-5) |
+| [ponytail-help](plugins/research-skills/skills/ponytail-help/SKILL.md) (~1k) | 查看 Ponytail 的调用方式、级别、关闭和更新方法。 | [5](#credit-5) |
 
 ## 致谢与许可证
 
@@ -191,4 +206,4 @@ codex plugin marketplace remove research-skills
 
 ## 个人偏好
 
-写作风格、`research-explainer-animation` 的默认视觉与配音风格，以及量子简报的[研究偏好](plugins/research-skills/skills/quantum-research-radar/references/user-research-profile.md)按我的研究习惯设置。可以在请求中指定自己的偏好，也可以修改本地仓库后重新安装。
+写作风格、`research-explainer-animation` 的默认视觉与配音风格，以及 `quantum-research-radar` 的几部分按我的研究习惯设置。radar 的这几部分是它的[研究偏好](plugins/research-skills/skills/quantum-research-radar/references/user-research-profile.md)、[来源与检索词表](plugins/research-skills/skills/quantum-research-radar/references/source-and-query-map.md)中按研究偏好定制的检索词（Lane B）、中文[输出模板](plugins/research-skills/skills/quantum-research-radar/references/output-template.md)，以及[定时运行提示](plugins/research-skills/skills/quantum-research-radar/prompts/weekday-schedule-prompt.md)中的时区。可以在请求中指定自己的偏好，也可以修改本地仓库后重新安装。radar 需要联网检索，或由你提供论文列表和论文，两者都没有时会停下，不会凭记忆写简报。

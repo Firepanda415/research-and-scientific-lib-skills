@@ -24,7 +24,7 @@ Load only relevant references:
 
 ## Scientific and visual checks
 
-Apply these points while designing. Before delivery, check the rendered figure at its intended size against the points that show there, in a pass separate from producing it, and fix what fails. An audit applies them to each supplied figure.
+Apply these points while designing. Before delivery, once the figure is rendered, check it yourself at its intended size against the points that show there, as a step after production, and fix what fails. An audit applies them to each supplied figure.
 
 - Trace plotted values, transformations, and selections to data or explicitly labeled illustrative inputs. Never alter data to improve appearance.
 - Use meaningful axes, units, scales, and ranges. Bars generally need their length baseline at zero; use a point or line plot when a focused nonzero range is scientifically useful. Show breaks or clipping explicitly.
@@ -35,4 +35,4 @@ Apply these points while designing. Before delivery, check the rendered figure a
 
 ## Delivery
 
-Return the artifact or actionable design with the important decisions and remaining uncertainties. Audit findings should distinguish misleading scientific encoding, unreadability, and optional polish. No fixed eight-section report, named paradigm, alternate-tool essay, or user confirmation checklist is required. For a comprehensive audit, cover every supplied figure and all relevant issues without repeating boilerplate.
+Return the artifact or actionable design with the important decisions and remaining uncertainties. Audit findings should distinguish misleading scientific encoding, unreadability, and optional polish. Structure the delivery to the request. Name a reference layout or an alternative tool only when it informs a decision, and ask the user only about choices the inputs leave open. For a comprehensive audit, cover every supplied figure and all relevant issues without repeating boilerplate.

@@ -12,15 +12,13 @@ A local notation correction, missing information, or weak presentation is not
 automatically a failure of the idea.
 
 Accuracy, speed, robustness, cost, and breadth are optional comparison lenses.
-Use the axes relevant to the proposal; do not require multiple improvements,
-score unrelated dimensions, or map ratings to publication probabilities. Theory,
-negative results, explanations, and replication can stand on their own value.
+Use the axes relevant to the proposal and judge value by what the work would
+establish. One convincing gain can be enough, and theory, negative results,
+explanations, and replication can stand on their own value.
 
 Estimate feasibility from concrete proof obstacles, access, dependencies, measured
 costs, and real deadlines. Include hidden setup, peak memory, communication,
-measurement/readout, and repeated execution when they affect the result. Generic
-idea-expiry months, weekly-hour thresholds, and GPU counts are not evidence of
-feasibility or publication prospects.
+measurement/readout, and repeated execution when they affect the result.
 
 Prefer a discriminating small test, source inspection, or analytical bound before
 expensive scaling when it resolves the important uncertainty. Choose a large run
@@ -29,7 +27,7 @@ No new permanent test or durable ledger follows merely from evaluating an idea.
 
 Recommend proceeding, checking, narrowing, reframing, or stopping this version,
 and explain the decisive reason. Severity follows the scientific consequence and
-repairability, not issue count, repair weeks, or the age of a baseline.
+repairability.
 
 Adapted and substantially revised from research-evaluation methodology by
 Yuyu Luo and contributors (2026). This reference retains the original

@@ -2,9 +2,9 @@
 name: ponytail-gain
 description: >
   Show historical upstream Ponytail benchmark results as a compact scoreboard
-  with their measured scope, for /ponytail-gain or questions about what
-  Ponytail saves. These do not validate this customized fork or predict savings
-  on the current repository. One-shot display, not a persistent mode.
+  with their measured scope, for an explicit ponytail-gain request or
+  questions about what Ponytail saves. These do not validate this customized
+  fork or predict savings on the current repository. One-shot display, not a persistent mode.
 ---
 
 # Ponytail Gain
@@ -27,7 +27,7 @@ without rerunning benchmarks.
 | Agent session cost | −20% |
 | Agent session elapsed time | −27% |
 
-12 feature tasks · Claude Code 2.1.177 + Haiku 4.5 · 4 runs per task/arm · means. No Codex measurement exists.
+12 feature tasks · Claude Code 2.1.177 + Haiku 4.5 · 4 runs per task/arm · means. The upstream report includes no Codex measurement.
 This measures code generation sessions, not the runtime or memory of the
 produced software. It is not validation of this customized fork.
 
@@ -36,12 +36,13 @@ produced software. It is not validation of this customized fork.
 Do not present the old single-shot 80–94% reduction as a general effect: the
 upstream report identifies a conversational-baseline artifact. Even the later
 agentic results cover one model and a small task set; they do not establish
-quantum-workload performance, general correctness, or universal savings.
+performance on scientific or other specific workloads, such as quantum
+simulation, general correctness, or universal savings.
 
 Do not invent a per-repository counterfactual such as “you saved X lines/tokens”
 when the no-skill version was never run. A current comparison needs a real
-baseline, matching workload, and measured quantities. `/ponytail-debt` counts
-recorded shortcuts; `/ponytail-audit` identifies possible simplifications.
+baseline, matching workload, and measured quantities. `ponytail-debt` counts
+recorded shortcuts, and `ponytail-audit` identifies possible simplifications.
 Neither measures realized savings.
 
 ## Boundaries

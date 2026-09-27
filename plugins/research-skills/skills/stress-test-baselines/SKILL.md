@@ -33,6 +33,10 @@ the comparison's constrained and measured resources explicit, not forcing every
 resource to be equal simultaneously. For quantum computing this can include
 accuracy, problem size, state preparation, measurement shots, classical work,
 runtime, peak memory, and access assumptions. Compare like quantities.
+Run compared methods in the environment the project declares, or record the
+one chosen when none is declared, and keep it the same for every method or
+report how the environments differ, because runtime and memory depend on
+hardware, library versions, threads and precision.
 
 Before expanding numerical tuning, check whether a baseline admits an analytical
 simplification or a better implementation within the same allowed capabilities.
@@ -48,8 +52,9 @@ Match the requested outputs as well as the accuracy threshold. For time-evolutio
 comparisons, distinguish accuracy at each method's own step endpoints from
 accuracy at common requested observation times. State which task the evidence
 supports, including any partial final steps or extra readout needed for the
-common-time task. A lower count obtained by using more of the error budget is
-evidence of better resource selection, not by itself of a better synthesis method.
+common-time task. A lower cost obtained by spending more of the allowed error
+budget shows better use of that budget, not by itself a better method, such as
+a better circuit-synthesis method.
 
 Use fair bounded tuning for every compared method, including the proposed one,
 and report the search space, effort, selected settings, and meaningful
@@ -100,6 +105,9 @@ existing comparison, report which items it lacks.
   per-instance selection falls under one of the exceptions described above.
 - The compared outputs answer the same task, such as values at common
   observation times when that is the task.
+- Compared methods ran in the same environment, or the report states how the
+  environments differ, and each measured result names its environment and code
+  revision, plus the commands when a reader needs them to reproduce it.
 - A selection close to an acceptance threshold was checked against a nearby
   threshold using the existing records.
 - Planned or unrun comparisons are labeled as planned.

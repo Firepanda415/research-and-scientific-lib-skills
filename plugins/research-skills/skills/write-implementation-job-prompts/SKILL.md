@@ -43,11 +43,6 @@ shows it is stale. Do not promote an AI-authored plan or a file name to immutabl
 authority. Preserve explicit user requirements and identify a real conflict if
 one prevents execution.
 
-A handoff the user will send, keep, or reuse is paste-ready text and follows
-`research-writing-style`. A brief that an orchestrator passes directly to a
-subagent is intermediate material for that agent and is outside the writing
-route.
-
 ## Write the smallest sufficient handoff
 
 Usually include:
@@ -118,7 +113,7 @@ Distinguish byte-stable artifacts, intentional semantic changes, and numeric
 tolerance checks. Specify new values only after obtaining them from the intended
 reference. Do not regenerate unrelated expensive artifacts for appearance.
 
-Use the project's supported toolchain and ensure checks import the target checkout when shadowed installations are possible. When project instructions require a checked runner or revision checks, carry the actual checkout, revision, and invocation into the handoff. Resolve required guidance and executable paths from current project instructions before dispatch, rather than copying historical commands or inventing missing environment rules.
+Use the project's supported toolchain and ensure checks import the target checkout when shadowed installations are possible. When project instructions require revision checks or prescribe a wrapper command for running code, such as one that checks the environment or revision, carry the actual checkout, revision, and invocation into the handoff. Resolve required guidance and executable paths from current project instructions before dispatch, rather than copying historical commands or inventing missing environment rules.
 
 Do not game a scan by hiding its matches. Reuse the project's existing gates and
 show their actual results. Run deliberate breakages and any required mutation
@@ -160,6 +155,12 @@ Apply these checks to the clauses that the job actually contains:
   Reuse still-valid run evidence for unchanged expensive checks; use a bounded
   check for new uncertainty and mark any remaining run unverified. Do not repeat
   production work merely to fill a prompt or call an unrun command validated.
+- A job that runs code names the exact test commands, the repository root, the
+  starting revision and the interpreter or toolchain the checks use, by absolute
+  path when several environments exist, because the implementer does not inherit
+  your environment. When the project declares none, the handoff names the one you
+  resolved and says so, and it asks for the environment and revision with each
+  measured result.
 - Carry the user's standing rules that the implementer may not inherit and the job could violate, such as authorship or commit, integration, or push authority. An implementer on another host, in a fresh session, or in a subagent may not load the user's global instructions. Carry the current project's required reading, workspace/import, action, and delivery rules as well. Resolve a material conflict before treating the job as ready.
 
 For a review-only request, apply these checks to the existing prompt and report
@@ -172,9 +173,10 @@ drift, or a real scope change. A worker's completion token or READY claim is not
 acceptance. Inspect the live change and relevant evidence.
 
 Return the prompt in chat unless a durable file is requested or needed by the
-established workflow. The bundled `scripts/lint_job_prompt.py` targets detailed
-contract-style handoffs; use it only when that format is selected. Its formatting
+established workflow. Run the bundled `scripts/lint_job_prompt.py` on a long,
+sectioned handoff that carries commands, gates or a closed edit surface, or when
+the project asks for it. A short handoff does not need it. Its formatting
 rules do not define scientific validity or require adding absent machinery to an
 otherwise sufficient short handoff.
 
-When the detailed handoff format calls for the bundled linter, read [linter execution](references/linter-execution.md). Apply the current project's environment and runner requirements to that command.
+Before running the linter, read [linter execution](references/linter-execution.md). Apply the current project's environment requirements and any wrapper command it prescribes to that command.

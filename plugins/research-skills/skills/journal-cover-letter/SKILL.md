@@ -16,7 +16,7 @@ Determine submission type from the existing artifact and conversation. Preserve 
 ## New-letter and readiness workflow
 
 1. Identify the target manuscript source, journal, article type, corresponding author, intended output file, and submission date or cycle.
-2. Check the current official journal author instructions and submission portal requirements for cover letters, required declarations, prohibited content, editor addressing, and length or file-format rules. Prefer official journal or publisher sources. Record the access date and the specific policy page. If current policy cannot be verified, label it unverified and do not present remembered requirements as current.
+2. Check the current official journal author instructions and submission portal requirements for cover letters, required declarations, prohibited content, editor addressing, and length or file-format rules. Prefer official journal or publisher sources. Report the specific policy page and its access date to the user, outside the letter. If current policy cannot be verified, label it unverified and do not present remembered requirements as current.
 3. Read the manuscript title, author list, affiliations, corresponding email, abstract, summary/results section, and conclusion. Treat the manuscript and its accompanying data/supplementary materials as the source of truth for technical claims.
 4. If examples are provided, separate format from content:
    - If multiple examples are provided, reuse layout, document class, sender block, and signature style from the example with the best formatting, and reuse tone and contribution framing from the example with the strongest wording. Reuse declaration phrasing only after current-policy and factual confirmation.
@@ -35,15 +35,15 @@ Determine submission type from the existing artifact and conversation. Preserve 
 
 ## Recommended Structure
 
-Use this order for a standard journal submission:
+Use this order for a standard journal submission unless the journal or a supplied example sets another order:
 
 1. Sender block with name, title, institution, and email.
 2. Recipient block: named editor if known; otherwise `Editors` and the journal name.
 3. Subject line with the manuscript title.
 4. Opening: `Dear Editors,` unless a named editor is known.
 5. Submission paragraph: manuscript title, article type, target journal, and on-behalf-of-all-authors wording only when that authorization is established.
-6. Fit paragraph: one concise sentence tying the work to the journal scope.
-7. Contribution bullets: a compact set of concrete, defensible claims; three to five is a useful default.
+6. Fit: why the work suits this journal's readers, sized to the venue. That is often one sentence for a specialist journal and a short significance paragraph for a broad-readership journal.
+7. Contributions: a compact set of concrete, defensible claims, as bullets or prose following the venue's conventions or a supplied example. Three to five is a useful default.
 8. Declarations paragraph containing only journal-required or author-confirmed statements.
 9. Polite closing and signature with title/institution.
 
@@ -55,16 +55,16 @@ Use this order for a standard journal submission:
 - Keep the letter short, usually one page.
 - Follow `research-writing-style` for punctuation and vocabulary. Its default house style, which an explicit user instruction or the journal's own requirements override, excludes em dashes and semicolons from authored prose.
 - Mention a working-paper or preprint version when current journal policy requires it, or when the user provides the details and requests disclosure. Never invent or infer preprint metadata.
-- Reuse a supplied example's document class if it compiles in the target environment. Otherwise use the standard `letter` class.
+- Produce the format the user or the submission portal needs, such as a LaTeX file, a word-processor file, or plain text for a portal field. For LaTeX, reuse a supplied example's document class if it compiles in the target environment, and otherwise use the standard `letter` class.
 
-## LaTeX Checks
+## Checks
 
-For a new letter or submission-readiness check, apply the metadata and declaration checks below to the complete letter. For a local edit, apply those checks only to affected claims, declarations, metadata, or venue requirements. Compile and visually inspect an actual `.tex` artifact after creating or editing it; a grammar-only request does not become a new submission-readiness judgment.
+For a new letter or submission-readiness check, apply the metadata and declaration checks 1 to 3 below to the complete letter. For a local edit, apply them only to affected claims, declarations, metadata, or venue requirements. Checks 4 to 6 apply to a LaTeX letter after creating or editing its `.tex` file. A grammar-only request does not become a new submission-readiness judgment.
 
 1. Confirm the title, corresponding email, journal name, and article type match the manuscript and current journal instructions.
 2. List every factual submission declaration and its confirmation source. Any unresolved declaration remains a visible placeholder and blocks a "ready to submit" verdict.
 3. Check for template leftovers inconsistent with the established submission type. Review-related terms such as `reviewer`, `response`, `revised`, and `resubmission` are legitimate when that type requires them; inspect stale `verbatim` or revision-color markup where relevant.
-4. Compile the standalone letter with the available TeX workflow and inspect the result. Diagnose undefined commands or layout problems from that build; a separate audit of every package command is unnecessary. Manuscript-only macros are a common source of undefined commands.
+4. Compile the standalone letter with the available TeX workflow and inspect the rendered PDF, or its extracted text when the host cannot display pages. Diagnose undefined commands or layout problems from that build, without a separate audit of every package command. Manuscript-only macros are a common source of undefined commands.
 5. Confirm that the final PDF has the intended complete letter and signature.
 6. If local TeX tools are unavailable, say so and report source-level checks instead of claiming compilation.
 

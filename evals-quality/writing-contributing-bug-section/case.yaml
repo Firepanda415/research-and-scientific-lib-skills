@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: writing-contributing-bug-section
 description: >-
-  Contributor instructions that people will keep in the repository.
+  Contributor instructions that other people read in the repository.
 tags: [quality, writing, variant]
 execution:
   max_turns: 12

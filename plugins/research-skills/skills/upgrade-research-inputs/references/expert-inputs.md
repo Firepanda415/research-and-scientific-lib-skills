@@ -9,8 +9,8 @@ visibility alone.
 Make the request concrete: the weakest assumption, missing comparison, first
 failure point, hidden resource condition, or evidence that would change the
 decision. A small useful artifact, clear explanation, reproduction, or relevant
-reference can make the exchange easier. Do not require a contribution-first
-ritual, a fixed network plan, or a recurring follow-up schedule.
+reference can make the exchange easier. Plan only the contacts and follow-ups
+that the knowledge gap needs.
 
 Match the material to the actual audience and existing confidentiality, IP, and
 publication constraints. Ask about an unknown restriction only when it affects

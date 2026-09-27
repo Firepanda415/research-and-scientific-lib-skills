@@ -22,7 +22,7 @@ Bars normally need a zero baseline because their length encodes magnitude. Use p
 
 ## Reproducible implementation
 
-Reuse the project's plotting script or style. A standalone plot can use ordinary Matplotlib settings or an existing style file. Create `plot_utils.py` only when repeated plots require shared behavior and no existing mechanism covers it. Keep the source needed to regenerate a data-driven figure without building an unnecessary plotting framework.
+Reuse the project's plotting script or style. A standalone plot can use the plotting library's ordinary settings, for example Matplotlib's, or an existing style file. Add a shared plotting module only when repeated plots require shared behavior and no existing mechanism covers it. Keep the source needed to regenerate a data-driven figure without building an unnecessary plotting framework.
 
 Render at the final paper dimensions and inspect labels, line widths, uncertainty, and color/marker distinctions. Dense numerical layers can be rasterized when this materially reduces output size or rendering cost while preserving the information needed for the claim.
 

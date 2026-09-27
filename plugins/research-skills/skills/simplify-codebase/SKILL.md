@@ -1,6 +1,6 @@
 ---
 name: simplify-codebase
-description: "Audit or perform authorized codebase simplification to remove accidental complexity, dead code, duplication and obsolete layers while preserving contracts. Use for 代码简化, 代码瘦身 or 熵回收; exclude general review and performance tuning."
+description: "Audit or perform authorized codebase simplification to remove accidental complexity, dead code, duplication and obsolete layers while preserving contracts. Use for codebase simplification audits or cleanups, such as 代码简化, 代码瘦身 or 熵回收 requests. Exclude general review and performance tuning."
 ---
 
 # Simplify Codebase
@@ -28,7 +28,7 @@ Deleting a reachable capability, supported interface, stored representation, or 
 1. Read the repository's instructions and the architecture, decision records, manifests, test guidance, or generated-file conventions relevant to the proposed cut.
 2. Inspect version-control state and preserve unrelated work. Identify vendored, generated, migration, fixture, and public-package surfaces before classifying them.
 3. Trace the runtime path from entrypoints through configuration, registration, dispatch, persistence, processes, and wire boundaries. Record public, dynamic, persisted, generated, and compatibility-sensitive contracts.
-4. In Change mode, discover the repository's real verification commands and capture a proportional baseline when feasible. A failing baseline narrows what the final checks can prove.
+4. In Change mode, discover the repository's real verification commands and the interpreter or toolchain it declares, or record the one used when none is declared. Run the commands in that environment and capture a proportional baseline when feasible. A failing baseline narrows what the final checks can prove.
 
 Preserve authorization, trust-boundary validation, security isolation, accessibility essentials, data-loss prevention, stored-format compatibility, and cleanup that establishes quiescence. Treat changes to these protections as their own explicitly authorized objective, not an incidental simplification.
 
@@ -92,4 +92,4 @@ If the user asks to combine findings from another branch, pull request, task, or
 
 For a survey, report coverage and ranked findings with decisive evidence. Include rejected or unresolved high-value leads when they change the recommendation.
 
-For a change, use the proportional validation in [execution-and-recovery.md](references/execution-and-recovery.md). Report what changed, the evidence that the surviving contract works, and material limits. A narrow green check does not establish broader runtime, deployment, or user acceptance.
+For a change, use the proportional validation in [execution-and-recovery.md](references/execution-and-recovery.md). Report what changed, the evidence that the surviving contract works with the commands, environment and revision that produced it, and material limits. A narrow green check does not establish broader runtime, deployment, or user acceptance.

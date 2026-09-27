@@ -38,8 +38,7 @@ evidence; existing records do not require migration.
 - Distinguish active work, expected delay, a stalled worker, failure, completion,
   and an intentional pause. A process ID alone does not prove progress, and no
   new output during a long kernel does not prove a stall.
-- Derive stale and retry thresholds from expected work, cadence, and cost. Do not
-  classify a run from a universal number of unchanged checks.
+- Derive stale and retry thresholds from expected work, cadence, and cost.
 - A completed process may still require scientific validation. Report that
   distinction without calling normal deferred validation an operational failure.
 
@@ -50,6 +49,9 @@ action. Stay quiet when healthy or non-actionable state is unchanged unless the
 user requested periodic reports. Keep only the monitoring history needed for
 recovery and diagnosis; native state or a compact snapshot is often sufficient.
 
+The worker is the agent or process doing the task, the orchestrator is the
+session that launched or coordinates it, the monitor checks its health, and a
+nudge is a short message asking a stalled agent to report or continue.
 A monitor can send an authorized bounded nudge or recommend a repair. The worker
 or orchestrator executes repairs and compute actions within the approved scope
 and remaining budget. Do not restart a paused task, duplicate an uncertain job,
@@ -57,4 +59,4 @@ or infer new spending authority from the absence of the user.
 
 Operational monitoring never modifies scientific conclusions, invents missing
 data, or certifies correctness. Escalate the precise unresolved blocker when
-needed; do not wrap every status update in a mandatory safety checklist.
+needed.

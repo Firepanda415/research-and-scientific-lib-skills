@@ -119,9 +119,10 @@ implementation or smaller remaining suite does not answer it.
 
 ## Exercise the real consumer environment
 
-Use the project's pinned interpreter and confirm the imported source resolves
-inside the checkout or worktree being reviewed. A green suite against an
-editable install from another checkout proves nothing.
+Use the project's pinned interpreter, or record the one used when none is
+pinned, and confirm the imported source resolves inside the checkout or
+worktree being reviewed. A green suite against an editable install from another
+checkout proves nothing.
 
 Run the boundary that users actually consume when it is affected:
 

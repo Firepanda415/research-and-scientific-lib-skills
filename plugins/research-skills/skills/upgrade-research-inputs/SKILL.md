@@ -26,6 +26,9 @@ Search by mechanism and mathematical structure as well as current terminology.
   search/access limits without turning them into a blanket disclaimer.
 - Verify changeable facts using current authoritative sources. Do not infer
   correctness from prestige or a mechanism from aggregate performance alone.
+- When a step depends on web retrieval that is unavailable and the user has not
+  supplied the sources it needs, say so and stop that step, because an answer
+  from memory cannot meet this evidence standard.
 
 ## Scale the inquiry
 
@@ -84,5 +87,7 @@ Optional references:
 
 Problem choice, idea generation, evidence gathering, and evaluation can interact
 in either order. Use other research skills when their specific job is needed,
-not as prerequisites for this one. For a date-bounded scan of what is new in
-quantum research, use `quantum-research-radar`.
+not as prerequisites for this one. `quantum-research-radar` produces Chinese
+briefings of new quantum research, ranked by its bundled research profile. Use
+it for a date-bounded scan only when that briefing is wanted, and run other
+scans of recent work here.

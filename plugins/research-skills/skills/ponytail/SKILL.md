@@ -35,11 +35,13 @@ These rules apply to coding decisions only. They do not impose code-first
 answers or minimal-length explanations on other tasks.
 
 The user can name a level (lite, full or ultra) anywhere in the session, for
-example `$ponytail lite` or "use ponytail ultra". A named level lasts until the
-user names another or turns Ponytail off. Full applies when no level is named.
+example `$ponytail lite` in Codex, `/research-skills:ponytail lite` in Claude
+Code, or "use ponytail ultra". A level given as the skill's invocation argument
+sets it. A named level lasts until the user names another or turns Ponytail off.
+Full applies when no level is named.
 
-"stop ponytail", "normal mode" or `$ponytail off` in the conversation turns
-Ponytail off. A later request for Ponytail turns it back on at full unless the
+"stop ponytail", "normal mode", `$ponytail off` in Codex or
+`/research-skills:ponytail off` in Claude Code turns Ponytail off. A later request for Ponytail turns it back on at full unless the
 user names another level. If the user turned Ponytail off in this session, do
 not apply these rules unless they turn it back on.
 

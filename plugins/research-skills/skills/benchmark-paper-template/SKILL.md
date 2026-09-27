@@ -45,8 +45,9 @@ or revising manuscript prose, follow `research-writing-style`.
 
 A common narrative is evaluation need → benchmark design → measurements →
 findings → implications. Choose sections, figures, research questions, and
-contribution count from the argument and venue. Examples are optional; no fixed
-Figure 1, human–AI gap, page budget, or six-part Introduction is mandatory.
+contribution count from the argument and venue. Examples are optional. Use a
+Figure 1, a human baseline, a page budget, or a set Introduction structure only
+when the argument or venue calls for it.
 
 Keep exact reproducibility details where needed, often in methods, captions,
 appendices, or a configuration artifact. Keep the main narrative focused on

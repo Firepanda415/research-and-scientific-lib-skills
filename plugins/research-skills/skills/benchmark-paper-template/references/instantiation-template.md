@@ -2,14 +2,19 @@
 
 ## Table of contents
 
-1. Basic information and core evaluation definition
-2. Gap analysis and research questions
-3. Benchmark design and construction pipeline
-4. Dataset characteristics and expected findings
-5. Running example and contamination mitigation
-6. Experiment plan
-7. Figure and table plan
-8. Reference case studies
+1. Basic information
+2. Core evaluation definition
+3. Gap analysis
+4. Research questions
+5. Benchmark design
+6. Construction pipeline
+7. Dataset characteristics
+8. Expected findings
+9. Running example design
+10. Contamination mitigation
+11. Experiment plan
+12. Figure and table plan
+13. Reference case studies
 
 
 Fill only the fields the work needs. Infer answers from supplied artifacts and ask only for information that changes the design.
@@ -118,15 +123,15 @@ List only the steps that affect validity, cost, or reproduction, with a quality 
 |-------|-------------|
 | **Scale** (samples, splits, domains) | |
 | **Difficulty levels** | |
-| **Rich metadata / reasoning paths** for deep evaluation | |
+| **Metadata that supports diagnosis** (for example reasoning paths, instance parameters, reference error) | |
 | **Key comparison dimensions** with existing benchmarks | |
 
 ## 8. Expected Findings
 
 | Field | Your Answer |
 |-------|-------------|
-| **What difficulties will SOTA models face?** | |
-| **Where will model errors concentrate?** | |
+| **What difficulties will the strongest current methods (models, solvers, or other systems) face?** | |
+| **Where will errors or failures concentrate?** | |
 | **Expected human-model performance gap** (optional, when a human baseline applies) | |
 
 ## 9. Running Example Design (optional, Figure 1)
@@ -136,7 +141,7 @@ List only the steps that affect validity, cost, or reproduction, with a quality 
 | **What concrete example will Figure 1 show?** | |
 | **Does it simultaneously illustrate** existing method limitations AND your benchmark's value? | |
 
-## 10. Contamination Mitigation
+## 10. Contamination Mitigation (learned or tuned systems)
 
 | Field | Your Answer |
 |-------|-------------|
@@ -146,9 +151,9 @@ List only the steps that affect validity, cost, or reproduction, with a quality 
 
 ## 11. Experiment Plan (see [experiments.md](experiments.md))
 
-### Baseline Models
+### Compared Methods
 
-| Model | Type | Scale | Why Include |
+| Method (for example a model or solver) | Type | Scale or configuration | Why Include |
 |-------|------|-------|------------|
 | | | | |
 | | | | |
@@ -163,7 +168,7 @@ List only the steps that affect validity, cost, or reproduction, with a quality 
 
 ## 12. Figure & Table Plan
 
-Positions below are illustrative. Use the current venue template.
+Positions below are illustrative. Take them from the venue's template when it can be retrieved or the user supplies it. Without either, say that the positions are not checked against the venue.
 
 | Item | Content | Position |
 |------|---------|----------|
@@ -173,7 +178,7 @@ Positions below are illustrative. Use the current venue template.
 | Table 2 | Statistics: | Page 4-5 |
 | Table 3 | Overall Performance: | Page 6-7 |
 
-## Reference Case Studies
+## 13. Reference Case Studies
 
 Summaries are illustrative. Verify venue, taxonomy, and findings in the paper before citing them.
 

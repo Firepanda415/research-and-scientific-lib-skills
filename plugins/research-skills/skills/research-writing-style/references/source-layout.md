@@ -4,7 +4,7 @@ Use these rules when authoring prose or math in a LaTeX, Markdown, or other sour
 
 ## Prose and captions
 
-Follow the target file's existing paragraph wrapping and equation-row layout. When the file sets no convention, as in an Overleaf manuscript edited paragraph by paragraph, write one paragraph per physical source line and apply the same rule to figure and table captions. Display math and table rows keep their own line structure. These rules govern new or replaced text, so leave untouched paragraphs in their current layout.
+Follow the target file's existing paragraph wrapping and equation-row layout, or else the project's convention for that file type, such as a formatter or linter setting. When neither sets one, as in an Overleaf manuscript edited paragraph by paragraph, write one paragraph per physical source line and apply the same rule to figure and table captions. Display math and table rows keep their own line structure. These rules govern new or replaced text, so leave untouched paragraphs in their current layout.
 
 ## Display math
 

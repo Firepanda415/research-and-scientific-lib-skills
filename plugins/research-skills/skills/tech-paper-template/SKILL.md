@@ -7,7 +7,7 @@ description: Plan, draft, or repair a technical paper's argument, Introduction, 
 
 Make the central contribution, motivation, and supporting evidence easy to follow.
 Start from what the work establishes rather than fitting it to a publication
-template or requiring a separate idea-assessment verdict.
+template, and go directly to the requested output.
 
 ## Argument structure
 
@@ -35,14 +35,15 @@ result need not map one-to-one onto an implementation module.
 
 When turning experiment or validation records into a manuscript, organize the
 results around the conclusions the evidence supports. Present each main result
-with its evidence type and material conditions, distinguishing an identity, a
-conditional bound, a numerical observation, and a physical interpretation.
+with its evidence type and material conditions, distinguishing evidence types
+such as an identity, a conditional bound, a numerical or empirical observation,
+and a physical or other interpretation.
 State the supported result directly, and keep counterevidence and unsuccessful
 controls visible when they explain or limit it. Move routine search chronology,
 seeds, and refinement logs to methods, appendices, or linked records as appropriate.
 Introduce the main result once its necessary assumptions and definitions are in
-place. Give background, dictionaries, and classifications the space needed to
-understand the argument.
+place. Give background, notation or correspondence tables, and classifications
+the space needed to understand the argument.
 
 ## Output
 
@@ -56,8 +57,8 @@ invalid argument matters more than an absent template cell. Do not label a
 format preference as a submission-blocking scientific problem.
 
 For Introduction drafting, use [introduction.md](references/introduction.md) with
-the available claims and evidence. Draft prose when that is the user's request;
-do not stop after an outline or require a separate handoff artifact. When
+the available claims and evidence. Draft prose when that is the user's request,
+rather than stopping at an outline. When
 drafting or revising manuscript prose, follow `research-writing-style`.
 
 ## Optional references

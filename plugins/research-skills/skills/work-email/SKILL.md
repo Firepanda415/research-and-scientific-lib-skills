@@ -14,7 +14,7 @@ Handle short everyday correspondence, such as an email or chat message to collea
 - Keep every fact, number, date, name, commitment, request and hedge exactly. Add no claims, praise, apologies, pleasantries or promises that the user did not make.
 - Edit only the user's own text, and leave quoted or forwarded messages unchanged.
 - Write in the email's language, and explain anything to the user in the conversation's language, outside the email.
-- In sentences you compose or restructure, follow the collection's punctuation defaults, which exclude semicolons, em dashes and colons that join clauses. Leave the author's correct punctuation as it is.
+- In sentences you compose or restructure, follow the collection's punctuation defaults, which exclude semicolons, em dashes and colons that join clauses, unless the user or the destination sets another style. Leave the author's correct punctuation as it is.
 
 ## Check before returning
 
@@ -22,6 +22,6 @@ Reread the whole email once, in a pass separate from editing it, and confirm the
 
 - Every fact, number, date, name and request matches the original or the user's points.
 - Nothing mentions the instructions, the editing, or what the user asked to leave out, such as "as requested" or "I have revised".
-- The sentences you composed or restructured contain no semicolon or em dash, and no `retain`, `honest` or their inflections.
+- The sentences you composed or restructured follow the punctuation style in use, which by default has no semicolon or em dash, and contain no `retain`, `honest` or their inflections.
 
 Return the email ready to paste. Keep the author's greeting and sign-off, and add plain ones only to a new email draft. When a change needs the user's confirmation, such as an ambiguous date or a possible change of meaning, list it briefly after the email. When the draft needs no change, say so and return it unchanged.

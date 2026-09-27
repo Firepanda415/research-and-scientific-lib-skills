@@ -126,8 +126,11 @@ frame, event, semantic owner, legal states, and cross-field invariant.
 
 ## Integration and evidence deletion
 
-Parallel agents may investigate separate surfaces. One serial integration owner
-changes a shared semantic owner. Run the required integration falsifiers after
+Parallel agents may investigate separate surfaces. Give each agent whose work
+runs code the interpreter or toolchain, test commands, repository root and
+revision to use, because a delegated agent does not inherit the session's
+environment. One serial integration owner changes a shared semantic owner.
+Run the required integration falsifiers after
 merges that affect their exercised source or interactions. Reuse evidence only
 after verifying equivalent exercised source, dependencies and selection, and
 explaining why the merge cannot change the relation. A final docs-only commit
@@ -154,8 +157,9 @@ is otherwise established.
 
 Freeze the requested review deliverables before parallel investigation. When
 the user requests a durable uncapped report, write every accepted finding to
-that report. A size-limited findings panel may mirror the highest-priority
-subset, but it does not replace or limit the durable report.
+that report. Where the host also shows findings in a size-limited view, that
+view may mirror the highest-priority subset, but it does not replace or limit
+the durable report.
 
 Use a noncolliding output name and treat unknown tracked or untracked workspace
 files as user-owned or another session's work. Do not delete, replace, or rename

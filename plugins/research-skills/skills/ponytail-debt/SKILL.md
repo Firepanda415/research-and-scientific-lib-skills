@@ -12,9 +12,13 @@ can't quietly become permanent.
 ## Scan
 
 Search the repo for comment markers, skipping `.git`, `node_modules`, `build`,
-and `dist` directories:
+and `dist` directories. Use ripgrep when it is available:
 
-`rg -n --hidden --glob '!**/.git/**' --glob '!**/node_modules/**' --glob '!**/build/**' --glob '!**/dist/**' '(#|//) ?ponytail:' .`  (add other comment prefixes if your stack uses them)
+`rg -n --hidden --glob '!**/.git/**' --glob '!**/node_modules/**' --glob '!**/build/**' --glob '!**/dist/**' '(#|//) ?ponytail:' .`
+
+Without `rg`, run `git grep -nE --untracked` or the host's search tool with the
+same pattern and exclusions. Add the comment prefixes of the repository's
+languages to the pattern, such as `!` for Fortran or `%` for MATLAB and LaTeX.
 
 Each hit is one ledger row. The comment prefix keeps prose that merely mentions
 the convention out of the ledger.

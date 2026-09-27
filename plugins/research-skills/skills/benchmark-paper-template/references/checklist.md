@@ -18,8 +18,11 @@ with the user or a printed checklist for every review.
 - Are cited sources, artifact references, and version/configuration information
   correct where they support the result?
 
-Check the current official venue requirements when submission compliance is
-part of the task. Do not inherit dated metadata, licensing, checklist, or
+When submission compliance is part of the task, check it against the venue's
+official requirements, retrieved from the venue or supplied by the user. Venue
+rules change between submission cycles, so when neither source is available,
+say so and leave the compliance check undone instead of reconstructing the
+requirements from memory. Do not inherit dated metadata, licensing, checklist, or
 formatting rules from an example venue. A human baseline, new companion method,
 particular figure, or numbered RQ is not a universal submission requirement.
 

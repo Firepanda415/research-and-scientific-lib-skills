@@ -13,6 +13,13 @@ count reads of a skill's reference files. For a Codex
 subagent it shows the parent session's first prompt, because the subagent's
 own brief is not stored as a plain message.
 
+--cost estimates, per skill, the tokens that the skill's files brought into the
+sessions that read them: the SKILL.md and every reference a session read, each
+version of a file once per session, measured on the installed version while it is still in
+the plugin cache and on the checkout otherwise. It leaves out the skill
+descriptions and hook text that every session carries, and text re-sent on later
+requests, so it ranks skills rather than pricing them.
+
 Counts come from tool-call requests, so they do not confirm that a read
 succeeded, how much of a file was read, or why. Several reads in one session
 count once. Installed paths carry the plugin version, which the report lists.
@@ -22,9 +29,11 @@ files, and leaves out Skill calls, which carry no version.
 
 import argparse
 import collections
+import functools
 import json
 import pathlib
 import re
+import statistics
 import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -35,6 +44,14 @@ REFERENCE = re.compile(r"plugins/cache/research-skills/research-skills/([^/\s\"'
 NAMED = re.compile(r"\b(" + "|".join(map(re.escape, NAMES)) + r")/SKILL\.md")
 CLAUDE_READERS = {"Read", "Bash"}
 CODEX_CALLS = {"function_call", "custom_tool_call", "local_shell_call"}
+CACHES = [HOME / ".claude/plugins/cache/research-skills/research-skills",
+          HOME / ".codex/plugins/cache/research-skills/research-skills"]
+# --cost converts characters to tokens per host. Claude: about 3.5 English characters
+# per token, from https://platform.claude.com/docs/en/about-claude/glossary (checked
+# 2026-09-27), the figure AGENTS.md uses for the README estimates. Codex: about 5
+# characters per token for this plugin's Markdown, measured from the context growth
+# after single-file reads in Codex sessions on 2026-09-27.
+CHARS_PER_TOKEN = {"Claude Code": 3.5, "Codex": 5.0}
 
 
 def entries(path):
@@ -107,6 +124,30 @@ def codex_session(path):
     return session
 
 
+@functools.lru_cache(maxsize=None)
+def chars(version, relative):
+    """Characters of a skill file: the installed version while it is cached, else the checkout's."""
+    if version:
+        for cache in CACHES:
+            path = cache / version / "skills" / relative
+            if path.is_file():
+                return len(path.read_text(errors="ignore"))
+    path = ROOT / "plugins/research-skills/skills" / relative
+    return len(path.read_text(errors="ignore")) if path.is_file() else 0
+
+
+def loaded_chars(session):
+    """Characters of each skill's files that a session read, counting each version of a file once."""
+    files = {(version, f"{name}/SKILL.md") for version, name in session["reads"]}
+    # A Skill call carries no version, so its SKILL.md is measured on the checkout.
+    files |= {("", f"{name}/SKILL.md") for name in session["loads"] - {name for _, name in session["reads"]}}
+    files |= {(version, f"{skill}/references/{ref}") for version, skill, ref in session["refs"]}
+    total = collections.Counter()
+    for version, relative in files:
+        total[relative.split("/", 1)[0]] += chars(version, relative)
+    return total
+
+
 def recent(roots, cutoff):
     for root in roots:
         if not root.is_dir():
@@ -127,6 +168,7 @@ def main():
     parser.add_argument("--list", metavar="SKILL", help="list the sessions that loaded SKILL")
     parser.add_argument("--refs", metavar="SKILL", help="count the sessions that read each reference file of SKILL")
     parser.add_argument("--plugin-version", metavar="PREFIX", help="count only reads of installed files whose plugin version starts with PREFIX")
+    parser.add_argument("--cost", action="store_true", help="estimate the tokens that each skill's files brought into the sessions that read them")
     args = parser.parse_args()
     cutoff = time.time() - args.days * 86400
     hosts = (("Claude Code", [HOME / ".claude/projects"], claude_session),
@@ -141,8 +183,9 @@ def main():
             versions.update({version for version, _ in s["reads"]} | {version for version, _, _ in s["refs"]})
             if args.plugin_version:
                 keep = lambda version: version.startswith(args.plugin_version)
-                s["loads"] = {name for version, name in s["reads"] if keep(version)}
+                s["reads"] = {(version, name) for version, name in s["reads"] if keep(version)}
                 s["refs"] = {(version, skill, ref) for version, skill, ref in s["refs"] if keep(version)}
+                s["loads"] = {name for _, name in s["reads"]}
             else:
                 s["loads"] |= {name for _, name in s["reads"]}
             sessions.append(s)
@@ -161,6 +204,16 @@ def main():
             print(f"  {'skill':32} {'main':>5} {'subagent':>9} {'named':>6}")
         for name in rows:
             print(f"  {name:32} {loads[name, False]:5d} {loads[name, True]:9d} {named[name]:6d}")
+        if args.cost:
+            ratio = CHARS_PER_TOKEN[host]
+            tokens = collections.defaultdict(list)
+            for s in sessions:
+                for name, n in loaded_chars(s).items():
+                    tokens[name].append(n / ratio)
+            print(f"  skill files read, in tokens at about {ratio:g} characters per token:")
+            print(f"  {'skill':32} {'sessions':>8} {'per session':>11} {'total':>10}")
+            for name in sorted(tokens, key=lambda n: -sum(tokens[n])):
+                print(f"  {name:32} {len(tokens[name]):8d} {statistics.mean(tokens[name]):11,.0f} {sum(tokens[name]):10,.0f}")
         if args.refs:
             refs = collections.Counter((ref, s["subagent"]) for s in sessions for ref in {ref for _, skill, ref in s["refs"] if skill == args.refs})
             print(f"  {args.refs} references read, main and subagent sessions:")

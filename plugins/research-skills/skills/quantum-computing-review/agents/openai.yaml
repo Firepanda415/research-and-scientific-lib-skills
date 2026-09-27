@@ -1,4 +1,4 @@
 interface:
-  display_name: "Quantum Computing Review"
-  short_description: "Prepare evidence-grounded referee reports"
+  display_name: "Technical Referee Review"
+  short_description: "Referee reports in any field, with added quantum checks"
   default_prompt: "Use $quantum-computing-review to referee this technical manuscript and prepare a source-grounded report."

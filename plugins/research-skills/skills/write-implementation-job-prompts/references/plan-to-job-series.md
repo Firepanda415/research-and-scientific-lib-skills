@@ -21,9 +21,10 @@ agreement or READY tokens, or consult on every ordinary prompt revision. When
 jobs depend on a derivation from a consultation, check its load-bearing steps
 with a small independent numerical or symbolic calculation before dispatch.
 When the consultation runs in a separate application whose answer the principal
-cannot read back directly, exchange the request and the answer as files in the
-task's working folder outside the repository, so that each answer stays with
-the question it answered.
+cannot read back directly, exchange the request and the answer as files in a
+location both sides can read and the project's rules allow, such as a scratch
+folder outside version control, so that each answer stays with the question it
+answered.
 
 Choose expertise by the task and unresolved failure modes, not permanent model
 brand roles. Model agreement is not independent scientific evidence. Consultation

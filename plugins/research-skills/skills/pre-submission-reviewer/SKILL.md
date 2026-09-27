@@ -5,7 +5,7 @@ description: Audit the user's own technical paper or revision, from a focused cl
 
 # Pre-Submission Reviewer
 
-Audit the user's own paper for submission readiness. Follow the requested scope and venue. Keep scientific correctness and evidence ahead of polish. Do not require a systems-paper structure, running example, dataset count, or figure family unless the venue or the paper's argument needs it.
+Audit the user's own paper for submission readiness. Follow the requested scope and venue. Keep scientific correctness and evidence ahead of polish. Judge structure, examples, datasets, and figures by what the venue and the paper's argument need.
 
 ## Review priorities
 
@@ -17,7 +17,7 @@ Audit the user's own paper for submission readiness. Follow the requested scope 
 - Take venue constraints from the user, the supplied template, or the current official author instructions (cite the page and access date). Label unverified requirements, and do not rate them Critical from memory.
 - Check whether figures and captions accurately communicate the data, axes, units, uncertainty, and scope. Use `figure-designer` when redesign or detailed figure analysis is needed.
 - Audit the active source. Commented-out text is not manuscript content unless the user says otherwise, so a definition, hypothesis, or caveat that survives only in comments counts as missing from the paper. When the user asks to review, restore, or compare a commented draft, that draft is the material to work on.
-- When a region was rewritten or pasted in during the current revision, or is reported as changed, trace each label, symbol, hypothesis, and convention that region defined or removed through the rest of the document, because orphaned symbols and unapplied conventions still compile. The tracing covers those items and does not re-audit untouched text. When the text leaves open which convention produced reported values, recompute a representative value from available outputs or a cheap calculation, within the computation limit stated after this list.
+- When a region was rewritten or pasted in during the current revision, or is reported as changed, trace each label, symbol, hypothesis, and convention that region defined or removed through the rest of the document, because orphaned symbols and unapplied conventions still compile. The tracing covers those items and does not re-audit untouched text. When the text leaves open which convention produced reported values, recompute a representative value from available outputs or a cheap calculation, within the computation limit stated after this list. Run project code in the environment the project declares, and record the one you used when it declares none. Report a recomputed value with that interpreter or toolchain, the command, and the code revision, so that a mismatch can be traced to the paper or to the environment.
 
 A requested complete audit covers these relevant dimensions, but does not need separate passes or reports. Focused questions remain focused. Do not run or request expensive new computations unless they resolve a specific claim-level uncertainty.
 
@@ -48,7 +48,7 @@ Audit the revised manuscript itself under the review priorities above. When the 
 - **MINOR:** a bounded correction that leaves the central conclusion intact.
 - **Editorial:** house style, punctuation, or an optional presentation preference. Keep these separate from scientific severity. Word frequency, em dashes, and layout preferences do not automatically make a scientific Major finding.
 
-Assign severity by consequence, not how mathematically dramatic the isolated typo looks or how many style hits occur. A displayed formula that needs a local sign correction may be Minor if the dependent results remain valid; the same discrepancy must be resolved before implementing from the paper.
+Assign severity by consequence, not how mathematically dramatic the isolated typo looks or how many style hits occur. A displayed formula that needs a local sign correction may be Minor if the dependent results remain valid. Minor severity does not make the displayed equation usable as written, so the correction stays requested.
 
 Use **Ready to submit**, **Needs focused revision**, or **Needs major revision before submission** with the actual unresolved reasons. Do not manufacture a score from counts. A house-style correction can remain requested without becoming evidence that the science is unsound.
 
@@ -56,4 +56,4 @@ Use **Ready to submit**, **Needs focused revision**, or **Needs major revision b
 
 Lead with the readiness judgment and the most consequential findings. Each substantive finding needs a verified locator, the issue and consequence, evidence, and the smallest useful correction. Distinguish an observed failure from an unverified concern. Say which material or checks were unavailable without making the user reconfirm checks the assistant can perform.
 
-Provide a full issue inventory when requested; otherwise use a concise ranked report. No fixed table layout, gate checklist, or mandatory style scan is needed for a narrow scientific question. Apply `research-writing-style` to generated text, including its default house style and any explicit user style. When giving manual manuscript replacements, follow `research-writing-style` for current-file anchors and paste-ready spans.
+Provide a full issue inventory when requested. Otherwise use a concise ranked report. No fixed table layout, gate checklist, or mandatory style scan is needed for a narrow scientific question. Apply `research-writing-style`, including its default house style and any explicit user style, to text drafted for the manuscript or the response to referees, such as replacement passages, and to the audit report only when that report goes to other people, such as coauthors or an editor. When giving manual manuscript replacements, follow `research-writing-style` for current-file anchors and paste-ready spans.

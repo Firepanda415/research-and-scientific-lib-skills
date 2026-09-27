@@ -1,8 +1,9 @@
 schema_version: "1.1"
 name: writing-memory-entry-current-state
 description: >-
-  A project-memory entry rewritten to state only the current rule.
-tags: [quality, writing, variant]
+  A project-memory entry rewritten to state only the current rule. Memory is text for
+  agents, so the writing route stays out, and the graders test the hook's current-state rule.
+tags: [quality, writing, negative]
 execution:
   max_turns: 12
   timeout_seconds: 600
@@ -13,17 +14,20 @@ execution:
     Current entry:
     NWQ-Sim qualification: only a runner built from exactly commit efd0226 is qualified. Any other commit, including upstream 202f5ca, is reported as an unchecked NWQ-Sim revision.
 graders:
-  - name: loads-research-writing-style
+  - name: skips-research-writing-style
     type: tool_used
     tool: Skill
     input_match: '"(?:research-skills:)?research-writing-style"'
-    min: 1
-  - name: reads-research-writing-style
+    min: 0
+    max: 0
+    arm: both
+  - name: skips-reading-research-writing-style
     type: tool_used
     tool: Read
     input_match: 'skills/research-writing-style/SKILL\.md'
-    min: 1
-    arm: with-only
+    min: 0
+    max: 0
+    arm: both
   - name: keeps-commit
     type: regex
     pattern: 'efd0226'
@@ -42,19 +46,6 @@ graders:
     type: llm
     criteria: >-
       The entry states the current rule as guidance (descendants of efd0226 qualify when the derivation's source files are byte-identical, otherwise the receipt marks them changed) and does not describe the earlier rule.
-  - name: no-semicolons
-    type: regex
-    pattern: '[;；]'
-    match: not_contains
-  - name: no-em-dashes
-    type: regex
-    pattern: '—'
-    match: not_contains
-  - name: no-banned-words
-    type: regex
-    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
-    flags: i
-    match: not_contains
   - name: no-process-leakage
     type: regex
     pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'

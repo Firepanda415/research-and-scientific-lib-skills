@@ -1,14 +1,14 @@
 schema_version: "1.1"
 name: writing-copyedit-minimal
 description: >-
-  A grammar-only copyedit of a technical paragraph.
+  A grammar-only copyedit of a paragraph from a library's user guide.
 tags: [quality, writing, variant]
 execution:
   max_turns: 12
   timeout_seconds: 600
   allowed_tools: [Read, Skill]
   prompt: |
-    Fix only the grammar and spelling in this paragraph. Change nothing else, and reply with only the corrected paragraph.
+    Fix only the grammar and spelling in this paragraph from our library's user guide. Change nothing else, and reply with only the corrected paragraph.
 
     The solver return a normalized state whose amplitudes is proportional to the solution vector. To recover the physical solution, the user must rescale it by the norm that the method estimate from a seperate set of measurements, which introduce an additional sampling error.
 graders:

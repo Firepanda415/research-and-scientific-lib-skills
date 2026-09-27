@@ -450,7 +450,7 @@ Check:
 - error composition and success probability;
 - consistency between main text, Methods, Supplementary Information, and pseudocode.
 
-When a derivation is central, reconstruct the decisive steps. For a suspected sign, factor, index, or notation error, identify the intended convention and propagate the smallest plausible correction through dependent equations, algorithms, and results. A local typo leaves the scientific conclusion intact after correction. If that consequence is unverified, state the uncertainty. Do not call an error fatal merely because the displayed equation is false, or harmless merely because its repair looks small. Paper-based implementation must resolve the discrepancy before using the equation, even if its referee severity is Minor.
+When a derivation is central, reconstruct the decisive steps. For a suspected sign, factor, index, or notation error, identify the intended convention and propagate the smallest plausible correction through dependent equations, algorithms, and results. A local typo leaves the scientific conclusion intact after correction. If that consequence is unverified, state the uncertainty. Do not call an error fatal merely because the displayed equation is false, or harmless merely because its repair looks small. A Minor rating still leaves the displayed equation wrong as written, so say so in the comment when readers are likely to implement from it.
 
 #### 3.2 Structural Simplifications
 
@@ -598,7 +598,7 @@ Ask the central counterfactual:
 > If the component credited with the improvement were replaced while every surrounding
 > component remained fixed, would the claimed improvement survive?
 
-Decompose the method into:
+Decompose the method into the components it actually has, such as:
 
 - problem formulation;
 - decomposition or instance selection;
@@ -656,7 +656,9 @@ Hold fixed as much as possible:
 - wall-clock or compute budget;
 - parallel resources.
 
-#### Minimum Decisive Ablation Template
+#### Example Decisive Ablations
+
+Keep the rows that match the method's components and claims. The exact local replacement applies to a method with a local solver, and the structure-aware reference to a crossover or scaling claim.
 
 | Variant | Component changed | Everything held fixed | Main question answered |
 |---|---|---|---|
@@ -792,6 +794,8 @@ When the same or substantially overlapping author group has a related paper, do 
 vague labels such as “present in both.” Identify **what exact object is repeated**.
 
 #### Required Overlap Table
+
+Include the rows for objects the two papers share, and add a row for any shared object the table does not list.
 
 | Component | Prior paper: exact object and locator | Present manuscript: exact object and locator | Exact relationship | Citation and disclosure status | Is it part of the claimed novelty? | Review significance |
 |---|---|---|---|---|---|---|
@@ -986,7 +990,7 @@ Add these quantum-specific replacements to the matched ablations in Step 4 where
 - preserving versus discarding the joint quantum output;
 - same algorithm with hardware sampling replaced by classical sampling.
 
-For a quantum manuscript, the Minimum Decisive Ablation Template takes this form:
+For a quantum manuscript, the Example Decisive Ablations take this form, with rows chosen by the same rule:
 
 | Variant | Component changed | Everything held fixed | Main question answered |
 |---|---|---|---|
@@ -1268,7 +1272,7 @@ Rank comments by their effect on validity, contribution, evidence, and interpret
 
 For a requested comprehensive audit, surface all verified, nonredundant, actionable findings without a fixed comment cap. Do not stop discovery because several strong findings already determine a recommendation. For a focused report, stay within the requested question.
 
-Use a candidate ledger or omission ledger when the user requests one or a complex selection process needs it. Fixed headings and duplicate private/public reports are unnecessary. When compressing a comprehensive review, disclose any omitted substantive concern that changes interpretation. Routine editorial omissions need no ledger. Preserve the user's selected comments and personal sign-off, and apply an explicit requested length at delivery rather than as a discovery limit.
+Use a candidate ledger or omission ledger when the user requests one or a complex selection process needs it. Fixed headings and duplicate private/public reports are unnecessary. When compressing a comprehensive review, disclose any omitted substantive concern that changes interpretation. Routine editorial omissions need no ledger. Preserve the user's selected comments and sign-off, and apply an explicit requested length at delivery rather than as a discovery limit.
 
 ## Output Matched to the Request
 
@@ -1288,32 +1292,27 @@ When editor comments are requested, include:
 
 Match the report to the requested scope. A comprehensive audit includes all verified, nonredundant, actionable findings. A submission-ready report prioritizes the issues that the authors and editor need to act on, with concise minor corrections.
 
-#### Personal Style Settings
+#### Report Style Settings
 
 These are adjustable reviewer-style defaults, not review methodology. A sign-off, length,
-or layout given in the user's request or guidance replaces them. Adjust them here without
-touching the rest of the skill.
+or layout set by the venue's report form, the user's request, or the user's guidance
+replaces them. Adjust them here without touching the rest of the skill.
 
-- **Sign-off:** do not add a separate `Recommendation` section. End the Overall
-  Assessment with one of these forms:
-
-  ```text
-  I recommend the acceptance only after a major revision for the following N issues.
-  I recommend the acceptance only after a minor revision for the following N issues.
-  ```
-
-  Preserve this wording as the reviewer's personal sign unless the user asks for a
-  different form. For rejection or acceptance without revision, use a direct sentence
-  appropriate to the journal rather than forcing this template.
-- **Final length:** the preferred submitted review is about 2–3 PDF pages, applied only
-  at the submission-editing stage (see Comment Prioritization and Page-Budget Policy).
+- **Sign-off:** when the venue's form has a recommendation field or a required layout,
+  follow it. Otherwise end the Overall Assessment with one sentence that states the
+  recommendation in the venue's decision terms and, for a revision, the number of issues
+  below that it rests on. That sentence carries the recommendation in place of a separate
+  `Recommendation` section.
+- **Final length:** apply a length that the venue or the user sets. Without one, aim for
+  about 2–3 PDF pages. Apply either target only at the submission-editing stage (see
+  Comment Prioritization and Page-Budget Policy).
 
 ```markdown
 # Referee Report
 
 ## Overall assessment
 
-[Brief assessment ending with the preferred recommendation sentence.]
+[Brief assessment ending with the recommendation sentence.]
 
 ## Major comments
 
@@ -1331,8 +1330,8 @@ In Supplementary Note Y (SI p. X), ...
 2. Typos: “searchable typo” -> “correction”; ...
 ```
 
-Do not add a separate `Recommendation` section unless the user requests it. The
-sign-off rule above governs how the recommendation appears.
+Add a separate `Recommendation` section only when the venue's form or the user asks for
+one. Otherwise the sign-off setting above governs how the recommendation appears.
 
 ### Revision Review
 
@@ -1368,7 +1367,7 @@ problem that the original review clearly missed (see Mode C).
 - Putting speculative allegations in the author-facing report.
 - Contradicting the author-facing report in confidential comments.
 - Producing an unranked, repetitive, or speculative wish list. Completeness means surfacing every verified actionable issue, not requesting every imaginable experiment.
-- Silently deleting a verified concern merely to meet an assumed 2–3 page budget.
+- Silently deleting a verified concern merely to meet a length target.
 - Giving an exact location only in private notes while omitting it from the submitted review.
 - Writing a major or non-typo minor comment with only a broad section name and no
   page or paragraph/object locator.
