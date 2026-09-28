@@ -16,7 +16,7 @@ Before a rebase, make a backup branch at the worker's final revision, and resolv
 
 ## Before each review
 
-- Run one full suite on each supported platform whose code path changed, all platforms in parallel.
+- Run one full suite on each supported platform whose code path changed, all platforms in parallel, unless one already ran on the same tree, dependencies and platform.
 - The mathematics advisor checks only the mathematics the round changed, with its code: the changed items, the principal's decisions and the changed texts. It does not widen into mathematics the round did not touch.
 - Before a review of fixes, the fix list gives each item with its disposition and commits, what each commit changes (code, tests or documentation), the owner and scope of each deferred item and who decided it (the user, or the principal and the counselor under the step 0 delegation), and the open questions. The review principal checks each entry against its commits. (NWQLib 0.99: a deferral recorded only in the principal's ledger, which the review side does not read, reached the review as an item without an owner.)
 
