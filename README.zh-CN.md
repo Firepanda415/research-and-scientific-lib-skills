@@ -4,18 +4,18 @@
 
 这是我日常科研和科学软件开发中使用的 Codex 与 Claude Code skills 集合，覆盖研究选题、论文阅读与写作、绘图、科学计算和代码审查，也包含按个人习惯修改的 Ponytail。我会根据实际使用持续更新，欢迎按自己的研究需要使用和调整。
 
-**在 Codex 和 Claude Code 中，插件都提供全部 30 个 skills（包括按个人习惯修改的 Ponytail 编码模式）和写作 hook。**
+**在 Codex 和 Claude Code 中，插件都提供全部 31 个 skills（包括按个人习惯修改的 Ponytail 编码模式）和写作 hook。**
 
 ## 上下文成本
 
-安装插件后，每个会话在使用任何 skill 之前就占用约 5k tokens。其中约 3k 是 30 个 skills 的描述，两个宿主都会把它们留在上下文中用于选择 skill，见 [Claude Code](https://code.claude.com/docs/en/skills) 和 [Codex](https://learn.chatgpt.com/docs/build-skills) 的 skill 文档。约 2k 是写作 hook 的说明，每个 subagent 也会收到一份。skill 的完整说明只在使用时加载，之后一直留在对话中。[技能一览](#技能一览)表格中 skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，包括它的 `SKILL.md` 和默认读取的 reference 文件。只在部分任务中用到的 reference 文件会在此基础上增加。估算按每个 token 约 3.5 个英文字符计算，这是 Anthropic 在[术语表](https://platform.claude.com/docs/en/about-claude/glossary)中给出的 Claude 的数字。根据 2026 年 9 月 Codex 使用记录的测量，写作 skill 的文件比这个估算少用约 30% 的 tokens。
+安装插件后，每个会话在使用任何 skill 之前就占用约 5k tokens。其中约 3k 是 31 个 skills 的描述，两个宿主都会把它们留在上下文中用于选择 skill，见 [Claude Code](https://code.claude.com/docs/en/skills) 和 [Codex](https://learn.chatgpt.com/docs/build-skills) 的 skill 文档。约 2k 是写作 hook 的说明，每个 subagent 也会收到一份。skill 的完整说明只在使用时加载，之后一直留在对话中。[技能一览](#技能一览)表格中 skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，包括它的 `SKILL.md` 和默认读取的 reference 文件。只在部分任务中用到的 reference 文件会在此基础上增加。估算按每个 token 约 3.5 个英文字符计算，这是 Anthropic 在[术语表](https://platform.claude.com/docs/en/about-claude/glossary)中给出的 Claude 的数字。根据 2026 年 9 月 Codex 使用记录的测量，写作 skill 的文件比这个估算少用约 30% 的 tokens。
 
 有几个 skill 的成本明显高于其他 skill：
 
 - `research-writing-style` 每次读取约 16k tokens。写作 hook 会把有其他人阅读的文档（例如论文、审稿报告、文档、README 和信件）以及为这类文档起草的文字交给这个 skill 起草、修改和审阅，所以产出这类文字的 skill 也会带上这部分成本。你自己看的笔记和报告、写给 agent 的文字，以及代码注释、commit 和 pull request 不走这条路线。
-- `simplify-codebase` 连同它加载的 Ponytail skill 约占 6k，`quantum-computing-review`、`research-explainer-animation`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 19k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 4k）。
+- `simplify-codebase` 连同它加载的 Ponytail skill 约占 6k，`lead-multi-agent-project`、`quantum-computing-review`、`research-explainer-animation`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 19k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 4k）。`lead-multi-agent-project` 写 brief 时还会加载 `write-implementation-job-prompts`（约 4k），各阶段的 reference 文件在整个项目中合计再加约 7k。
 
-有些流程还会增加额外成本。每个 subagent 都会各自读取一份说明和材料，所以 `research-writing-style` 为篇幅较大的文档启动的独立 reviewer 会再加载一次这个 skill，`deep-code-review` 在实质性审查中可能会启动多个并行查找问题的 agent。`quantum-research-radar` 每次运行都会把最多五条检索路线的结果放进上下文。`research-explainer-animation` 还要在本地花计算时间合成语音和渲染视频。
+有些流程还会增加额外成本。每个 subagent 都会各自读取一份说明和材料，所以 `research-writing-style` 为篇幅较大的文档启动的独立 reviewer 会再加载一次这个 skill，`deep-code-review` 在实质性审查中可能会启动多个并行查找问题的 agent，`lead-multi-agent-project` 为每个 job 开一个 subagent、为每轮 review 开一个 session，并为每个主题开一个新的 advisor 线程。`quantum-research-radar` 每次运行都会把最多五条检索路线的结果放进上下文。`research-explainer-animation` 还要在本地花计算时间合成语音和渲染视频。
 
 如果只需要其中一部分，可以 clone 本仓库，让 agent 删除你不用的 skills，并按你的工作需要精简或拆分大的 skills，例如把很少用到的部分移到按需加载的 references 中。有些 skill 依赖其他 skill。写作 hook 指向 `research-writing-style` 和 `work-email`，多个代码类 skills 会加载 `ponytail` 并读取 `scientific-computing-correctness` 中的 reference 文件，`pre-submission-reviewer` 会读取 `benchmark-paper-template` 中的 checklist。除非同时修改用到它的地方，否则应保留这类 skill，删除某个 skill 后也请让 agent 检查 skill 之间的链接。然后按[安装](#安装)和[更新](#更新)中的说明从本地仓库安装。在 Codex 中也可以在 `/hooks` 里关闭写作 hook，见[停用或卸载](#停用或卸载)。
 
@@ -46,7 +46,7 @@ codex plugin add research-skills@research-skills
 python3 scripts/install-claude.py
 ```
 
-脚本在 `~/.local/share/research-skills/claude-marketplace/` 创建 local marketplace，并通过 Claude CLI 将 `research-skills@research-skills` 安装到 user scope。安装内容包括全部 30 个 skills、配套文件和写作 hook。如果 `PATH` 中的 `claude` 不存在、无法运行，或不是你正在使用的 Claude Code，可用 `--claude-bin /path/to/claude` 指定当前 executable。脚本会打印实际使用的 executable。Local marketplace 的加载方式见 [Claude Code marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces)。
+脚本在 `~/.local/share/research-skills/claude-marketplace/` 创建 local marketplace，并通过 Claude CLI 将 `research-skills@research-skills` 安装到 user scope。安装内容包括全部 31 个 skills、配套文件和写作 hook。如果 `PATH` 中的 `claude` 不存在、无法运行，或不是你正在使用的 Claude Code，可用 `--claude-bin /path/to/claude` 指定当前 executable。脚本会打印实际使用的 executable。Local marketplace 的加载方式见 [Claude Code marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces)。
 
 修改源文件后，重新运行该脚本并新建 Claude Code session。已在运行的 session 和 workflow 会继续使用旧副本，直到结束。在新 session 中可按名称调用 skill，例如 `/research-skills:scientific-library-review`。如果 Claude Code 中也装有独立的 Ponytail 插件，请卸载它，以免它的钩子和重复的 skills 与本插件同时运行。
 
@@ -64,7 +64,7 @@ python3 scripts/install-claude.py
 
 该 skill 默认的写作风格是正文不用分号、破折号或连接独立分句的冒号，除已成型的技术术语外也不用 `retain`、`honest` 及其变形。用户的明确要求或文字去向的格式规定（如期刊格式指南）优先于这些默认规则。交付前，该 skill 的最终检查会扫描新写的正文中有没有分号、破折号和这几个词，并列出每份交付物都要通过的其他检查，例如 prompt 泄漏、含义、术语、引用和变更记录。
 
-另有几个 skill 在完成工作后单独做一次简短的 review，包括代码方面的 `scientific-computing-correctness` 和 `ponytail`、notebook 方面的 `library-example-notebooks`、渲染后插图的 `figure-designer`、比较实验的 `stress-test-baselines`、文献综述的 `upgrade-research-inputs`、项目记录的 `maintain-project-memory`，以及短邮件的 `work-email`。每个 review 核对的是该 skill 生成阶段已经规定的条目，主要挑选生成时容易漏掉、又能在成品上核对的项目，例如每个新公式旁的推导、说某个量是精确的或不存在时所依据的语境，以及把尚未运行的比较标为计划。Review 只核对列出的条目，不重复先前的验证，除任务本身要求的检查外也不增加运行。这一设计的参考来源见 [15](#credit-15)。
+另有几个 skill 在完成工作后单独做一次简短的 review，包括代码方面的 `scientific-computing-correctness` 和 `ponytail`、notebook 方面的 `library-example-notebooks`、渲染后插图的 `figure-designer`、比较实验的 `stress-test-baselines`、文献综述的 `upgrade-research-inputs`、项目记录的 `maintain-project-memory`、多 agent 项目的 `lead-multi-agent-project`（计划、brief 和分诊），以及短邮件的 `work-email`。每个 review 核对的是该 skill 生成阶段已经规定的条目，主要挑选生成时容易漏掉、又能在成品上核对的项目，例如每个新公式旁的推导、说某个量是精确的或不存在时所依据的语境，以及把尚未运行的比较标为计划。Review 只核对列出的条目，不重复先前的验证，除任务本身要求的检查外也不增加运行。这一设计的参考来源见 [15](#credit-15)。
 
 skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，见[上下文成本](#上下文成本)。产出供其他人阅读的文档的 skill 还会加载 `research-writing-style`。
 
@@ -93,6 +93,7 @@ skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，
 | [library-example-notebooks](plugins/research-skills/skills/library-example-notebooks/SKILL.md) (~3k) | 编写或审阅科学软件库的示例 notebook 和教程，让读者在第一屏看到计算结果，以及如何换成自己的问题。 | [15](#credit-15) |
 | [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) (~4k) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | [12](#credit-12) |
 | [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) (~6k) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据。 | [4](#credit-4), [12](#credit-12) |
+| [lead-multi-agent-project](plugins/research-skills/skills/lead-multi-agent-project/SKILL.md) (~5k) | 以主脑身份带领多 agent 项目（例如科学软件发版），协调 advisor、worker、review 和参谋模型，从开始时的设置一直到发版。 | [15](#credit-15) |
 | [write-implementation-job-prompts](plugins/research-skills/skills/write-implementation-job-prompts/SKILL.md) (~4k) | 将需求或审查结果整理为清晰、可执行的开发任务提示词。 | [12](#credit-12) |
 | [ponytail](plugins/research-skills/skills/ponytail/SKILL.md) (~4k) | 在满足正确性和性能要求的前提下，选择简单的实现。 | [5](#credit-5), [12](#credit-12), [15](#credit-15) |
 | [ponytail-review](plugins/research-skills/skills/ponytail-review/SKILL.md) (<1k) | 审查代码变更，提出有依据的简化建议。 | [5](#credit-5) |
@@ -135,7 +136,7 @@ skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，
     - Anthropic。[Prompting Claude Opus 5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5) 中关于书面交付物长度以及任务范围与过度验证的部分，查阅于 2026-09-25。[Prompting Claude Opus 5.5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5) 说明这些做法对该模型仍是合理的起点。
     - OpenAI。[Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra.md) 中关于 initiative and follow-through 的部分，查阅于 2026-09-25。其中的示例 prompt 要求模型从指令和之前的对话推断用户的意图和任务范围。
 
-15. <a id="credit-15"></a>review 阶段的参考来源。`scientific-computing-correctness`、`ponytail`、`library-example-notebooks`、`figure-designer`、`stress-test-baselines`、`upgrade-research-inputs` 和 `maintain-project-memory` 中新增的 review 文字，以及 `research-writing-style` 最终检查中的清单，都由本项目编写。每处文字沿用所在文件的 license，`figure-designer` 中为 **CC BY-NC-SA 4.0**，其余为 **MIT**。不包含来源的文字。
+15. <a id="credit-15"></a>review 阶段的参考来源。`scientific-computing-correctness`、`ponytail`、`library-example-notebooks`、`figure-designer`、`stress-test-baselines`、`upgrade-research-inputs` 和 `maintain-project-memory` 中新增的 review 文字、`lead-multi-agent-project` 的检查清单，以及 `research-writing-style` 最终检查中的清单，都由本项目编写。每处文字沿用所在文件的 license，`figure-designer` 中为 **CC BY-NC-SA 4.0**，其余为 **MIT**。不包含来源的文字。
     - Anthropic。[Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) 中关于 workflows 与 feedback loops 的部分，查阅于 2026-09-26。草稿对照一份可核对的简短清单检查，修改到全部通过为止。
     - Anthropic。Claude Code 的 [Code Review](https://code.claude.com/docs/en/code-review) 文档，查阅于 2026-09-26。只用于 review 的规则写在 `REVIEW.md` 中，会直接交给每个查找和核实问题的 agent，因此比写在很长的 `CLAUDE.md` 里的同样规则更可靠地得到执行。`REVIEW.md` 过长则会冲淡最重要的规则。
     - Anthropic。[Prompting Claude Opus 5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5) 中关于任务范围与过度验证的部分，查阅于 2026-09-26。它建议删除要求增加验证步骤的明确指令，因为模型本身已经会验证自己的工作。这里的 review 只保留能在成品上核对的具体条目，也不增加运行。[anthropics/skills](https://github.com/anthropics/skills) 中 `pptx` skill 的 QA 部分对照列出的缺陷检查渲染结果，只复查改动过的部分。
@@ -206,4 +207,4 @@ codex plugin marketplace remove research-skills
 
 ## 个人偏好
 
-写作风格、`research-explainer-animation` 的默认视觉与配音风格，以及 `quantum-research-radar` 的几部分按我的研究习惯设置。radar 的这几部分是它的[研究偏好](plugins/research-skills/skills/quantum-research-radar/references/user-research-profile.md)、[来源与检索词表](plugins/research-skills/skills/quantum-research-radar/references/source-and-query-map.md)中按研究偏好定制的检索词（Lane B）、中文[输出模板](plugins/research-skills/skills/quantum-research-radar/references/output-template.md)，以及[定时运行提示](plugins/research-skills/skills/quantum-research-radar/prompts/weekday-schedule-prompt.md)中的时区。可以在请求中指定自己的偏好，也可以修改本地仓库后重新安装。radar 需要联网检索，或由你提供论文列表和论文，两者都没有时会停下，不会凭记忆写简报。
+写作风格、`research-explainer-animation` 的默认视觉与配音风格，以及 `quantum-research-radar` 的几部分按我的研究习惯设置。radar 的这几部分是它的[研究偏好](plugins/research-skills/skills/quantum-research-radar/references/user-research-profile.md)、[来源与检索词表](plugins/research-skills/skills/quantum-research-radar/references/source-and-query-map.md)中按研究偏好定制的检索词（Lane B）、中文[输出模板](plugins/research-skills/skills/quantum-research-radar/references/output-template.md)，以及[定时运行提示](plugins/research-skills/skills/quantum-research-radar/prompts/weekday-schedule-prompt.md)中的时区。除非用户或项目另有规定，`lead-multi-agent-project` 也按我的默认做法运行。它只通过桌面应用使用其他厂商的模型，采用自带的测试政策，advisor 线程压缩六次后换新线程。可以在请求中指定自己的偏好，也可以修改本地仓库后重新安装。radar 需要联网检索，或由你提供论文列表和论文，两者都没有时会停下，不会凭记忆写简报。

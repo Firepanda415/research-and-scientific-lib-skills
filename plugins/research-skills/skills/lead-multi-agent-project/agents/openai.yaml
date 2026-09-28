@@ -1,0 +1,4 @@
+interface:
+  display_name: "Lead Multi-Agent Project"
+  short_description: "Lead a project with advisor, worker and review models"
+  default_prompt: "Use $lead-multi-agent-project to lead this project as its principal, starting with the settings to confirm."
