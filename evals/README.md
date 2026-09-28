@@ -13,12 +13,13 @@ Each case directory holds one `case.yaml` in the format that `claude plugin eval
 | `scicode-` | review of a scientific library, general code review, and work on one computation |
 | `simplify-` | deletion and API retirement decisions, including a session-level Ponytail opt-out |
 | `handoff-` | resume state for a later session, project memory, a research log entry, and an implementer prompt |
+| `project-` | leading a multi-agent project, one implementer prompt, and monitoring a running job |
 
 To add a case, copy an existing `case.yaml` into a new directory named after the case. The dry run checks the fields, the grader rules above, and that each skill name exists in the Claude package, which carries all 31 skills.
 
 ## Cost and approval
 
-The package checks, `scripts/check-package.py` and the Node tests, do not run this suite. Each run of a case is a full Claude Code session on the maintainer's own credentials, and the cost of a complete suite has not been measured. The 18 cases at the default of three runs each start 54 sessions. Running the suite needs the maintainer's explicit approval, and a first run should be a one-case pilot. The `--max-cost-usd` ceiling is checked before each run starts, so a run already in progress can finish above it.
+The package checks, `scripts/check-package.py` and the Node tests, do not run this suite. Each run of a case is a full Claude Code session on the maintainer's own credentials, and the cost of a complete suite has not been measured. The 21 cases at the default of three runs each start 63 sessions. Running the suite needs the maintainer's explicit approval, and a first run should be a one-case pilot. The `--max-cost-usd` ceiling is checked before each run starts, so a run already in progress can finish above it.
 
 ## Dry run
 

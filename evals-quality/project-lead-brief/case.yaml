@@ -1,0 +1,81 @@
+schema_version: '1.1'
+name: project-lead-brief
+description: 'The principal writes the brief for job J3 after plan approval: derivation package, every
+  place of the claim, duration, deliverable stop, checks, review and report, and a suspected derivation
+  error goes to the advisor.'
+tags:
+- quality
+- lead-multi-agent-project
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Skill
+  - Write
+  prompt: '你是 qdemo 0.3 的主脑。计划已经批准，设置见 notes/SETTINGS.md。把 J3 的 brief 写到 work/jobs/J3.md，先不要派发。
+
+    '
+graders:
+- name: loads-lead-multi-agent-project
+  type: tool_used
+  tool: Skill
+  input_match: '"(?:research-skills:)?lead-multi-agent-project"'
+  min: 1
+- name: loads-write-implementation-job-prompts
+  type: tool_used
+  tool: Skill
+  input_match: '"(?:research-skills:)?write-implementation-job-prompts"'
+  min: 1
+- name: skips-research-writing-style
+  type: tool_used
+  tool: Skill
+  input_match: '"(?:research-skills:)?research-writing-style"'
+  min: 0
+  max: 0
+- name: brief-written
+  type: file_exists
+  path: work/jobs/J3.md
+  exists: true
+- name: brief-carries-d3-code
+  type: regex
+  target:
+    source: file
+    path: work/jobs/J3.md
+  pattern: 12 \* eps
+  match: contains
+- name: brief-math-and-places
+  type: llm
+  criteria: 'Context: the text below is a brief for a code worker implementing job J3, a new step bound
+    with a refusal that states the remedy. PASS if the brief carries the derivation package D-3 (premises,
+    cases, code and text to copy), tells the worker to copy it verbatim, derive nothing and send any missing
+    derivation to the principal as a request file, and lists every place that states the bound (the admit_steps
+    docstring and code, the guide''s Budget section, the refusal message) with the requirement to change
+    all of them. FAIL if any of these is missing.'
+  focus:
+    source: file
+    path: work/jobs/J3.md
+- name: brief-bounds-and-checks
+  type: llm
+  criteria: 'Context: the text below is a brief for a code worker. PASS if it gives an expected duration,
+    a stop condition that names a deliverable, the checks (the test files covering the changed module
+    and related mutation probes through the checked runner, and no full suite), a foreground review by
+    the code advisor''s model before hand-in, the branch or worktree with the base revision and owned
+    files, and a report format with a disposition and evidence per item. FAIL if two or more of these
+    are missing.'
+  focus:
+    source: file
+    path: work/jobs/J3.md
+- name: math-defect-to-advisor
+  type: llm
+  criteria: 'Context: the principal of a multi-agent project wrote a brief for job J3 from an approved
+    plan whose derivation package D-3 comes from a mathematics advisor. The workflow forbids the principal
+    from deriving mathematics: a suspected error in D-3, or any new mathematical statement such as a changed
+    rounding rule or remedy, goes to the mathematics advisor before dispatch. The text below is the principal''s
+    final reply. PASS if the reply either reports no problem with D-3, or routes any suspected D-3 problem
+    to the mathematics advisor (or holds the job) instead of prescribing its own mathematical fix to the
+    worker. FAIL if the principal writes its own mathematical correction of D-3 into the brief as settled.'

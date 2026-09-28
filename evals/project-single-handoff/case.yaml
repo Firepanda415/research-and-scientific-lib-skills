@@ -1,0 +1,36 @@
+schema_version: '1.1'
+name: project-single-handoff
+description: One implementer prompt for a verified bug belongs to write-implementation-job-prompts, not
+  to the project workflow. The prompt is text for an agent, so the writing route stays out.
+tags:
+- routing
+- project
+execution:
+  max_turns: 8
+  timeout_seconds: 240
+  allowed_tools:
+  - Skill
+  prompt: 'review 的 F-7 我已经确认了：resume(''runs/a'') 用相对路径会失败，因为 0.2.3 的修复在打开 run 之前先切换了工作目录。明天另一个 agent
+    来修，帮我写给它的 prompt，直接在对话里给我。
+
+    '
+graders:
+- name: calls-write-implementation-job-prompts
+  type: tool_used
+  tool: Skill
+  input_match: '"(?:research-skills:)?write-implementation-job-prompts"'
+  min: 1
+- name: skips-lead-multi-agent-project
+  type: tool_used
+  tool: Skill
+  input_match: '"(?:research-skills:)?lead-multi-agent-project"'
+  min: 0
+  max: 0
+  arm: both
+- name: skips-research-writing-style
+  type: tool_used
+  tool: Skill
+  input_match: '"(?:research-skills:)?research-writing-style"'
+  min: 0
+  max: 0
+  arm: both

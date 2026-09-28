@@ -1,0 +1,80 @@
+schema_version: '1.1'
+name: project-lead-triage
+description: 'Triage of nine review findings: three groups with impact sentences for every item, imprecision
+  is not a defect, mathematical clauses go to the advisor.'
+tags:
+- quality
+- lead-multi-agent-project
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 25
+  timeout_seconds: 900
+  allowed_tools:
+  - Read
+  - Glob
+  - Grep
+  - Skill
+  prompt: '第一轮 review 的结果在 review/FINDINGS.md，设置见 notes/SETTINGS.md。按流程分诊，把分诊结果给我看，先不要派发任何 job。
+
+    '
+graders:
+- name: loads-lead-multi-agent-project
+  type: tool_used
+  tool: Skill
+  input_match: '"(?:research-skills:)?lead-multi-agent-project"'
+  min: 1
+- name: skips-research-writing-style
+  type: tool_used
+  tool: Skill
+  input_match: '"(?:research-skills:)?research-writing-style"'
+  min: 0
+  max: 0
+- name: reads-triage-calibration
+  type: tool_used
+  tool: Read
+  input_match: triage-calibration\.md
+  min: 1
+  arm: with-only
+- name: groups-and-impact
+  type: llm
+  criteria: 'Context: the assistant triaged nine review findings F-1 to F-9 for the user. The text below
+    is its reply. PASS if the items appear in three groups (change code, change text, defer or not fix)
+    and every item, including those not fixed, has an impact sentence naming who meets it in ordinary
+    use and what goes wrong for them (for an item not fixed, that no ordinary user meets it or that nothing
+    goes wrong also counts). FAIL if the grouping is missing or several items lack an impact sentence.'
+- name: imprecision-not-fixed
+  type: llm
+  criteria: 'Context: F-2 is a bound that holds but is loose, F-3 is a binary64 precision limit at an
+    offset of 2**60, and F-4 is a division by zero in a private helper that no caller reaches. The text
+    below is a triage. PASS if none of F-2, F-3 and F-4 is scheduled for a code change such as a tighter
+    derivation, exact rational arithmetic or a guard, unless the triage names a contract that users rely
+    on; not fixing them, correcting a claim, or noting that planned job J3 replaces the bound all pass.
+    FAIL if any of them is scheduled for a code change without such a reason.'
+- name: important-kept
+  type: llm
+  criteria: 'Context: F-5 is a refusal that does not say what to change, F-6 is a guide example that raises
+    TypeError as printed, and F-7 is resume failing with a relative directory. The text below is a triage.
+    PASS if F-5, F-6 and F-7 are all fixed now, in code or text, or F-5 is assigned to planned job J3
+    whose refusal states the remedy. FAIL if any of them is deferred or dropped.'
+- name: math-clauses-to-advisor
+  type: llm
+  criteria: 'Context: F-5 proposes appending the remedy "reduce t or raise eps" to a refusal, and F-9
+    proposes the text "requires at least N steps, because the count stopped at the limit". A remedy direction
+    and a causal clause about a count are mathematical statements, which the workflow sends to the mathematics
+    advisor before dispatch, or takes from an existing advisor derivation such as D-3. The text below
+    is a triage. PASS if the triage does not dispatch the review''s wording for F-5 or for the causal
+    clause of F-9 as is, and instead routes them to the advisor or to D-3; adding only "at least" may
+    be treated as a change that cannot be wrong. FAIL if it plans to apply either wording directly.'
+- name: notebook-to-release
+  type: llm
+  criteria: 'Context: F-8 is a sentence in an example notebook. The workflow writes notebooks once, in
+    the release step. The text below is a triage. PASS if F-8 is deferred to the release step or to the
+    notebook work there. FAIL if it is scheduled as a job now.'
+- name: charge-checked
+  type: llm
+  criteria: 'Context: F-1 says a work charge used to admit plans omits a pass and proposes charging four
+    passes with a new test. The text below is a triage. PASS if the triage questions whether this admission
+    charge is a contract, for example by treating it as a nominal estimate and correcting the claim, or
+    by checking the review''s pass count against the code before any fix. FAIL if it adopts the proposed
+    change and test without that examination.'
