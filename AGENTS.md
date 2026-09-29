@@ -30,8 +30,9 @@ characters per token, rounded to the nearest thousand and shown as `<1k` below
 `quantum-computing-review`, `user-research-profile.md` for `quantum-research-radar`,
 `production-pipeline.md` and `house-style.md` for `research-explainer-animation`,
 and Ponytail's `SKILL.md` for `simplify-codebase`. Every other skill counts its
-`SKILL.md` only. The Context cost sections estimate the skill descriptions, the
-hook text and the referee handbook the same way. When a change alters a rounded
+`SKILL.md` only. The Context cost sections estimate the skill listing (one line
+per skill with its qualified name and description, as Claude Code lists them),
+the hook text and the referee handbook the same way. When a change alters a rounded
 figure or which references a skill reads by default, recompute every token figure
 in both READMEs, including the totals and the figures repeated in the Context cost
 bullets, and check which skills those bullets name.

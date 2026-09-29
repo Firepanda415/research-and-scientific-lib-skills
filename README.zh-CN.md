@@ -8,7 +8,7 @@
 
 ## 上下文成本
 
-安装插件后，每个会话在使用任何 skill 之前就占用约 5k tokens。其中约 3k 是 31 个 skills 的描述，两个宿主都会把它们留在上下文中用于选择 skill，见 [Claude Code](https://code.claude.com/docs/en/skills) 和 [Codex](https://learn.chatgpt.com/docs/build-skills) 的 skill 文档。约 2k 是写作 hook 的说明，每个 subagent 也会收到一份。skill 的完整说明只在使用时加载，之后一直留在对话中。[技能一览](#技能一览)表格中 skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，包括它的 `SKILL.md` 和默认读取的 reference 文件。只在部分任务中用到的 reference 文件会在此基础上增加。估算按每个 token 约 3.5 个英文字符计算，这是 Anthropic 在[术语表](https://platform.claude.com/docs/en/about-claude/glossary)中给出的 Claude 的数字。根据 2026 年 9 月 Codex 使用记录的测量，写作 skill 的文件比这个估算少用约 30% 的 tokens。
+安装插件后，每个会话在使用任何 skill 之前就占用约 5k tokens。其中约 3k 是 31 个 skills 的名称和描述，两个宿主都会把它们留在上下文中用于选择 skill，见 [Claude Code](https://code.claude.com/docs/en/skills) 和 [Codex](https://learn.chatgpt.com/docs/build-skills) 的 skill 文档。约 2k 是写作 hook 的说明，每个 subagent 也会收到一份。skill 的完整说明只在使用时加载，之后一直留在对话中。[技能一览](#技能一览)表格中 skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，包括它的 `SKILL.md` 和默认读取的 reference 文件。只在部分任务中用到的 reference 文件会在此基础上增加。估算按每个 token 约 3.5 个英文字符计算，这是 Anthropic 在[术语表](https://platform.claude.com/docs/en/about-claude/glossary)中给出的 Claude 的数字。根据 2026 年 9 月 Codex 使用记录的测量，写作 skill 的文件比这个估算少用约 30% 的 tokens。
 
 有几个 skill 的成本明显高于其他 skill：
 
