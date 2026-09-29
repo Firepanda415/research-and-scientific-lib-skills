@@ -1,53 +1,53 @@
 schema_version: "1.1"
 name: simplify-pr-test-review
 description: >-
-  A review of the tests added in one pull request to ordinary application code
-  is a code review, not a simplification sweep, even though it asks whether the
-  tests are worth keeping.
+  Acceptance review of one pull request to a scientific library, judged on
+  whether its new tests are independent evidence, is a library review, not a
+  simplification sweep, even though it asks whether the tests are worth keeping.
 tags: [routing, simplification]
 execution:
   max_turns: 8
   timeout_seconds: 240
   allowed_tools: [Skill]
   prompt: |
-    Before I merge this PR to our lab's upload service, review the two tests it adds. Do they actually catch a regression, and are they worth keeping? Do not change anything, just tell me.
+    Please review this PR to our Trotter simulation library before I merge it. It adds the step-count bound below and two tests for it. Are the tests independent evidence that the bound is right, and are they worth keeping? Do not change anything, just tell me what you find.
 
     ```python
-    from unittest import mock
-
-    from uploader import upload
-
-
-    def test_upload_posts_record():
-        with mock.patch("uploader.requests.post") as post:
-            post.return_value.status_code = 200
-            post.return_value.json.return_value = {"id": 7}
-            assert upload({"a": 1}, "http://x") == {"id": 7}
-            post.assert_called_once()
+    # trotter/steps.py
+    import math
 
 
-    def test_upload_retries_then_gives_up():
-        with mock.patch("uploader.requests.post", side_effect=ConnectionError):
-            with mock.patch("uploader.time.sleep"):
-                assert upload({"a": 1}, "http://x", retries=2) is None
+    def trotter_steps(norm_h, t, eps):
+        """Second-order Trotter steps for error at most eps: steps >= (norm_h * t) ** 1.5 / eps ** 0.5."""
+        return math.ceil((norm_h * t) ** 1.5 / eps ** 0.5)
+    ```
+
+    ```python
+    # tests/test_steps.py
+    import math
+
+    from trotter.steps import trotter_steps
+
+
+    def test_matches_formula():
+        norm_h, t, eps = 2.0, 3.0, 1e-4
+        assert trotter_steps(norm_h, t, eps) == math.ceil((norm_h * t) ** 1.5 / eps ** 0.5)
+
+
+    def test_hand_computed_case():
+        # norm_h * t = 4, so 4 ** 1.5 = 8; eps = 1e-2 gives 8 / 0.1 = 80
+        assert trotter_steps(2.0, 2.0, 1e-2) == 80
     ```
 graders:
-  - name: calls-deep-code-review
+  - name: calls-scientific-library-review
     type: tool_used
     tool: Skill
-    input_match: '"(?:research-skills:)?deep-code-review"'
+    input_match: '"(?:research-skills:)?scientific-library-review"'
     min: 1
   - name: skips-simplify-codebase
     type: tool_used
     tool: Skill
     input_match: '"(?:research-skills:)?simplify-codebase"'
-    min: 0
-    max: 0
-    arm: both
-  - name: skips-scientific-library-review
-    type: tool_used
-    tool: Skill
-    input_match: '"(?:research-skills:)?scientific-library-review"'
     min: 0
     max: 0
     arm: both

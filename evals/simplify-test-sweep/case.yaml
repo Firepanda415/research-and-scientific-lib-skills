@@ -3,7 +3,7 @@ name: simplify-test-sweep
 description: >-
   A read-only sweep of a library's test directory for low-value and duplicated
   tests and the test-only seams they keep alive belongs to the simplification
-  workflow with Ponytail, not to a code-review skill.
+  workflow, not to a code-review skill. Ponytail is left ungraded.
 tags: [routing, simplification]
 execution:
   max_turns: 8
@@ -16,11 +16,6 @@ graders:
     type: tool_used
     tool: Skill
     input_match: '"(?:research-skills:)?simplify-codebase"'
-    min: 1
-  - name: calls-ponytail
-    type: tool_used
-    tool: Skill
-    input_match: '"(?:research-skills:)?ponytail"'
     min: 1
   - name: skips-deep-code-review
     type: tool_used
