@@ -83,10 +83,10 @@ For every candidate:
      independent oracle and with cases that separate correct from plausibly
      wrong behavior, such as alternate accepted input representations and
      downstream consumers that transform the value. Include a
-     legal preservation case: a valid input that a proposed fix or restriction
+     legal preservation case: a valid input a proposed fix or restriction
      must still accept;
    - test or harness gaps: a passing baseline plus an injected relevant failure
-     or missing-evidence case that the claimed guard fails to catch. Report a
+     or missing-evidence case the claimed guard fails to catch. Report a
      test that cannot fail for a plausible defect in the behavior it claims to
      cover as a test gap, and give it no weight as evidence for that behavior.
      Examples are tautologies, tests whose expected values come from the code
@@ -141,7 +141,7 @@ coverage record, and report that it was not independent. Look for:
   inventories, such as before/after test-name sets or a
   documentation-insensitive syntax comparison, can bound this sweep;
 - new expensive calls, caps or changed defaults on the runtime path, including
-  valid work that a new or unchanged cap now rejects;
+  valid work a new or unchanged cap now rejects;
 - one fact represented differently across code, schema, report, documentation,
   example, generated artifact, or CI;
 - unchecked semantic equivalents or lifecycle distinctions hidden by defaults,
@@ -187,7 +187,7 @@ deferred, and unverified items distinct. For scientific issues, state the affect
 quantity, demonstrated error, and preserved paths. Resource severity follows the
 measured or bounded impact, not an automatic low-priority cleanup label. Report
 each executed check with its command, environment, revision, and pass, failure
-and skip counts, so that a reader can interpret or rerun it.
+and skip counts, so a reader can interpret or rerun it.
 
 Deliver all accepted findings in one review. A requested durable report contains
 the full findings, relevant prior-issue closure, coverage, checks, and material

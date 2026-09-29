@@ -102,7 +102,7 @@ existing comparison, report which items it lacks.
 - Every compared method, the proposed one included, has a stated tuning budget,
   search space and selected setting.
 - A configuration claimed across instances was chosen by a stated rule, or its
-  per-instance selection falls under one of the exceptions described above.
+  per-instance selection falls under one of the exceptions above.
 - The compared outputs answer the same task, such as values at common
   observation times when that is the task.
 - Compared methods ran in the same environment, or the report states how the

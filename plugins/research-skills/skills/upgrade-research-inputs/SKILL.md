@@ -26,7 +26,7 @@ Search by mechanism and mathematical structure as well as current terminology.
   search/access limits without turning them into a blanket disclaimer.
 - Verify changeable facts using current authoritative sources. Do not infer
   correctness from prestige or a mechanism from aggregate performance alone.
-- When a step depends on web retrieval that is unavailable and the user has not
+- When a step depends on unavailable web retrieval and the user has not
   supplied the sources it needs, say so and stop that step, because an answer
   from memory cannot meet this evidence standard.
 
@@ -40,7 +40,7 @@ For a broad review, organize evidence around the user's claims or decisions.
 Historical lineage, adjacent fields, resource assumptions, and contradictory
 results are useful lanes when relevant. Use independent agents only for separable
 work that improves coverage or judgment. Keep source inspection distinct from
-the act of assigning a perspective to an agent.
+assigning a perspective to an agent.
 
 Use Research-STORM-style iterative inquiry only when its multiple question lanes
 and evolving outline help the task; see [method-workflow.md](references/method-workflow.md).
@@ -58,7 +58,7 @@ Before delivering a synthesis, answer or comparison, check the draft against
 these items using the sources already inspected, in a pass separate from
 writing it, and fix what fails.
 
-- Each load-bearing claim cites a primary source that was inspected, with a
+- Each load-bearing claim cites an inspected primary source, with a
   location when the detail matters.
 - A detailed method, proof, resource or experiment claim that rests on an
   abstract alone is marked unverified.

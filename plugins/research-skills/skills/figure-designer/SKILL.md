@@ -11,7 +11,7 @@ Design, produce, or audit the figure the research argument needs. Motivated exam
 
 1. Identify what the reader should learn and which source, equation, or data supports it. Inspect supplied figures and relevant manuscript context directly. Distinguish a numerical result from a conceptual illustration.
 2. Choose an encoding and layout that make the comparison or relationship legible. Axis direction, normalization, units, uncertainty, selection, and aggregation must match the actual data. Do not position or highlight the proposed method according to a desired conclusion.
-3. Reuse the project's plotting tools and style. For a standalone plot, ordinary plotting-library settings are sufficient. Add shared utilities only when existing repeated use justifies them.
+3. Reuse the project's plotting tools and style. For a standalone plot, ordinary plotting-library settings suffice. Add shared utilities only when existing repeated use justifies them.
 4. When inputs permit, create the requested artifact and keep enough source to reproduce a data-driven plot. Render and inspect it at its intended size. If only a design can be produced, label that deliverable accurately.
 
 Load only relevant references:

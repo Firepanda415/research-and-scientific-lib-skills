@@ -12,7 +12,7 @@ can't quietly become permanent.
 ## Scan
 
 Search the repo for comment markers, skipping `.git`, `node_modules`, `build`,
-and `dist` directories. Use ripgrep when it is available:
+and `dist` directories. Use ripgrep when available:
 
 `rg -n --hidden --glob '!**/.git/**' --glob '!**/node_modules/**' --glob '!**/build/**' --glob '!**/dist/**' '(#|//) ?ponytail:' .`
 

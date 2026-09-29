@@ -15,7 +15,7 @@ complete a template. Durable project decisions and reusable lessons belong to
 ## Record the relevant evidence
 
 - Use the existing log's conventions when available. Otherwise choose a concise
-  entry that includes the actual observation or question, relevant setup/source,
+  entry with the actual observation or question, relevant setup/source,
   and interpretation where one is justified.
 - Preserve the result-sensitive parameters, code revision, command and
   environment that produced a result, source locations, and uncertainty, as far

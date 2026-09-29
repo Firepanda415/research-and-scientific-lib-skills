@@ -12,7 +12,7 @@ Make a short narrated video that explains one piece of research to a scientifica
 1. Read the whole source. For a paper, include the tables, figure captions, and appendices behind the numbers you will quote. For a repository without a paper, read its README, documentation, examples, and tests, and explain only behavior the code supports.
 2. Write a claim map before the script. Cover the problem, why it is hard, the key idea, what is new relative to cited prior work, how the method works block by block, the results with their conditions, and the stated limitations. Record the table, section, or file behind each number, and mark derived numbers, such as a percentage computed from two table entries, as derived.
 3. Plot real data. Look for the authors' data and code, including repositories named in the paper and the user's local copies. Before using a plotted quantity, trace it to its data and recompute any derived value or fit from that data. Compare the traced or recomputed values with the reported ones. Rerun an expensive simulation or experiment only with the user's approval. Label schematic inputs as illustrative.
-4. Find the destination project's existing animation pipeline and style module and reuse them, so a new video matches earlier ones. Without an existing pipeline, build one following the architecture in [production pipeline](references/production-pipeline.md), and treat its function names as suggestions. Take paths, environment and build commands, and the way videos attach to a page from the project's guidance when it has them. Use the environment the project declares. When it declares none, use installed tools that meet the pipeline's needs, record their paths and versions with the video's sources, and tell the user what still needs installing, including any first-use download of speech-synthesis weights.
+4. Find the destination project's existing animation pipeline and style module and reuse them, so a new video matches earlier ones. Without an existing pipeline, build one following the architecture in [production pipeline](references/production-pipeline.md), and treat its function names as suggestions. Take paths, environment and build commands, and how videos attach to a page from the project's guidance when it has them. Use the environment the project declares. When it declares none, use installed tools that meet the pipeline's needs, record their paths and versions with the video's sources, and tell the user what still needs installing, including any first-use download of speech-synthesis weights.
 
 ## Script the narration
 
@@ -33,7 +33,7 @@ Read [production pipeline](references/production-pipeline.md) for the synthesis,
 
 ## Check before delivery
 
-These checks are required. A narrated video can fail silently in ways that a successful render does not reveal.
+These checks are required. A narrated video can fail silently in ways a successful render does not reveal.
 
 - Inspect the whole render as contact sheets, for example one frame every four or five seconds, and inspect dense frames at full size. Look for clipped or overlapping text, labels drawn over axes, incomplete formulas such as missing fraction bars, and objects that separate from the data they represent during motion.
 - Confirm that every subtitle line has narration under it and that subtitle starts align with speech onsets.

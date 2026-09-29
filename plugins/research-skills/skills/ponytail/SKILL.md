@@ -83,16 +83,16 @@ Do not require an unrelated repository-wide audit for a local change.
 edit, grep every caller of the function you're about to touch. Fix the
 representation, operation or lifecycle rule at the first owner that violates
 the intended relation, then check every affected caller. Keep the correction
-at that owner instead of patching the same symptom separately in each caller.
+at that owner instead of patching the same symptom in each caller.
 
 ## Rules
 
-- No unrequested abstractions: avoid interfaces, factories, helpers, classifications, configuration, and compatibility paths without a current consumer or requirement. A display of entries that users define themselves, such as custom gate names, shows them as they are, because users know what their own entries mean.
+- No unrequested abstractions: avoid interfaces, factories, helpers, classifications, configuration, and compatibility paths without a current consumer or requirement. A display of entries users define themselves, such as custom gate names, shows them as they are, because users know what their own entries mean.
 - No boilerplate, no scaffolding "for later", later can scaffold for itself.
 - Deletion over addition. Boring over clever, clever is what someone decodes at 3am.
 - Delete completely. After a removal, code, comments, docs, and tests describe only what exists. Version control holds the history, and a changelog or migration note records it when users must act. A `removed` or `no longer` comment or a stub needs a stated reason the item must stay absent, such as a measured failure or an explicit user request. A test of its absence needs a product, security, or compatibility contract, such as a secret that must never reach logs, or an explicit user request.
 - Minimize the change after satisfying the actual scientific and engineering contract. Do not trade required behavior or performance for a smaller diff.
-- Complete the authorized task. Resolve routine choices from context, and ask only when a missing fact materially changes the result or authority. Follow-through that the change implies needs no separate approval within the authorized workload, such as refreshing generated metadata after a version bump, re-executing affected notebooks, updating stale tests or docs, and removing build outputs the change made stale.
+- Complete the authorized task. Resolve routine choices from context, and ask only when a missing fact materially changes the result or authority. Follow-through the change implies needs no separate approval within the authorized workload, such as refreshing generated metadata after a version bump, re-executing affected notebooks, updating stale tests or docs, and removing build outputs the change made stale.
 - Choose algorithms by their relevant failure modes and resource costs, not by line count.
 - Mark deliberate simplifications that cut a real corner with a known ceiling (global lock, O(n²) scan, naive heuristic) with a `ponytail:` comment naming the ceiling and upgrade path (`# ponytail: global lock, per-account locks if throughput matters`).
 
@@ -140,7 +140,7 @@ formula can need verification, and a large edit does not justify a test quota.
 Before coding, decide what each check asserts and take its expected result from
 a spec, derivation, reference, or known-good case, not from the new code. Each
 check should be able to fail when the behavior it covers is wrong. For a fix,
-show or reuse a failure on the old code that the defect causes. Check behavior
+show or reuse a failure the defect causes on the old code. Check behavior
 rather than the presence or absence of text unless that text is the contract.
 
 Judge each added or changed test by the current user obligation it protects. Ask
@@ -150,7 +150,7 @@ or a user-visible contract against an independently computed expected value,
 through the public workflow or at the kernel that owns the relation, act as a
 canary for a dependency's behavior, or are the one test for a recurring failure
 class. A test that only witnesses one past fix, pins one site's numbers, or
-reaches the code through a monkeypatched path that users cannot reach protects
+reaches the code through a monkeypatched path users cannot reach protects
 no current obligation. A test that needs a production seam no production caller
 needs, such as an export, flag, wrapper, or injection hook, is written at the
 real boundary instead, and the seam is not kept for it. A fix's failing-before
@@ -180,7 +180,7 @@ not establish large-scale accuracy or performance.
 
 Keep expensive validation out of repeated kernels unless correctness requires
 it there. Account for temporary copies, device transfers, retained states,
-and serialized output when affected. Keep sufficient evidence for the claim
+and serialized output when affected. Keep enough evidence for the claim
 and reproduction needs, without duplicating full states or executing work
 only to populate a report. Use existing measurements or a bounded check when
 performance is uncertain.

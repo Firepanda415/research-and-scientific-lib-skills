@@ -33,7 +33,7 @@ evidence; existing records do not require migration.
 
 - Inspect cheap, relevant health signals: scheduler status, recent bounded log
   tails, heartbeat age where one exists, expected artifact metadata, and exit
-  status. Parse result contents only when that check is needed to diagnose a
+  status. Parse result contents only when needed to diagnose a
   failure; do not reread large datasets on every poll.
 - Distinguish active work, expected delay, a stalled worker, failure, completion,
   and an intentional pause. A process ID alone does not prove progress, and no

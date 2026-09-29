@@ -13,7 +13,7 @@ Connect worker-local checks to that user-facing relation, base completion on int
 
 Discarding information does not by itself justify a stronger claim or greater certainty. Improvements from denoising, estimation, or aggregation need their own mathematical or empirical justification.
 
-No document establishes mathematical or numerical truth by assertion, and neither does a derivation supplied by another agent or model. Check the steps that later work depends on with a small independent numerical or symbolic calculation. When a plan, policy, framework, constants registry, review report, or earlier AI-authored summary could change the scientific decision, or when the project designates an implementation of record or frozen evidence, read [project records](references/project-records.md).
+No document establishes mathematical or numerical truth by assertion, nor does a derivation supplied by another agent or model. Check the steps that later work depends on with a small independent numerical or symbolic calculation. When a plan, policy, framework, constants registry, review report, or earlier AI-authored summary could change the scientific decision, or when the project designates an implementation of record or frozen evidence, read [project records](references/project-records.md).
 
 For implementation, optimization, refactoring, or proposed structural changes, load and apply [Ponytail](../ponytail/SKILL.md) unless it is off. Choose the simplest design that meets the scientific and resource contract established here. Pure verification without code-design decisions does not need it.
 
@@ -99,9 +99,9 @@ For paper-derived implementations, replications, proof-assistant formalizations,
   semantic owner. Trace every producer, transform, caller, sibling path, and
   consumer before changing a shared owner, including extension implementations
   written against a documented protocol. Targeted tests can miss those
-  implementations, so a change to an entry point that they all pass through
+  implementations, so a change to an entry point they all pass through
   runs the project's standard full test suite before integration.
-- Document each formula or numerical rule that the work adds or changes where
+- Document each formula or numerical rule the work adds or changes where
   the project keeps derivations, linked from the definition, and otherwise in
   the docstring or a comment above the definition, with the derivation steps a
   reader needs, its assumptions, its error bound when it has one, and its
@@ -118,7 +118,7 @@ For paper-derived implementations, replications, proof-assistant formalizations,
 
 When a change touches a public record or its fields, a relation between counts
 or populations, interacting options, a reuse key, cache or dependency
-qualification, or metadata that describes a build, read
+qualification, or metadata describing a build, read
 [cross-layer consistency](references/cross-layer-consistency.md).
 
 For dependency exceptions, numerical failures or proposed recovery, read [dependency recovery](references/dependency-recovery.md). Recover only by an applicable scientific method, and otherwise preserve and propagate the cause.
@@ -168,7 +168,7 @@ claims, and how to count extra work and phrase the request.
   role is explicitly justified and authorized. An agreement test does not
   authorize full reference recomputation or exact-decision equality in a hot
   loop. Fix the numerical owner and reuse existing results before proposing
-  additional work. Do not satisfy an accuracy failure merely by installing a
+  more work. Do not satisfy an accuracy failure merely by installing a
   veto and changing the test to expect termination.
 - Leave the smallest test set that protects a current scientific, resource,
   provenance, lifecycle, public-input, or serialization obligation. Temporary
@@ -179,11 +179,11 @@ claims, and how to count extra work and phrase the request.
   interpreter, dependency versions and import origin the project declares (or
   those actually used when none is declared).
 - A green build, regenerated notebook, mutation kill, or full test suite proves
-  only the invariants that its checks can falsify. Use an additional independent
+  only the invariants its checks can falsify. Use an additional independent
   pass when unresolved scientific risk warrants it, and do not rerun settled
   checks or large experiments without a new evidential need.
 
-When work is intended to close earlier scientific-review findings, read and
+When work aims to close earlier scientific-review findings, read and
 apply [remediation closure](references/remediation-closure.md) before editing.
 Ordinary scientific-computing tasks do not need it.
 

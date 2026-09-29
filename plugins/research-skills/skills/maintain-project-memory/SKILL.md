@@ -13,12 +13,12 @@ future work, rather than a transcript of activity.
 
 An owner is the authoritative record for a fact or decision. The project entry
 is the record a new session reads first, such as a per-project memory index
-that the host provides or the project's agent instruction file. When none
+the host provides or the project's agent instruction file. When none
 exists, use a location the user or the project's instructions name, and
 otherwise propose a location and its readers before creating the entry,
 because the location decides who sees it, for example every collaborator of a
 shared repository. Read the user's request, the existing project entry and
-the records relevant to the requested
+the records relevant to the
 update. Verify important current claims against live source, configuration,
 decisions or evidence. Follow replacement links when old paths have moved; a
 remembered filename is not a reason to recreate a retired file. When a record
@@ -53,12 +53,12 @@ Retain confirmed, nontrivial facts that could change a future decision:
 - A failure mechanism, the condition that exposed it, the prevention rule at
   its actual owner, and the domain where the lesson applies.
 - A decision's rationale, relevant rejected alternative, consequence and the
-  condition under which reconsideration would make sense.
+  condition for reconsidering it.
 - An accepted result's source/revision, workload or assumptions, evidence
   location and limits. Record a later unresolved finding alongside earlier
   acceptance when their scopes differ; neither erases the other.
 - Unresolved work and user-approved deferrals, with the remaining question and
-  the next action only when it is actually known and authorized.
+  the next action only when actually known and authorized.
 
 Prefer a short causal note and evidence link. Do not record routine typos,
 repeated principles, transient progress or an unverified hypothesis as a lesson.
@@ -94,7 +94,7 @@ Do not delete raw research evidence merely because a summary now exists.
 Archive or delete a report only after its intended reader has read it, unless
 the user decides otherwise.
 When a piece of work ends and its temporary folder is cleared, move the material
-that later decisions rest on into the place where the project keeps lasting
+later decisions rest on to where the project keeps lasting
 records, such as an archive, decision log or docs folder, linked from its index
 or entry. This material includes final reports, review findings with their
 dispositions, user decisions, the measured evidence behind a decision, and
@@ -141,7 +141,7 @@ new work, and unresolved obligations remain visible. Check that each user
 decision, approved rule and kept capability from the work reached its owner. A
 decision recorded only in a temporary report or the conversation is lost to
 later sessions, which may then propose the rejected option again. Before recording an
-artifact as protected or reusable, confirm that its location survives restarts
+artifact as protected or reusable, confirm its location survives restarts
 and routine cleanup. For a temporary location, record how to rebuild the
 artifact or that it cannot be rebuilt. Do not mark a finding resolved from a
 worker receipt or green suite alone. Resume state for continuing an in-progress

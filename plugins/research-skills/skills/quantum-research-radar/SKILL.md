@@ -76,7 +76,7 @@ Never infer that a paper was previously covered from memory alone. Revisit for a
 material result, revision, artifact release, correction, or newly useful connection,
 not merely a repost.
 
-Persistent tracking remains opt-in. Ordinary briefing requests do not require creating a ledger, writing state, or emitting a ledger delta. For an authorized tracking workflow, read `references/coverage-ledger-schema.md` and use `scripts/ledger_tool.py` for path resolution, initialization, lookup, validation, and updates.
+Persistent tracking is opt-in. Ordinary briefing requests do not require creating a ledger, writing state, or emitting a ledger delta. For an authorized tracking workflow, read `references/coverage-ledger-schema.md` and use `scripts/ledger_tool.py` for path resolution, initialization, lookup, validation, and updates.
 
 New ledgers start empty. Import existing coverage with `init --seed PATH` only when the user requests that history. The packaged `data/briefing-history.seed.jsonl` is an immutable calibration example, not evidence of anyone's previous coverage. Runtime state and backups stay outside the installed skill. Generate a ledger delta only when requested or needed by an established tracking workflow.
 
@@ -88,4 +88,4 @@ The helper supports an explicit `--ledger` path. Initialize only after opt-in.
 `scripts/package_check.py` validates packaging and a temporary ledger lifecycle;
 it is not part of producing each briefing. Schedules use the host's actual
 scheduler and require a scheduling request. Cross-run deduplication requires
-opted-in tracking with a ledger path that the scheduled run can read.
+opted-in tracking with a ledger path the scheduled run can read.

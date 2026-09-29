@@ -5,7 +5,7 @@ description: Lead a multi-agent engineering project, such as a scientific-softwa
 
 # Lead a multi-agent project
 
-The principal is the session the user opens to lead the work. It plans, writes the briefs, dispatches, integrates, keeps the ledger and reports to the user. This skill gives the order of the work and the judgment rules that agents missed in real releases. Examples marked "NWQLib 0.99" or "0.99.1" come from two releases of a scientific library in September 2026 and show what a rule prevents.
+The principal is the session the user opens to lead the work. It plans, writes the briefs, dispatches, integrates, keeps the ledger and reports to the user. This skill gives the order of the work and the judgment rules agents missed in real releases. Examples marked "NWQLib 0.99" or "0.99.1" come from two releases of a scientific library in September 2026 and show what a rule prevents.
 
 Read a step's reference when you first enter that step, and again after compaction, which can drop its text.
 
@@ -19,7 +19,7 @@ Roles follow the competencies the project demands. Each competency has an adviso
 - **Mathematics advisor.** Derives and audits the mathematics, designs and runs the studies that choose defaults, settles mathematical and scientific disagreements, and reviews each round's mathematics.
 - **Code worker.** Implements library code, tests and documentation, copying the derivations its brief carries.
 - **Mathematics worker.** Implements jobs whose correctness rests mainly on derivations, also copying them.
-- **Counselor.** Takes delegated user decisions together with the principal while the user is away, and checks the principal's review requests and merged triage before they go out. By default it runs on a model from a different vendor than the principal's, for a different perspective and rigor.
+- **Counselor.** Takes delegated user decisions with the principal while the user is away, and checks the principal's review requests and merged triage before they go out. By default it runs on a model from a different vendor than the principal's, for a different perspective and rigor.
 
 A job goes to the worker of the competency its correctness rests on, and a job that needs two is split by module.
 
@@ -28,14 +28,14 @@ A job goes to the worker of the competency its correctness rests on, and a job t
 At the start of every run, ask the user for these settings rather than reuse recorded ones, because models and their relative strengths change often:
 
 - the model and reasoning level of each advisor and worker the principal plans from the project's competencies (the principal is this session);
-- which advisors review each round: both by default, or one of them when the user judges two unnecessary, told what the other would have covered;
+- which advisors review each round: both by default, or one when the user judges two unnecessary, told what the other would have covered;
 - the counselor model;
 - the decisions the user keeps, and how to notify the user;
 - how each model of another vendor is reached: its desktop app, where the user can follow each agent's progress, or a command-line tool, which the user cannot watch. Without an answer, use the desktop app only.
 
 Then test at once whether this session can start its workers and reviewers as subagents and operate the other vendor's app. Where it cannot start them, ask the user to open them. If it cannot operate the app, tell the user before planning. Before the first request to another vendor's model, read [other-vendor-app.md](references/other-vendor-app.md). When that model runs through its desktop app, request full-screen control now and keep it to the end.
 
-Record the answers, the environment (the checked runner or declared environment, the worktree rules, the memory folder and the working directory) and every standing rule the user states during the run in the durable files that later sessions read, not only in the conversation.
+Record the answers, the environment (the checked runner or declared environment, the worktree rules, the memory folder and the working directory) and every standing rule the user states during the run in the durable files later sessions read, not only in the conversation.
 
 ## Order of the work
 
@@ -83,7 +83,7 @@ When a decision belongs to the user, the user did not keep it at step 0, and the
 - **Text for agents.** Check the facts of briefs, requests, fix lists and handoffs against their sources before sending them.
 - **Short-lived sessions.** Repeated compaction lowers a model's ability, so sessions and agents other than the principal are not used for long or for many tasks. A reviewer serves one round and the verification of its fixes. An advisor thread takes only continuations of its job, until it has been compacted six times; new work opens a new thread. The principal hands off where the user decides, preferably at a boundary of the job split.
 - **Handoff.** The handoff file names this skill in its first section and gives the state, the next steps and the open questions. The new principal loads the skill, reads the durable records from the start, checks the handoff's facts against the live checkout and the rule files, and records there any rule that lived only in the handoff, because a handoff written from a compacted context can be wrong.
-- **Rules another session rereads.** When a rule changes, change the file that session rereads as well as telling it.
+- **Rules another session rereads.** When a rule changes, change the file that session rereads and tell it.
 - **Clock.** Take every recorded time from the system clock, and record a decision when it is taken; estimated times ran ahead of the clock.
 - **Environment.** Run every interpreter, test, lint and documentation command through the project's checked runner (a wrapper that pins the interpreter and revision) or in its declared environment, and carry that command into every brief.
 - **Records.** Keep a ledger of jobs, advisor threads, integrations, leftovers and the measured duration of each job kind, with each of the principal's decisions and its reason; a decision record that separates the user's decisions from those of the two models; a disagreement record; the project's rule file; and its lessons. Each fact has one home file, named in the project's guidance, and other records point to it.
@@ -106,5 +106,5 @@ Check each artifact before it leaves the principal.
 - **Triage, before presenting:** every item, including those not fixed, has an impact sentence, each item not fixed or deferred has a reason, and the counselor has checked the triage.
 - **Fix list:** every deferred item names its owner, scope and who decided it.
 - **Expensive checks:** ran on the final code, or the record says why not.
-- **Rules:** a rule is recorded only at the user's request or as a stated standing rule, in its smallest form; a changed rule is in the file the other session rereads; standing rules the user stated in this run are in the durable files.
+- **Rules:** a rule is recorded only at the user's request or as a stated standing rule, in its smallest form; a changed rule is in the file the other session rereads; standing rules the user stated this run are in the durable files.
 - **Start of the run:** the step 0 settings were asked this run.

@@ -30,7 +30,7 @@ Determine submission type from the existing artifact and conversation. Preserve 
    - preprints, related manuscripts, prior submissions, or overlap;
    - suggested or excluded reviewers and the journal's rules for them.
    Do not infer these facts from an example letter. If confirmation is missing, omit an optional statement or leave a clearly marked `[AUTHOR CONFIRMATION REQUIRED: ...]` placeholder; never silently assert it.
-8. For LaTeX output, make the cover letter compile independently. Avoid manuscript-specific macros unless they are defined in the cover-letter file.
+8. For LaTeX output, make the cover letter compile independently. Avoid manuscript-specific macros unless the cover-letter file defines them.
 9. Prefer exact manuscript numbers over vague ranges when the manuscript provides them.
 
 ## Recommended Structure
@@ -50,7 +50,7 @@ Use this order for a standard journal submission unless the journal or a supplie
 ## Style Rules
 
 - Use direct academic prose; avoid marketing language such as "groundbreaking," "transformative," or "paradigm-shifting."
-- Keep claims aligned with the manuscript. Do not introduce novelty, performance, or scope claims that are not supported in the paper.
+- Keep claims aligned with the manuscript. Do not introduce novelty, performance, or scope claims the paper does not support.
 - Prefer precise nouns over generic phrases: "postselection success probability" is better than "robustness" if that is what the manuscript proves.
 - Keep the letter short, usually one page.
 - Follow `research-writing-style` for punctuation and vocabulary. Its default house style, which an explicit user instruction or the journal's own requirements override, excludes em dashes and semicolons from authored prose.
@@ -65,7 +65,7 @@ For a new letter or submission-readiness check, apply the metadata and declarati
 2. List every factual submission declaration and its confirmation source. Any unresolved declaration remains a visible placeholder and blocks a "ready to submit" verdict.
 3. Check for template leftovers inconsistent with the established submission type. Review-related terms such as `reviewer`, `response`, `revised`, and `resubmission` are legitimate when that type requires them; inspect stale `verbatim` or revision-color markup where relevant.
 4. Compile the standalone letter with the available TeX workflow and inspect the rendered PDF, or its extracted text when the host cannot display pages. Diagnose undefined commands or layout problems from that build, without a separate audit of every package command. Manuscript-only macros are a common source of undefined commands.
-5. Confirm that the final PDF has the intended complete letter and signature.
+5. Confirm the final PDF has the intended complete letter and signature.
 6. If local TeX tools are unavailable, say so and report source-level checks instead of claiming compilation.
 
 ## Common Fixes

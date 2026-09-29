@@ -16,7 +16,7 @@ description: "Explain physics-heavy mathematics (rotating frames and RWA, ladder
 
 Infer depth and prerequisites from the question and supplied context. Do not ask for inputs
 already clear or force the full study-note structure onto a narrow question. This skill
-remains specific to physics; ordinary nonphysics explanation needs no physics workflow.
+is specific to physics; ordinary nonphysics explanation needs no physics workflow.
 
 ## Core workflow
 

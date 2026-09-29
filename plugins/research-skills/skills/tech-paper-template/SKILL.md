@@ -20,7 +20,7 @@ use definitions, assumptions, results, and their implications as appropriate.
 The "New method or mechanism" and "New problem or setting" rows of
 [paper-types.md](references/paper-types.md) are useful narrative examples, not
 exhaustive paper types. A benchmark contribution can use
-`benchmark-paper-template` when its measurement-specific guidance is helpful.
+`benchmark-paper-template` when its measurement-specific guidance helps.
 
 Check the connections that bear the claim:
 
@@ -57,7 +57,7 @@ invalid argument matters more than an absent template cell. Do not label a
 format preference as a submission-blocking scientific problem.
 
 For Introduction drafting, use [introduction.md](references/introduction.md) with
-the available claims and evidence. Draft prose when that is the user's request,
+the available claims and evidence. Draft prose when the user requests it,
 rather than stopping at an outline. When
 drafting or revising manuscript prose, follow `research-writing-style`.
 

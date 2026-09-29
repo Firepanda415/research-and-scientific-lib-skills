@@ -5,7 +5,7 @@ description: "Audit or perform authorized codebase simplification to remove acci
 
 # Simplify Codebase
 
-Reduce the number of concepts and obligations a codebase must keep coherent. Line-count reduction is supporting evidence, not the objective. A successful run may conclude that the inspected surface is already justified.
+Reduce the number of concepts and obligations a codebase must keep coherent. Line-count reduction is supporting evidence, not the objective. A successful run may conclude the inspected surface is already justified.
 
 For both surveys and authorized changes, load and apply [Ponytail](../ponytail/SKILL.md) unless the user has turned it off. Use its ladder to judge maintenance value and feature retirement within this investigation. Keep the review read-only when requested, and do not start a separate Ponytail audit. A relevant scientific review still owns correctness and evidence requirements.
 

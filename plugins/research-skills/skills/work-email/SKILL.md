@@ -11,7 +11,7 @@ Handle short everyday correspondence, such as an email or chat message to collea
 
 - For a grammar or wording request, make the smallest change that fixes each error or unclear phrase. Keep the author's voice, register, structure and length, and rewrite more only when the user asks.
 - For a draft from the user's points, write only what the points support, in the register the recipient calls for, and make the request or next step easy to find.
-- Keep every fact, number, date, name, commitment, request and hedge exactly. Add no claims, praise, apologies, pleasantries or promises that the user did not make.
+- Keep every fact, number, date, name, commitment, request and hedge exactly. Add no claims, praise, apologies, pleasantries or promises the user did not make.
 - Edit only the user's own text, and leave quoted or forwarded messages unchanged.
 - Write in the email's language, and explain anything to the user in the conversation's language, outside the email.
 - In sentences you compose or restructure, follow the collection's punctuation defaults, which exclude semicolons, em dashes and colons that join clauses, unless the user or the destination sets another style. Leave the author's correct punctuation as it is.

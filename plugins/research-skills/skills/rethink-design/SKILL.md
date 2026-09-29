@@ -10,7 +10,7 @@ Help the user decide whether a different problem formulation would make the work
 
 ## Locate the limiting choice
 
-Inspect enough of the supplied proposal, result, or implementation to identify which choice limits progress. The limitation might concern the question being asked, the quantity being measured, the available information, or the division of responsibility. Distinguish an observed limitation from an assumption about what might happen.
+Inspect enough of the supplied proposal, result, or implementation to identify which choice limits progress. The limitation might concern the question asked, the quantity measured, the available information, or the division of responsibility. Distinguish an observed limitation from an assumption about what might happen.
 
 Ask what changes if that choice is replaced. Develop a concrete alternative whose benefit can be explained through a mechanism. A larger architecture, stronger adjective, or longer feature list does not establish a better direction.
 
