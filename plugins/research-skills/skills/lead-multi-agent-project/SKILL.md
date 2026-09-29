@@ -33,7 +33,7 @@ At the start of every run, ask the user for these settings rather than reuse rec
 - the decisions the user keeps, and how to notify the user;
 - how each model of another vendor is reached: its desktop app, where the user can follow each agent's progress, or a command-line tool, which the user cannot watch. Without an answer, use the desktop app only.
 
-Then test at once whether this session can start its workers and reviewers as subagents and whether it can operate the other vendor's app. Where it cannot start them, ask the user to open them. If it cannot operate the app, tell the user before planning. Before the first request to another vendor's model, read [other-vendor-app.md](references/other-vendor-app.md). When that model runs through its desktop app, request full-screen control now and keep it to the end.
+Then test at once whether this session can start its workers and reviewers as subagents and operate the other vendor's app. Where it cannot start them, ask the user to open them. If it cannot operate the app, tell the user before planning. Before the first request to another vendor's model, read [other-vendor-app.md](references/other-vendor-app.md). When that model runs through its desktop app, request full-screen control now and keep it to the end.
 
 Record the answers, the environment (the checked runner or declared environment, the worktree rules, the memory folder and the working directory) and every standing rule the user states during the run in the durable files that later sessions read, not only in the conversation.
 
@@ -104,7 +104,7 @@ Check each artifact before it leaves the principal.
 - **Review request:** it is neutral (revision, scope, decisions, environment, output) without working files, names a fixed ref of its own, and the counselor has checked it.
 - **Integration:** the checks match its grade.
 - **Triage, before presenting:** every item, including those not fixed, has an impact sentence, each item not fixed or deferred has a reason, and the counselor has checked the triage.
-- **Fix list:** every deferred item names its owner and scope.
+- **Fix list:** every deferred item names its owner, scope and who decided it.
 - **Expensive checks:** ran on the final code, or the record says why not.
 - **Rules:** a rule is recorded only at the user's request or as a stated standing rule, in its smallest form; a changed rule is in the file the other session rereads; standing rules the user stated in this run are in the durable files.
 - **Start of the run:** the step 0 settings were asked this run.

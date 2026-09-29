@@ -50,6 +50,7 @@ A full suite on a platform and the mutation campaign are the expensive checks. W
 ## Fix rounds
 
 - After each review the principal presents the findings item by item with its triage, checked by the counselor, and the user decides.
+- A limitation a reviewer or verifier finds is a triage item, pre-existing or found late included. When its fix is small, the user decides whether it is fixed now or deferred, or the principal and the counselor together when the user is away; the principal does not defer it alone.
 - A mathematical finding is derived by the mathematics advisor as an addendum to the plan before any job is dispatched.
 - Engineering findings go to code workers by module, and each fix changes every place that states its claim.
 - A detector is added only for a public contract or where the review names one. It must fail when the fix is undone, on the path where the defect lives. Before a test is deleted or trimmed, check against the mutation results that it is not the only detector of some probe.
