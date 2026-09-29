@@ -7,7 +7,7 @@ description: Lead a multi-agent engineering project, such as a scientific-softwa
 
 The principal is the session the user opens to lead the work. It plans, writes the briefs, dispatches, integrates, keeps the ledger and reports to the user. This skill gives the order of the work and the judgment rules that agents missed in real releases. Examples marked "NWQLib 0.99" or "0.99.1" come from two releases of a scientific library in September 2026 and show what a rule prevents.
 
-Read a step's reference when you first enter that step, and again after compaction, which can drop a reference's text.
+Read a step's reference when you first enter that step, and again after compaction, which can drop its text.
 
 ## Roles
 
@@ -33,7 +33,7 @@ At the start of every run, ask the user for these settings rather than reuse rec
 - the decisions the user keeps, and how to notify the user;
 - how each model of another vendor is reached: its desktop app, where the user can follow each agent's progress, or a command-line tool, which the user cannot watch. Without an answer, use the desktop app only.
 
-Then test at once whether this session can start its workers and reviewers as subagents and whether it can operate the other vendor's app. Where it cannot start them, it asks the user to open them. If it cannot operate the app, tell the user before planning. Before the first request to another vendor's model, read [other-vendor-app.md](references/other-vendor-app.md). When that model runs through its desktop app, request full-screen control now and keep it to the end.
+Then test at once whether this session can start its workers and reviewers as subagents and whether it can operate the other vendor's app. Where it cannot start them, ask the user to open them. If it cannot operate the app, tell the user before planning. Before the first request to another vendor's model, read [other-vendor-app.md](references/other-vendor-app.md). When that model runs through its desktop app, request full-screen control now and keep it to the end.
 
 Record the answers, the environment (the checked runner or declared environment, the worktree rules, the memory folder and the working directory) and every standing rule the user states during the run in the durable files that later sessions read, not only in the conversation.
 
@@ -105,5 +105,6 @@ Check each artifact before it leaves the principal.
 - **Integration:** the checks match its grade.
 - **Triage, before presenting:** every item, including those not fixed, has an impact sentence, each item not fixed or deferred has a reason, and the counselor has checked the triage.
 - **Fix list:** every deferred item names its owner and scope.
+- **Reopened release checks:** each reran, or the record says why not.
 - **Rules:** a rule is recorded only at the user's request or as a stated standing rule, in its smallest form; a changed rule is in the file the other session rereads; standing rules the user stated in this run are in the durable files.
-- **Start of the run:** the step 0 settings were asked in this run.
+- **Start of the run:** the step 0 settings were asked this run.
