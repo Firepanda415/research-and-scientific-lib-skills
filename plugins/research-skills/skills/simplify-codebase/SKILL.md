@@ -1,6 +1,6 @@
 ---
 name: simplify-codebase
-description: "Audit or perform authorized codebase simplification to remove accidental complexity, dead code, duplication and obsolete layers while preserving contracts. Use for codebase simplification audits or cleanups, such as 代码简化, 代码瘦身 or 熵回收 requests. Exclude general review and performance tuning."
+description: "Audit or perform authorized codebase simplification to remove accidental complexity, dead code, duplication and obsolete layers while preserving contracts, including sweeps of low-value, duplicated or implementation-coupled tests and the test-only production seams they keep alive. Use for codebase simplification audits or cleanups, such as 代码简化, 代码瘦身, 熵回收, 测试清理 or 测试审计 requests. Exclude general review and performance tuning."
 ---
 
 # Simplify Codebase
@@ -41,6 +41,8 @@ For every Broad engagement, and for Focused work involving dynamic architecture 
 For concurrency, cancellation, readiness, cleanup, defensive copies, validation, authorization, security isolation, accessibility, data-loss prevention, or cross-process data, also read [boundaries-and-lifecycle.md](references/boundaries-and-lifecycle.md).
 
 For scientific or research software, numerical libraries, benchmark repositories, or any simplification that removes tests, probes, reports, examples, documentation, or gates used to support scientific claims, read [research-software-evidence.md](references/research-software-evidence.md). Audit conservation of independent evidence separately from conservation of behavior.
+
+When the cut targets tests, fixtures, test support, or production code whose only callers are tests, from one test file to a whole subsystem's test surface, read [test-surface.md](references/test-surface.md). It gives the candidate patterns, the keeper per contract, the evidence for each test or seam, and the order of a campaign. The scientific-evidence reference above still owns the audit of deleted evidence for scientific claims.
 
 For scientific dependency guards, error wrappers, or recovery candidates, also use the [dependency-failure policy](../scientific-computing-correctness/references/dependency-recovery.md#dependency-failures-and-recovery) to distinguish useful numerical recovery, informative errors, and cheap rejection of silently wrong inputs.
 

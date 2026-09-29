@@ -90,9 +90,11 @@ For every candidate:
      test that cannot fail for a plausible defect in the behavior it claims to
      cover as a test gap, and give it no weight as evidence for that behavior.
      Examples are tautologies, tests whose expected values come from the code
-     path under test, and checks that a string, symbol, file or key exists, or
-     that a removed one stays absent, when that text or artifact is not itself
-     the contract. A labeled
+     path under test, mocks or fixtures that implement the behavior being
+     asserted, negative controls that pass for an unrelated reason, such as a
+     rejection from a different guard or one the production path never reaches,
+     and checks that a string, symbol, file or key exists, or that a removed one
+     stays absent, when that text or artifact is not itself the contract. A labeled
      characterization test with expected values recorded from the pre-change
      code is not such a gap;
    - resource cost: actual call/lifetime/size counts or a justified operation

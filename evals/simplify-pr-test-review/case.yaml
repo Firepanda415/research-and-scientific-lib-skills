@@ -1,0 +1,53 @@
+schema_version: "1.1"
+name: simplify-pr-test-review
+description: >-
+  A review of the tests added in one pull request to ordinary application code
+  is a code review, not a simplification sweep, even though it asks whether the
+  tests are worth keeping.
+tags: [routing, simplification]
+execution:
+  max_turns: 8
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    Before I merge this PR to our lab's upload service, review the two tests it adds. Do they actually catch a regression, and are they worth keeping? Do not change anything, just tell me.
+
+    ```python
+    from unittest import mock
+
+    from uploader import upload
+
+
+    def test_upload_posts_record():
+        with mock.patch("uploader.requests.post") as post:
+            post.return_value.status_code = 200
+            post.return_value.json.return_value = {"id": 7}
+            assert upload({"a": 1}, "http://x") == {"id": 7}
+            post.assert_called_once()
+
+
+    def test_upload_retries_then_gives_up():
+        with mock.patch("uploader.requests.post", side_effect=ConnectionError):
+            with mock.patch("uploader.time.sleep"):
+                assert upload({"a": 1}, "http://x", retries=2) is None
+    ```
+graders:
+  - name: calls-deep-code-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?deep-code-review"'
+    min: 1
+  - name: skips-simplify-codebase
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?simplify-codebase"'
+    min: 0
+    max: 0
+    arm: both
+  - name: skips-scientific-library-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?scientific-library-review"'
+    min: 0
+    max: 0
+    arm: both

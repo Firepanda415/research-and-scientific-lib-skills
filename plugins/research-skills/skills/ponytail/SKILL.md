@@ -151,21 +151,24 @@ through the public workflow or at the kernel that owns the relation, act as a
 canary for a dependency's behavior, or are the one test for a recurring failure
 class. A test that only witnesses one past fix, pins one site's numbers, or
 reaches the code through a monkeypatched path that users cannot reach protects
-no current obligation. A fix's failing-before check stays in the suite only when
-it also protects such an obligation. Otherwise its before-and-after evidence
-goes in the report or scratch files. Prefer extending or replacing an existing
-check when it can cover the same failure. A temporary reproducer need not become
-a permanent test, and a release or coverage target alone does not justify one. A
-test whose only claim is that a removed API, option, file or name stays absent
-protects no current obligation unless that absence is itself a product,
-security, or compatibility contract, or the user asks for the test. Search for
-leftovers once, while removing the item. A kernel test and a public-workflow
-test can both be needed when they detect different failures. Pin private helper
-calls or implementation structure only when that restriction protects scientific
-meaning, resource use, lifecycle behavior or a compatibility contract. If a
-valid refactor breaks only that arrangement, reconsider the test. Recommend
-consolidation or removal only after identifying what evidence would be lost and
-how the remaining checks cover the obligation.
+no current obligation. A test that needs a production seam no production caller
+needs, such as an export, flag, wrapper, or injection hook, is written at the
+real boundary instead, and the seam is not kept for it. A fix's failing-before
+check stays in the suite only when it also protects such an obligation.
+Otherwise its before-and-after evidence goes in the report or scratch files.
+Prefer extending or replacing an existing check when it can cover the same
+failure. A temporary reproducer need not become a permanent test, and a release
+or coverage target alone does not justify one. A test whose only claim is that a
+removed API, option, file or name stays absent protects no current obligation
+unless that absence is itself a product, security, or compatibility contract, or
+the user asks for the test. Search for leftovers once, while removing the item.
+A kernel test and a public-workflow test can both be needed when they detect
+different failures. Pin private helper calls or implementation structure only
+when that restriction protects scientific meaning, resource use, lifecycle
+behavior or a compatibility contract. If a valid refactor breaks only that
+arrangement, reconsider the test. Recommend consolidation or removal only after
+identifying what evidence would be lost and how the remaining checks cover the
+obligation.
 
 ### Scientific and resource constraints
 

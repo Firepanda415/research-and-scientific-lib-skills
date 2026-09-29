@@ -11,7 +11,7 @@ Each case directory holds one `case.yaml` in the format that `claude plugin eval
 | `direction-` | choosing a new research direction and reconsidering an existing one |
 | `writing-` | a brief for another agent and instructions that other people read |
 | `scicode-` | review of a scientific library, general code review, and work on one computation |
-| `simplify-` | deletion and API retirement decisions, including a session-level Ponytail opt-out |
+| `simplify-` | deletion and API retirement decisions, a sweep of a test directory, a review of one pull request's tests, and a session-level Ponytail opt-out |
 | `handoff-` | resume state for a later session, project memory, a research log entry, and an implementer prompt |
 | `project-` | leading a multi-agent project, one implementer prompt, and monitoring a running job |
 
@@ -19,7 +19,7 @@ To add a case, copy an existing `case.yaml` into a new directory named after the
 
 ## Cost and approval
 
-The package checks, `scripts/check-package.py` and the Node tests, do not run this suite. Each run of a case is a full Claude Code session on the maintainer's own credentials, and the cost of a complete suite has not been measured. The 21 cases at the default of three runs each start 63 sessions. Running the suite needs the maintainer's explicit approval, and a first run should be a one-case pilot. The `--max-cost-usd` ceiling is checked before each run starts, so a run already in progress can finish above it.
+The package checks, `scripts/check-package.py` and the Node tests, do not run this suite. Each run of a case is a full Claude Code session on the maintainer's own credentials, and the cost of a complete suite has not been measured. The 23 cases at the default of three runs each start 69 sessions. Running the suite needs the maintainer's explicit approval, and a first run should be a one-case pilot. The `--max-cost-usd` ceiling is checked before each run starts, so a run already in progress can finish above it.
 
 ## Dry run
 
@@ -48,7 +48,7 @@ The aggregate result, the JSON run record and the HTML report go to `--results-d
 
 Skill graders do not observe file reads. The writing hook names a `SKILL.md` path, and companion instructions link to one, so a compliant agent may use Read instead of Skill. Before treating a grader result as a routing outcome, inspect the trace for relevant file reads as well as Skill calls.
 
-`simplify-retirement-proposal` requires both `simplify-codebase` and `ponytail`, even though the prompt names neither skill and authorizes only a review. `scicode-library-remediation` requires `scientific-library-review` and `ponytail` for a repair decision. `simplify-ponytail-off` requires the simplification workflow while forbidding Ponytail, and `writing-contributing-guide` forbids Ponytail for prose about coding. The other `scicode-` cases leave Ponytail calls ungraded. These cases test selection boundaries, not the quality of a simplification or repair.
+`simplify-retirement-proposal` and `simplify-test-sweep` require both `simplify-codebase` and `ponytail`, even though their prompts name neither skill and authorize no edits. `scicode-library-remediation` requires `scientific-library-review` and `ponytail` for a repair decision. `simplify-ponytail-off` requires the simplification workflow while forbidding Ponytail, and `writing-contributing-guide` forbids Ponytail for prose about coding. The other `scicode-` cases leave Ponytail calls ungraded. These cases test selection boundaries, not the quality of a simplification or repair.
 
 The graders count Skill calls without checking their order or whether the agent followed the loaded guidance. When a run loads Ponytail alongside another workflow, inspect its trace to check that the owning workflow was loaded first. For the retirement case, check whether the response separates evidence that an interface is callable from evidence that it is worth maintaining. For the remediation case, check whether it compares fixes at the shared contract with adapters at individual callers while preserving scientific meaning.
 

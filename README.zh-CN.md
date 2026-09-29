@@ -54,7 +54,7 @@ python3 scripts/install-claude.py
 
 ## 技能一览
 
-可以在 Codex 或 Claude Code 中选择指定 skill，也可以让 agent 根据任务自动选择。Ponytail 适用于 implementation、debugging、refactoring，以及代码、API 和 tests 的只读简化与退役判断。`simplify-codebase` 在 survey 和实际修改中加载它。Code review、scientific computing 和 implementation handoff skills 在涉及各自说明的设计取舍时也会加载它。相关 correctness 或 review skill 主导，Ponytail 在其要求范围内工作，不另开一次 audit。普通代码事实解释和仅涉及 prose 的任务不触发它。
+可以在 Codex 或 Claude Code 中选择指定 skill，也可以让 agent 根据任务自动选择。Ponytail 适用于 implementation、debugging、refactoring，以及代码、API 和 tests 的只读简化与退役判断。`simplify-codebase` 在 survey 和实际修改中加载它，包括清理测试目录里的低价值测试和只为测试存在的生产代码。Code review、scientific computing 和 implementation handoff skills 在涉及各自说明的设计取舍时也会加载它。相关 correctness 或 review skill 主导，Ponytail 在其要求范围内工作，不另开一次 audit。普通代码事实解释和仅涉及 prose 的任务不触发它。
 
 可以在对话中指定级别（`lite`、`full` 或 `ultra`），例如在 Codex 中输入 `$ponytail lite`，或在 Claude Code 中输入 `/research-skills:ponytail lite`，该级别持续到你指定其他级别或关闭 Ponytail 为止。未指定级别时使用 `full`。说 `stop ponytail` 或 `normal mode`，或使用 `$ponytail off`，可关闭 Ponytail，直到你在本次对话中再次要求使用。再次开启时使用 `full`，除非你指定其他级别。其他 skills 也遵守这一 off 状态。`ponytail-help` 列出两个 host 上的调用方式。
 
@@ -91,11 +91,11 @@ skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，
 | [scientific-computing-correctness](plugins/research-skills/skills/scientific-computing-correctness/SKILL.md) (~5k) | 实现、调试、优化和独立验证科学计算，关注计算精度与资源开销。 | [15](#credit-15) |
 | [scientific-library-review](plugins/research-skills/skills/scientific-library-review/SKILL.md) (~5k) | 审查科学软件库的数学含义、使用流程、执行行为与资源开销。 | [7](#credit-7) |
 | [library-example-notebooks](plugins/research-skills/skills/library-example-notebooks/SKILL.md) (~3k) | 编写或审阅科学软件库的示例 notebook 和教程，让读者在第一屏看到计算结果，以及如何换成自己的问题。 | [15](#credit-15) |
-| [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) (~4k) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | [12](#credit-12) |
-| [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) (~6k) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据。 | [4](#credit-4), [12](#credit-12) |
+| [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) (~4k) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | [12](#credit-12), [16](#credit-16) |
+| [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) (~6k) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据，也清理低价值测试和只为测试存在的生产代码。 | [4](#credit-4), [12](#credit-12), [16](#credit-16) |
 | [lead-multi-agent-project](plugins/research-skills/skills/lead-multi-agent-project/SKILL.md) (~5k) | 以主脑身份带领多 agent 项目（例如科学软件发版），协调 advisor、worker、review 和参谋模型，从开始时的设置一直到发版。 | [15](#credit-15) |
 | [write-implementation-job-prompts](plugins/research-skills/skills/write-implementation-job-prompts/SKILL.md) (~4k) | 将需求或审查结果整理为清晰、可执行的开发任务提示词。 | [12](#credit-12) |
-| [ponytail](plugins/research-skills/skills/ponytail/SKILL.md) (~4k) | 在满足正确性和性能要求的前提下，选择简单的实现。 | [5](#credit-5), [12](#credit-12), [15](#credit-15) |
+| [ponytail](plugins/research-skills/skills/ponytail/SKILL.md) (~4k) | 在满足正确性和性能要求的前提下，选择简单的实现。 | [5](#credit-5), [12](#credit-12), [15](#credit-15), [16](#credit-16) |
 | [ponytail-review](plugins/research-skills/skills/ponytail-review/SKILL.md) (<1k) | 审查代码变更，提出有依据的简化建议。 | [5](#credit-5) |
 | [ponytail-audit](plugins/research-skills/skills/ponytail-audit/SKILL.md) (<1k) | 以精简的只读审查报告列出整个仓库中可以删除或简化的代码。 | [5](#credit-5) |
 | [ponytail-debt](plugins/research-skills/skills/ponytail-debt/SKILL.md) (<1k) | 汇总代码中标记的简化取舍，以及需要重新处理这些取舍的条件。 | [5](#credit-5) |
@@ -142,6 +142,7 @@ skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，
     - Anthropic。[Prompting Claude Opus 5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5) 中关于任务范围与过度验证的部分，查阅于 2026-09-26。它建议删除要求增加验证步骤的明确指令，因为模型本身已经会验证自己的工作。这里的 review 只保留能在成品上核对的具体条目，也不增加运行。[anthropics/skills](https://github.com/anthropics/skills) 中 `pptx` skill 的 QA 部分对照列出的缺陷检查渲染结果，只复查改动过的部分。
     - OpenAI。[Custom code review rules for Codex](https://developers.openai.com/blog/custom-code-review-rules-for-codex)，查阅于 2026-09-26。文章建议先写两三条后果重大并说明安全做法的规则，机械性检查交给 CI。在其评测中，按规则 review 找回了 98% 应找出的自定义问题，基线对照为 58.3%。
     - OpenAI。[openai/skills](https://github.com/openai/skills) 中的 `playwright-interactive` skill 的 QA 清单涵盖最终回复将提出的说法。[Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra.md) 中关于 testing and verification 的部分按改动规模确定检查范围。两者均查阅于 2026-09-26。
+16. <a id="credit-16"></a>OpenClaw Foundation。OpenClaw 中的 [test-audit skill](https://github.com/openclaw/openclaw/tree/main/.agents/skills/test-audit)（2026）。**MIT**。改编为 `simplify-codebase` 的 test-surface reference，`ponytail` 中关于只为测试存在的生产代码的一句和 `deep-code-review` 中两个无法失败的测试的例子也来自它。
 
 各部分的条款见 [LICENSE.md](LICENSE.md)，来源与修改说明见 [NOTICE.md](plugins/research-skills/NOTICE.md)。
 

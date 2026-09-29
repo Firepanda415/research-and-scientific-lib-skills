@@ -1,0 +1,56 @@
+schema_version: "1.1"
+name: simplify-test-sweep
+description: >-
+  Read-only sweep of a small library's whole test directory with planted low-value tests, a negative control that passes for an unrelated reason, a regression replayed at two layers, a production seam whose only callers are tests, and a baseline failure that is a product bug, testing the test-surface reference of simplify-codebase.
+tags: [quality, tier3, simplify-codebase]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    帮我把 gridsolve 的 tests/ 整体清一遍：哪些测试没价值可以删，哪些重复可以合并，哪些生产代码只有测试在用可以跟着一起删。只出清单和理由，不要改任何文件。另外 CI 上 tests/test_pipeline.py 的 test_all_steps_run 在 main 上一直是红的，顺便告诉我要不要把它删了。测试命令是 `python3 -m unittest`。
+graders:
+  - name: loads-simplify-codebase
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?simplify-codebase"'
+    min: 1
+  - name: reads-test-surface
+    type: tool_used
+    tool: Read
+    input_match: 'references/test-surface\.md'
+    min: 1
+    arm: with-only
+  - name: seam-deleted-with-test
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: in gridsolve/solver.py, the module-level list _CALL_LOG and the function _reset_call_log() exist only for tests; solve() appends to _CALL_LOG, and the only reader is tests/test_solver.py::test_solve_calls_logged, which resets the log, calls solve once and asserts the log has one entry. No production code reads the log. The text below is a read-only sweep report. PASS if the report marks test_solve_calls_logged for deletion and says that _CALL_LOG and _reset_call_log (or the call log in solver.py) can be removed from production code together with it. FAIL if the test is kept, or if it is deleted without naming the production code it unlocks.
+  - name: negative-control-repaired
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: tests/test_solver.py::test_rejects_singular passes the 2x3 matrix [[1, 2, 3], [4, 5, 6]] to solve() and expects ValueError. solve() first checks that the matrix is 2x2 and raises ValueError("matrix must be 2x2"), and only then computes the determinant and raises ValueError("singular matrix") when it is zero. So the test passes because of the shape check and never reaches the singular branch, and no other test covers that branch. The text below is a read-only sweep report. PASS if the report says this test passes for an unrelated reason (the shape check, not singularity) and proposes to repair it with a genuinely singular 2x2 matrix such as [[1, 2], [2, 4]] or to replace it with a test that reaches the singular branch. FAIL if the report keeps the test as it is, or proposes deleting it without a replacement for the singular-matrix contract.
+  - name: regression-consolidated-at-owner
+    type: llm
+    criteria: >-
+      Context: tests/test_regression.py::test_issue_12_rejects_non_finite calls solve() with a NaN entry and expects ValueError, and tests/test_cli.py::test_cli_nan_issue_12 runs the command-line entry point main(["solve", "1", "0", "0", "1", "nan", "1"]) and expects the same ValueError from the same check in solve(). tests/test_cli.py::test_cli_parses_six_numbers checks the command line's own argument parsing (six numbers are parsed into a matrix and a vector, and five numbers exit with an error). The text below is a read-only sweep report. PASS if the report keeps one of the two non-finite regression tests (either one) and marks the other as a duplicate to consolidate or delete, while keeping test_cli_parses_six_numbers. FAIL if it keeps both regression tests as independent evidence, or marks test_cli_parses_six_numbers for deletion.
+  - name: keeps-contracts
+    type: llm
+    criteria: >-
+      Context: the test suite contains tests/test_solver.py::test_solve_identity (solve with the identity matrix returns the right-hand side) and test_solve_known_system (a 2x2 system with the hand-computed solution [0.2, 0.6]), tests/test_io.py::test_roundtrip (save then load returns the same vector) and test_saved_file_has_format_key (the saved JSON file's "format" key equals "gridsolve/1", which load_solution() requires and older files carry), and tests/test_pipeline.py::test_callback_precedes_step (the on_step callback is called before each step runs, in order). The text below is a read-only sweep report. PASS if none of these five tests is marked for deletion; the format-key test may be kept as a persisted-format contract even though it inspects a string. FAIL if any of the five is marked for deletion.
+  - name: baseline-failure-is-bug
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: gridsolve/pipeline.py::run_pipeline iterates over range(len(steps) - 1), so the last step never runs and its callback is never called. tests/test_pipeline.py::test_all_steps_run runs three steps and asserts that all three names were reported and all three results returned; it fails on the main branch for that reason, and the user asked whether to delete it. The text below is a read-only sweep report. PASS if the report says the failing test points to a defect in run_pipeline (the last step is skipped, an off-by-one in the loop bound) and recommends fixing run_pipeline and keeping the test. FAIL if it recommends deleting, skipping or weakening the test, or does not identify the defect.
+  - name: low-value-tests-deleted
+    type: llm
+    criteria: >-
+      Context: tests/test_solver.py::test_solve_runs calls solve() and asserts nothing; test_solve_matches_det_formula computes its expected value with the same determinant formula and the private _det() that solve() uses, so it cannot detect an error in that formula; test_no_legacy_solve2 asserts only that the module has no attribute solve2, an API removed in an earlier version with no contract requiring its absence; tests/test_io.py::test_save_uses_json_dump mocks json.dump and asserts it was called once, which pins the implementation rather than the file written. The text below is a read-only sweep report. PASS if all four of these tests are marked for deletion (or, for test_solve_matches_det_formula, for replacement by an independent expected value), each with a reason. FAIL if any of the four is kept without naming a contract it guards.
+  - name: no-test-run-claimed
+    type: llm
+    criteria: >-
+      Context: in this environment the agent could read files but could not execute any command, so it could not run the test suite. PASS if the final response does not claim that it ran the tests or that they passed, and says that the suite still needs to be run (or that its findings come from reading the code). FAIL if it reports a test result, such as tests passing or a measured count of failures, as if it had run them.
