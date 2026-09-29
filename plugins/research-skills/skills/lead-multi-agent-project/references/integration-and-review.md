@@ -16,9 +16,17 @@ Before a rebase, make a backup branch at the worker's final revision, and resolv
 
 ## Before each review
 
-- Run one full suite on each supported platform whose code path changed, all platforms in parallel, unless one already ran on the same tree, dependencies and platform. A platform's code path is what its run exercises and the other platforms' runs do not, such as a native simulator or a platform-specific dependency; a change to platform-independent code needs the suite on one platform.
+- Run one full suite on each supported platform whose code path changed (see the expensive checks below), all platforms in parallel, unless one already ran on the same tree, dependencies and platform.
 - The mathematics advisor checks only the mathematics the round changed, with its code: the changed items, the principal's decisions and the changed texts. It does not widen into mathematics the round did not touch.
 - Before a review of fixes, the fix list gives each item with its disposition and commits, what each commit changes (code, tests or documentation), the owner and scope of each deferred item and who decided it (the user, or the principal and the counselor under the step 0 delegation), and the open questions. The reviewers check each entry against its commits. (NWQLib 0.99: a deferral recorded only in the principal's ledger, which the reviewers do not read, reached the review as an item without an owner.)
+
+## The expensive checks
+
+A full suite on a platform and the mutation campaign are the expensive checks. Wherever this skill calls for one, at an integration, before a review, at the release or for any change after the release checks, whether a fix of a late finding or work the user adds, the principal judges from the diff since the check's last run whether the change can alter its result, and a change that cannot leaves the last run standing. The integration grades and the before-review rule apply this at their steps. The principal takes the judgment itself, reports it, and records the commit each check ran on and what changed after it, in the validation record and the pull-request text. (NWQLib 0.99.1: two changes after the release checks, a documentation policy and a one-module fix of archive reopening, needed one full suite on one platform, and the principal judged this only when the user asked.)
+
+- A full suite on a platform reruns for library code that platform's run exercises. A platform's code path is what its run exercises and the other platforms' runs do not, such as a native simulator or a platform-specific dependency; a change to platform-independent code needs the suite on one platform, and a change to an entry point every extension passes through gets it, as at integration.
+- The mutation campaign reruns for a change that can lower what the tests detect: a test deleted, trimmed or weakened, a probe added or moved, or a change at a probe site or on the path from its killing test to it. A change that only admits more inputs, or changes text, leaves the campaign's result standing.
+- Documentation, notebooks and the version number need only the checks of their own files.
 
 ## The review round
 

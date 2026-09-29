@@ -105,6 +105,6 @@ Check each artifact before it leaves the principal.
 - **Integration:** the checks match its grade.
 - **Triage, before presenting:** every item, including those not fixed, has an impact sentence, each item not fixed or deferred has a reason, and the counselor has checked the triage.
 - **Fix list:** every deferred item names its owner and scope.
-- **Reopened release checks:** each reran, or the record says why not.
+- **Expensive checks:** ran on the final code, or the record says why not.
 - **Rules:** a rule is recorded only at the user's request or as a stated standing rule, in its smallest form; a changed rule is in the file the other session rereads; standing rules the user stated in this run are in the durable files.
 - **Start of the run:** the step 0 settings were asked this run.
