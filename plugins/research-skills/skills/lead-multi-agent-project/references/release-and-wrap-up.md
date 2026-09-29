@@ -15,6 +15,7 @@ Read when the fix rounds have converged.
 
 ## Wrap-up
 
-- Record the statistics of the run: the verification runs and their time, the rebases, and the results of each review round.
+- Record the statistics of the run: the verification runs and their time, the rebases, the results of each review round, and the measured duration of each job kind, which the next run's stop conditions use.
 - Ask the user which settings the next run must ask for at its start, then write the lessons where the project keeps them.
 - Remove the temporary worktrees and branches once their content is confirmed integrated. Handle the working and review directories as the project's rules say, and move lasting records into the project's memory.
+- Write the handoff for the next principal with this skill named in its first section.

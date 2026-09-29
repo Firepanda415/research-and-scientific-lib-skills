@@ -5,7 +5,7 @@ Read before the first request to another vendor's model, and when a request ther
 ## Protocol
 
 - Reach the other vendor's model through the channel chosen at step 0.
-- Only the principal operates the app, so that no two sessions compete for it. A review session writes each request as a file in its own directory and sends the path, saying whether it needs a new chat or a continuation of a named thread. The principal opens that chat, sends only "Read <path> and follow it.", replies with the thread id, and forwards the thread's final message when it finishes. The principal does not edit the review side's requests.
+- Only the principal operates the app, so that no two sessions compete for it. A worker or reviewer on the principal's host that needs that model writes its request as a file and sends the path, saying whether it needs a new chat or a continuation of a named thread. The principal opens that chat, sends only "Read <path> and follow it.", replies with the thread id, and forwards the thread's final message when it finishes, without editing the request.
 - Open a new chat for each job or topic, in the app's project for the repository. Only a continuation of the same job stays in its thread. Requests and answers are files in a location both sides can read, and each request names its answer file.
 - Give the model a pinned snapshot worktree on its own branch, never a branch in use.
 - Send once, and confirm that the turn started from the app's own session record, not from a screenshot, which can lag. A second click can stop a turn that has started.
