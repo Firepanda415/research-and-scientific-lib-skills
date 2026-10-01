@@ -36,7 +36,7 @@ Review is mandatory for every in-scope draft or revision. The [review reference]
 
 ## Load additional detail only when applicable
 
-- The durable-prose reference supplies shared criteria, and the prose-review reference is mandatory for the review stage, including review-only tasks. Do not load manuscript, Overleaf, or scientific copyediting guidance solely because an ordinary document contains mathematics.
+- The durable-prose reference supplies shared criteria, and the prose-review reference is mandatory for the review stage, including review-only tasks. Read each reference in a call of its own with no other command; a combined read is cut off by the tool's output limit and then read again. Do not load manuscript, Overleaf, or scientific copyediting guidance solely because an ordinary document contains mathematics.
 - For prose or display math written into a LaTeX, Markdown, or other source document, read [source layout](references/source-layout.md). It follows the file's existing wrapping and equation-row conventions, with one paragraph per source line as the default.
 - For manuscript or response-letter drafting, substantial work on research paragraphs, or additions driven by reviewer feedback, read [manuscript prose](references/manuscript-prose.md).
 - For scientific proofreading or sentence/paragraph editing, read [copyediting](references/copyediting.md). A local prose edit does not trigger a referee review, submission audit, or new experiment.
