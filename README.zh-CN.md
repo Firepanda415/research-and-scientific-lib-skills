@@ -12,7 +12,7 @@
 
 有几个 skill 的成本明显高于其他 skill：
 
-- `research-writing-style` 每次读取约 16k tokens。写作 hook 会把有其他人阅读的文档（例如论文、审稿报告、文档、README 和信件）以及为这类文档起草的文字交给这个 skill 起草、修改和审阅，所以产出这类文字的 skill 也会带上这部分成本。你自己看的笔记和报告、写给 agent 的文字，以及代码注释、commit 和 pull request 不走这条路线。
+- `research-writing-style` 每次读取约 17k tokens。写作 hook 会把有其他人阅读的文档（例如论文、审稿报告、文档、README 和信件）以及为这类文档起草的文字交给这个 skill 起草、修改和审阅，所以产出这类文字的 skill 也会带上这部分成本。你自己看的笔记和报告、写给 agent 的文字，以及代码注释、commit 和 pull request 不走这条路线。对会渲染成库的 API reference 的 docstring，hook 改为指向一份不到 1k tokens 的简短 reference，不经过写作的 review 阶段。
 - `simplify-codebase` 连同它加载的 Ponytail skill 约占 6k，`lead-multi-agent-project`、`quantum-computing-review`、`research-explainer-animation`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 19k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 4k）。`lead-multi-agent-project` 写 brief 时还会加载 `write-implementation-job-prompts`（约 4k），各阶段的 reference 文件在整个项目中合计再加约 14k。
 
 有些流程还会增加额外成本。每个 subagent 都会各自读取一份说明和材料，所以 `research-writing-style` 为篇幅较大的文档启动的独立 reviewer 会再加载一次这个 skill，`deep-code-review` 在实质性审查中可能会启动多个并行查找问题的 agent，`lead-multi-agent-project` 为每个 job 开一个 subagent、为每轮 review 在两个 advisor 模型上各开一个新的 reviewer，并为每个主题开一个新的 advisor 线程。`quantum-research-radar` 每次运行都会把最多五条检索路线的结果放进上下文。`research-explainer-animation` 还要在本地花计算时间合成语音和渲染视频。
@@ -81,7 +81,7 @@ skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，
 | [physics-from-math-explainer](plugins/research-skills/skills/physics-from-math-explainer/SKILL.md) (~1k) | 从数学出发解释物理，补充物理直觉，讲清符号和约定。 | — |
 | [tech-paper-template](plugins/research-skills/skills/tech-paper-template/SKILL.md) (~1k) | 组织技术论文的论点、引言和章节结构。 | [1](#credit-1) |
 | [benchmark-paper-template](plugins/research-skills/skills/benchmark-paper-template/SKILL.md) (~1k) | 规划或评估自己的基准测试论文，包括评估缺口、构建、测量设计和结论，不限领域。 | [1](#credit-1) |
-| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) (~16k) | 起草、编辑和对抗性审阅有其他人阅读的文档，交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10), [12](#credit-12), [15](#credit-15) |
+| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) (~17k) | 起草、编辑和对抗性审阅有其他人阅读的文档（包括科学软件库的指南和 API reference），交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10), [12](#credit-12), [15](#credit-15), [17](#credit-17) |
 | [work-email](plugins/research-skills/skills/work-email/SKILL.md) (<1k) | 修改简短工作邮件或消息的语法，或按你给的要点起草，保持事实、请求和语气不变。 | — |
 | [figure-designer](plugins/research-skills/skills/figure-designer/SKILL.md) (~1k) | 设计论文插图、方法示意图和可复现的数据图表。 | [1](#credit-1), [15](#credit-15) |
 | [research-explainer-animation](plugins/research-skills/skills/research-explainer-animation/SKILL.md) (~5k) | 为论文和代码制作带配音和字幕的讲解动画，画面与旁白中的数字都可追溯到原始来源，交付前逐帧检查。 | — |
@@ -143,6 +143,11 @@ skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，
     - OpenAI。[Custom code review rules for Codex](https://developers.openai.com/blog/custom-code-review-rules-for-codex)，查阅于 2026-09-26。文章建议先写两三条后果重大并说明安全做法的规则，机械性检查交给 CI。在其评测中，按规则 review 找回了 98% 应找出的自定义问题，基线对照为 58.3%。
     - OpenAI。[openai/skills](https://github.com/openai/skills) 中的 `playwright-interactive` skill 的 QA 清单涵盖最终回复将提出的说法。[Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra.md) 中关于 testing and verification 的部分按改动规模确定检查范围。两者均查阅于 2026-09-26。
 16. <a id="credit-16"></a>OpenClaw Foundation。OpenClaw 中的 [test-audit skill](https://github.com/openclaw/openclaw/tree/main/.agents/skills/test-audit)（2026）。**MIT**。改编为 `simplify-codebase` 的 test-surface reference，`ponytail` 中关于只为测试存在的生产代码的一句和 `deep-code-review` 中两个无法失败的测试的例子也来自它。
+17. <a id="credit-17"></a>`research-writing-style` 中科学软件库文档 reference 的参考来源。这些 reference 根据作者开发科学软件库的经验为本合集编写，使用本合集的 **MIT** 许可证，不包含来源文本。细节上以下列指南为准，查阅于 2026-10-01：
+    - Daniele Procida。[Diátaxis](https://diataxis.fr/)，一套技术文档框架。
+    - numpydoc。NumPy docstring 的 [Style guide](https://numpydoc.readthedocs.io/en/latest/format.html)。
+    - Rust Library Team。Rust API Guidelines 中的 [Documentation](https://rust-lang.github.io/api-guidelines/documentation.html) 一章。
+    - Google。Google developer documentation style guide 中的 [Highlights](https://developers.google.com/style/highlights)。
 
 各部分的条款见 [LICENSE.md](LICENSE.md)，来源与修改说明见 [NOTICE.md](plugins/research-skills/NOTICE.md)。
 

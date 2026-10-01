@@ -48,7 +48,8 @@ test('writing routing reaches sessions and subagents with stdin open', async () 
     assert.equal(output.systemMessage, undefined);
     const context = output.hookSpecificOutput.additionalContext;
     const routed = [
-      ...['SKILL.md', path.join('references', 'durable-prose.md'), path.join('references', 'prose-review.md')]
+      ...['SKILL.md', path.join('references', 'durable-prose.md'), path.join('references', 'prose-review.md'),
+        path.join('references', 'api-docstrings.md')]
         .map(file => path.join(root, 'skills', 'research-writing-style', file)),
       path.join(root, 'skills', 'work-email', 'SKILL.md'),
     ];
