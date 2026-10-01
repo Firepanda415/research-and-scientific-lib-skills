@@ -28,10 +28,13 @@ Open the first screen with these parts, in this order:
 5. A light result card:
    - one sentence with two or three key numbers and the execution mode when the library has more than one
    - the main figure
+   - the resources on both sides, quantum (qubits, two-qubit gates or circuits, shots) and classical (peak memory, planning work, measured seconds)
    - two to four concrete steps the library performed for this problem, such as the representation or method it selected, the parameters it computed and the post-processing it applied (for a quantum linear solver, the block encoding, phase angles and restored solution scale)
    - a pointer to the template cell
 
    Put any detailed cost table, such as predicted and compiled gate counts for a quantum library, further down.
+
+An introductory notebook also executes one refusal, so that the reader sees what the library declines and what its message says to change.
 
 As checked in September 2026, a blockquote rendered as a set-off block in JupyterLab, VS Code, GitHub, and nbconvert. GitHub and nbconvert showed `jupyter.source_hidden` cells expanded, and GitHub did not reliably render HTML alert classes or in-notebook anchor links. Check the rendered first screen again when a renderer or template changes.
 
@@ -51,13 +54,13 @@ A notebook derived from a paper gives the answer first, then the paper's scope a
 - Show the method in a setting where it works, say why that setting matters, and state where the method stops working. A default whose result is negative gives a newcomer no reason to try the library.
 - Keep the example code to the call and its result. Defensive checks that repeat the library's own validation, and dumps of raw records or JSON, bury the result.
 - Run demonstrations on the smallest system that shows the point, within the resource limits above, because cost can grow steeply with problem size. Give larger sizes as planning numbers, labeled as not executed.
-- Execute notebooks with a kernel in the environment the project declares, or record the one used when none is declared, and ensure it imports the library from the checkout being documented rather than an installed release.
+- Execute notebooks with a kernel in the environment the project declares, or record the one used when none is declared, and ensure it imports the library from the checkout being documented rather than an installed release. Stored outputs go stale silently when the library changes under an unchanged source, and a source comparison does not see it, so a release re-executes every notebook.
 - Compute the result card's sentence from the run. Check it by swapping in another problem, such as another molecule, so the text cannot silently go stale.
 - When notebooks compare the library with other packages, put the comparison on one dated page that states the scope of each claim. Notebooks link to it and give only their own concrete reasons.
 
 ## Rewriting a set of notebooks
 
-Start from an adopter review that reads the notebooks as a newcomer and tests their claims with small scripts. Reviews by different models can find different problems, so when more than one adopter review is authorized, merge their findings into one plan. Pilot the planned changes on one notebook and check it as rendered HTML before applying them to the others, which can then proceed in parallel. Give parallel workers the approved pilot as their pattern, together with the execution environment and command, and run them so their results return to the agent that merges and checks them, for example in the foreground. When the user or project asks to approve the changes, get that approval on the rendered pilot first. Re-execute each notebook whose code, cell order, or outputs changed, within the authorized workload. When the project tests its notebooks, keep an independent reference check for each one.
+Start from an adopter review that reads the notebooks as a newcomer and tests their claims with small scripts. Reviews by different models can find different problems, so when more than one adopter review is authorized, merge their findings into one plan. Pilot the planned changes on one notebook and check it as rendered HTML before applying them to the others, which can then proceed in parallel. Give parallel workers the approved pilot as their pattern, together with the execution environment and command, and run them so their results return to the agent that merges and checks them, for example in the foreground. When the user or project asks to approve the changes, get that approval on the rendered pilot first. Re-execute each notebook whose code, cell order, or outputs changed, within the authorized workload. When the project tests its notebooks, keep an independent reference check for each one. Each notebook job also reports what the library did not expose that the notebook needed, such as a peak memory it only admits, a bound it cannot return, the degree a refusal needs, or a predicted size or time; these are the library's next usability items. (One rewrite of eight notebooks, a pilot of 16 minutes and six parallel rewrites of 12 to 30 minutes each, took the set from 205 paragraphs over 50 words to none.)
 
 ## Review before delivery
 
@@ -67,4 +70,4 @@ Review each written or revised notebook as rendered, in a pass separate from wri
 - The template cell runs on its own with its own variable names, next to its input format, size limits and the meaning of the returned value.
 - Each main figure and key number names its output quantity and, where the library has several, its execution mode. The result card's sentence comes from the run.
 - The code holds no defensive checks that repeat the library's validation, no raw record or JSON dumps, and no text addressed to the conversation or its instructions.
-- The notebook ran after its last code change, within the resource limits above and with the library imported from the documented checkout, its stored outputs come from that run, and the report names the environment, execution command and code revision.
+- The notebook ran after the last code change of its own or of the library, within the resource limits above and with the library imported from the documented checkout, its stored outputs come from that run, and the report names the environment, execution command and code revision.

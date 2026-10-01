@@ -40,12 +40,13 @@ graders:
   type: llm
   criteria: 'Context: the user asked the assistant, the session they opened, to act as the principal agent
     of a multi-agent release of a small scientific library. The workflow requires asking the user, before
-    planning or dispatching, for five groups of settings: (1) the model and reasoning level of each advisor
+    planning or dispatching, for six groups of settings: (1) the model and reasoning level of each advisor
     and worker role the principal plans, such as a code advisor, a mathematics advisor and a code worker;
     (2) which advisors review each round, both by default or one of them; (3) the counselor model; (4) the
     decisions the user keeps and how to notify the user; (5) how models of another vendor are reached,
-    such as a desktop app or a command-line tool. The principal''s own model is the session''s and is not
-    asked. The text below is the assistant''s reply. PASS if the reply asks for all five groups. FAIL if
+    such as a desktop app or a command-line tool; (6) for a release, which this is, the version and its
+    destinations, such as a repository, a package index, a documentation site and an archive. The principal''s own model is the session''s and is not
+    asked. The text below is the assistant''s reply. PASS if the reply asks for all six groups. FAIL if
     a group is missing, if the reply assumes specific models instead of asking, or if it asks which model
     the principal itself should use.'
 - name: waits-before-dispatch

@@ -25,6 +25,20 @@ Each fails the three questions: no wrong result, no blocked user, no wrong decis
 
 The principal first recommended fixing nearly all of about 36 findings, some of them completely, the user accepted the recommendation, and the principal sent 15 derivation requests. When the user asked whether a trivial notebook-text item would need a round of verification and review, the principal only added a rule that plain text needs no advisor review. The user then asked for a new triage from first principles. Three items became claim corrections with the improvement deferred, two charge completions became nominal-charge wording, and seven items were not fixed. Eleven small code changes remained, and the estimate fell from 6 to 10 hours to 3 to 5. The user then restored the fixes whose complete derivation and code already existed and that changed little else.
 
+## Settings nobody makes
+
+A finding reachable only under a setting nobody makes is an observation, not a defect. (NWQLib 1.0: reviewers of two rounds probed a byte cap with a 10 GB default at 1,000 to 20,000 bytes and reported byte-exact remedy defects; the principal commissioned an advisor derivation and about 150 lines of fixed-point code for the first and was about to commission more. The user: a byte cap is a fuse with a generous default so that nobody touches it.) The impact sentence names a real user in ordinary use, and "a user who sets a tiny cap" is not one. Before triaging a finding of the form "with X set to a tiny value", ask what the default is and who would set it there. A remedy for a coarse safety cap needs only the right direction, such as raising it with the default named, never a byte-exact value, and the review requests tell reviewers not to probe caps below realistic values.
+
+Defaults are set generously, not remedied precisely: when an ordinary workload meets a fuse, raise the default; a finer ladder or an exact retry value is the wrong fix. (NWQLib 1.0: two caps were raised fourfold and tenfold on the user's one-line answer.)
+
+A review suggestion's smallest correction is a hypothesis, and so are the counselor's and the principal's. (NWQLib 1.0: a reuse scheme, a counting sink and a step rule were all overtaken by the user's one question, what the 10 GB default is for.) The triage asks that question first.
+
+Code that acts only on an edited archive is meaningless code: a check that passes every legal file and fails only after the user edits a saved file is removed, whatever version added it.
+
+## Changes that cannot be wrong
+
+Notebook prose, a stale figure, a run time, or "at least" added to a refusal whose count stops at the limit. A detector is a test that fails when its fix is undone, and such changes get none. The principal checks the diff scope, runs the checks of the touched files, and collects such items into one job.
+
 ## Why fixes did not hold
 
 In the first four fix rounds, 29 to 52 percent of the items each round changed came back partial, and each changed item brought 0.38 to 0.56 new findings. The causes repeated.
@@ -43,3 +57,4 @@ In the first four fix rounds, 29 to 52 percent of the items each round changed c
 | A chain of smallest changes grew a subsystem | 0.99.1: three verification rounds on one domain check, each smallest change adding exact-arithmetic machinery for the next input class, about 1.5 hours; the chain was visible at the first partial. | Judge the accumulated chain at every partial, and ask the verifier of a replaced validation to enumerate the input classes the old one covered. |
 | A decision of the principal resting on an unchecked premise | A cost convention assumed that a halving was fused into each layer, while the code performed the halvings as separate operations. | Check a decision's premises against the code, and send its mathematics to the advisor. |
 | A limit deferred by the principal alone | 0.99.1: a verifier found that archives of unevaluated objectives could not be reopened, a limit shared with 0.99.0 and fixed in one module; the principal filed it as a known limitation, and the user had it fixed after the release checks. | A limitation a reviewer or verifier finds is a triage item, pre-existing included. When its fix is small, the user decides whether it is fixed now or deferred, or the principal and the counselor when the user is away. |
+| A breaker that stopped nothing | 1.0: a feature rolled through six consecutive jobs by way of review findings, each job delivered and each review opening the next; the breaker counted only undelivered items, and the principal then wrote a breaker record alone and dispatched the next job anyway. | Count every follow-up on one feature, whatever produced it; the second consecutive one goes to the counselor before dispatch, and the rule lives in the file the principal rereads after compaction. |

@@ -21,7 +21,7 @@ When an internal report carries text drafted for a document others read, such as
 
 **Review-only:** Start directly from the user's existing text, without generating a substitute first. Report supported findings and necessary limitations. Do not edit the source or supply a full rewrite unless requested. A passage with no demonstrated defect can pass unchanged. Review is not a requirement to find something to rewrite.
 
-Review is mandatory for every in-scope draft or revision. The [review reference](references/prose-review.md) sets when to use an independent reviewer and what to give one. If parts were delegated or assembled, review the combined deliverable.
+Review is mandatory for every in-scope draft or revision. The [review reference](references/prose-review.md) sets when to use an independent reviewer and what to give one. If parts were delegated or assembled, review the combined deliverable. Text copied verbatim from a document that already passed this review, placed without newly composed prose around it, needs at review only the leakage and placement check.
 
 ## Shared constraints
 

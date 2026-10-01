@@ -13,7 +13,7 @@
 有几个 skill 的成本明显高于其他 skill：
 
 - `research-writing-style` 每次读取约 16k tokens。写作 hook 会把有其他人阅读的文档（例如论文、审稿报告、文档、README 和信件）以及为这类文档起草的文字交给这个 skill 起草、修改和审阅，所以产出这类文字的 skill 也会带上这部分成本。你自己看的笔记和报告、写给 agent 的文字，以及代码注释、commit 和 pull request 不走这条路线。
-- `simplify-codebase` 连同它加载的 Ponytail skill 约占 6k，`lead-multi-agent-project`、`quantum-computing-review`、`research-explainer-animation`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 19k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 4k）。`lead-multi-agent-project` 写 brief 时还会加载 `write-implementation-job-prompts`（约 4k），各阶段的 reference 文件在整个项目中合计再加约 10k。
+- `simplify-codebase` 连同它加载的 Ponytail skill 约占 6k，`lead-multi-agent-project`、`quantum-computing-review`、`research-explainer-animation`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 19k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 4k）。`lead-multi-agent-project` 写 brief 时还会加载 `write-implementation-job-prompts`（约 4k），各阶段的 reference 文件在整个项目中合计再加约 14k。
 
 有些流程还会增加额外成本。每个 subagent 都会各自读取一份说明和材料，所以 `research-writing-style` 为篇幅较大的文档启动的独立 reviewer 会再加载一次这个 skill，`deep-code-review` 在实质性审查中可能会启动多个并行查找问题的 agent，`lead-multi-agent-project` 为每个 job 开一个 subagent、为每轮 review 在两个 advisor 模型上各开一个新的 reviewer，并为每个主题开一个新的 advisor 线程。`quantum-research-radar` 每次运行都会把最多五条检索路线的结果放进上下文。`research-explainer-animation` 还要在本地花计算时间合成语音和渲染视频。
 

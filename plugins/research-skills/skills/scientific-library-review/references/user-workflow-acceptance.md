@@ -38,6 +38,11 @@ and identify a valid next step. Preserve the original failure identity and usefu
 context. Guidance must not silently add retries, change scientific inputs or
 promote an exploratory result into a certified one.
 
+Probe limits and caps at values a user would set. A finding that needs a cap far
+below its default, such as a byte limit of a few thousand bytes against a default
+of gigabytes, is an observation, not a defect, and a remedy for such a cap needs
+only the right direction.
+
 ## Evidence and completion
 
 Keep execution success, completion of the user's task and scientific validity

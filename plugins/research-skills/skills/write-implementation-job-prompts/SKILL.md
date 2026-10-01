@@ -97,6 +97,12 @@ as an extra solver call), or additional mutation probe is useful when output
 equality could conceal a wrong algorithm or hidden cost. It is not a field
 required on every acceptance row.
 
+When the job adds the first production entry of a by-name registry, such as a
+format, reducer or decoder, acceptance includes a witness in a fresh process
+through the saved-record path, because the registering import can be absent
+there. A detector that passes on both sides of the fix is a finding, not
+evidence.
+
 When the job changes an entry point that every plugin or extension
 implementation passes through, acceptance includes the tests of that extension
 protocol and the project's standard full test suite before integration, because
@@ -126,7 +132,10 @@ Read [plan-to-job-series.md](references/plan-to-job-series.md) when the user wan
 a job series. Split on real dependencies and independently reviewable changes;
 do not serialize jobs merely because they belong to one plan. Preserve required
 outcomes, temporary migration obligations, and the final acceptance responsibility
-without a new ledger for every relationship.
+without a new ledger for every relationship. A follow-up's file list is derived
+from the original brief's ownership and its carve-outs, item by item, never from
+the report's leftovers, and its time limit from the remaining work rather than
+the original job's.
 
 ## Pre-dispatch check
 
@@ -134,7 +143,9 @@ Apply these checks to the clauses the job actually contains:
 
 - Back claimed current values, counts, and artifact differences with live
   measurements or an independent reference. Distinguish target outcomes from
-  observed results; do not guess empirical expectations.
+  observed results; do not guess empirical expectations. Check a factual clause
+  about the code against the code, not against a decision record or an earlier
+  report.
 - Call a gate verified only when actual run evidence supports that claim on the
   relevant baseline and within the authorized workload. New gates for behavior
   not yet implemented stay proposed: explain what defect they can distinguish.
