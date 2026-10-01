@@ -62,7 +62,7 @@ graders:
 - name: brief-bounds-and-checks
   type: llm
   criteria: 'Context: the text below is a brief for a code worker. PASS if it gives a stop condition that
-    names a deliverable and a time limit, the checks (the test files covering the changed module
+    names a deliverable, the checks (the test files covering the changed module
     and related mutation probes through the checked runner, and no full suite), a foreground review by
     the code advisor''s model before hand-in, the branch or worktree with the base revision and owned
     files, and a report format with a disposition and evidence per item. FAIL if two or more of these

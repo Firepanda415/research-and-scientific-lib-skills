@@ -97,7 +97,7 @@ Check each artifact before it leaves the principal.
   - every place that states each changed claim is listed;
   - a fix of a public contract, or one a review names, requires a detector that fails before the fix;
   - the checks are the covering test files and probes, with no full suite;
-  - its stop condition names a deliverable and a time limit taken from measured job times;
+  - its stop condition names a deliverable;
   - it updates the places that state its changed claims but carries no documentation job for its area, which starts only after the area's code review has converged, and notebooks wait for the release.
 - **Advisor request:** it covers the whole claim in every case the code reaches and asks for complete derivations.
 - **Review request:** it is neutral (revision, scope, decisions, environment, output) without working files, names a fixed ref of its own, and the counselor has checked it.

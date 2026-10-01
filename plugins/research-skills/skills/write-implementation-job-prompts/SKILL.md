@@ -134,8 +134,7 @@ do not serialize jobs merely because they belong to one plan. Preserve required
 outcomes, temporary migration obligations, and the final acceptance responsibility
 without a new ledger for every relationship. A follow-up's file list is derived
 from the original brief's ownership and its carve-outs, item by item, never from
-the report's leftovers, and its time limit from the remaining work rather than
-the original job's.
+the report's leftovers.
 
 ## Pre-dispatch check
 
