@@ -1,0 +1,65 @@
+schema_version: "1.1"
+name: writing-website-project-blurb-zh
+description: >-
+  A project description for a personal research website, from Chinese notes with a link placeholder and a paper still under review.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    我个人主页上要放一段 Halcyon 的项目介绍，英文，120 词左右，读者是来看主页的其他研究者和可能的合作者。只给正文。
+
+    信息：
+    - 2026 年 9 月开源，GitHub 链接先用 [link] 占位。
+    - 我是主要开发者，项目和 Ines Varga 教授的组合作。
+    - 用途：量子算法的资源估计和小规模验证。
+    - 现在的用户主要是我们组和两个合作组。
+    - 介绍这个库的论文在审，还没有 arXiv 编号。
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-link-placeholder
+    type: regex
+    pattern: '\[link\]'
+    match: contains
+  - name: no-invented-arxiv-number
+    type: regex
+    pattern: 'arXiv:\s*\d|\b\d{4}\.\d{4,5}\b'
+    flags: i
+    match: not_contains
+  - name: no-chinese-in-output
+    type: regex
+    pattern: '[一-鿿]'
+    match: not_contains
+  - name: facts-without-additions
+    type: llm
+    criteria: >-
+      The text describes the Halcyon project on the personal website of its main developer, for visiting researchers and possible collaborators. Facts: Halcyon was open-sourced in September 2026, and its GitHub link is left as the placeholder [link]. The site owner is the main developer, and the project is a collaboration with Professor Ines Varga's group. It is used for resource estimation and small-scale verification of quantum algorithms. Its current users are mainly the owner's group and two collaborating groups. A paper describing the library is under review and has no arXiv number yet. PASS if the text is consistent with these facts and adds no user count, adoption, impact, performance claim, award, citation or arXiv number that they do not support, and does not describe the user base as broader than these groups. Otherwise FAIL.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

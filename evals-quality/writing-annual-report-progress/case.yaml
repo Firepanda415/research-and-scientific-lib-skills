@@ -1,0 +1,65 @@
+schema_version: "1.1"
+name: writing-annual-report-progress
+description: >-
+  A progress paragraph of an annual report to a funding agency, from milestone notes that include a delay.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Draft the "Progress in Year 1" paragraph of our annual report to the funding agency. The program manager reads it to decide on continued funding. About 180 words, reply with only the paragraph.
+
+    Notes:
+    - Milestone 1 (simulator for 30-qubit Hamiltonian simulation): done, released as version 0.9 in June.
+    - Milestone 2 (resource estimates for three chemistry benchmarks): done for two of the three. The third (the FeMoco active space) moves to Q2 of Year 2 because the integrals from our collaborators arrived in August instead of March.
+    - Milestone 3 (hardware demonstration on 8 qubits): done on the partner's device, with fidelity 0.91 on the 8-qubit GHZ benchmark.
+    - Two papers submitted, one of which is accepted (Phys. Rev. A).
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-0.91
+    type: regex
+    pattern: '0\.91'
+    match: contains
+  - name: keeps-femoco
+    type: regex
+    pattern: 'FeMoco'
+    flags: i
+    match: contains
+  - name: keeps-new-quarter
+    type: regex
+    pattern: '\bQ2\b|second quarter'
+    flags: i
+    match: contains
+  - name: milestones-stated-plainly
+    type: llm
+    criteria: >-
+      The paragraph reports Year 1 progress to a funding agency's program manager. Facts: Milestone 1, a simulator for 30-qubit Hamiltonian simulation, is done and was released as version 0.9 in June. Milestone 2, resource estimates for three chemistry benchmarks, is done for two of the three, and the third (the FeMoco active space) moves to Q2 of Year 2 because the collaborators' integrals arrived in August instead of March. Milestone 3, a hardware demonstration on 8 qubits, is done on the partner's device with fidelity 0.91 on the 8-qubit GHZ benchmark. Two papers were submitted, and one of them is accepted in Phys. Rev. A. PASS if the paragraph states all of these facts correctly, says plainly that one of the three Milestone 2 benchmarks is delayed and why, does not minimize or hide the delay, and adds no impact, adoption, publication, schedule or performance claim that the facts do not support. Otherwise FAIL.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

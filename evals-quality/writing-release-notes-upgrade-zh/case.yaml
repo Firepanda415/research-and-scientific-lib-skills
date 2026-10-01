@@ -1,0 +1,64 @@
+schema_version: "1.1"
+name: writing-release-notes-upgrade-zh
+description: >-
+  Release notes for users upgrading a library, from a Chinese list of changes that includes breaking changes and a corrected result.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    写 Halcyon 1.0 的 release notes，英文 Markdown，读者是从 0.9 升级的用户。只给正文。
+
+    改动：
+    - 默认后端从 dense 改为 sparse。dense 仍可通过 backend="dense" 使用。12 个比特以下的问题，sparse 可能比 dense 慢。
+    - 参数 tol 改名为 atol。旧名字在 1.2 之前仍可用，但会发出 DeprecationWarning。
+    - 修复了 RZZ 门梯度的符号错误。0.9 及更早版本中，含 RZZ 的电路算出的梯度符号是反的。
+    - 新增 qDRIFT 采样器（实验性）。
+    - 不再支持 Python 3.9，最低要求 Python 3.10。
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-atol
+    type: regex
+    pattern: '\batol\b'
+    match: contains
+  - name: keeps-removal-version
+    type: regex
+    pattern: '\b1\.2\b'
+    match: contains
+  - name: no-chinese-in-output
+    type: regex
+    pattern: '[一-鿿]'
+    match: not_contains
+  - name: upgrade-facts-and-actions
+    type: llm
+    criteria: >-
+      The text is the release notes of Halcyon 1.0 for users upgrading from 0.9. Facts: the default backend changed from dense to sparse, dense remains available with backend="dense", and sparse may be slower than dense for problems below 12 qubits. The parameter tol is renamed atol, and the old name keeps working until 1.2 with a DeprecationWarning. A sign error in the gradients of the RZZ gate is fixed, so gradients of circuits containing RZZ computed with 0.9 or earlier had the wrong sign. A qDRIFT sampler is added and is experimental. Python 3.9 is no longer supported and Python 3.10 is the minimum. PASS if the notes state all of these facts correctly, make clear where an upgrading user must act or recheck earlier results (the changed default, the renamed parameter, gradients computed with RZZ in 0.9 or earlier, the Python version), and add no change, date, performance figure or claim that the facts do not support. Otherwise FAIL.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

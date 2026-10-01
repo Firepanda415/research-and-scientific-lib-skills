@@ -1,0 +1,64 @@
+schema_version: "1.1"
+name: writing-docs-gpu-troubleshooting
+description: >-
+  An installation-guide troubleshooting section from a list of known symptoms, causes and fixes.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Write the "GPU installation problems" section of our library's installation guide, for users installing the CUDA backend. Markdown, about 200 words, reply with only the section.
+
+    What we know:
+    - The CUDA backend needs CUDA 12.2 or later and NVIDIA driver 535 or later.
+    - `CUDA_ERROR_NO_DEVICE` at import usually means the driver is older than 535. `nvidia-smi` shows the driver version.
+    - `libcustatevec.so.1: cannot open shared object file` means the cuQuantum dependency is missing. Install it with `pip install "halcyon[cuda12]"`.
+    - On clusters the login node often has no GPU. Import then succeeds, but the first simulation fails with `no CUDA-capable device is detected`. Run on a compute node.
+    - `HALCYON_BACKEND=cpu` forces the CPU backend, which helps to check whether a problem is specific to the GPU.
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-driver-535
+    type: regex
+    pattern: '\b535\b'
+    match: contains
+  - name: keeps-install-extra
+    type: regex
+    pattern: 'halcyon\[cuda12\]'
+    match: contains
+  - name: keeps-cpu-override
+    type: regex
+    pattern: 'HALCYON_BACKEND=cpu'
+    match: contains
+  - name: fixes-match-symptoms
+    type: llm
+    criteria: >-
+      The text is a troubleshooting section for installing a library's CUDA backend. Facts: the backend needs CUDA 12.2 or later and NVIDIA driver 535 or later. CUDA_ERROR_NO_DEVICE at import usually means the driver is older than 535, and nvidia-smi shows the driver version. "libcustatevec.so.1: cannot open shared object file" means the cuQuantum dependency is missing, fixed with pip install "halcyon[cuda12]". On clusters the login node often has no GPU, so import succeeds but the first simulation fails with "no CUDA-capable device is detected", and the fix is to run on a compute node. HALCYON_BACKEND=cpu forces the CPU backend, which helps to check whether a problem is specific to the GPU. PASS if each symptom is paired with the cause and fix given in these facts, and the text adds no error message, command, version number, environment variable, cause or fix that the facts do not contain. Otherwise FAIL.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

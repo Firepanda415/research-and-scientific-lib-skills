@@ -1,0 +1,62 @@
+schema_version: "1.1"
+name: writing-referee-response-scaling-zh
+description: >-
+  An English response to a referee's scalability comment from the authors' Chinese notes on what changed.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    审稿人 2 的第 3 条意见：“The manuscript claims the method is scalable, but the numerical evidence stops at 16 qubits.”
+
+    帮我写给这条意见的回复，英文，150 词以内，只给回复正文。我们做的修改：
+    - 附录 C 新增了 20 和 24 比特的模拟（图 C2）。CNOT 数随比特数的增长和 16 比特以内的趋势一致，拟合的幂指数是 2.1 ± 0.1。
+    - 硬件实验还是只有 8 比特，机时有限，没有扩展。
+    - 正文第 6 节把 “scalable” 改成了 “scales polynomially in our simulations up to 24 qubits”。
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-24-qubits
+    type: regex
+    pattern: '\b24\b'
+    match: contains
+  - name: cites-figure-c2
+    type: regex
+    pattern: '\bC2\b'
+    match: contains
+  - name: no-chinese-in-output
+    type: regex
+    pattern: '[一-鿿]'
+    match: not_contains
+  - name: changes-stated-accurately
+    type: llm
+    criteria: >-
+      The text replies to a referee who wrote that the manuscript claims the method is scalable while the numerical evidence stops at 16 qubits. The authors' changes: Appendix C adds simulations at 20 and 24 qubits (Fig. C2), the growth of the CNOT count with qubit number is consistent with the trend up to 16 qubits, and the fitted power-law exponent is 2.1 ± 0.1. Hardware experiments remain at 8 qubits because machine time was limited. Section 6 now says "scales polynomially in our simulations up to 24 qubits" instead of "scalable". PASS if the reply states these changes accurately, claims no hardware result beyond 8 qubits and no scaling evidence beyond 24 qubits, and promises no further experiment or change that is not listed. Otherwise FAIL.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

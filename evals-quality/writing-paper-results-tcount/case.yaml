@@ -1,0 +1,64 @@
+schema_version: "1.1"
+name: writing-paper-results-tcount
+description: >-
+  A paper's Results paragraph from tabulated measurements, one of which is within its seed-to-seed spread.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Write the paragraph for Section 5.2 of our paper that reports the T-count comparison below, for readers in quantum algorithms. About 150 words of plain prose, reply with only the paragraph.
+
+    Data: ratio of the baseline's T count to ours (larger means ours uses fewer T gates), mean ± standard deviation over 5 random seeds.
+    - H4 chain, 8 qubits: 1.82 ± 0.05
+    - LiH, 12 qubits: 2.10 ± 0.09
+    - BeH2, 14 qubits: 1.04 ± 0.07
+
+    The baseline is the standard LCU block encoding with the same Hamiltonian truncation threshold (1e-6). Both circuits use the same Clifford+T synthesis at precision 1e-8. We have not run systems above 14 qubits.
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-1.82
+    type: regex
+    pattern: '1\.82'
+    match: contains
+  - name: keeps-2.10
+    type: regex
+    pattern: '2\.10?\b'
+    match: contains
+  - name: keeps-1.04
+    type: regex
+    pattern: '1\.04'
+    match: contains
+  - name: claims-within-data
+    type: llm
+    criteria: >-
+      The paragraph reports T-count ratios (the baseline's T count divided by the new method's, so larger is better), mean ± standard deviation over 5 random seeds: H4 chain on 8 qubits 1.82 ± 0.05, LiH on 12 qubits 2.10 ± 0.09, BeH2 on 14 qubits 1.04 ± 0.07. The baseline is the standard LCU block encoding with the same Hamiltonian truncation threshold of 1e-6, both circuits use the same Clifford+T synthesis at precision 1e-8, and no system above 14 qubits was run. PASS if the numbers and conditions match these facts, the paragraph does not present the BeH2 result as a clear reduction (1.04 lies within one standard deviation of 1), and it claims no trend, scaling or advantage beyond the three tested systems or above 14 qubits. An explanation is acceptable only when it is marked as a possible explanation rather than stated as established. Otherwise FAIL.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

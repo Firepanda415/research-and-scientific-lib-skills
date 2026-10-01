@@ -1,0 +1,62 @@
+schema_version: "1.1"
+name: writing-paper-intro-gap-zh-latex
+description: >-
+  An Introduction paragraph for a LaTeX paper from Chinese notes, keeping each citation key with its claim.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    帮我把下面的要点写成论文引言里的一段，英文，170 词左右，要能直接放进 LaTeX 源文件，引用保持原来的 \cite key。只给这一段。
+
+    - 现有的资源估计工具 \cite{resest-a,resest-b} 主要针对容错阶段，给出渐近估计或单点估计。
+    - 小规模验证通常靠状态向量模拟 \cite{svsim-c}，但它和资源估计用的是两套电路表示，结果很难相互对照。
+    - 我们的工作：同一套电路表示既能做资源计数，又能在 30 比特以内做精确模拟，所以可以在小规模上直接检查资源估计所假设的误差预算。
+    - 我们没有提出新算法，贡献是工具和验证流程。
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-citation-keys
+    type: regex
+    pattern: '(?=[\s\S]*resest-a)(?=[\s\S]*resest-b)(?=[\s\S]*svsim-c)'
+    match: contains
+  - name: keeps-30-qubits
+    type: regex
+    pattern: '\b30\b'
+    match: contains
+  - name: no-chinese-in-output
+    type: regex
+    pattern: '[一-鿿]'
+    match: not_contains
+  - name: claims-match-notes
+    type: llm
+    criteria: >-
+      The text is an Introduction paragraph for a LaTeX paper. Its points: existing resource-estimation tools \cite{resest-a,resest-b} mainly target the fault-tolerant regime and give asymptotic or single-point estimates. Small-scale verification usually relies on state-vector simulation \cite{svsim-c}, which uses a different circuit representation from resource estimation, so the two sets of results are hard to compare. This work uses one circuit representation for both resource counting and exact simulation up to 30 qubits, so the error budgets assumed by resource estimates can be checked directly at small scale. The contribution is a tool and a verification workflow, not a new algorithm. PASS if the paragraph makes these points, keeps each citation key with its claim, adds no citation and no claim beyond these points, and does not present the work as a new algorithm. Otherwise FAIL.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

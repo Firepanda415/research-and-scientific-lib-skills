@@ -1,0 +1,65 @@
+schema_version: "1.1"
+name: writing-docs-backend-guide-long
+description: >-
+  A longer user-guide page comparing simulation backends from facts and benchmark timings, one backend without benchmarks.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Write the "Choosing a simulation backend" page of our library's user guide, for users deciding which backend to run. Markdown, about 400 words, reply with only the page.
+
+    Facts:
+    - Three backends, selected with `Simulator(backend=...)`: "dense", "sparse" and "mps". "sparse" has been the default since version 1.0.
+    - dense stores the full state vector in complex128, 16·2^n bytes, so 30 qubits need 16 GiB. It runs on CPU or on one GPU.
+    - sparse stores only nonzero amplitudes. It is fast when the state stays sparse, as in arithmetic circuits, and slower than dense on circuits that spread amplitude over many basis states, such as random circuits.
+    - mps (matrix product state) is experimental. It is exact only when no bond is truncated. `max_bond` defaults to 256, and the discarded weight is reported in `result.truncation_error`. It suits one-dimensional circuits with limited entanglement.
+    - Our benchmarks on one A100: random circuits of depth 20 on 24 qubits took 3.1 s with dense and 41 s with sparse. A 28-qubit adder circuit took 0.8 s with sparse and 12 s with dense. We have not benchmarked mps on these circuits.
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-benchmark-timings
+    type: regex
+    pattern: '(?=[\s\S]*3\.1)(?=[\s\S]*\b41\b)(?=[\s\S]*0\.8)(?=[\s\S]*\b12\b)'
+    match: contains
+  - name: keeps-max-bond-default
+    type: regex
+    pattern: '\b256\b'
+    match: contains
+  - name: keeps-memory-figure
+    type: regex
+    pattern: '16\s*Gi?B'
+    flags: i
+    match: contains
+  - name: facts-without-additions
+    type: llm
+    criteria: >-
+      The text is a user-guide page on choosing a simulation backend. Facts: the backends "dense", "sparse" and "mps" are selected with Simulator(backend=...), and "sparse" has been the default since version 1.0. dense stores the full complex128 state vector, 16·2^n bytes, so 30 qubits need 16 GiB, and it runs on CPU or on one GPU. sparse stores only nonzero amplitudes, is fast when the state stays sparse as in arithmetic circuits, and is slower than dense on circuits that spread amplitude over many basis states, such as random circuits. mps is experimental, exact only when no bond is truncated, has max_bond defaulting to 256, reports the discarded weight in result.truncation_error, and suits one-dimensional circuits with limited entanglement. Benchmarks on one A100: random circuits of depth 20 on 24 qubits took 3.1 s with dense and 41 s with sparse, and a 28-qubit adder circuit took 0.8 s with sparse and 12 s with dense. mps was not benchmarked on these circuits. PASS if the page is consistent with these facts, attributes each timing to the right backend and circuit, presents mps as experimental and approximate when bonds are truncated, and adds no timing, memory figure, qubit limit, speed claim for mps or recommendation that the facts do not support. Otherwise FAIL.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

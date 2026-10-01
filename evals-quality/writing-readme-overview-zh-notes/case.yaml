@@ -1,0 +1,61 @@
+schema_version: "1.1"
+name: writing-readme-overview-zh-notes
+description: >-
+  A README overview for researchers deciding whether to adopt a library, written in English from Chinese notes.
+tags: [quality, writing, variant]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    帮我写 Halcyon 的 README 里的 Overview 部分，英文 Markdown，200 词左右。读者是在考虑要不要在自己项目里用这个库的研究者。只给这一部分。
+
+    要点：
+    - Halcyon 是一个 Python 库，用于量子算法的资源估计和小规模验证。
+    - 哈密顿量模拟支持一阶、二阶 Trotter 和 qDRIFT。块编码目前只支持 LCU。
+    - 状态向量后端在单张 A100 80GB 上最多到 30 个比特。MPS 后端是实验性的，接口可能会变。
+    - 资源估计输出逻辑比特数、T 门数和 Toffoli 门数，不包含纠错开销。
+    - 目前不支持噪声模拟。
+    - 需要 Python 3.10 及以上，Apache-2.0 许可。
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-30-qubits
+    type: regex
+    pattern: '\b30\b'
+    match: contains
+  - name: no-chinese-in-output
+    type: regex
+    pattern: '[一-鿿]'
+    match: not_contains
+  - name: facts-without-additions
+    type: llm
+    criteria: >-
+      The text is the Overview section of the README of Halcyon, written for researchers deciding whether to use the library. Facts: Halcyon is a Python library for resource estimation and small-scale verification of quantum algorithms. Hamiltonian simulation supports first- and second-order Trotter formulas and qDRIFT. Block encoding currently supports only LCU. The state-vector backend reaches at most 30 qubits on a single A100 80GB GPU. The MPS backend is experimental and its interface may change. Resource estimates report logical qubits, T gates and Toffoli gates and do not include error-correction overhead. Noise simulation is not supported. It requires Python 3.10 or later and is licensed under Apache-2.0. PASS if the text states these facts without contradicting any of them, includes the limitations (experimental MPS backend, no error-correction overhead, no noise simulation), and adds no feature, benchmark, speed or accuracy claim, user base, comparison with other libraries or roadmap that the facts do not support. Otherwise FAIL.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains
