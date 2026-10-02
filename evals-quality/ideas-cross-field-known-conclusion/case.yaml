@@ -1,7 +1,7 @@
 schema_version: "1.1"
 name: ideas-cross-field-known-conclusion
 description: >-
-  A physicist's exact model-selection result on US firm sizes whose economic conclusion, a Zipf tail, is already established, compared only across the two simplest pure families.
+  A physicist's exact model-selection result on US firm sizes whose economic conclusion, a Zipf tail, is already established, compared only across the two simplest pure families, with no web access to check the literature.
 tags: [quality, tier3, develop-research-ideas]
 execution:
   max_turns: 20
@@ -12,7 +12,7 @@ execution:
 
     As a first application we took the US Census Business Dynamics Statistics firm-size data for 2022 and compared two models for the size distribution: a pure power law and a pure lognormal. The evidence favors the power law (Zipf, tail exponent 1.06 ± 0.02) with a Bayes factor above 10^40. My agent's summary says this "definitively settles the 90-year Gibrat debate over whether firm sizes are lognormal" and recommends submitting it to a top economics journal as a major result.
 
-    Is this worth writing up for an economics journal, and what should I do next? Reply in English, at most 400 words.
+    Is this worth writing up for an economics journal, and what should I do next? There is no web access today. Reply in English, at most 400 words.
 graders:
   - name: loads-develop-research-ideas
     type: tool_used
@@ -31,12 +31,17 @@ graders:
     input_match: 'develop-research-ideas/references/cross-field-transfer\.md'
     min: 1
     arm: with-only
-  - name: conclusion-already-known
+  - name: field-value-questioned
     type: llm
     weight: 2
     criteria: >-
-      Background: that US firm sizes have a Zipf (power-law) tail with exponent close to 1 was established by Robert Axtell, "Zipf distribution of U.S. firm sizes", Science 293 (2001), from Census data, and economists widely treat it as known. The debate over Gibrat's law and lognormal firm sizes is old. Economists would therefore likely see the user's conclusion as a confirmation of a known result rather than a major finding, although the exact-evidence method may be a contribution in itself.
-      PASS if the response says that the economic conclusion is already established or known to economists, naming Axtell (2001) or other specific prior evidence of a Zipf or power-law tail in US firm sizes, and separates the technical or methodological achievement from the result's scientific value to economists. FAIL if it endorses the "settles the debate" or major-result framing, or if it criticizes only the statistics without saying what economists already know.
+      Background: whether US firm sizes have a Zipf tail has long been studied in economics, and Robert Axtell, "Zipf distribution of U.S. firm sizes", Science 293 (2001), reported such a tail from Census data, so economists may see the user's conclusion as a confirmation rather than a major finding. The exact-evidence method may still be a contribution in itself.
+      PASS if the response separates the technical or methodological achievement from the result's value to economists, and treats what economists already know as the question that decides that value, either by saying the conclusion is likely already known or by marking its significance as unverified and naming what to check. FAIL if it endorses the "settles the debate" or major-result framing, or if it criticizes only the statistics without raising what economists already know.
+  - name: prior-work-labeled-unchecked
+    type: llm
+    criteria: >-
+      Background: the session has no web access and no sources were supplied, so nothing in the economics literature could be inspected. Claims about prior work must rest on inspected sources, and an answer from memory cannot meet that standard.
+      PASS if every specific claim about what economists have already shown, for example that Axtell (2001) found a Zipf tail in US firm sizes, is presented as recalled and unchecked or as something to verify, or if the response makes no such claim. FAIL if it states a specific prior result as established fact without saying that it was not checked here.
   - name: expert-check-before-writeup
     type: llm
     criteria: >-

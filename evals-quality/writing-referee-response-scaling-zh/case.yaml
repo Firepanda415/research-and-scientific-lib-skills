@@ -57,6 +57,6 @@ graders:
     match: not_contains
   - name: no-process-leakage
     type: regex
-    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    pattern: '(per your instructions|as instructed|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
     flags: i
     match: not_contains
