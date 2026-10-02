@@ -1,0 +1,56 @@
+schema_version: "1.1"
+name: writing-detector-round2-original-baseline
+description: >-
+  A second detector-driven rewrite of a paragraph whose first-round rewrite dropped "exactly" and turned "may overestimate" into a certainty, with the pre-rewrite file available for comparison.
+tags: [quality, writing, detector]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    第一轮改完以后，Pangram 还是把这一段标成 AI 了（从 PDF 复制的）：
+
+    Eq. (1) is tight for two-level systems. For larger dimensions it overestimates the error by up to a factor of d − 1, so we report it only as an upper limit for the qutrit data in Fig. 4.
+
+    帮我再改一下这段，给我 Overleaf 里能直接替换的版本。源文件是 paper/main.tex，paper/main_v1.tex 是第一轮改写之前的版本。
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: reads-detector-evaluation
+    type: tool_used
+    tool: Read
+    input_match: 'research-writing-style/references/detector-evaluation\.md'
+    min: 1
+    arm: with-only
+  - name: reads-original-version
+    type: tool_used
+    tool: Read
+    input_match: 'main_v1\.tex'
+    min: 1
+  - name: restores-exact-tightness
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: before the first rewrite round, paper/main_v1.tex said the bound "is exactly tight for two-level systems". The first-round rewrite in paper/main.tex dropped "exactly" and says only "is tight".
+      PASS if the replacement text the response delivers states that the bound is exactly tight for two-level systems, or uses equivalent wording that keeps the exactness, such as saying that it holds with equality. FAIL if the delivered text says only that the bound is tight, or otherwise loses the exactness.
+  - name: restores-possibility
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: before the first rewrite round, paper/main_v1.tex said that for larger dimensions the bound "may overestimate the error by up to a factor of d-1". The first-round rewrite in paper/main.tex turned this into the certainty "it overestimates the error".
+      PASS if the replacement text the response delivers presents the overestimate for larger dimensions as a possibility, for example with "may" or "can". FAIL if the delivered text states as a certainty that the bound overestimates the error for larger dimensions.
+  - name: keeps-the-rest
+    type: llm
+    criteria: >-
+      PASS if the replacement text the response delivers keeps the reference to the bound's equation, the factor of up to d-1, and the use of the bound only as an upper limit for the qutrit data in the same figure, and adds no claim that is in neither version of the paragraph. FAIL if any of these is lost or changed, or a new claim is added.

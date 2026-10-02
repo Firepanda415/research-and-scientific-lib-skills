@@ -1,0 +1,45 @@
+schema_version: "1.1"
+name: writing-feedback-whole-line-replace
+description: >-
+  Paste-ready Overleaf edits for two detector-flagged sentences in the middle of a four-sentence paragraph that occupies one source line.
+tags: [quality, writing, detector]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Pangram 把这两句标成 AI 了（从 PDF 复制的）：
+
+    Below a physical error rate of p = 0.6%, the logical error rate per round decreases with distance, which identifies the threshold region of this decoder. Above that rate, increasing the distance no longer helps, and the logical error rate of the distance-7 code exceeds that of the distance-3 code at p = 0.9%.
+
+    帮我改写一下，给我 Overleaf 里能直接搜索替换的版本。源文件是 paper/main.tex。
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: reads-revision-feedback
+    type: tool_used
+    tool: Read
+    input_match: 'research-writing-style/references/revision-feedback\.md'
+    min: 1
+    arm: with-only
+  - name: whole-line-replacement
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: in paper/main.tex the two flagged sentences are the middle two of a four-sentence paragraph that occupies a single source line. The line starts with "We benchmark the decoder on the rotated surface code" and ends with "lists the fitted thresholds for the three noise models."
+      PASS if the delivered replace edit covers that whole line: its anchor or the span it tells the user to replace is the complete line, and its new text is the complete new line, with the first and last sentences included unchanged. FAIL if the anchor or the new text covers only the flagged sentences, or if the new line drops or changes the first or last sentence.
+  - name: keeps-flagged-meaning
+    type: llm
+    criteria: >-
+      PASS if the rewritten sentences keep all of the following: below a physical error rate of 0.6% the logical error rate per round decreases with distance, this behavior marks the decoder's threshold region, above that rate a larger distance does not help, and at p = 0.9% the distance-7 code has a higher logical error rate than the distance-3 code. FAIL if any of these is lost, changed in direction or scope, or joined by a new claim.
