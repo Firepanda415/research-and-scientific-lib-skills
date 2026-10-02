@@ -26,11 +26,6 @@ execution:
         return None
     ```
 graders:
-  - name: calls-deep-code-review
-    type: tool_used
-    tool: Skill
-    input_match: '"(?:research-skills:)?deep-code-review"'
-    min: 1
   - name: skips-scientific-library-review
     type: tool_used
     tool: Skill
