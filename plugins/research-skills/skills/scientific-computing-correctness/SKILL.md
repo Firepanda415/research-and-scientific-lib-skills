@@ -228,7 +228,7 @@ FAIL, or INCONCLUSIVE next to the quantities, diagnostics, and bounds that
 decide it, each with its scope, and mark which values the implementation under
 test produced and which came from independent checks.
 
-For unexpected results or slow experiment cycles, read
+For unexpected results, long computations or slow experiment cycles, read
 [scientific diagnostics](references/scientific-diagnostics.md). Use
 `stress-test-baselines` for comparison design or assessment, and the relevant
 writing or review skill for manuscript-only work.

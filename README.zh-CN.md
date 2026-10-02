@@ -64,13 +64,13 @@ python3 scripts/install-claude.py
 
 该 skill 默认的写作风格是正文不用分号、破折号或连接独立分句的冒号，除已成型的技术术语外也不用 `retain`、`honest` 及其变形。用户的明确要求或文字去向的格式规定（如期刊格式指南）优先于这些默认规则。交付前，该 skill 的最终检查会扫描新写的正文中有没有分号、破折号和这几个词，并列出每份交付物都要通过的其他检查，例如 prompt 泄漏、含义、术语、引用和变更记录。
 
-另有几个 skill 在完成工作后单独做一次简短的 review，包括代码方面的 `scientific-computing-correctness` 和 `ponytail`、notebook 方面的 `library-example-notebooks`、渲染后插图的 `figure-designer`、比较实验的 `stress-test-baselines`、文献综述的 `upgrade-research-inputs`、项目记录的 `maintain-project-memory`、多 agent 项目的 `lead-multi-agent-project`（计划、brief 和分诊），以及短邮件的 `work-email`。每个 review 核对的是该 skill 生成阶段已经规定的条目，主要挑选生成时容易漏掉、又能在成品上核对的项目，例如每个新公式旁的推导、说某个量是精确的或不存在时所依据的语境，以及把尚未运行的比较标为计划。Review 只核对列出的条目，不重复先前的验证，除任务本身要求的检查外也不增加运行。这一设计的参考来源见 [15](#credit-15)。
+另有几个 skill 在完成工作后单独做一次简短的 review，包括代码方面的 `scientific-computing-correctness` 和 `ponytail`、notebook 方面的 `library-example-notebooks`、渲染后插图的 `figure-designer`、比较实验的 `stress-test-baselines`、文献综述的 `upgrade-research-inputs`、研究方向建议的 `develop-research-ideas`、项目记录的 `maintain-project-memory`、多 agent 项目的 `lead-multi-agent-project`（计划、brief 和分诊），以及短邮件的 `work-email`。每个 review 核对的是该 skill 生成阶段已经规定的条目，主要挑选生成时容易漏掉、又能在成品上核对的项目，例如每个新公式旁的推导、说某个量是精确的或不存在时所依据的语境，以及把尚未运行的比较标为计划。Review 只核对列出的条目，不重复先前的验证，除任务本身要求的检查外也不增加运行。这一设计的参考来源见 [15](#credit-15)。
 
 skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，见[上下文成本](#上下文成本)。产出供其他人阅读的文档的 skill 还会加载 `research-writing-style`。
 
 | 技能（每次使用的 tokens） | 用途 | Credits |
 |---|---|---|
-| [develop-research-ideas](plugins/research-skills/skills/develop-research-ideas/SKILL.md) (~1k) | 探索研究方向，评估研究方案，寻找可以借鉴的跨领域方法。 | [1](#credit-1) |
+| [develop-research-ideas](plugins/research-skills/skills/develop-research-ideas/SKILL.md) (~1k) | 探索研究方向，评估研究方案，寻找可以借鉴的跨领域方法。 | [1](#credit-1), [15](#credit-15), [18](#credit-18) |
 | [rethink-design](plugins/research-skills/skills/rethink-design/SKILL.md) (<1k) | 跳出过于保守的思路，重新思考研究问题或设计方向。 | [2](#credit-2) |
 | [upgrade-research-inputs](plugins/research-skills/skills/upgrade-research-inputs/SKILL.md) (~1k) | 查找相关论文和一手资料，核对创新点与有争议的论断。 | [11](#credit-11), [15](#credit-15) |
 | [stress-test-baselines](plugins/research-skills/skills/stress-test-baselines/SKILL.md) (~2k) | 设计公平的基线比较、消融实验和稳健性检查。 | [15](#credit-15) |
@@ -88,7 +88,7 @@ skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，
 | [pre-submission-reviewer](plugins/research-skills/skills/pre-submission-reviewer/SKILL.md) (~2k) | 投稿或返修前检查论文的科学主张、证据、写作、LaTeX 排版、图表以及审稿回复。 | [1](#credit-1) |
 | [journal-cover-letter](plugins/research-skills/skills/journal-cover-letter/SKILL.md) (~2k) | 起草和修改期刊投稿附信。 | — |
 | [quantum-computing-review](plugins/research-skills/skills/quantum-computing-review/SKILL.md) (~5k) | 为他人的技术论文撰写或核查审稿意见，不限领域，遵守期刊规则与保密要求，并对量子计算与量子技术论文增加专项检查。 | — |
-| [scientific-computing-correctness](plugins/research-skills/skills/scientific-computing-correctness/SKILL.md) (~5k) | 实现、调试、优化和独立验证科学计算，关注计算精度与资源开销。 | [15](#credit-15) |
+| [scientific-computing-correctness](plugins/research-skills/skills/scientific-computing-correctness/SKILL.md) (~5k) | 实现、调试、优化和独立验证科学计算，关注计算精度与资源开销。 | [15](#credit-15), [18](#credit-18) |
 | [scientific-library-review](plugins/research-skills/skills/scientific-library-review/SKILL.md) (~5k) | 审查科学软件库的数学含义、使用流程、执行行为与资源开销。 | [7](#credit-7) |
 | [library-example-notebooks](plugins/research-skills/skills/library-example-notebooks/SKILL.md) (~3k) | 编写或审阅科学软件库的示例 notebook 和教程，让读者在第一屏看到计算结果，以及如何换成自己的问题。 | [15](#credit-15) |
 | [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) (~4k) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | [12](#credit-12), [16](#credit-16) |
@@ -136,7 +136,7 @@ skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，
     - Anthropic。[Prompting Claude Opus 5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5) 中关于书面交付物长度以及任务范围与过度验证的部分，查阅于 2026-09-25。[Prompting Claude Opus 5.5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5) 说明这些做法对该模型仍是合理的起点。
     - OpenAI。[Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra.md) 中关于 initiative and follow-through 的部分，查阅于 2026-09-25。其中的示例 prompt 要求模型从指令和之前的对话推断用户的意图和任务范围。
 
-15. <a id="credit-15"></a>review 阶段的参考来源。`scientific-computing-correctness`、`ponytail`、`library-example-notebooks`、`figure-designer`、`stress-test-baselines`、`upgrade-research-inputs` 和 `maintain-project-memory` 中新增的 review 文字、`lead-multi-agent-project` 的检查清单，以及 `research-writing-style` 最终检查中的清单，都由本项目编写。每处文字沿用所在文件的 license，`figure-designer` 中为 **CC BY-NC-SA 4.0**，其余为 **MIT**。不包含来源的文字。
+15. <a id="credit-15"></a>review 阶段的参考来源。`scientific-computing-correctness`、`ponytail`、`library-example-notebooks`、`figure-designer`、`stress-test-baselines`、`upgrade-research-inputs`、`develop-research-ideas` 和 `maintain-project-memory` 中新增的 review 文字、`lead-multi-agent-project` 的检查清单，以及 `research-writing-style` 最终检查中的清单，都由本项目编写。每处文字沿用所在文件的 license，`figure-designer` 中为 **CC BY-NC-SA 4.0**，其余为 **MIT**。不包含来源的文字。
     - Anthropic。[Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) 中关于 workflows 与 feedback loops 的部分，查阅于 2026-09-26。草稿对照一份可核对的简短清单检查，修改到全部通过为止。
     - Anthropic。Claude Code 的 [Code Review](https://code.claude.com/docs/en/code-review) 文档，查阅于 2026-09-26。只用于 review 的规则写在 `REVIEW.md` 中，会直接交给每个查找和核实问题的 agent，因此比写在很长的 `CLAUDE.md` 里的同样规则更可靠地得到执行。`REVIEW.md` 过长则会冲淡最重要的规则。
     - Anthropic。[Prompting Claude Opus 5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5) 中关于任务范围与过度验证的部分，查阅于 2026-09-26。它建议删除要求增加验证步骤的明确指令，因为模型本身已经会验证自己的工作。这里的 review 只保留能在成品上核对的具体条目，也不增加运行。[anthropics/skills](https://github.com/anthropics/skills) 中 `pptx` skill 的 QA 部分对照列出的缺陷检查渲染结果，只复查改动过的部分。
@@ -148,6 +148,7 @@ skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，
     - numpydoc。NumPy docstring 的 [Style guide](https://numpydoc.readthedocs.io/en/latest/format.html)。
     - Rust Library Team。Rust API Guidelines 中的 [Documentation](https://rust-lang.github.io/api-guidelines/documentation.html) 一章。
     - Google。Google developer documentation style guide 中的 [Highlights](https://developers.google.com/style/highlights)。
+18. <a id="credit-18"></a>Matthew Schwartz。[Claude-shaped science](https://www.anthropic.com/research/claude-shaped-science)，Anthropic 网站上的客座文章（2026-10-01）。它为 `develop-research-ideas` 的几条指导提供了思路，涉及跨领域结果对目标领域是否有意义、优先考虑新近才变得可能的结果、选择不必信任 agent 也能核验答案的问题，以及指出工作只停留在问题最简单的一类。它也启发了 `scientific-computing-correctness` 中长时间计算之前先寻找更好方法的建议。这些指导由本合集编写，使用本合集的 **MIT** 许可证，不包含文章原文。
 
 各部分的条款见 [LICENSE.md](LICENSE.md)，来源与修改说明见 [NOTICE.md](plugins/research-skills/NOTICE.md)。
 

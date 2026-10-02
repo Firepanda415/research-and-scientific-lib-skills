@@ -16,6 +16,13 @@ access may lose its advantage once input preparation or data loading (such as
 quantum state preparation), measurement or readout, communication, or storage is
 included.
 
+A transfer can be technically correct and still answer a question the target
+field has settled in qualitative form or no longer asks. Before investing
+further, establish what that field currently asks and already knows. Outside the
+user's own field, neither the agent's enthusiasm nor the user's agreement shows
+that a result matters. Name the question a domain expert would need to answer,
+and use `upgrade-research-inputs` for expert input.
+
 Keep a useful transfer, narrow it, seek a specific missing fact, or set it aside
 with a reason. Preserve artifacts only when requested or needed for ongoing work;
 the learning itself can be the result. Do not build a full system to prove that

@@ -1,8 +1,8 @@
 # Scientific diagnostics
 
-Use this reference for unexplained results or slow experiment cycles. Start from
-available code, configurations, logs, and outputs; identify the uncertainty
-before choosing another run.
+Use this reference for unexplained results, long computations or slow experiment
+cycles. Start from available code, configurations, logs, and outputs; identify
+the uncertainty before choosing another run.
 
 ## Unexpected results
 
@@ -18,8 +18,13 @@ before choosing another run.
 - For large states or trajectories, use selected observables, residuals, or
   streamed summaries. State what the inspected sample cannot establish.
 
-## Slow experiment cycles
+## Long computations and slow experiment cycles
 
+- Before starting a computation expected to take hours or days, or when one runs
+  well past its expected time, check whether a method change would cut it by
+  orders of magnitude, such as an algorithm with better scaling, structure the
+  problem offers, or a tool when the same calculation recurs. Continue the long
+  run when no such change costs less in total.
 - Locate time spent reaching an informative result, including launch, execution,
   interpretation, and repeated manual work. Use existing timings first.
 - Choose the smallest workload that preserves the mechanism being tested;

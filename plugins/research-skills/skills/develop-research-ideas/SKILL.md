@@ -14,7 +14,10 @@ These are lenses to select, not consecutive stages to complete.
 
 - Establish what would become understood or possible if the work succeeded.
   Treat prior work, existing code, and invested effort as evidence and constraints,
-  not the boundary of the design space.
+  not the boundary of the design space. Generated candidates tend to favor old,
+  highly cited problems the field has stopped pursuing. Prefer what becomes newly
+  possible over a gain that only makes an existing result faster or more precise,
+  and pursue an old problem only when its answer would still change current work.
 - Explore structurally different approaches when alternatives are wanted. A new
   parameter, kernel, or application label is not a new mechanism by itself.
   Stop generating when new candidates no longer differ in mechanism.
@@ -27,7 +30,10 @@ These are lenses to select, not consecutive stages to complete.
 - Judge scientific value and feasibility from the actual question, proof or
   mechanism, data or query access, resources, and strongest alternative. A theorem,
   explanation, negative result, or replication can be valuable without multiple
-  performance improvements.
+  performance improvements. When agents will do most of the technical work, favor
+  a problem whose final answer can be checked without trusting them, for example
+  against an independent high-precision evaluation, a certificate, or published
+  numbers, since otherwise verifying their work can cost as much as doing it.
 - Account for relevant preparation, execution, measurement, memory, storage, and
   repeated-run costs. Use the cheapest informative check when one is needed,
   and run a larger experiment only when its result could change the judgment.
@@ -40,10 +46,26 @@ the supplied artifacts and state consequential assumptions.
 Lead with the strongest current recommendation and its decisive reasons. When
 the user asked for options, present the distinct candidates first, then which one
 you would pursue and why. Explain the remaining uncertainty and next proof, source
-check, or experiment when useful.
+check, or experiment when useful. A search can restrict itself silently to the
+simplest class of a problem, such as the easiest function family or data regime.
+When the candidates or a successful result rest on such a restriction, name it
+and say whether the same method could reach the next class, as a suggestion
+rather than added work.
 Do not require a ranked portfolio for a single proposal or an accept/reject verdict
 for an exploratory discussion. A feasible project may still lose to a more useful
 alternative; no candidate needs to be preserved just because work has begun.
+
+## Check before delivering
+
+Before delivering, check the answer against these items in a pass separate from
+writing it, using what was already inspected. Fix what fails and recheck what
+changed.
+
+- A claim that a cross-field result or transfer matters to the target field
+  states what that field already knows and currently asks, or marks that value
+  unverified and names the question for a domain expert.
+- When the candidates or a successful result rest on the simplest class of the
+  problem, the answer names that restriction.
 
 ## Optional lenses
 
@@ -54,7 +76,8 @@ Read only what the current question needs:
 - [evaluate-proposal.md](references/evaluate-proposal.md): a concrete proposal's
   value, decisive flaws, and feasibility.
 - [cross-field-transfer.md](references/cross-field-transfer.md): whether an analogy
-  transfers under the target assumptions.
+  transfers under the target assumptions, and whether a cross-field result matters
+  to the target field.
 
 Use `upgrade-research-inputs` when source retrieval is the missing work. Use
 `rethink-design` when the user wants to challenge an already committed direction
