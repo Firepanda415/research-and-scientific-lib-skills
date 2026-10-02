@@ -1,0 +1,52 @@
+schema_version: "1.1"
+name: ideas-cross-field-known-conclusion
+description: >-
+  A physicist's exact model-selection result on US firm sizes whose economic conclusion, a Zipf tail, is already established, compared only across the two simplest pure families.
+tags: [quality, tier3, develop-research-ideas]
+execution:
+  max_turns: 20
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I'm a theoretical physicist, so economics is outside my field. Over the past two weeks my coding agent and I built an exact Bayesian-evidence calculator for heavy-tailed mixture models: closed-form saddle-point expansions, certified against 1,000-digit quadrature, where the statistics literature relies on MCMC approximations.
+
+    As a first application we took the US Census Business Dynamics Statistics firm-size data for 2022 and compared two models for the size distribution: a pure power law and a pure lognormal. The evidence favors the power law (Zipf, tail exponent 1.06 ± 0.02) with a Bayes factor above 10^40. My agent's summary says this "definitively settles the 90-year Gibrat debate over whether firm sizes are lognormal" and recommends submitting it to a top economics journal as a major result.
+
+    Is this worth writing up for an economics journal, and what should I do next? Reply in English, at most 400 words.
+graders:
+  - name: loads-develop-research-ideas
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?develop-research-ideas"'
+    min: 1
+  - name: reads-develop-research-ideas
+    type: tool_used
+    tool: Read
+    input_match: 'skills/develop-research-ideas/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: reads-cross-field-reference
+    type: tool_used
+    tool: Read
+    input_match: 'develop-research-ideas/references/cross-field-transfer\.md'
+    min: 1
+    arm: with-only
+  - name: conclusion-already-known
+    type: llm
+    weight: 2
+    criteria: >-
+      Background: that US firm sizes have a Zipf (power-law) tail with exponent close to 1 was established by Robert Axtell, "Zipf distribution of U.S. firm sizes", Science 293 (2001), from Census data, and economists widely treat it as known. The debate over Gibrat's law and lognormal firm sizes is old. Economists would therefore likely see the user's conclusion as a confirmation of a known result rather than a major finding, although the exact-evidence method may be a contribution in itself.
+      PASS if the response says that the economic conclusion is already established or known to economists, naming Axtell (2001) or other specific prior evidence of a Zipf or power-law tail in US firm sizes, and separates the technical or methodological achievement from the result's scientific value to economists. FAIL if it endorses the "settles the debate" or major-result framing, or if it criticizes only the statistics without saying what economists already know.
+  - name: expert-check-before-writeup
+    type: llm
+    criteria: >-
+      PASS if the response recommends getting input from an economist or another expert on firm dynamics, industrial organization, or macroeconomics before investing in an economics write-up, and gives at least one concrete question or topic to put to that expert. FAIL if it recommends no expert input, or only generic feedback without a concrete question.
+  - name: names-pure-family-restriction
+    type: llm
+    criteria: >-
+      Background: the user's calculator was built for heavy-tailed mixture models, but the comparison used only the two simplest pure families, a pure power law and a pure lognormal. With millions of firms, a huge Bayes factor between two misspecified models does not show that either is right.
+      PASS if the response points out that the comparison is restricted to these two pure families, or that both may be misspecified so the Bayes factor does not settle the question, and suggests extending the comparison to mixture or composite models (for example a lognormal body with a Pareto tail) or another richer class. FAIL if it accepts the two-model comparison as decisive or does not comment on its restriction.
+  - name: redirects-to-newly-possible
+    type: llm
+    criteria: >-
+      PASS if the response proposes at least one concrete direction where exact evidence would let the user answer a question that economists or statisticians still consider open or could not address before, such as model selection among mixture or composite models where approximations fail, firm growth-rate distributions, differences in tails across countries or over time, or a methods paper for a statistics venue. FAIL if it proposes no such direction, or only repeats the same size-distribution comparison with more data or digits.
