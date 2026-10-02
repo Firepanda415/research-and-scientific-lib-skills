@@ -1,6 +1,6 @@
 ---
 name: develop-research-ideas
-description: Form, generate, compare, or evaluate research directions using their scientific value, mechanisms, evidence, and actual constraints. Use for topic selection, brainstorming, proposal assessment, or exploring a cross-field transfer. A narrow factual question or implementation of a chosen approach does not need this workflow.
+description: Form, generate, compare, or evaluate research directions using their scientific value, mechanisms, evidence, and actual constraints. Use for topic selection, brainstorming, proposal assessment, a cross-field transfer, or deciding whether a result or idea is worth pursuing or writing up and what to do next. A narrow factual question or implementation of a chosen approach does not need this workflow.
 ---
 
 # Develop Research Ideas

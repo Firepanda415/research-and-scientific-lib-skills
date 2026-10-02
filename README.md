@@ -72,7 +72,7 @@ The number after each skill name estimates the tokens the skill loads by default
 
 | Skill (tokens per use) | Purpose | Credits |
 |---|---|---|
-| [develop-research-ideas](plugins/research-skills/skills/develop-research-ideas/SKILL.md) (~1k) | Develop and assess research directions, proposals, and ideas from other fields. | [1](#credit-1), [15](#credit-15), [18](#credit-18) |
+| [develop-research-ideas](plugins/research-skills/skills/develop-research-ideas/SKILL.md) (~1k) | Develop and assess research directions, proposals, and ideas from other fields, and judge whether a result is worth pursuing or writing up. | [1](#credit-1), [15](#credit-15), [18](#credit-18) |
 | [rethink-design](plugins/research-skills/skills/rethink-design/SKILL.md) (<1k) | Reconsider a limiting research question or design choice and assess a more ambitious alternative. | [2](#credit-2) |
 | [upgrade-research-inputs](plugins/research-skills/skills/upgrade-research-inputs/SKILL.md) (~1k) | Investigate literature, novelty, disputed claims, and missing primary evidence. | [11](#credit-11), [15](#credit-15) |
 | [stress-test-baselines](plugins/research-skills/skills/stress-test-baselines/SKILL.md) (~2k) | Design or run fair comparisons, ablation studies, and robustness checks. | [15](#credit-15) |

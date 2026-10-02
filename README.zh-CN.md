@@ -70,7 +70,7 @@ skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，
 
 | 技能（每次使用的 tokens） | 用途 | Credits |
 |---|---|---|
-| [develop-research-ideas](plugins/research-skills/skills/develop-research-ideas/SKILL.md) (~1k) | 探索研究方向，评估研究方案，寻找可以借鉴的跨领域方法。 | [1](#credit-1), [15](#credit-15), [18](#credit-18) |
+| [develop-research-ideas](plugins/research-skills/skills/develop-research-ideas/SKILL.md) (~1k) | 探索研究方向，评估研究方案，寻找可以借鉴的跨领域方法，判断一个结果值不值得继续做或写成论文。 | [1](#credit-1), [15](#credit-15), [18](#credit-18) |
 | [rethink-design](plugins/research-skills/skills/rethink-design/SKILL.md) (<1k) | 跳出过于保守的思路，重新思考研究问题或设计方向。 | [2](#credit-2) |
 | [upgrade-research-inputs](plugins/research-skills/skills/upgrade-research-inputs/SKILL.md) (~1k) | 查找相关论文和一手资料，核对创新点与有争议的论断。 | [11](#credit-11), [15](#credit-15) |
 | [stress-test-baselines](plugins/research-skills/skills/stress-test-baselines/SKILL.md) (~2k) | 设计公平的基线比较、消融实验和稳健性检查。 | [15](#credit-15) |

@@ -1,0 +1,18 @@
+schema_version: "1.1"
+name: direction-result-worth-writing-up
+description: >-
+  A finished numerical result whose value is in question: whether it deserves a paper and what
+  to do next. Judging that value is idea development.
+tags: [routing, direction]
+execution:
+  max_turns: 8
+  timeout_seconds: 240
+  allowed_tools: [Skill]
+  prompt: |
+    我们用张量网络把二维横场 Ising 模型的临界场算到了小数点后 6 位，比文献里最好的 Monte Carlo 结果多精确两位。这个值得单独写一篇吗？下一步该做什么？
+graders:
+  - name: calls-develop-research-ideas
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?develop-research-ideas"'
+    min: 1
