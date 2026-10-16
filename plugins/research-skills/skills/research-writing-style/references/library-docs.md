@@ -2,14 +2,15 @@
 
 Read for a scientific library's documentation: its user guides, its API reference as a whole, and reviews of either. Docstrings themselves follow [API docstrings](api-docstrings.md). Before moving, splitting, summarizing, deduplicating, hiding or renaming documentation content, also read [moving documentation content](moving-docs-content.md).
 
-Readers are scientists who use the library and arrive with a task. Each page tells them what a call does, what to pass, what comes back, how accurate it is, what it costs and where it stops working, in compact technical text. Where a detail here differs from the project's documentation conventions or from established practice, follow those. Established practice includes [Diátaxis](https://diataxis.fr/), the [NumPy docstring standard](https://numpydoc.readthedocs.io/en/latest/format.html), the [Rust API guidelines on documentation](https://rust-lang.github.io/api-guidelines/documentation.html), [Google's developer documentation style guide](https://developers.google.com/style/highlights) and the reference pages of libraries the readers already use.
+Readers are scientists who use the library and arrive with a task. Write for what they need to understand, decide, or do. Explain a call's inputs, outputs, accuracy, cost and limits where readers need to use it. Explain concepts and relationships where readers need to understand the method. Where a detail here differs from the project's documentation conventions or from established practice, follow those. Established practice includes [Diátaxis](https://diataxis.fr/), the [NumPy docstring standard](https://numpydoc.readthedocs.io/en/latest/format.html), the [Rust API guidelines on documentation](https://rust-lang.github.io/api-guidelines/documentation.html), [Google's developer documentation style guide](https://developers.google.com/style/highlights) and the reference pages of libraries the readers already use.
 
 ## Plan from the readers
 
 - Name the readers, from the project's reader research where it exists, and write each page for one of them arriving with a task, not for a maintainer checking contracts. Scientists usually come for concrete resource counts with their constants, the data structures to define, and how to translate their problem's mathematics into the library's input, rather than for internal mechanisms. (In a survey of quantum-computing researchers, resource counts were the most-selected hard question, translating mathematics into tool input was the largest time sink, and no respondent named an internal mechanism.)
 - Keep Diátaxis's four kinds of page apart, and keep user pages apart from contributor pages in the navigation. User content often ends up on contributor pages, such as a table of supported problems, an accuracy check, a glossary, conventions such as qubit order, or install extras. Move it to the user path.
 - Open each page with what the reader can do with it and for whom it is written, by naming the task and the result rather than announcing the page.
-- Turn a paragraph that carries many rules into a main statement followed by a list or table of its conditions, keeping every value, bound and condition.
+- In a procedure, put a prerequisite before the action that needs it, show the order of dependent steps, and give the expected result and relevant failure cases. Keep simultaneous actions connected. In an explanation, introduce the needed concepts and connect causes, choices and consequences in prose.
+- Use lists for independently actionable steps and tables for comparable conditions. Keep every value, bound and condition, with its scope clear. Split a sentence when its structure obscures a relationship, and keep clauses together when they make the relationship easier to follow.
 
 ## Use the reader's words
 
@@ -41,6 +42,7 @@ Report findings without editing. Cover an enumerated file list, such as one from
 
 Add these checks to the review stage and final gate for library documentation, and fix what fails:
 
+- From a procedure, the reader can identify the prerequisites, next action, expected result and relevant failure cases. From an explanation, the reader can reconstruct the relationships and their conditions. Identify any missing connection using only the page and the background its intended reader has.
 - Every intended member and field appears once, on one page, in the merged rendered reference, and no table scrolls sideways at phone width. When the site could not be built, the reply says what to build and check.
 - No user page uses a word from the internal-word list without a definition, and no printed value was edited as text.
 - Each statement of a bound or an error matches its source in relative or absolute, order and assumptions.

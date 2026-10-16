@@ -4,7 +4,7 @@ Use this reference for manuscript or response-letter drafting, substantial parag
 
 ## Write for the paper's reader
 
-Make each sentence serve the paper's argument. Keep reviewer correspondence and the authors' working process out of manuscript prose. Explain disagreement with a reviewer in the response letter, factually and briefly; do not add a manuscript paragraph merely to disparage a suggested citation or pre-empt criticism.
+Make each sentence serve the paper's argument. Use connected prose to explain how the evidence supports the claim, with procedural detail where readers need it to reproduce the method. Keep reviewer correspondence and the authors' working process out of manuscript prose. Explain disagreement with a reviewer in the response letter, factually and briefly. Do not add a manuscript paragraph merely to disparage a suggested citation or pre-empt criticism.
 
 Work from the active text. Commented-out source counts as deleted unless the user says otherwise, so do not cite it, derive from it, or describe it as the paper's content.
 

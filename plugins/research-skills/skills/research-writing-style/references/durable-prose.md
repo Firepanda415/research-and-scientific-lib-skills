@@ -4,7 +4,7 @@ Read this reference whenever the parent skill applies. Write for the actual read
 
 ## Content before polish
 
-Before drafting, identify what the reader needs to understand or do and which facts support it. For an edit, locate the claims, evidence, uncertainty, and important details in the original. Preserve names, dates, values, units, bounds, rankings, causal direction, simultaneity, citations, and meaningful qualifications. “More than 30” must not become “30.” A correlation must not become a cause. An unverified relationship must not become a named role.
+Before drafting, identify what the reader needs to understand, decide, or do and which facts support it. Judge clarity by whether that reader can identify the relevant objects, relationships, conditions, and consequences without guessing. Add or remove detail according to that need. For an edit, locate the claims, evidence, uncertainty, and important details in the original. Preserve names, dates, values, units, bounds, rankings, causal direction, simultaneity, citations, and meaningful qualifications. “More than 30” must not become “30.” A correlation must not become a cause. An unverified relationship must not become a named role.
 
 Make the finished text understandable without this chat. Supply the necessary object, scope, and context instead of unexplained references to “the above,” a review plan, or an earlier conversation. Introduce a list by its scope rather than treating its title as the name of an entity.
 
@@ -61,6 +61,8 @@ Let the argument determine sentence and paragraph length. Repair mechanical runs
 Keep all distinct members of a genuine list, whether there are two, three, or ten. Remove a padded triad only when its members duplicate one another or say nothing. Do not drop a dimension, example, result, ranking, or simultaneous action to improve rhythm. Check “from X to Y” for a real range, scale, sequence, or clearly stated scope. Unrelated endpoints are not an explanation.
 
 Use a table for comparable fields and lists for steps, criteria, alternatives, or independently actionable items. Use prose for an argument. Do not force an essay into a table or give every sentence a bold mini-heading. Preserve useful definitions and acronym expansions when removing decoration.
+
+Choose a medium for the relationship the reader needs to understand. A diagram can show structure, an interactive view can support parameter exploration, and a video can explain a process over time. Add such an artifact when it serves the requested task and fits its workload. Keep exact definitions, values and conditions available in text, and make each visual agree with them.
 
 Use headings that help readers find information, with a coherent hierarchy and the target's capitalization rules. Sentence case is the default when no house style is specified. Avoid redundant titles, empty heading scaffolds, gratuitous level-one headings, skipped levels, and a separator between every short section. A required template or navigation structure can justify a parent heading with child sections.
 
