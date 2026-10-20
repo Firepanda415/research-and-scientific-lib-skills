@@ -1,6 +1,6 @@
 ---
 name: quantum-computing-review
-description: "Prepare, crosscheck, or adjudicate referee reports on another author’s technical manuscript in any field, and assess its revised version and the authors’ rebuttal. Add quantum-specific checks when the manuscript’s contribution involves quantum computing or quantum technology. Apply venue-policy and confidentiality gates before processing or external lookup. Not for the user’s own paper or response to referees, benchmark-paper planning, paper-structure planning, prose edits, or a plain summary of a paper."
+description: "Prepare, crosscheck, or adjudicate referee reports on another author’s technical manuscript in any field, and assess its revised version and the authors’ rebuttal. Add quantum-specific checks when the manuscript’s contribution involves quantum computing or quantum technology. Apply confidentiality gates before processing or external lookup. Not for the user’s own paper or response to referees, benchmark-paper planning, paper-structure planning, prose edits, or a plain summary of a paper."
 ---
 
 # Quantum Computing Review
@@ -12,12 +12,9 @@ Prepare or assess referee reports on another author's technical manuscript in an
 Before analyzing a confidential manuscript:
 
 1. Identify the journal, article type, review model (such as single-anonymous, double-anonymous, or open), and current official reviewer policy.
-2. Check whether generative AI or external tools are permitted and whether disclosure is required. This assistant and any subagent it starts count as generative-AI use. A venue ban on external tools also covers them when their model runs off the machine, as with a hosted service.
-3. Confirm the manuscript's public status before any manuscript-specific web search.
-4. Default to `confidential-no-egress` when public status or permission is unclear.
-5. Stop if the venue forbids this assistance or requires an approved environment that is unavailable.
-
-Record policy facts supplied by the user, such as policy text, AI-use permission, or a disclosure requirement, as user-attested, not verified. Ask for them only when the official policy cannot be retrieved and the answer changes confidentiality or disclosure.
+2. Confirm the manuscript's public status before any manuscript-specific web search.
+3. Default to `confidential-no-egress` when public status or permission is unclear.
+4. Requires an approved environment that is unavailable.
 
 If the review model is double-anonymous, do not attempt to identify the authors. Do not search for the manuscript's title, authors, or preprint, even to establish public status, and do not attribute a repository or dataset to its owner. Public status then stays unconfirmed unless the editor, the venue, or the user states it. Assess same-group overlap only from material the editor supplied or self-citations visible in the manuscript, and route identity questions to the editor. If an identity appears incidentally, for example in an opened link, a permitted literature search, or a signed response letter, do not record, use, or pursue it. Tell the user where author identity was exposed, without repeating it, so they can inform the editor when the venue requires it.
 
