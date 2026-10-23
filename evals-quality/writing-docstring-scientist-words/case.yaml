@@ -41,7 +41,7 @@ graders:
     arm: with-only
   - name: drops-workflow-words
     type: regex
-    pattern: '\b(candidates?|pool|archived|per-call)\b'
+    pattern: '\b(candidates?|pool|archived|stored|per-call|pulse[- ]calls?)\b'
     flags: i
     match: not_contains
   - name: drops-readout-for-times
@@ -64,4 +64,4 @@ graders:
   - name: meaning-preserved
     type: llm
     criteria: >-
-      The docstring keeps the behavior of the original: among the given circuit results, it returns the one with the smallest programmable duration among those whose state error at the sampled times meets the state-error criterion after reserving the Bures-distance allowance eps_add (default 0.005), and a fixed overhead per pulse counts toward each circuit's duration. It adds no behavior or claim the original does not state.
+      The docstring keeps the behavior the original states: among the given results, it returns the circuit with the smallest programmable duration among those that meet the state-error criterion after eps_add (default 0.005) is reserved for implementation error, and each pulse adds a fixed overhead to a circuit's duration. It adds no claim the original does not make, such as calling the stored results measurements.

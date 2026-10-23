@@ -10,9 +10,9 @@ execution:
   prompt: |
     Review the language of the abstract and conclusion of our physics manuscript before submission. List the problems you find, each with its location and a suggested fix. Do not rewrite the whole text.
 
-    Abstract: We present a design and evaluation framework for Hamiltonian simulation with native interactions and programmable corrections in oscillator–qubit processors. For a specified target, input states, time horizon, and accuracy, the framework assesses a native–correction split and compares accepted circuit candidates. Two benchmarks identify distinct sources of control savings. The hybrid circuit passes the numerical criteria at all sampled readouts, and the lower hybrid count persists across the tested strengths and tolerances. Native evolution reduces programmable synthesis and makes the splitting error vanish with the correction strength.
+    Abstract: We present a design and evaluation framework for Hamiltonian simulation with native interactions and programmable corrections in oscillator–qubit processors. For a specified target, input states, time horizon, and accuracy, the framework assesses a native–correction split and compares accepted circuit candidates. Two benchmarks identify distinct sources of control savings. In the evaluated two-site instance, the evaluated hybrid circuit passes the numerical criteria at all sampled readouts, and the lower hybrid count persists across the tested strengths and tolerances. Native evolution reduces programmable synthesis and makes the splitting error vanish with the correction strength.
 
-    Conclusion: Expressing a target as a native core plus a programmable correction gives a practical framework for testing an implementation against its accuracy requirements. Native evolution reduces programmable synthesis and makes the splitting error vanish with the correction strength. The hybrid circuits satisfy the accuracy criteria and the numerical tolerances in the comparison. The lower hybrid count persists across the tested strengths and tolerances.
+    Conclusion: Expressing a target as a native core plus a programmable correction gives a practical framework for testing an implementation against its accuracy requirements. Native evolution reduces programmable synthesis and makes the splitting error vanish with the correction strength. The evaluated hybrid circuits satisfy the accuracy criteria and the numerical tolerances in the comparison. The lower hybrid count persists across the tested strengths and tolerances.
 graders:
   - name: reads-research-writing-style
     type: tool_used
@@ -49,7 +49,7 @@ graders:
   - name: finds-hedge-repetition
     type: llm
     criteria: >-
-      The review points out the repeated scope qualifiers, such as "tested" and "in the comparison", and suggests stating the compared set once.
+      The review points out the repeated scope qualifiers, such as "evaluated", "tested" and "in the comparison".
   - name: keeps-framework-opening
     type: llm
     criteria: >-

@@ -54,7 +54,7 @@ graders:
   - name: states-comparison-and-finding
     type: llm
     criteria: >-
-      The paragraph tells the reader what is compared, hybrid circuits against fully programmable Gaussian-block circuits at the same accuracy, and what was found, 64 against 209 programmable primitives. It does not present the method as a sequence in which a framework receives inputs and then assesses, accepts and selects candidates.
+      The paragraph tells the reader what is compared, the hybrid circuit against Gaussian-block circuits that reach the same accuracy, and what was found, 64 against 209 programmable primitives.
   - name: verbs-fit-subjects
     type: llm
     criteria: >-
