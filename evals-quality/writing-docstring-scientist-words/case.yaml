@@ -1,0 +1,67 @@
+schema_version: "1.1"
+name: writing-docstring-scientist-words
+description: >-
+  An API docstring for physicists that uses workflow words from the code, edited to the readers' words.
+tags: [quality, writing]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Edit this docstring for our quantum-simulation library's API reference. Its readers are physicists. Reply with only the edited docstring.
+
+    ```python
+    def select_fastest(results, eps_add=0.005):
+        """Select the fastest circuit from the candidate pool.
+
+        Each candidate in the pool is accepted when its archived readouts pass the
+        state-error criterion after reserving eps_add. The per-call overhead of each
+        pulse is charged to the candidate before selection. This step runs at the
+        end of the benchmarking pipeline.
+
+        Parameters
+        ----------
+        results : list of CircuitResult
+            Candidates produced by the step scan, with their archived readouts.
+        eps_add : float, optional
+            Bures-distance allowance reserved for implementation error.
+
+        Returns
+        -------
+        CircuitResult
+            The accepted candidate with the smallest programmable duration.
+        """
+    ```
+graders:
+  - name: reads-api-docstrings
+    type: tool_used
+    tool: Read
+    input_match: 'references/api-docstrings\.md'
+    min: 1
+    arm: with-only
+  - name: drops-workflow-words
+    type: regex
+    pattern: '\b(candidates?|pool|archived|per-call)\b'
+    flags: i
+    match: not_contains
+  - name: drops-readout-for-times
+    type: regex
+    pattern: '\breadouts?\b'
+    flags: i
+    match: not_contains
+  - name: keeps-eps-add
+    type: regex
+    pattern: 'eps_add'
+    match: contains
+  - name: keeps-default
+    type: regex
+    pattern: '0\.005'
+    match: contains
+  - name: keeps-sections
+    type: regex
+    pattern: 'Parameters[\s\S]*Returns'
+    match: contains
+  - name: meaning-preserved
+    type: llm
+    criteria: >-
+      The docstring keeps the behavior of the original: among the given circuit results, it returns the one with the smallest programmable duration among those whose state error at the sampled times meets the state-error criterion after reserving the Bures-distance allowance eps_add (default 0.005), and a fixed overhead per pulse counts toward each circuit's duration. It adds no behavior or claim the original does not state.

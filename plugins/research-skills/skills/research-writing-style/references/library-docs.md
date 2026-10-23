@@ -14,7 +14,7 @@ Readers are scientists who use the library and arrive with a task. Write for wha
 
 ## Use the reader's words
 
-Words from the code's design, such as owner, ledger, admission or receipt, are jargon on user pages. Replace each with what the reader calls the thing or with the object's name, or define it once on that page when the reader needs the concept, and keep that one name. A public API name stays as code and gets a plain explanation where it first appears. Contributor pages may keep the terms they define. Where the plain word would be less exact, keep the term and define it.
+Words from the code's design or workflow, such as owner, ledger, admission, receipt, candidate pool, accepted, or archived, are jargon on user pages. Everyday words with a single meaning, such as pipeline, can stay, and a word with a scientific meaning, such as readout, keeps that meaning. Replace each with what the reader calls the thing or with the object's name, or define it once on that page when the reader needs the concept, and keep that one name. A public API name stays as code and gets a plain explanation where it first appears. Contributor pages may keep the terms they define. Where the plain word would be less exact, keep the term and define it.
 
 - Before: "Admission charges the plan against the work ceiling before acquisition."
 - After: "Before running any circuit, the library estimates the plan's work and rejects plans above `max_work`."

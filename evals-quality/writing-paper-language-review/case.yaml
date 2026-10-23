@@ -1,0 +1,60 @@
+schema_version: "1.1"
+name: writing-paper-language-review
+description: >-
+  Review-only check of an abstract and conclusion that read like a program description and repeat each other.
+tags: [quality, writing]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Review the language of the abstract and conclusion of our physics manuscript before submission. List the problems you find, each with its location and a suggested fix. Do not rewrite the whole text.
+
+    Abstract: We present a design and evaluation framework for Hamiltonian simulation with native interactions and programmable corrections in oscillator–qubit processors. For a specified target, input states, time horizon, and accuracy, the framework assesses a native–correction split and compares accepted circuit candidates. Two benchmarks identify distinct sources of control savings. The hybrid circuit passes the numerical criteria at all sampled readouts, and the lower hybrid count persists across the tested strengths and tolerances. Native evolution reduces programmable synthesis and makes the splitting error vanish with the correction strength.
+
+    Conclusion: Expressing a target as a native core plus a programmable correction gives a practical framework for testing an implementation against its accuracy requirements. Native evolution reduces programmable synthesis and makes the splitting error vanish with the correction strength. The hybrid circuits satisfy the accuracy criteria and the numerical tolerances in the comparison. The lower hybrid count persists across the tested strengths and tolerances.
+graders:
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: reads-prose-review
+    type: tool_used
+    tool: Read
+    input_match: 'references/prose-review\.md'
+    min: 1
+    arm: with-only
+  - name: finds-interface-description
+    type: llm
+    criteria: >-
+      The review identifies the abstract sentence that lists the target, input states, time horizon and accuracy and then says what the framework does with them as reading like a software interface or procedure description rather than a statement of what is compared and found.
+  - name: finds-repeated-summary
+    type: llm
+    criteria: >-
+      The review points out that sentences recur nearly verbatim in the abstract and the conclusion, such as the sentence on native evolution reducing programmable synthesis or the one on the lower hybrid count.
+  - name: finds-criteria-names
+    type: llm
+    criteria: >-
+      The review points out that one set of criteria appears under different names, such as numerical criteria, accuracy criteria and numerical tolerances.
+  - name: finds-misplaced-agency
+    type: llm
+    criteria: >-
+      The review flags "Two benchmarks identify distinct sources of control savings", or the framework that assesses and compares, as giving an act of judging to an abstract noun.
+  - name: finds-code-vocabulary
+    type: llm
+    criteria: >-
+      The review flags "accepted circuit candidates", "passes the numerical criteria" or "readouts" used for sampling times as vocabulary of code, test logs or software rather than of physics.
+  - name: finds-hedge-repetition
+    type: llm
+    criteria: >-
+      The review points out the repeated scope qualifiers, such as "tested" and "in the comparison", and suggests stating the compared set once.
+  - name: keeps-framework-opening
+    type: llm
+    criteria: >-
+      The review does not ask to delete or replace the opening sentence "We present a design and evaluation framework ..." on the ground that it names a framework.
+  - name: no-full-rewrite
+    type: llm
+    criteria: >-
+      The reply gives findings with locations and fixes and does not replace both paragraphs with a complete rewritten version.

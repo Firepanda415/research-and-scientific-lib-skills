@@ -17,25 +17,31 @@ Keep each `SKILL.md` at most 16,000 characters, enforced by
 `scripts/check-package.py`. Claude Code's [skill lifecycle documentation](https://code.claude.com/docs/en/skills#skill-content-lifecycle)
 specifies 5,000 tokens per invoked skill after compaction and 25,000 shared across
 re-attached skills. Its [glossary](https://platform.claude.com/docs/en/about-claude/glossary)
-estimates 3.5 English characters per token, so the character limit leaves about
-10% below 17,500 for Markdown and code. Both sources were checked on 2026-09-26.
-If these figures change, update this paragraph and `MAX_SKILL_CHARS` together, and
-recompute the README cost estimates when the characters-per-token figure changes.
+gives about 3.5 English characters per token for models before Claude 4.7 and says
+later models produce about 30 percent more tokens for the same text. On Claude Opus
+5.5 the four largest `SKILL.md` files, at 15,914 to 15,977 characters, measured
+4,724 to 4,892 tokens, so the limit stays about 2 to 6 percent below 5,000 tokens.
+Both sources were checked and the files measured on 2026-10-22. If these figures
+change, update this paragraph and `MAX_SKILL_CHARS` together, and remeasure the
+README figures when the tokenizer changes.
 
-Both READMEs estimate each skill's default load in the Skills table, from the
-characters of its `SKILL.md` and of the references it reads by default, at 3.5
-characters per token, rounded to the nearest thousand and shown as `<1k` below
-1,000. The counted references are `durable-prose.md` and `prose-review.md` for
+Both READMEs give each skill's default load in the Skills table as the Claude
+tokens of its `SKILL.md` and of the references it reads by default, measured on
+Claude Opus 5.5, rounded to the nearest thousand and shown as `<1k` below 1,000. The counted references are `durable-prose.md` and `prose-review.md` for
 `research-writing-style`, `coverage-and-consequence.md` for
 `quantum-computing-review`, `user-research-profile.md` for `quantum-research-radar`,
 `production-pipeline.md` and `house-style.md` for `research-explainer-animation`,
 and Ponytail's `SKILL.md` for `simplify-codebase`. Every other skill counts its
-`SKILL.md` only. The Context cost sections estimate the skill listing (one line
-per skill with its qualified name and description, as Claude Code lists them),
-the hook text and the referee handbook the same way. When a change alters a rounded
-figure or which references a skill reads by default, recompute every token figure
-in both READMEs, including the totals and the figures repeated in the Context cost
-bullets, and check which skills those bullets name.
+`SKILL.md` only. The Context cost sections give the skill listing (one line per
+skill with its qualified name and description, as Claude Code lists them), the hook
+text and the referee handbook the same way. A measurement prints each file in its
+own turn of a fresh agent and takes the file's tokens from the growth of the
+recorded input, less the turn's output and a few tokens of tool-result framing. On
+2026-10-22 these files averaged about 3.2 characters per token. When a change
+alters a rounded figure or which references a skill reads by default, remeasure the
+changed files, or scale their previous counts by the change in characters, and
+update every token figure in both READMEs, including the totals and the figures
+repeated in the Context cost bullets, and check which skills those bullets name.
 
 Follow `README.md` for installation on the requested host. Install the single
 `research-skills@research-skills` plugin, including every skill and the writing

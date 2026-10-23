@@ -46,12 +46,11 @@ CLAUDE_READERS = {"Read", "Bash"}
 CODEX_CALLS = {"function_call", "custom_tool_call", "local_shell_call"}
 CACHES = [HOME / ".claude/plugins/cache/research-skills/research-skills",
           HOME / ".codex/plugins/cache/research-skills/research-skills"]
-# --cost converts characters to tokens per host. Claude: about 3.5 English characters
-# per token, from https://platform.claude.com/docs/en/about-claude/glossary (checked
-# 2026-09-27), the figure AGENTS.md uses for the README estimates. Codex: about 5
-# characters per token for this plugin's Markdown, measured from the context growth
-# after single-file reads in Codex sessions on 2026-09-27.
-CHARS_PER_TOKEN = {"Claude Code": 3.5, "Codex": 5.0}
+# --cost converts characters to tokens per host, at ratios measured for this plugin's
+# Markdown from the context growth after single-file reads on 2026-10-22. Claude: about
+# 3.2 characters per token on Claude Opus 5.5, as AGENTS.md records for the README
+# figures. Codex: about 4.8, pooled over the writing files read in recent sessions.
+CHARS_PER_TOKEN = {"Claude Code": 3.2, "Codex": 4.8}
 
 
 def entries(path):

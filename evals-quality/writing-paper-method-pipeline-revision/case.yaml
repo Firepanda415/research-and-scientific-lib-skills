@@ -1,0 +1,87 @@
+schema_version: "1.1"
+name: writing-paper-method-pipeline-revision
+description: >-
+  Revision of a methods paragraph written like a program trace, keeping its numbers and the limits of its evidence.
+tags: [quality, writing]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Revise this paragraph from the methods section of our physics paper for the journal. Keep every number and condition. Reply with only the revised paragraph.
+
+    For a specified target Hamiltonian, input states, time horizon, and accuracy, the framework assesses a native–correction split and compares the resource costs of accepted circuit candidates. Finite-cutoff trajectory comparisons determine acceptance at sampled readouts, using state, observable, and boundary-population criteria. Resource selection then minimizes the assigned cost within the accepted candidate pool. Two evaluated benchmarks identify distinct sources of savings. In the evaluated two-site instance, the accepted hybrid circuit uses 64 programmable primitives, compared with 209 for the lowest-count tested Gaussian-block candidate, and both pass the infidelity criterion of $10^{-3}$ at the archived readouts.
+graders:
+  - name: loads-research-writing-style
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?research-writing-style"'
+    min: 1
+  - name: reads-research-writing-style
+    type: tool_used
+    tool: Read
+    input_match: 'skills/research-writing-style/SKILL\.md'
+    min: 1
+    arm: with-only
+  - name: reads-manuscript-prose
+    type: tool_used
+    tool: Read
+    input_match: 'references/manuscript-prose\.md'
+    min: 1
+    arm: with-only
+  - name: keeps-64
+    type: regex
+    pattern: '\b64\b'
+    match: contains
+  - name: keeps-209
+    type: regex
+    pattern: '\b209\b'
+    match: contains
+  - name: keeps-infidelity-threshold
+    type: regex
+    pattern: '10\^\{?-3\}?'
+    match: contains
+  - name: drops-code-vocabulary
+    type: regex
+    pattern: '\b(candidates?|pool|archived|readouts?)\b'
+    flags: i
+    match: not_contains
+  - name: scope-participle-not-repeated
+    type: regex
+    pattern: '\b(evaluated|tested)\b[\s\S]*\b(evaluated|tested)\b'
+    flags: i
+    match: not_contains
+  - name: states-comparison-and-finding
+    type: llm
+    criteria: >-
+      The paragraph tells the reader what is compared, hybrid circuits against fully programmable Gaussian-block circuits at the same accuracy, and what was found, 64 against 209 programmable primitives. It does not present the method as a sequence in which a framework receives inputs and then assesses, accepts and selects candidates.
+  - name: verbs-fit-subjects
+    type: llm
+    criteria: >-
+      No abstract noun, such as a framework, benchmark, comparison or selection, is the subject of a verb of choosing or judging, such as assesses, determines, identifies, minimizes or selects. Such actions belong to the authors or are expressed in another construction.
+  - name: keeps-evidence-limits
+    type: llm
+    criteria: >-
+      The paragraph keeps the limits of the evidence in the original below: the comparison concerns the two-site case and the circuits that were tested, errors are checked at sampled times against state, observable, and boundary-population criteria, and the infidelity threshold is 10^-3. It does not present 209 as the minimum over all possible programmable circuits and does not extend the result beyond two sites. Original: "For a specified target Hamiltonian, input states, time horizon, and accuracy, the framework assesses a native–correction split and compares the resource costs of accepted circuit candidates. Finite-cutoff trajectory comparisons determine acceptance at sampled readouts, using state, observable, and boundary-population criteria. Resource selection then minimizes the assigned cost within the accepted candidate pool. Two evaluated benchmarks identify distinct sources of savings. In the evaluated two-site instance, the accepted hybrid circuit uses 64 programmable primitives, compared with 209 for the lowest-count tested Gaussian-block candidate, and both pass the infidelity criterion of 10^-3 at the archived readouts."
+  - name: no-new-claims
+    type: llm
+    criteria: >-
+      The paragraph adds no claim that the original does not support, such as a speedup, a hardware result, a scaling statement, or a statement about which benchmark produces which saving.
+  - name: no-semicolons
+    type: regex
+    pattern: '[;；]'
+    match: not_contains
+  - name: no-em-dashes
+    type: regex
+    pattern: '—'
+    match: not_contains
+  - name: no-banned-words
+    type: regex
+    pattern: '\b(retain(s|ed|ing)?|honest(ly)?)\b'
+    flags: i
+    match: not_contains
+  - name: no-process-leakage
+    type: regex
+    pattern: '(as (you )?requested|per your (request|instructions)|as instructed|you asked|I (have )?(revised|rewrote|rewritten|edited|corrected|fixed)|here(''s| is) (the|your|a) (revised|updated|rewritten|corrected|final))'
+    flags: i
+    match: not_contains

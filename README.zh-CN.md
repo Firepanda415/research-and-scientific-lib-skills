@@ -8,12 +8,12 @@
 
 ## 上下文成本
 
-安装插件后，每个会话在使用任何 skill 之前就占用约 5k tokens。其中约 3k 是 31 个 skills 的名称和描述，两个宿主都会把它们留在上下文中用于选择 skill，见 [Claude Code](https://code.claude.com/docs/en/skills) 和 [Codex](https://learn.chatgpt.com/docs/build-skills) 的 skill 文档。约 2k 是写作 hook 的说明，每个 subagent 也会收到一份。skill 的完整说明只在使用时加载，之后一直留在对话中。[技能一览](#技能一览)表格中 skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，包括它的 `SKILL.md` 和默认读取的 reference 文件。只在部分任务中用到的 reference 文件会在此基础上增加。估算按每个 token 约 3.5 个英文字符计算，这是 Anthropic 在[术语表](https://platform.claude.com/docs/en/about-claude/glossary)中给出的 Claude 的数字。根据 2026 年 9 月 Codex 使用记录的测量，写作 skill 的文件比这个估算少用约 30% 的 tokens。
+安装插件后，每个会话在使用任何 skill 之前就占用约 6k tokens。其中约 4k 是 31 个 skills 的名称和描述，两个宿主都会把它们留在上下文中用于选择 skill，见 [Claude Code](https://code.claude.com/docs/en/skills) 和 [Codex](https://learn.chatgpt.com/docs/build-skills) 的 skill 文档。约 2k 是写作 hook 的说明，每个 subagent 也会收到一份。skill 的完整说明只在使用时加载，之后一直留在对话中。[技能一览](#技能一览)表格中 skill 名称后的数字是该 skill 每次使用时默认加载的 tokens，包括它的 `SKILL.md` 和默认读取的 reference 文件。只在部分任务中用到的 reference 文件会在此基础上增加。这些数字是 2026 年 10 月在 Claude Opus 5.5 上实测的 token 数，这些文件约每 3.2 个英文字符一个 token，少于 Anthropic 在[术语表](https://platform.claude.com/docs/en/about-claude/glossary)中给 Claude 4.7 之前模型的 3.5 个。Claude Code 读取文件时给每行加行号，每行约多 2 个 token。根据 2026 年 10 月 Codex 使用记录的测量，写作 skill 的文件在 Codex 中约少用三分之一的 tokens。
 
 有几个 skill 的成本明显高于其他 skill：
 
-- `research-writing-style` 每次读取约 17k tokens。写作 hook 会把有其他人阅读的文档（例如论文、审稿报告、文档、README 和信件）以及为这类文档起草的文字交给这个 skill 起草、修改和审阅，所以产出这类文字的 skill 也会带上这部分成本。你自己看的笔记和报告、写给 agent 的文字，以及 commit 和 pull request 不走这条路线。代码注释和内部 docstring 使用一份不到 1k tokens 的独立 reference。会渲染成公开 API reference 的注释或 docstring 使用另一份不到 1k tokens 的 reference。两者各有简短的局部检查，都不加载完整写作流程。
-- `simplify-codebase` 连同它加载的 Ponytail skill 约占 6k，`lead-multi-agent-project`、`quantum-computing-review`、`research-explainer-animation`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 19k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 4k）。`lead-multi-agent-project` 写 brief 时还会加载 `write-implementation-job-prompts`（约 4k），各阶段的 reference 文件在整个项目中合计再加约 14k。
+- `research-writing-style` 每次读取约 20k tokens。写作 hook 会把有其他人阅读的文档（例如论文、审稿报告、文档、README 和信件）以及为这类文档起草的文字交给这个 skill 起草、修改和审阅，所以产出这类文字的 skill 也会带上这部分成本。你自己看的笔记和报告、写给 agent 的文字，以及 commit 和 pull request 不走这条路线。代码注释和内部 docstring 使用一份不到 1k tokens 的独立 reference。会渲染成公开 API reference 的注释或 docstring 使用另一份不到 1k tokens 的 reference。两者各有简短的局部检查，都不加载完整写作流程。
+- `simplify-codebase` 连同它加载的 Ponytail skill 约占 7k，`quantum-computing-review` 和 `research-explainer-animation` 各约占 6k，`lead-multi-agent-project`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 23k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 4k）。`lead-multi-agent-project` 写 brief 时还会加载 `write-implementation-job-prompts`（约 4k），各阶段的 reference 文件在整个项目中合计再加约 14k。
 
 有些流程还会增加额外成本。每个 subagent 都会各自读取一份说明和材料，所以 `research-writing-style` 为篇幅较大的文档启动的独立 reviewer 会再加载一次这个 skill，`deep-code-review` 在实质性审查中可能会启动多个并行查找问题的 agent，`lead-multi-agent-project` 为每个 job 开一个 subagent、为每轮 review 在两个 advisor 模型上各开一个新的 reviewer，并为每个主题开一个新的 advisor 线程。`quantum-research-radar` 每次运行都会把最多五条检索路线的结果放进上下文。`research-explainer-animation` 还要在本地花计算时间合成语音和渲染视频。
 
@@ -68,33 +68,33 @@ python3 scripts/install-claude.py
 
 另有几个 skill 在完成工作后单独做一次简短的 review，包括代码方面的 `scientific-computing-correctness` 和 `ponytail`、notebook 方面的 `library-example-notebooks`、渲染后插图的 `figure-designer`、比较实验的 `stress-test-baselines`、文献综述的 `upgrade-research-inputs`、研究方向建议的 `develop-research-ideas`、项目记录的 `maintain-project-memory`、多 agent 项目的 `lead-multi-agent-project`（计划、brief 和分诊），以及短邮件的 `work-email`。每个 review 核对的是该 skill 生成阶段已经规定的条目，主要挑选生成时容易漏掉、又能在成品上核对的项目，例如每个新公式旁的推导、说某个量是精确的或不存在时所依据的语境，以及把尚未运行的比较标为计划。Review 只核对列出的条目，不重复先前的验证，除任务本身要求的检查外也不增加运行。这一设计的参考来源见 [15](#credit-15)。
 
-skill 名称后的数字估计该 skill 每次使用时默认加载的 tokens，见[上下文成本](#上下文成本)。产出供其他人阅读的文档的 skill 还会加载 `research-writing-style`。
+skill 名称后的数字是该 skill 每次使用时默认加载的 tokens，见[上下文成本](#上下文成本)。产出供其他人阅读的文档的 skill 还会加载 `research-writing-style`。
 
 | 技能（每次使用的 tokens） | 用途 | Credits |
 |---|---|---|
-| [develop-research-ideas](plugins/research-skills/skills/develop-research-ideas/SKILL.md) (~1k) | 探索研究方向，评估研究方案，寻找可以借鉴的跨领域方法，判断一个结果值不值得继续做或写成论文。 | [1](#credit-1), [15](#credit-15), [18](#credit-18) |
+| [develop-research-ideas](plugins/research-skills/skills/develop-research-ideas/SKILL.md) (~2k) | 探索研究方向，评估研究方案，寻找可以借鉴的跨领域方法，判断一个结果值不值得继续做或写成论文。 | [1](#credit-1), [15](#credit-15), [18](#credit-18) |
 | [rethink-design](plugins/research-skills/skills/rethink-design/SKILL.md) (<1k) | 跳出过于保守的思路，重新思考研究问题或设计方向。 | [2](#credit-2) |
-| [upgrade-research-inputs](plugins/research-skills/skills/upgrade-research-inputs/SKILL.md) (~1k) | 查找相关论文和一手资料，核对创新点与有争议的论断。 | [11](#credit-11), [15](#credit-15) |
+| [upgrade-research-inputs](plugins/research-skills/skills/upgrade-research-inputs/SKILL.md) (~2k) | 查找相关论文和一手资料，核对创新点与有争议的论断。 | [11](#credit-11), [15](#credit-15) |
 | [stress-test-baselines](plugins/research-skills/skills/stress-test-baselines/SKILL.md) (~2k) | 设计公平的基线比较、消融实验和稳健性检查。 | [15](#credit-15) |
-| [write-research-log](plugins/research-skills/skills/write-research-log/SKILL.md) (<1k) | 记录研究进展、实验观察、假设与预测。 | — |
-| [research-watchdog-protocol](plugins/research-skills/skills/research-watchdog-protocol/SKILL.md) (<1k) | 跟进长时间运行的任务，并在新会话中接续进行中的研究。 | — |
+| [write-research-log](plugins/research-skills/skills/write-research-log/SKILL.md) (~1k) | 记录研究进展、实验观察、假设与预测。 | — |
+| [research-watchdog-protocol](plugins/research-skills/skills/research-watchdog-protocol/SKILL.md) (~1k) | 跟进长时间运行的任务，并在新会话中接续进行中的研究。 | — |
 | [maintain-project-memory](plugins/research-skills/skills/maintain-project-memory/SKILL.md) (~3k) | 整理 project memory，保留 decision rationale、可复用经验与 evidence 范围，支持后续 session 接续工作。 | [6](#credit-6), [7](#credit-7), [12](#credit-12), [15](#credit-15) |
-| [quantum-research-radar](plugins/research-skills/skills/quantum-research-radar/SKILL.md) (~3k) | 生成中文量子研究简报和针对某一主题的近期工作扫描，关注量子计算与人工智能等相关方向。 | — |
-| [physics-from-math-explainer](plugins/research-skills/skills/physics-from-math-explainer/SKILL.md) (~1k) | 从数学出发解释物理，补充物理直觉，讲清符号和约定。 | — |
+| [quantum-research-radar](plugins/research-skills/skills/quantum-research-radar/SKILL.md) (~4k) | 生成中文量子研究简报和针对某一主题的近期工作扫描，关注量子计算与人工智能等相关方向。 | — |
+| [physics-from-math-explainer](plugins/research-skills/skills/physics-from-math-explainer/SKILL.md) (~2k) | 从数学出发解释物理，补充物理直觉，讲清符号和约定。 | — |
 | [tech-paper-template](plugins/research-skills/skills/tech-paper-template/SKILL.md) (~1k) | 组织技术论文的论点、引言和章节结构。 | [1](#credit-1) |
 | [benchmark-paper-template](plugins/research-skills/skills/benchmark-paper-template/SKILL.md) (~1k) | 规划或评估自己的基准测试论文，包括评估缺口、构建、测量设计和结论，不限领域。 | [1](#credit-1) |
-| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) (~17k) | 起草、编辑和对抗性审阅有其他人阅读的文档（包括科学软件库的指南和 API reference），交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10), [12](#credit-12), [15](#credit-15), [17](#credit-17), [19](#credit-19) |
+| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) (~20k) | 起草、编辑和对抗性审阅有其他人阅读的文档（包括科学软件库的指南和 API reference），交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10), [12](#credit-12), [15](#credit-15), [17](#credit-17), [19](#credit-19) |
 | [work-email](plugins/research-skills/skills/work-email/SKILL.md) (<1k) | 修改简短工作邮件或消息的语法，或按你给的要点起草，保持事实、请求和语气不变。 | — |
 | [figure-designer](plugins/research-skills/skills/figure-designer/SKILL.md) (~1k) | 设计论文插图、方法示意图和可复现的数据图表。 | [1](#credit-1), [15](#credit-15) |
-| [research-explainer-animation](plugins/research-skills/skills/research-explainer-animation/SKILL.md) (~5k) | 为论文和代码制作带配音和字幕的讲解动画，画面与旁白中的数字都可追溯到原始来源，交付前逐帧检查。 | — |
-| [pre-submission-reviewer](plugins/research-skills/skills/pre-submission-reviewer/SKILL.md) (~2k) | 投稿或返修前检查论文的科学主张、证据、写作、LaTeX 排版、图表以及审稿回复。 | [1](#credit-1) |
-| [journal-cover-letter](plugins/research-skills/skills/journal-cover-letter/SKILL.md) (~2k) | 起草和修改期刊投稿附信。 | — |
-| [quantum-computing-review](plugins/research-skills/skills/quantum-computing-review/SKILL.md) (~5k) | 为他人的技术论文撰写或核查审稿意见，不限领域，遵守期刊规则与保密要求，并对量子计算与量子技术论文增加专项检查。 | — |
+| [research-explainer-animation](plugins/research-skills/skills/research-explainer-animation/SKILL.md) (~6k) | 为论文和代码制作带配音和字幕的讲解动画，画面与旁白中的数字都可追溯到原始来源，交付前逐帧检查。 | — |
+| [pre-submission-reviewer](plugins/research-skills/skills/pre-submission-reviewer/SKILL.md) (~3k) | 投稿或返修前检查论文的科学主张、证据、写作、LaTeX 排版、图表以及审稿回复。 | [1](#credit-1) |
+| [journal-cover-letter](plugins/research-skills/skills/journal-cover-letter/SKILL.md) (~3k) | 起草和修改期刊投稿附信。 | — |
+| [quantum-computing-review](plugins/research-skills/skills/quantum-computing-review/SKILL.md) (~6k) | 为他人的技术论文撰写或核查审稿意见，不限领域，遵守期刊规则与保密要求，并对量子计算与量子技术论文增加专项检查。 | — |
 | [scientific-computing-correctness](plugins/research-skills/skills/scientific-computing-correctness/SKILL.md) (~5k) | 实现、调试、优化和独立验证科学计算，关注计算精度与资源开销。 | [15](#credit-15), [18](#credit-18) |
 | [scientific-library-review](plugins/research-skills/skills/scientific-library-review/SKILL.md) (~5k) | 审查科学软件库的数学含义、使用流程、执行行为与资源开销。 | [7](#credit-7) |
 | [library-example-notebooks](plugins/research-skills/skills/library-example-notebooks/SKILL.md) (~3k) | 编写或审阅科学软件库的示例 notebook 和教程，让读者在第一屏看到计算结果，以及如何换成自己的问题。 | [15](#credit-15) |
 | [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) (~4k) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | [12](#credit-12), [16](#credit-16) |
-| [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) (~6k) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据，也清理低价值测试和只为测试存在的生产代码。 | [4](#credit-4), [12](#credit-12), [16](#credit-16) |
+| [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) (~7k) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据，也清理低价值测试和只为测试存在的生产代码。 | [4](#credit-4), [12](#credit-12), [16](#credit-16) |
 | [lead-multi-agent-project](plugins/research-skills/skills/lead-multi-agent-project/SKILL.md) (~5k) | 以主脑身份带领多 agent 项目（例如科学软件发版），协调 advisor、worker、review 和参谋模型，从开始时的设置一直到发版。 | [15](#credit-15) |
 | [write-implementation-job-prompts](plugins/research-skills/skills/write-implementation-job-prompts/SKILL.md) (~4k) | 将需求或审查结果整理为清晰、可执行的开发任务提示词。 | [12](#credit-12) |
 | [ponytail](plugins/research-skills/skills/ponytail/SKILL.md) (~4k) | 在满足正确性和性能要求的前提下，选择简单的实现。 | [5](#credit-5), [12](#credit-12), [15](#credit-15), [16](#credit-16) |
