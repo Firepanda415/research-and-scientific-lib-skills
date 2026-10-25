@@ -118,18 +118,18 @@ Example (illustrative decisions, not report templates): while speeding up a run 
 - full: "`@functools.lru_cache(maxsize=1000)` caches the repeated calls within the 1,000-result memory budget."
 - ultra: "No cache added, because the calculation's 5% share of the profiled run does not justify one."
 
-## When NOT to be lazy
+## When not to simplify
 
 Never simplify away: input validation at trust boundaries, error handling
 that prevents data loss, security measures, accessibility basics, anything
 explicitly requested. User insists on the full version → build it, no
 re-arguing.
 
-Never lazy about understanding the problem. The ladder shortens the
+Never cut corners on understanding the problem. The ladder shortens the
 solution, never the reading. Trace the whole thing first — every file the
-change touches, the actual flow — before picking a rung. Laziness that skips
+change touches, the actual flow — before picking a rung. A shortcut that skips
 comprehension to ship a small diff is the dangerous kind: it dresses up as
-efficiency and ships a confident wrong fix. Read fully, then be lazy.
+efficiency and ships a confident wrong fix. Read fully, then simplify.
 
 Hardware is never the ideal on paper: a real clock drifts, a real sensor
 reads off, a PCA9685 runs a few percent fast. Leave the calibration knob, not
@@ -155,7 +155,8 @@ which plausible failure would escape the remaining checks if this test were
 removed. Tests that usually earn a permanent place check a scientific relation
 or a user-visible contract against an independently computed expected value,
 through the public workflow or at the kernel that owns the relation, act as a
-canary for a dependency's behavior, or distinguish a plausible failure class.
+canary for a dependency's behavior, or are the only check for a plausible
+failure the remaining checks would miss.
 A historical example earns a permanent regression when it still detects a
 failure of a current contract. Incident identity, site-specific numbers, or a
 monkeypatched path users cannot reach do not establish that obligation.

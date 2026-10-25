@@ -8,14 +8,14 @@
 
 ## 上下文成本
 
-安装插件后，每个会话在使用任何 skill 之前就占用约 6k tokens。其中约 4k 是 31 个 skills 的名称和描述，两个宿主都会把它们留在上下文中用于选择 skill，见 [Claude Code](https://code.claude.com/docs/en/skills) 和 [Codex](https://learn.chatgpt.com/docs/build-skills) 的 skill 文档。约 2k 是写作 hook 的说明，每个 subagent 也会收到一份。skill 的完整说明只在使用时加载，之后一直留在对话中。[技能一览](#技能一览)表格中 skill 名称后的数字是该 skill 每次使用时默认加载的 tokens，包括它的 `SKILL.md` 和默认读取的 reference 文件。只在部分任务中用到的 reference 文件会在此基础上增加。这些数字是 2026 年 10 月在 Claude Opus 5.5 上实测的 token 数，这些文件约每 3.2 个英文字符一个 token，少于 Anthropic 在[术语表](https://platform.claude.com/docs/en/about-claude/glossary)中给 Claude 4.7 之前模型的 3.5 个。Claude Code 读取文件时给每行加行号，每行约多 2 个 token。根据 2026 年 10 月 Codex 使用记录的测量，写作 skill 的文件在 Codex 中约少用三分之一的 tokens。
+安装插件后，每个会话在使用任何 skill 之前就占用约 6k tokens。其中约 4k 是 31 个 skills 的名称和描述，两个宿主都会把它们留在上下文中用于选择 skill，见 [Claude Code](https://code.claude.com/docs/en/skills) 和 [Codex](https://learn.chatgpt.com/docs/build-skills) 的 skill 文档。约 2k 是写作 hook 的说明，每个 subagent 也会收到一份。skill 的完整说明只在使用时加载，之后一直留在对话中。[技能一览](#技能一览)表格中 skill 名称后的数字是该 skill 每次使用时默认加载的 tokens，包括它的 `SKILL.md` 和默认读取的 reference 文件。只在部分任务中用到的 reference 文件会在此基础上增加。这些数字是 2026 年 10 月在 Claude Opus 5.5 上实测的 token 数，这些文件约每 3.2 个英文字符一个 token，少于 Anthropic 在[术语表](https://platform.claude.com/docs/en/about-claude/glossary)中给 Claude 4.7 之前模型的 3.5 个。此后修改过的文件，其数字按字符数变化从实测值换算。Claude Code 读取文件时给每行加行号，每行约多 2 个 token。根据 2026 年 10 月 Codex 使用记录的测量，写作 skill 的文件在 Codex 中约少用三分之一的 tokens。
 
 有几个 skill 的成本明显高于其他 skill：
 
 - `research-writing-style` 每次读取约 20k tokens。写作 hook 会把有其他人阅读的文档（例如论文、审稿报告、文档、README 和信件）以及为这类文档起草的文字交给这个 skill 起草、修改和审阅，所以产出这类文字的 skill 也会带上这部分成本。你自己看的笔记和报告、写给 agent 的文字，以及 commit 和 pull request 不走这条路线。代码注释和内部 docstring 使用一份不到 1k tokens 的独立 reference。会渲染成公开 API reference 的注释或 docstring 使用另一份不到 1k tokens 的 reference。两者各有简短的局部检查，都不加载完整写作流程。
 - `simplify-codebase` 连同它加载的 Ponytail skill 约占 8k，`quantum-computing-review` 和 `research-explainer-animation` 各约占 6k，`lead-multi-agent-project`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 23k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 5k）。`lead-multi-agent-project` 写 brief 时还会加载 `write-implementation-job-prompts`（约 4k），各阶段的 reference 文件在整个项目中合计再加约 14k。
 
-有些流程还会增加额外成本。每个 subagent 都会各自读取一份说明和材料，所以 `research-writing-style` 为篇幅较大的文档启动的独立 reviewer 会再加载一次这个 skill，`deep-code-review` 在实质性审查中可能会启动多个并行查找问题的 agent。`lead-multi-agent-project` 为每项必要审查指定负责人，合并可兼任的审查角色，并将适用的审查结论用于交付和验收。有充分依据且已获修改授权的局部文档问题，可以由 reviewer 在现有审查中直接修正收口。科学工作仍保留独立科学审查和必要的最终工作流检查。`quantum-research-radar` 每次运行都会把最多五条检索路线的结果放进上下文。`research-explainer-animation` 还要在本地花计算时间合成语音和渲染视频。
+有些流程还会增加额外成本。每个 subagent 都会各自读取一份说明和材料，所以 `research-writing-style` 为篇幅较大的文档启动的独立 reviewer 会再加载一次这个 skill，`deep-code-review` 在实质性审查中可能会启动多个并行查找问题的 agent。`lead-multi-agent-project` 为每个 job、每组 advisor 问题和每轮 review 各开 session。每轮 review 在开始时选定的 advisor 模型上（默认两个）各开新的 reviewer。参谋模型（默认来自另一家厂商）检查 review 请求和分诊结果。可兼任的审查角色由同一个 reviewer 承担，job 的 review 同时作为验收。`quantum-research-radar` 每次运行都会把最多五条检索路线的结果放进上下文。`research-explainer-animation` 还要在本地花计算时间合成语音和渲染视频。
 
 如果只需要其中一部分，可以 clone 本仓库，让 agent 删除你不用的 skills，并按你的工作需要精简或拆分大的 skills，例如把很少用到的部分移到按需加载的 references 中。有些 skill 依赖其他 skill。写作 hook 指向 `research-writing-style` 和 `work-email`，多个代码类 skills 会加载 `ponytail` 并读取 `scientific-computing-correctness` 中的 reference 文件，`pre-submission-reviewer` 会读取 `benchmark-paper-template` 中的 checklist。除非同时修改用到它的地方，否则应保留这类 skill，删除某个 skill 后也请让 agent 检查 skill 之间的链接。然后按[安装](#安装)和[更新](#更新)中的说明从本地仓库安装。在 Codex 中也可以在 `/hooks` 里关闭写作 hook，见[停用或卸载](#停用或卸载)。
 
@@ -69,8 +69,6 @@ python3 scripts/install-claude.py
 另有几个 skill 在完成工作后单独做一次简短的 review，包括代码方面的 `scientific-computing-correctness` 和 `ponytail`、notebook 方面的 `library-example-notebooks`、渲染后插图的 `figure-designer`、比较实验的 `stress-test-baselines`、文献综述的 `upgrade-research-inputs`、研究方向建议的 `develop-research-ideas`、项目记录的 `maintain-project-memory`、多 agent 项目的 `lead-multi-agent-project`（计划、brief 和分诊），以及短邮件的 `work-email`。每个 review 核对的是该 skill 生成阶段已经规定的条目，主要挑选生成时容易漏掉、又能在成品上核对的项目，例如每个新公式旁的推导、说某个量是精确的或不存在时所依据的语境，以及把尚未运行的比较标为计划。Review 只核对列出的条目，不重复先前的验证，除任务本身要求的检查外也不增加运行。这一设计的参考来源见 [15](#credit-15)。
 
 skill 名称后的数字是该 skill 每次使用时默认加载的 tokens，见[上下文成本](#上下文成本)。产出供其他人阅读的文档的 skill 还会加载 `research-writing-style`。
-
-Ponytail 和 `simplify-codebase` 的估计值于 2026-10-24 按字符数变化从之前的计数换算。测试成本 reference 只在相关任务中读取，不计入默认总量。
 
 | 技能（每次使用的 tokens） | 用途 | Credits |
 |---|---|---|
@@ -160,7 +158,7 @@ Ponytail 和 `simplify-codebase` 的估计值于 2026-10-24 按字符数变化�
     - Anthropic。[Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) 和 [Prompting Claude Opus 5.5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5)，以及后者推荐作为起点的 [Opus 5 指导](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5)。这些资料用于按任务加载 reference、确定范围和控制检查规模。
     - OpenAI。[Build skills](https://learn.chatgpt.com/docs/build-skills) 和 [Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model) 中关于指令遵循、写作风格和验证的部分。这些资料用于明确路由、按读者需要组织文字，并按改动确定检查范围。
 
-20. <a id="credit-20"></a>OpenCode 贡献者。[AGENTS.md](https://github.com/anomalyco/opencode/blob/097a93e511e2cd7d4fbfc12e0623b721b02f23b9/AGENTS.md) 和 [unit-tests skill](https://github.com/anomalyco/opencode/blob/097a93e511e2cd7d4fbfc12e0623b721b02f23b9/.opencode/skills/unit-tests/SKILL.md)，查阅于 2026-10-24。**MIT**，Copyright (c) 2025 opencode。改编为 Ponytail 的抽象与校验判据，以及按需读取的测试成本 reference，`simplify-codebase` 也使用这些指导。改编保留科学准确性和科学家可读性，工具与预算以使用它的项目为准。指令结构参考 Anthropic 的 [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) 和 OpenAI 的 [Build skills](https://learn.chatgpt.com/docs/build-skills)。
+20. <a id="credit-20"></a>OpenCode 贡献者。[AGENTS.md](https://github.com/anomalyco/opencode/blob/097a93e511e2cd7d4fbfc12e0623b721b02f23b9/AGENTS.md) 和 [unit-tests skill](https://github.com/anomalyco/opencode/blob/097a93e511e2cd7d4fbfc12e0623b721b02f23b9/.opencode/skills/unit-tests/SKILL.md)，查阅于 2026-10-24。**MIT**，Copyright (c) 2025 opencode。改编为 Ponytail 的抽象与校验判据，以及按需读取的测试成本 reference，`simplify-codebase` 也使用这些指导。改编时把 OpenCode 的 Bun 命令、Windows 专用建议、超时和重复运行次数换成使用它的项目自己的工具和预算。
 
 各部分的条款见 [LICENSE.md](LICENSE.md)，来源与修改说明见 [NOTICE.md](plugins/research-skills/NOTICE.md)。
 

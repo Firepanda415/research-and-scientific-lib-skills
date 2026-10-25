@@ -42,7 +42,7 @@ follows changed failure modes rather than a fixed test count.
 
 | Skill | Trigger | What it does |
 |-------|---------|--------------|
-| **ponytail** | `$ponytail` | Lazy mode itself. Simplest solution that works. |
+| **ponytail** | `$ponytail` | Simplest code that keeps the required behavior, accuracy and readability. |
 | **ponytail-review** | `$ponytail-review` | Review a diff for justified simplifications that preserve its contracts. |
 | **ponytail-audit** | `$ponytail-audit` | Whole-repo audit of removable complexity and its consequences. |
 | **ponytail-debt** | `$ponytail-debt` | Harvest `ponytail:` shortcut comments into a tracked ledger. |

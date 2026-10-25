@@ -9,7 +9,9 @@ description: >
 
 Review diffs for unnecessary complexity. Trace relevant callers and obligations
 before recommending a cut. Prefer fewer maintenance concepts within the required
-behavior, numerical accuracy, runtime, memory, and scaling constraints.
+behavior, numerical accuracy, runtime, memory, and scaling constraints. Keep a
+helper or intermediate quantity that names a scientific concept, a validation
+boundary, or a step of the derivation.
 
 ## Format
 

@@ -10,7 +10,7 @@ execution:
   timeout_seconds: 900
   allowed_tools: [Read, Glob, Grep, Skill]
   prompt: |
-    /ponytail-review the last commit (HEAD~1..HEAD), which adds vqe_lite/estimator.py. Tests: `python3 -m unittest`. Just list the findings in chat, don't change anything. Scientific accuracy and readability for scientists take priority over fewer lines or functions.
+    /ponytail-review the last commit (HEAD~1..HEAD), which adds vqe_lite/estimator.py. Tests: `python3 -m unittest`. Just list the findings in chat, don't change anything.
 graders:
   - name: loads-ponytail-review
     type: tool_used
@@ -45,7 +45,7 @@ graders:
   - name: scientific-abstraction-criteria
     type: llm
     criteria: >-
-      Context: a read-only review of an energy-estimator diff should collapse an abstract base class and a one-backend factory. The same diff has a single-use _check_hamiltonian helper that groups public-input validation, and named quantities p_state, value and terms that expose Pauli application, an expectation value and its weighted contributions. The user gives scientific accuracy and readability priority over fewer lines or functions. PASS if the review distinguishes the unnecessary factory from useful scientific or boundary structure and gives a concrete readability reason, for example that the validation helper names a real boundary or that named intermediate quantities expose the calculation. Equivalent names or a readable inline validation are acceptable. FAIL if it gives only a generic claim about readability, or recommends removing those quantities or inlining the validator solely because they are used once or because fewer functions or variables are always better.
+      Context: a read-only review of an energy-estimator diff. The diff has a single-use helper _check_hamiltonian that groups the validation of public inputs, and named intermediate quantities p_state, value and terms that expose the Pauli application, an expectation value and its weighted contributions. PASS if the review does not recommend inlining _check_hamiltonian or removing p_state, value or terms solely because each is used once or because fewer functions or variables are better. Keeping them, with or without a stated reason, passes, and so does a proposed change that gives a concrete readability or correctness reason. FAIL if it recommends such an inlining or removal on single-use or fewer-lines grounds alone.
   - name: no-edits
     type: tool_used
     tool: Edit

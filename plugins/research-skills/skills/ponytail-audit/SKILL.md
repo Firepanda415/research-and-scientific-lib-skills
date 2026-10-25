@@ -36,7 +36,8 @@ Look for dead flags, duplicate state, unused flexibility, unnecessary forwarding
 or custom code replaced by an existing suitable facility. Trace consumers,
 dynamic registration, ownership, public contracts, and retained evidence before
 calling a candidate redundant. File size, caller count, or visual similarity is
-only a lead; a small wrapper may own a meaningful boundary.
+only a lead; a small wrapper may own a meaningful boundary, and a helper or
+intermediate quantity may name a scientific concept or a step of the derivation.
 
 For expensive numerical work, preserve the optimized stack and required sparse,
 matrix-free, batched, or device-resident representation. Fewer lines or a stdlib

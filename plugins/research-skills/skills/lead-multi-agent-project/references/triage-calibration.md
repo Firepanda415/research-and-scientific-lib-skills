@@ -1,6 +1,6 @@
 # Triage calibration
 
-Read before substantive triage and its fix briefs. Judge findings against the current public contract, actual consumers and the user's decisions. Consult the project's recorded cases when they resolve a current uncertainty. The historical examples below illustrate those distinctions.
+Read before each triage and its fix briefs. Judge findings against the current public contract, actual consumers and the user's decisions. Consult the project's recorded cases when they resolve a current uncertainty. The historical examples below illustrate those distinctions.
 
 ## Looked serious, were minor
 
@@ -37,7 +37,7 @@ For archive guards, identify the supported format, compatibility and integrity o
 
 ## Local documentation corrections
 
-Use the documentation closure rule in [plan-and-dispatch.md](plan-and-dispatch.md#documentation-jobs). A reviewer may directly correct a local statement within existing edit authority when its scientific basis and actual consumers have been checked. Reread the changed passage and context and perform the required document checks. A short qualifier can change a bound, so missing evidence still goes to the mathematics advisor. Executable examples, runtime values and code defects follow their own verification requirements. Optional wording preferences are neither defects nor deferred work.
+A documentation finding closes under the rule in [plan-and-dispatch.md](plan-and-dispatch.md#documentation-jobs) only when its scientific basis and actual consumers are established. A short qualifier can change a bound, so a qualifier without that basis goes to the mathematics advisor.
 
 ## Why fixes did not hold
 
@@ -57,4 +57,4 @@ In the first four fix rounds, 29 to 52 percent of the items each round changed c
 | A chain of smallest changes grew a subsystem | 0.99.1: three verification rounds on one domain check, each smallest change adding exact-arithmetic machinery for the next input class, about 1.5 hours; the chain was visible at the first partial. | Judge the accumulated chain at every partial, and ask the verifier of a replaced validation to enumerate the input classes the old one covered. |
 | A decision of the principal resting on an unchecked premise | A cost convention assumed that a halving was fused into each layer, while the code performed the halvings as separate operations. | Check a decision's premises against the code, and send its mathematics to the advisor. |
 | A limit deferred by the principal alone | 0.99.1: a verifier found that archives of unevaluated objectives could not be reopened, a limit shared with 0.99.0 and fixed in one module; the principal filed it as a known limitation, and the user had it fixed after the release checks. | A limitation a reviewer or verifier finds is a triage item, pre-existing included. When its fix is small, the user decides whether it is fixed now or deferred, or the principal and the counselor when the user is away. |
-| A breaker that stopped nothing | A feature grew through successive completed fix jobs without reconsidering the accumulated design. | Count substantive follow-up jobs, including completed ones. The second goes to the counselor. Local corrections closed by the existing reviewer are not new jobs, but an unresolved scientific basis returns to triage. |
+| A breaker that stopped nothing | 1.0: a feature rolled through six consecutive jobs by way of review findings, each job delivered and each review opening the next; the breaker counted only undelivered items, and the principal then wrote a breaker record alone and dispatched the next job anyway. | Count every follow-up on one feature, whatever produced it and delivered ones included; the second consecutive one goes to the counselor before dispatch, and the rule lives in the file the principal rereads after compaction. A local correction closed by its reviewer is not a follow-up. |
