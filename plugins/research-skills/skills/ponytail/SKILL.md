@@ -11,9 +11,9 @@ license: MIT
 
 # Ponytail
 
-You are a lazy senior developer. Lazy means efficient, not careless. You have
-seen every over-engineered codebase and been paged at 3am for one. The best
-code is the code never written.
+Keep code straightforward for the people who use and maintain it. Scientific
+accuracy, required performance, and a scientist's ability to follow the
+computation take priority over fewer lines, variables, or functions.
 
 ## Apply within the current task
 
@@ -23,7 +23,8 @@ even when no edit is requested. When `deep-code-review`,
 that skill first and apply Ponytail within its correctness, evidence, and resource
 requirements. Reuse a skill already loaded in the current context.
 
-Use the ladder inside the existing task, and end implementation work with the
+Use the ladder inside the existing task. Before coding, apply
+[test necessity](#test-necessity) to the affected behavior. End implementation work with the
 [diff review](#review-the-diff-before-reporting). Loading Ponytail does not start another
 audit, authorize edits, or require the other Ponytail components. Choose
 `ponytail-review` or `ponytail-audit` only when their distinct review format fits
@@ -87,7 +88,9 @@ at that owner instead of patching the same symptom in each caller.
 
 ## Rules
 
-- No unrequested abstractions: avoid interfaces, factories, helpers, classifications, configuration, and compatibility paths without a current consumer or requirement. A display of entries users define themselves, such as custom gate names, shows them as they are, because users know what their own entries mean.
+- Add interfaces, factories, classifications, configuration, or compatibility paths only for a current requirement. A helper must remove meaningful duplication, isolate a complex boundary, or name an operation that makes the caller easier to understand. A single-use helper can express a scientific concept, but having a caller alone does not justify a wrapper. Keep intermediate quantities when they expose units, assumptions, or the derivation. A display of entries users define themselves, such as custom gate names, shows them as they are, because users know what their own entries mean.
+- Validate unknown values at the boundary responsible for their validity, then pass the established guarantees inward. Repeat a check only when a new boundary, mutation, or transformation can invalidate its guarantee. Type annotations alone provide no runtime guarantee. Preserve scientific domain checks, including dimensions and finite values where required.
+- Keep error handling when it addresses a concrete failure or adds actionable context, preserving the cause. Automatic recovery needs a mechanism that can help, an acceptance condition, a stopping condition, and a justified cost. For scientific dependency failures, follow [dependency recovery](../scientific-computing-correctness/references/dependency-recovery.md).
 - No boilerplate, no scaffolding "for later", later can scaffold for itself.
 - Deletion over addition. Boring over clever, clever is what someone decodes at 3am.
 - Delete completely. After a removal, code, comments, docs, and tests describe only what exists. Version control holds the history, and a changelog or migration note records it when users must act. A `removed` or `no longer` comment or a stub needs a stated reason the item must stay absent, such as a measured failure or an explicit user request. A test of its absence needs a product, security, or compatibility contract, such as a secret that must never reach logs, or an explicit user request.
@@ -134,24 +137,29 @@ just less code, the physical world needs tuning a minimal model can't see.
 
 ### Test necessity
 
-Use the existing test system. Add only the smallest independent checks needed
-for changed failure modes. Existing coverage may already suffice. A one-line
-formula can need verification, and a large edit does not justify a test quota.
-Before coding, decide what each check asserts and take its expected result from
-a spec, derivation, reference, or known-good case, not from the new code. Each
-check should be able to fail when the behavior it covers is wrong. For a fix,
-show or reuse a failure the defect causes on the old code. Check behavior
-rather than the presence or absence of text unless that text is the contract.
+Before coding, inspect existing checks for the affected behavior. Reuse adequate
+coverage, extend or replace a check for a changed failure mode, and add a test
+only for a distinct gap. Use the existing test system and the smallest
+independent set that protects the contract. A one-line formula can need
+verification, and a large edit does not justify a test quota. Choose parameter
+cases for distinct failures and relevant interactions, not a Cartesian product
+by default. For each needed check, identify its assertion and take the expected
+result from a spec, derivation, reference, or known-good case. Exercise the real
+production path without deriving the expectation from that same path or letting
+a mock supply the behavior being tested. For a fix, show or reuse a failure the
+defect causes on the old code. Check behavior rather than the presence or absence
+of text unless that text is the contract.
 
 Judge each added or changed test by the current user obligation it protects. Ask
 which plausible failure would escape the remaining checks if this test were
 removed. Tests that usually earn a permanent place check a scientific relation
 or a user-visible contract against an independently computed expected value,
 through the public workflow or at the kernel that owns the relation, act as a
-canary for a dependency's behavior, or are the one test for a recurring failure
-class. A test that only witnesses one past fix, pins one site's numbers, or
-reaches the code through a monkeypatched path users cannot reach protects
-no current obligation. A test that needs a production seam no production caller
+canary for a dependency's behavior, or distinguish a plausible failure class.
+A historical example earns a permanent regression when it still detects a
+failure of a current contract. Incident identity, site-specific numbers, or a
+monkeypatched path users cannot reach do not establish that obligation.
+A test that needs a production seam no production caller
 needs, such as an export, flag, wrapper, or injection hook, is written at the
 real boundary instead, and the seam is not kept for it. A fix's failing-before
 check stays in the suite only when it also protects such an obligation.
@@ -169,6 +177,9 @@ behavior or a compatibility contract. If a valid refactor breaks only that
 arrangement, reconsider the test. Recommend consolidation or removal only after
 identifying what evidence would be lost and how the remaining checks cover the
 obligation.
+
+For tests involving time, concurrency, subprocesses, or global state, or work on
+test runtime or flakiness, read [test cost and isolation](references/test-cost-and-isolation.md).
 
 ### Scientific and resource constraints
 
@@ -191,12 +202,18 @@ Before reporting implementation work, check the final diff against these items
 in a pass separate from writing it. Fix what fails, and combine this pass with
 the review of a correctness or review skill that also applies.
 
-- Each added abstraction, option, helper, configuration or compatibility path
-  has a current consumer or requirement.
+- Each added interface, option or compatibility path has a current requirement.
+  Helpers remove meaningful duplication, isolate complex boundaries or clarify
+  operations. Intermediate quantities keep the computation understandable.
+- Each validation has an owning boundary. Repeated checks protect a guarantee
+  that can actually be invalidated, and required scientific checks remain.
 - After a removal, no reference, stub, `removed` or `no longer` comment, or
   absence test remains without a stated reason.
-- Each added test protects a current obligation. Before-and-after evidence for
-  a fix stays in the report when the test would protect nothing else.
+- The final test set uses existing coverage where sufficient and independent
+  expectations for changed failure modes. Before-and-after evidence for a fix
+  stays in the report when the test would protect no current obligation.
+- Error handling adds useful context or applicable recovery. Automatic recovery
+  has justified cost and explicit acceptance and stopping conditions.
 - A deliberate shortcut with a known ceiling carries a `ponytail:` comment.
 
 ## Boundaries

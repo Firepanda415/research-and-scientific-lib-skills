@@ -1,0 +1,74 @@
+schema_version: "1.1"
+name: project-lead-doc-closure
+description: >-
+  Close supported documentation corrections within an existing scientific review
+  while preserving code repair, public-API detector coverage, missing derivations
+  and the final notebook-inclusive delivery checks.
+tags: [quality, lead-multi-agent-project]
+execution:
+  max_turns: 15
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    你是科学软件发布的主脑，设置、发布范围内的代码修正、文档修正和项目标准检查已经获批。现有 scientific reviewer S、code reviewer C 都独立于实现，文案 reviewer P 独立于原稿且已完成原稿审阅。三人都可继续，原 worker W 也可接收同一任务的修正。只给出各项的负责人和收口方式，不启动 agent、不改文件、不运行命令。
+
+    最终审核发现：
+    1. S 发现指南遗漏了一个适用条件。正确条件已由独立审核的推导和当前源码建立，消费者也符合该条件。S 的 brief 已授权在指定可写 checkout 修正文档，原审核快照保持不动。
+    2. 另一处可以换一个更顺的同义词，但 reviewer 明确认为现有上下文不会误导读者。
+    3. 结果的数值正确，但 used_ids 含未参与结果的采样记录，summary 和资源报告读取这个集合。C 建议加一句 docstring 说明即可。
+    4. 一个被删测试覆盖公开 estimate(data, memo=cache) 的合法组合，无需 mock 即可调用。清理报告说内部没有调用者，所以不可达。保留的测试还没有覆盖共享 memo 的这一行为。
+    5. 已跑过的 lint 只选了 .py，交付还有改动过的 notebook。项目规定的最终 lint 命令会收集 notebook，但这条完整命令尚未运行。
+    6. 有人建议增加一条更紧的误差界，尚无适用推导。
+
+    我希望减少文档 review 后的来回，但科学准确性不变。哪些能在现有 review 收口，哪些仍需修正和证据？最终交接怎样避免反复重读旧过程记录？
+graders:
+  - name: local-documentation-closure
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a scientific reviewer S, independent of implementation, has found a
+      missing condition in a guide. Independently checked mathematics, current code
+      and actual consumers establish the correct condition. S already has edit
+      authority in a writable checkout, the original review snapshot stays fixed,
+      and independent prose review of the original draft is complete. PASS if S
+      directly corrects the guide, rereads the passage and surrounding context, and
+      records the diff and basis, with required assembled documentation checks.
+      FAIL if the response requires a new writer, verifier, counselor pass or
+      mathematical derivation solely for this local correction, or drops scientific
+      review rather than using S's existing independent review.
+  - name: code-and-public-contracts-remain
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: used_ids includes observations unused by the numerical result, and
+      summary and resource-report consumers rely on that collection. A separate
+      deleted test exercises a legal public estimate(data, memo=cache) combination
+      without mocks even though no internal caller uses it, and no keeper covers
+      that shared-memo behavior. PASS if the response rejects a docstring-only
+      closure of used_ids, assigns repair at its producing owner with independent
+      verification, and keeps or restores independent detection of the public memo
+      contract. It may reuse worker W and reviewer C. FAIL if it treats the unchanged
+      headline value as proof that the association is harmless, or accepts lack of
+      internal callers as proof that the public combination is unreachable.
+  - name: scientific-and-delivery-evidence
+    type: llm
+    criteria: >-
+      Context: a tighter error bound has no applicable derivation, and a .py-only
+      lint pass omitted changed notebooks collected by the project's required final
+      command. PASS if the response sends the bound for scientific qualification
+      before adopting it and calls for the existing canonical delivery check over
+      the integrated required surface, with the existing owner repairing failures.
+      FAIL if it treats the bound as a harmless wording fix, reports the scoped lint
+      as a full pass, or prescribes a new reviewer layer just for the notebook lint.
+      Checks must be described as planned, since no execution is authorized here.
+  - name: no-optional-backlog-or-history-replay
+    type: llm
+    criteria: >-
+      Context: a reviewer explicitly says an optional synonym change would not
+      improve the reader's understanding, and a handoff is needed after final review.
+      PASS if that preference creates no job or deferred todo, while real unresolved
+      obligations stay visible, and the handoff separates compact current state
+      (revision, rules, owners, next actions and evidence links) from dated history
+      consulted only when needed. FAIL if it stores the optional wording as future
+      work, discards unresolved scientific issues, or requires rereading the full
+      chronological record at every continuation.

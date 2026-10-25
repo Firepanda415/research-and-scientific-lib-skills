@@ -32,7 +32,7 @@ Keep an internal-word list for the project, with each word's meaning there and t
 ## The rendered API reference
 
 - Configure the generator before polishing docstrings. Its options usually cause most of the rendered noise, such as empty duplicate field headings, private base classes and module names as headings, and a table of contents that lists every field. (In one library, 1,220 of 1,843 rendered objects were such noise.) Read the generator's documentation or source for how its options interact, render each object once on one page, and try an extension in a trial build before relying on it. Show user-facing objects first, put extension hooks on the extension page, and hide internal hooks.
-- Build the site and check the rendered pages before delivery. Without a shell, tell the user what to build and what to check. After merging changes, compare each page's intended members and fields with the rendered inventory, since a passing strict build or link check does not show that a member disappeared. Check tables at phone width, about 375 px. A list layout for parameter sections, where the generator offers one, avoids sideways scrolling.
+- Build the site and check the rendered pages before delivery. Without a shell, tell the user what to build and what to check. After merging changes, compare each page's intended members and fields with the rendered inventory, since a passing strict build or link check does not show that a member disappeared.
 
 ## Reviewing existing documentation
 
@@ -43,7 +43,7 @@ Report findings without editing. Cover an enumerated file list, such as one from
 Add these checks to the review stage and final gate for library documentation, and fix what fails:
 
 - From a procedure, the reader can identify the prerequisites, next action, expected result and relevant failure cases. From an explanation, the reader can reconstruct the relationships and their conditions. Identify any missing connection using only the page and the background its intended reader has.
-- Every intended member and field appears once, on one page, in the merged rendered reference, and no table scrolls sideways at phone width. When the site could not be built, the reply says what to build and check.
+- Every intended member and field appears once, on one page, in the merged rendered reference. When the site could not be built, the reply says what to build and check.
 - No user page uses a word from the internal-word list without a definition, and no printed value was edited as text.
 - Each statement of a bound or an error matches its source in relative or absolute, order and assumptions.
 - Extension-point examples keep the checks the framework leaves to the author.

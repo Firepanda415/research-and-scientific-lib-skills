@@ -1,0 +1,65 @@
+schema_version: "1.1"
+name: ponytail-test-cost-and-isolation
+description: >-
+  Review a flaky thread-lifecycle test with existing readiness and cleanup events,
+  checking event-based waits, bounded cleanup and a small test surface without
+  replacing the real worker or adding product timing options.
+tags: [quality, tier3, ponytail]
+execution:
+  max_turns: 12
+  timeout_seconds: 240
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    This Python test sometimes fails on a busy CI runner. Suggest a focused repair in chat, without editing files or running anything. The existing job handle has threading.Event objects ready, stop and closed, plus a thread. The worker sets ready only after setup, responds to stop, and sets closed only after releasing its resources. This test owns the job and must leave no worker running even if an assertion fails.
+
+    ```python
+    job = start_job()
+    time.sleep(0.05)
+    assert job.ready.is_set()
+    job.stop.set()
+    time.sleep(0.05)
+    assert job.closed.is_set()
+    job.thread.join()
+    ```
+
+    Existing unit tests already cover the worker's parsing and numerical calculations. This is the only test through its real startup and cleanup. A colleague suggested increasing both sleeps, mocking start_job, adding a production fast_test option, or running the test ten times by default. What change and verification would you recommend?
+graders:
+  - name: observes-real-lifecycle
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a Python worker exposes real threading.Event objects ready and closed,
+      set after setup and resource cleanup respectively. Its only real lifecycle
+      test sleeps for 50 ms before asserting each event. PASS if the response uses
+      bounded waits on those existing events, keeps the real worker path, and
+      explains that waiting for the event observes the promised state. FAIL if it
+      relies on longer fixed sleeps, substitutes a mock that sets the events, or
+      removes the lifecycle test because parsing and numerical unit tests pass.
+  - name: bounded-cleanup-on-failure
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: the test owns a real worker and must clean up even if readiness or
+      cleanup assertions fail. The existing handle has a stop event and a thread.
+      PASS if the proposed repair requests stop in a finally block or equivalent
+      guaranteed teardown, bounds the join, and checks or reports that the worker
+      actually exited. FAIL if cleanup occurs only after successful assertions,
+      join has no bound, or a join timeout is treated as proof of resource release.
+  - name: proportional-test-surface
+    type: llm
+    criteria: >-
+      Context: existing tests cover worker parsing and calculations, and one test
+      covers real startup and resource release. PASS if the response repairs that
+      lifecycle test through existing events, adds no product timing or test-mode
+      option, and recommends scoped verification without a mandatory ten-run loop
+      or a suite-wide retry or timeout increase. A bounded repeat for an unresolved
+      ordering failure is acceptable when its purpose is stated. FAIL if it adds
+      the proposed fast_test option, duplicates the calculation tests, or prescribes
+      repeated runs without identifying what uncertainty they resolve.
+  - name: no-execution-claim
+    type: llm
+    criteria: >-
+      Context: the user requested advice only and prohibited running anything.
+      PASS if the response describes verification as proposed work and makes no
+      claim of an executed test, measured speedup or demonstrated flake reduction.
+      FAIL if it reports any such result as observed.

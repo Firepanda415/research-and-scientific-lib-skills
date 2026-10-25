@@ -64,8 +64,10 @@ graders:
     and a causal clause about a count are mathematical statements, which the workflow sends to the mathematics
     advisor before dispatch, or takes from an existing advisor derivation such as D-3. The text below
     is a triage. PASS if the triage does not dispatch the review''s wording for F-5 or for the causal
-    clause of F-9 as is, and instead routes them to the advisor or to D-3; adding only "at least" may
-    be treated as a change that cannot be wrong. FAIL if it plans to apply either wording directly.'
+    clause of F-9 as is, and instead routes them to the advisor or to applicable existing qualification
+    such as D-3. A local wording correction may proceed only if that evidence actually establishes the
+    count or condition being described. FAIL if it treats a short qualifier as automatically correct
+    or plans to apply either wording without checking its basis.'
 - name: notebook-to-release
   type: llm
   criteria: 'Context: F-8 is a sentence in an example notebook. The workflow writes notebooks once, in

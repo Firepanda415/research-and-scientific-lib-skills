@@ -44,6 +44,8 @@ For scientific or research software, numerical libraries, benchmark repositories
 
 When the cut targets tests, fixtures, test support, or production code whose only callers are tests, from one test file to a whole subsystem's test surface, read [test-surface.md](references/test-surface.md). It gives the candidate patterns, the keeper per contract, the evidence for each test or seam, and the order of a campaign. The scientific-evidence reference above still owns the audit of deleted evidence for scientific claims.
 
+When Ponytail is active, use its [test cost and isolation](../ponytail/references/test-cost-and-isolation.md) reference for test runtime, flakiness, or cuts involving time, concurrency, subprocesses or global state.
+
 For scientific dependency guards, error wrappers, or recovery candidates, also use the [dependency-failure policy](../scientific-computing-correctness/references/dependency-recovery.md#dependency-failures-and-recovery) to distinguish useful numerical recovery, informative errors, and cheap rejection of silently wrong inputs.
 
 Use repository-native search, compiler and linter output, dependency metadata, and history as discovery instruments. Treat their findings as leads until runtime consumers and contracts have been examined.

@@ -38,7 +38,7 @@ These checks are required. A narrated video can fail silently in ways a successf
 - Inspect the whole render as contact sheets, for example one frame every four or five seconds, and inspect dense frames at full size. Look for clipped or overlapping text, labels drawn over axes, incomplete formulas such as missing fraction bars, and objects that separate from the data they represent during motion.
 - Confirm that every subtitle line has narration under it and that subtitle starts align with speech onsets.
 - Compare every number on screen and in the narration with the claim map.
-- When the video is embedded in a site, build the site, run its tests, and check the page and the player at desktop and phone widths with the browser tooling the host provides, for example headless screenshots at both widths. Without such tooling, ask the user to check those widths.
+- When the video is embedded in a site, build the site, run its tests, and check the page and player in the destination site's intended layouts with the host's browser tooling. If browser verification is unavailable, report what remains unchecked.
 - Unless the host lets the agent listen to audio, ask the user to listen for pronunciation and pacing, and name the words most at risk.
 
 ## Deliver and revise

@@ -1,6 +1,6 @@
 # Triage calibration
 
-Read before each triage and before writing its fix briefs. The examples come from NWQLib 0.99, where the user corrected the principal's triage. When the user corrects a triage in a later run, record the item and the reason in the project's lessons in the same form, and read the examples recorded there before each triage.
+Read before substantive triage and its fix briefs. Judge findings against the current public contract, actual consumers and the user's decisions. Consult the project's recorded cases when they resolve a current uncertainty. The historical examples below illustrate those distinctions.
 
 ## Looked serious, were minor
 
@@ -9,7 +9,7 @@ Each fails the three questions: no wrong result, no blocked user, no wrong decis
 - A work charge used only to admit plans was not an exact upper bound, and three rounds added missing operations to it. Calling it a nominal charge was the cheapest correct change; its last completion went ahead only because the derivation and code already existed.
 - A verification gap was reported as 0 after 2^60 was added to the objective, a precision limit of binary64.
 - Two rounded budget fields summed to 8.67e-19 more than the total.
-- A NaN appeared at an edge that no caller reaches.
+- A NaN appeared in a private helper proven unreachable through supported entry points.
 - Notebook text differed slightly from the behavior. That is a text item for the release step.
 
 ## Were important
@@ -21,23 +21,23 @@ Each fails the three questions: no wrong result, no blocked user, no wrong decis
 - A guide example raised an error when run as printed.
 - A fix broke resuming from a relative directory.
 
-## A triage the user corrected
+## Trace the contract before choosing text or code
 
-The principal first recommended fixing nearly all of about 36 findings, some of them completely, the user accepted the recommendation, and the principal sent 15 derivation requests. When the user asked whether a trivial notebook-text item would need a round of verification and review, the principal only added a rule that plain text needs no advisor review. The user then asked for a new triage from first principles. Three items became claim corrections with the improvement deferred, two charge completions became nominal-charge wording, and seven items were not fixed. Eleven small code changes remained, and the estimate fell from 6 to 10 hours to 3 to 5. The user then restored the fixes whose complete derivation and code already existed and that changed little else.
+Trace the affected value through its public inputs, producer and consumers before accepting a proposed remedy. Text alone closes a finding only when behavior and data already meet the contract. A source association that includes observations unused by the result remains a code defect when summaries, assessments or resource reports consume it, even if the result's main numerical value is correct. Correct the producing owner and independently verify the affected paths.
 
-## Settings nobody makes
+Separate public reachability from internal use. A documented argument combination can be valid without an internal caller. Examine each proposed deletion and each fixture on its own: a public use without mocks, a real but uncommon workflow, and a synthetic test path need different evidence. Keep or replace an independent detector of the public obligation when consolidating tests.
 
-A finding reachable only under a setting nobody makes is an observation, not a defect. (NWQLib 1.0: reviewers of two rounds probed a byte cap with a 10 GB default at 1,000 to 20,000 bytes and reported byte-exact remedy defects; the principal commissioned an advisor derivation and about 150 lines of fixed-point code for the first and was about to commission more. The user: a byte cap is a fuse with a generous default so that nobody touches it.) The impact sentence names a real user in ordinary use, and "a user who sets a tiny cap" is not one. Before triaging a finding of the form "with X set to a tiny value", ask what the default is and who would set it there. A remedy for a coarse safety cap needs only the right direction, such as raising it with the default named, never a byte-exact value, and the review requests tell reviewers not to probe caps below realistic values.
+## Settings, limits and guards
 
-Defaults are set generously, not remedied precisely: when an ordinary workload meets a fuse, raise the default; a finer ladder or an exact retry value is the wrong fix. (NWQLib 1.0: two caps were raised fourfold and tenfold on the user's one-line answer.)
+Determine the intended scale, default and promised precision before refining a safety limit. A coarse admission charge may need a useful remedy direction rather than a byte-exact retry value. Extra precision machinery needs a current contract or user benefit. Conversely, a supported edge case is not dismissed merely for being unusual. Adjusting a default or widening an allowed workload follows the user's resource authority.
 
-A review suggestion's smallest correction is a hypothesis, and so are the counselor's and the principal's. (NWQLib 1.0: a reuse scheme, a counting sink and a step rule were all overtaken by the user's one question, what the 10 GB default is for.) The triage asks that question first.
+A suggested correction is a hypothesis, including one from the principal or counselor. Check its premises against the code and intended contract before commissioning a derivation or implementation.
 
-Code that acts only on an edited archive is meaningless code: a check that passes every legal file and fails only after the user edits a saved file is removed, whatever version added it.
+For archive guards, identify the supported format, compatibility and integrity obligations. A hand-edited fixture alone neither proves a guard useful nor makes it disposable. Preserve checks that protect a current boundary, and remove those protecting no supported obligation only after tracing consumers.
 
-## Changes that cannot be wrong
+## Local documentation corrections
 
-Notebook prose, a stale figure, a run time, or "at least" added to a refusal whose count stops at the limit. A detector is a test that fails when its fix is undone, and such changes get none. The principal checks the diff scope, runs the checks of the touched files, and collects such items into one job.
+Use the documentation closure rule in [plan-and-dispatch.md](plan-and-dispatch.md#documentation-jobs). A reviewer may directly correct a local statement within existing edit authority when its scientific basis and actual consumers have been checked. Reread the changed passage and context and perform the required document checks. A short qualifier can change a bound, so missing evidence still goes to the mathematics advisor. Executable examples, runtime values and code defects follow their own verification requirements. Optional wording preferences are neither defects nor deferred work.
 
 ## Why fixes did not hold
 
@@ -57,4 +57,4 @@ In the first four fix rounds, 29 to 52 percent of the items each round changed c
 | A chain of smallest changes grew a subsystem | 0.99.1: three verification rounds on one domain check, each smallest change adding exact-arithmetic machinery for the next input class, about 1.5 hours; the chain was visible at the first partial. | Judge the accumulated chain at every partial, and ask the verifier of a replaced validation to enumerate the input classes the old one covered. |
 | A decision of the principal resting on an unchecked premise | A cost convention assumed that a halving was fused into each layer, while the code performed the halvings as separate operations. | Check a decision's premises against the code, and send its mathematics to the advisor. |
 | A limit deferred by the principal alone | 0.99.1: a verifier found that archives of unevaluated objectives could not be reopened, a limit shared with 0.99.0 and fixed in one module; the principal filed it as a known limitation, and the user had it fixed after the release checks. | A limitation a reviewer or verifier finds is a triage item, pre-existing included. When its fix is small, the user decides whether it is fixed now or deferred, or the principal and the counselor when the user is away. |
-| A breaker that stopped nothing | 1.0: a feature rolled through six consecutive jobs by way of review findings, each job delivered and each review opening the next; the breaker counted only undelivered items, and the principal then wrote a breaker record alone and dispatched the next job anyway. | Count every follow-up on one feature, whatever produced it; the second consecutive one goes to the counselor before dispatch, and the rule lives in the file the principal rereads after compaction. |
+| A breaker that stopped nothing | A feature grew through successive completed fix jobs without reconsidering the accumulated design. | Count substantive follow-up jobs, including completed ones. The second goes to the counselor. Local corrections closed by the existing reviewer are not new jobs, but an unresolved scientific basis returns to triage. |

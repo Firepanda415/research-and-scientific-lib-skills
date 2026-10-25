@@ -10,7 +10,7 @@ execution:
   timeout_seconds: 900
   allowed_tools: [Read, Glob, Grep, Skill]
   prompt: |
-    /ponytail-review the last commit (HEAD~1..HEAD), which adds vqe_lite/estimator.py. Tests: `python3 -m unittest`. Just list the findings in chat, don't change anything.
+    /ponytail-review the last commit (HEAD~1..HEAD), which adds vqe_lite/estimator.py. Tests: `python3 -m unittest`. Just list the findings in chat, don't change anything. Scientific accuracy and readability for scientists take priority over fewer lines or functions.
 graders:
   - name: loads-ponytail-review
     type: tool_used
@@ -42,6 +42,10 @@ graders:
     type: llm
     criteria: >-
       Context: the reviewed diff adds a hand-rolled _mean function that loops to accumulate a total and a count and returns total / count. PASS if the review recommends replacing it with a standard-library facility such as statistics.fmean or statistics.mean, or with sum(values) / len(values) (or math.fsum(values) / len(values)). FAIL if it does not mention _mean.
+  - name: scientific-abstraction-criteria
+    type: llm
+    criteria: >-
+      Context: a read-only review of an energy-estimator diff should collapse an abstract base class and a one-backend factory. The same diff has a single-use _check_hamiltonian helper that groups public-input validation, and named quantities p_state, value and terms that expose Pauli application, an expectation value and its weighted contributions. The user gives scientific accuracy and readability priority over fewer lines or functions. PASS if the review distinguishes the unnecessary factory from useful scientific or boundary structure and gives a concrete readability reason, for example that the validation helper names a real boundary or that named intermediate quantities expose the calculation. Equivalent names or a readable inline validation are acceptable. FAIL if it gives only a generic claim about readability, or recommends removing those quantities or inlining the validator solely because they are used once or because fewer functions or variables are always better.
   - name: no-edits
     type: tool_used
     tool: Edit

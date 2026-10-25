@@ -5,7 +5,7 @@ description: Lead a multi-agent engineering project, such as a scientific-softwa
 
 # Lead a multi-agent project
 
-The principal is the session the user opens to lead the work. It plans, writes the briefs, dispatches, integrates, keeps the ledger and reports to the user. This skill gives the order of the work and the judgment rules agents missed in real releases. Examples marked "NWQLib 0.99", "0.99.1" or "1.0" come from three releases of a scientific library in 2026 and show what a rule prevents.
+The principal is the session the user opens to lead the work. It plans, writes the briefs, dispatches, integrates, keeps the ledger and reports to the user. Use the smallest team that covers the required competencies and independence. Roles and checks do not each require a separate session. The references give examples from scientific-library releases.
 
 Read a step's reference when you first enter that step, and again after compaction, which can drop its text.
 
@@ -21,7 +21,7 @@ Roles follow the competencies the project demands. Each competency has an adviso
 - **Mathematics worker.** Implements jobs whose correctness rests mainly on derivations, also copying them.
 - **Counselor.** Takes delegated user decisions with the principal while the user is away, and checks the principal's review requests and merged triage before they go out. By default it runs on a model from a different vendor than the principal's, for a different perspective and rigor.
 
-A job goes to the worker of the competency its correctness rests on, and a job that needs two is split by module.
+A coherent job goes to the worker of the competency its correctness rests on, with the other required expertise supplied through qualified derivations and review. Split it only when independent deliverables justify the added coordination.
 
 ## Step 0: settings and capabilities
 
@@ -40,12 +40,12 @@ Record the answers, the environment (the checked runner or declared environment,
 
 ## Order of the work
 
-1. **Plan** ([plan-and-dispatch.md](references/plan-and-dispatch.md)). Triage first, then the mathematics advisor derives every foreseeable mathematical item in the plan. The plan names its critical path and the independent lines that start together. The user approves the plan before any dispatch.
+1. **Plan** ([plan-and-dispatch.md](references/plan-and-dispatch.md)). Triage first, then qualify the necessary mathematics, reusing applicable independent evidence. The plan names its critical path and the independent lines that start together. The user approves the plan before dispatch.
 2. **Dispatch** (same reference). Briefs carry derivation packages. Parallel jobs own disjoint files, or disjoint regions in a fix round, and independent lines start at once. Code comes first, an area's documentation once its code review has converged, and notebooks once, at the release.
-3. **Implementation.** Workers copy derivations and change every place that states a changed claim. Each job gets a code advisor review, and its mathematics goes back to the mathematics advisor.
+3. **Implementation.** Workers copy derivations and change every place that states a changed claim. Each job names its independent code and mathematical review owners. Their review serves hand-in and acceptance without duplication. A scientific reviewer may directly correct local documentation claims when authorized in the brief (see Documentation jobs in the dispatch reference).
 4. **Integration**, graded by what it can have changed ([integration-and-review.md](references/integration-and-review.md), also for steps 5 to 7).
-5. **Before each review**, a full suite per changed platform and the advisor's check of the mathematics this round changed.
-6. **Review** by fresh reviewers on the advisor models chosen at step 0, requested by the principal, code and the user's side on the code advisor's model, mathematics and the previous-release check on the mathematics advisor's. A round checks only what changed. The end-to-end and previous-release checks run in the first round and again at the end; a round with one job merges its job review and the round review, keeping these two.
+5. **Before a review round**, reuse valid evidence and run the full suite only where the integration and expensive-check rules require it. The advisor checks the mathematics this round changed.
+6. **Review** on the advisor models chosen at step 0. Formal rounds use fresh reviewers, with one owner for each required purpose. A job review may also satisfy acceptance and round review when its scope covers them. End-to-end and previous-release checks belong to the first and final rounds' assigned reviewers. Fix verification stays with the existing reviewers and covers the delta and affected context.
 7. **Triage and fix rounds.** The principal triages, the counselor checks the triage, the user decides, and steps 2 to 6 follow.
 8. **Release and wrap-up** ([release-and-wrap-up.md](references/release-and-wrap-up.md)).
 
@@ -55,53 +55,54 @@ Once the user approves the plan, carry out the work it authorizes without asking
 
 A clause states mathematics by its content: a bound, a range, a guarantee, an equivalence, a window, a tolerance, a count of work or bytes, a condition, a cause, a rejection and its remedy direction, or a numerical algorithm with exact arithmetic or scaling.
 
-- The principal and the workers derive none of it. A worker that needs a derivation its brief lacks writes a request file for the principal, which opens a new advisor thread, and the worker continues with the parts that do not depend on the answer.
-- Every clause that states mathematics goes to the advisor before dispatch, however small it looks. That includes fixes disposed of as text or as fixed differently, review suggestions, which stay hypotheses until derived, and the principal's own decisions and rule proposals, such as an argument that one check covers another path, a cost convention or a reconciliation of two advisor answers. Only text that states no mathematics skips the advisor. A derivation requested after dispatch repairs a missed step and is not a second route.
+- The principal and the workers derive none of it. A worker that lacks a derivation sends the principal the relation, consuming path and missing premise, and continues independent work. The principal batches related questions for the advisor.
+- New claims, changed premises or unsupported mathematical reasoning go to the advisor before dispatch. Reuse qualification only when the conclusion, premises and actual consuming paths still match. Restoring documentation to an already qualified result needs a source check and contextual reread, not a new derivation. Missing evidence, changed scientific meaning or a changed user contract follows its scientific or implementation route, regardless of the edit's length.
 
 ## Triage of findings
 
-Before any fix is planned, triage every finding and present the triage to the user. Models of both vendors judged importance poorly when asked for first-principles judgment, so the judgment is built into these steps, and the review's severity and proposed change are inputs. Read [triage-calibration.md](references/triage-calibration.md) before each triage.
+Triage material findings before planning implementation fixes, treating the review's severity and remedy as inputs. Authorized local documentation corrections close within their review, as the dispatch reference describes. Read [triage-calibration.md](references/triage-calibration.md) before each triage.
 
 - **Three questions.** Does the finding produce a wrong result, block a user who follows the documentation, or lead a user to a wrong decision?
-- **An impact sentence** names who meets the finding in ordinary use and what goes wrong for them. A finding without one is at most a text item. A finding reachable only under a setting nobody makes, such as a cap far below its default, is an observation.
-- **Wrong or only imprecise.** A bound that holds but is loose, a charge that is a nominal proxy, a precision limit of the arithmetic, an edge no caller reaches and a rounding difference far below any tolerance are not defects of a result. Correct the claim that overstates them. Change code to meet a claim only when users rely on the claim as a contract.
-- **The cheapest correct change** removes the harm, often with one sentence. A larger change needs its own reason. When a complete derivation and code for a fix already exist, the fix costs only its extra engineering and instability, so it goes ahead when it needs little extra code and changes little else, even beyond the cheapest change.
-- **Not fixing is an outcome.** List the items not fixed and the items deferred, each with its reason, next to the items fixed.
-- **Circuit breaker.** At every partial, judge the accumulated chain of smallest changes, and when it has grown into a new design, stop and triage from first principles before another fix. A second consecutive follow-up on one feature goes to the counselor before dispatch; a breaker that stops no dispatch is none.
-- **Changes that cannot be wrong**, where the code or text shows directly that they are correct, get no detector, no full suite and no separate review, the code advisor's included; a clause that states mathematics still goes to the advisor. The principal collects them into one job with the checks of the touched files.
-- **The user sees the triage** in three groups (change code, change text, defer or not fix), each item, including those not fixed, with its impact sentence and recommendation, and decides which items are fixed and whether another round runs. While the user is away and has not kept this decision, the principal and the counselor take it. Small text problems, such as a stale run time or a wording slip, are fixed without waiting, also beside a job's items, and the report names them. Only new work, changes to the user's rules and extra cost wait for the user.
+- **An impact sentence** names a supported user path and what goes wrong. Establish reachability from the public contract and actual consumers, not only internal callers. An uncommon valid input can still expose a defect. Unsupported hypothetical use alone does not establish one.
+- **Wrong or only imprecise.** A loose valid bound, nominal charge or arithmetic precision limit is not a defect merely for being inexact. Check the promised semantics and downstream use. Incorrect result associations, provenance or resource classification are code defects when consumers rely on them, even if the headline numerical answer is unchanged.
+- **The cheapest correct change** removes the demonstrated harm. Text alone suffices only when behavior and consumed data already meet the contract. A larger change needs a concrete benefit relative to its engineering cost and instability, using derivations and implementation already available where applicable.
+- **Not fixing is an outcome.** Give material findings a disposition and reason. Keep real deferrals visible, but optional wording preferences create neither jobs nor active backlog items.
+- **Circuit breaker.** At every partial, judge the accumulated changes and coordination cost. A chain that changes the design or correctness basis returns to triage. A second substantive follow-up job on one feature goes to the counselor before dispatch, including documentation rewrites. A local correction closed by the existing reviewer is not another job.
+- **Direct documentation closure.** Within authorized edits, the responsible reviewer corrects local defects whose basis is established, then rereads the changed text and its context. Keep the original review snapshot and the correction diff. New mathematics, code changes and contract changes use their existing routes. Read-only reviews stay read-only.
+- **Present triage** as change code, change text, and defer or not fix, with impact and disposition for each material finding. The user decides new scope and rounds, or the principal and counselor within delegated authority. Complete already-authorized corrections without renewed approval. Report local documentation corrections with their evidence.
 
 ## Decisions with the counselor
 
-When a decision belongs to the user, the user did not keep it at step 0, and the user may be away, the principal and the counselor take it together, because decisions the principal took alone were often not thought through. The counselor also checks each round's review requests before they go out and the merged triage before fixes are dispatched, with the raw material in hand. Read [counselor.md](references/counselor.md) before a request to the counselor. Agreement between the two models settles a decision; it does not verify a result.
+The principal and counselor take only decisions delegated by the user. The counselor also checks formal review requests and substantive merged triage with the necessary source evidence. Reuse that decision for mechanical updates and authorized local corrections. Read [counselor.md](references/counselor.md) before a request. Agreement settles a decision within the delegation, not the correctness of a result.
 
 ## Standing rules
 
-- **Scope.** Act on an instruction at the scope the user gave. Do not turn a remark into rules across several files or extend a decision to later stages. Ask when the scope is unclear or an instruction could mean two different actions. Record a rule only when the user asks for one or states a standing rule, and then in the smallest form. Pass the user's own words to other sessions, not another model's reading of them. (NWQLib 0.99: a request to lighten one round's verification became a general rule on review depth, which the user then kept only as a record of that round.) A task the principal derives from a decision is its own proposal, in a sentence outside the decision's record; a topic the user has closed is not restated in reports.
+- **Scope.** Apply instructions at their stated scope. Pass the user's words when delegating decisions and distinguish the principal's proposals from those decisions. Record only requested or standing rules, briefly, in their current owner. Ask when unresolved ambiguity changes authority or results. A topic the user closed stays closed.
 - **No timers.** Start no timers, scheduled wake-ups or polling for dispatched work; completion notices report it. Check a background launch's log once within its first five minutes, to catch a run that never started; that single check is the only timed step. When the user asks about progress, look at what each job has produced, take any finished deliverable and stop only that job. Monitoring the user asks for follows `research-watchdog-protocol`.
 - **Text for agents.** Check the facts of briefs, requests, fix lists and handoffs against their sources before sending them.
-- **Short-lived sessions.** Repeated compaction lowers a model's ability, so sessions and agents other than the principal are not used for long or for many tasks. A reviewer serves one round and the verification of its fixes. An advisor thread takes only continuations of its job, until it has been compacted six times; new work opens a new thread. The principal hands off where the user decides, preferably at a boundary of the job split; a principal already compacted by earlier work hands off at the first job boundary.
-- **Handoff.** The handoff file names this skill in its first section and gives the state, the next steps and the open questions. The new principal loads the skill, reads the durable records from the start, checks the handoff's facts against the live checkout and the rule files, and records there any rule that lived only in the handoff, because a handoff written from a compacted context can be wrong. An item tied to a later step goes into that step's checklist.
+- **Short-lived sessions.** Keep context bounded: a reviewer serves one round and its fix verification; an advisor thread takes only its job's continuations, until six compactions, and new work opens a new thread. The principal hands off where the user decides, preferably at a job boundary; a principal already compacted by earlier work hands off at the first job boundary.
+- **Handoff.** Name this skill, the current revision and rules, active jobs, next actions, open decisions and evidence links. The successor verifies them against live state and reads history only to resolve a current uncertainty. Keep later-step obligations in that step's checklist.
 - **Rules another session rereads.** When a rule changes, change the file that session rereads and tell it.
 - **Clock.** The command that writes a record reads the clock itself, and a decision is recorded when it is taken; a time the model types runs ahead of the clock.
 - **Environment.** Run every interpreter, test, lint and documentation command through the project's checked runner (a wrapper that pins the interpreter and revision) or in its declared environment, and carry that command into every brief.
-- **Records.** Keep a ledger of jobs, advisor threads, integrations, leftovers and the measured duration of each job kind, with each of the principal's decisions and its reason; a decision record that separates the user's decisions from those of the two models; a disagreement record; the project's rule file; and its lessons. Each fact has one home file, named in the project's guidance, and other records point to it. Edit them with a file tool, never a shell delete at a computed line, print a line before deleting it, and keep them under version control, committed at boundaries.
+- **Records.** Each fact has one home in the project's existing records. Keep a compact current entry for rules, revision, jobs, decisions and evidence owners, with dated history linked separately. Preserve decision provenance and unresolved obligations when archiving history. Use measured duration and available usage without copying the full chronology into briefs or handoffs. Read actual content size rather than trusting line count. Edit records with file tools and keep them under version control at boundaries.
 
 ## Checks
 
 Check each artifact before it leaves the principal.
 
-- **Plan, before approval:** triage came first, every foreseeable mathematical item is derived in the plan, and the plan names its critical path and the lines that start together.
+- **Plan, before approval:** triage came first, necessary mathematics has applicable qualification, and the plan names its critical path and independent lines.
 - **Brief, before dispatch, inherited briefs included:**
-  - every clause that states mathematics came from the mathematics advisor;
+  - mathematical statements have applicable advisor qualification; changed meaning is qualified before dispatch;
   - every place that states each changed claim is listed;
   - a fix of a public contract, or one a review names, requires a detector that fails before the fix;
   - the checks are the covering test files and probes, with no full suite;
   - its stop condition names a deliverable;
+  - each additional agent has a distinct deliverable or independence requirement worth its briefing, context and review cost; delivery and acceptance share the assigned reviewer;
   - it updates the places that state its changed claims but carries no documentation job for its area, which starts only after the area's code review has converged, and notebooks wait for the release.
-- **Advisor request:** it covers the whole claim in every case the code reaches and asks for complete derivations.
+- **Advisor request:** it covers the claim and its supported public uses, identifies missing or changed premises, and requests the derivation those gaps require.
 - **Review request:** it is neutral (revision, scope, decisions, environment, output) without working files, names a fixed ref of its own, and the counselor has checked it.
-- **Integration:** the checks match its grade and every failed test line was read.
+- **Integration:** checks match the change and required delivery scope, including notebook cells or other formats the project's gates cover. Every failed test line was read. A scoped check is not reported as a repository-wide pass.
 - **Triage, before presenting:** every item, including those not fixed, has an impact sentence, each item not fixed or deferred has a reason, and the counselor has checked the triage.
 - **Fix list:** every deferred item names its owner, scope and who decided it.
 - **Expensive checks:** ran on the final code, or the record says why not.
