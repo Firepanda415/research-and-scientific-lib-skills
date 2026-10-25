@@ -101,7 +101,7 @@ def main():
     parser.add_argument("--ablation", choices=["with-without", "none"], default="with-without",
                         help="with-without adds the no-plugin arm (default); variants normally use none")
     parser.add_argument("--model", default="claude-opus-5-5", help="model for the sessions under test")
-    parser.add_argument("--effort", default="medium", help="CLAUDE_CODE_EFFORT_LEVEL for the sessions under test")
+    parser.add_argument("--effort", default="xhigh", help="CLAUDE_CODE_EFFORT_LEVEL for the sessions under test")
     parser.add_argument("--judge-model", default="claude-opus-5-5", help="model for llm graders")
     parser.add_argument("--concurrency", type=int, default=2, help="agent runs at once, 1 to 8 (default 2)")
     parser.add_argument("--allow-tools", nargs="+", default=[], help="tools to grant beyond the read-only set, such as Write Edit")
