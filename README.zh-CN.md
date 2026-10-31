@@ -13,9 +13,9 @@
 有几个 skill 的成本明显高于其他 skill：
 
 - `research-writing-style` 每次读取约 20k tokens。写作 hook 会把有其他人阅读的文档（例如论文、审稿报告、文档、README 和信件）以及为这类文档起草的文字交给这个 skill 起草、修改和审阅，所以产出这类文字的 skill 也会带上这部分成本。你自己看的笔记和报告、写给 agent 的文字，以及 commit 和 pull request 不走这条路线。代码注释和内部 docstring 使用一份不到 1k tokens 的独立 reference。会渲染成公开 API reference 的注释或 docstring 使用另一份不到 1k tokens 的 reference。两者各有简短的局部检查，都不加载完整写作流程。
-- `simplify-codebase` 连同它加载的 Ponytail skill 约占 8k，`quantum-computing-review` 和 `research-explainer-animation` 各约占 6k，`lead-multi-agent-project`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 23k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 5k）。`lead-multi-agent-project` 写 brief 时还会加载 `write-implementation-job-prompts`（约 4k），各阶段的 reference 文件在整个项目中合计再加约 14k。
+- `simplify-codebase` 连同它加载的 Ponytail skill 约占 8k，`quantum-computing-review` 和 `research-explainer-animation` 各约占 6k，`lead-multi-agent-project`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 23k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 5k）。`lead-multi-agent-project` 写 brief 时还会加载 `write-implementation-job-prompts`（约 4k），各阶段的 reference 文件在整个项目中合计再加约 15k。
 
-有些流程还会增加额外成本。每个 subagent 都会各自读取一份说明和材料，所以 `research-writing-style` 为篇幅较大的文档启动的独立 reviewer 会再加载一次这个 skill，`deep-code-review` 在实质性审查中可能会启动多个并行查找问题的 agent。`lead-multi-agent-project` 为每个 job、每组 advisor 问题和每轮 review 各开 session。每轮 review 在开始时选定的 advisor 模型上（默认两个）各开新的 reviewer。参谋模型（默认来自另一家厂商）检查 review 请求和分诊结果。可兼任的审查角色由同一个 reviewer 承担，job 的 review 同时作为验收。`quantum-research-radar` 每次运行都会把最多五条检索路线的结果放进上下文。`research-explainer-animation` 还要在本地花计算时间合成语音和渲染视频。
+有些流程还会增加额外成本。每个 subagent 都会各自读取一份说明和材料，所以 `research-writing-style` 为篇幅较大的文档启动的独立 reviewer 会再加载一次这个 skill，`deep-code-review` 在实质性审查中可能会启动多个并行查找问题的 agent。`lead-multi-agent-project` 只为缺少的专业能力、必要独立性或值得并行的独立交付增加 session。正式 review 轮次使用选定 advisor 模型上的新 reviewer，默认两个。参谋处理实质未决选择和明显新增的 review 范围。已有依据的局部修正、机械整合与记录由主脑或当前 owner 完成。可兼任的审查角色由同一个 reviewer 承担，job 的 review 同时作为验收。`quantum-research-radar` 每次运行都会把最多五条检索路线的结果放进上下文。`research-explainer-animation` 还要在本地花计算时间合成语音和渲染视频。
 
 如果只需要其中一部分，可以 clone 本仓库，让 agent 删除你不用的 skills，并按你的工作需要精简或拆分大的 skills，例如把很少用到的部分移到按需加载的 references 中。有些 skill 依赖其他 skill。写作 hook 指向 `research-writing-style` 和 `work-email`，多个代码类 skills 会加载 `ponytail` 并读取 `scientific-computing-correctness` 中的 reference 文件，`pre-submission-reviewer` 会读取 `benchmark-paper-template` 中的 checklist。除非同时修改用到它的地方，否则应保留这类 skill，删除某个 skill 后也请让 agent 检查 skill 之间的链接。然后按[安装](#安装)和[更新](#更新)中的说明从本地仓库安装。在 Codex 中也可以在 `/hooks` 里关闭写作 hook，见[停用或卸载](#停用或卸载)。
 
@@ -90,8 +90,8 @@ skill 名称后的数字是该 skill 每次使用时默认加载的 tokens，见
 | [pre-submission-reviewer](plugins/research-skills/skills/pre-submission-reviewer/SKILL.md) (~3k) | 投稿或返修前检查论文的科学主张、证据、写作、LaTeX 排版、图表以及审稿回复。 | [1](#credit-1) |
 | [journal-cover-letter](plugins/research-skills/skills/journal-cover-letter/SKILL.md) (~3k) | 起草和修改期刊投稿附信。 | — |
 | [quantum-computing-review](plugins/research-skills/skills/quantum-computing-review/SKILL.md) (~6k) | 为他人的技术论文撰写或核查审稿意见，不限领域，遵守期刊规则与保密要求，并对量子计算与量子技术论文增加专项检查。 | — |
-| [scientific-computing-correctness](plugins/research-skills/skills/scientific-computing-correctness/SKILL.md) (~5k) | 实现、调试、优化和独立验证科学计算，关注计算精度与资源开销。 | [15](#credit-15), [18](#credit-18) |
-| [scientific-library-review](plugins/research-skills/skills/scientific-library-review/SKILL.md) (~5k) | 审查科学软件库的数学含义、使用流程、执行行为与资源开销。 | [7](#credit-7) |
+| [scientific-computing-correctness](plugins/research-skills/skills/scientific-computing-correctness/SKILL.md) (~5k) | 实现、调试、优化和独立验证科学计算，关注计算精度与资源开销。 | [15](#credit-15), [18](#credit-18), [21](#credit-21) |
+| [scientific-library-review](plugins/research-skills/skills/scientific-library-review/SKILL.md) (~5k) | 审查科学软件库的数学含义、使用流程、执行行为与资源开销。 | [7](#credit-7), [21](#credit-21) |
 | [library-example-notebooks](plugins/research-skills/skills/library-example-notebooks/SKILL.md) (~3k) | 编写或审阅科学软件库的示例 notebook 和教程，让读者在第一屏看到计算结果，以及如何换成自己的问题。 | [15](#credit-15) |
 | [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) (~4k) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | [12](#credit-12), [16](#credit-16) |
 | [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) (~8k) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据，也清理低价值测试和只为测试存在的生产代码。 | [4](#credit-4), [12](#credit-12), [16](#credit-16), [20](#credit-20) |
@@ -159,6 +159,8 @@ skill 名称后的数字是该 skill 每次使用时默认加载的 tokens，见
     - OpenAI。[Build skills](https://learn.chatgpt.com/docs/build-skills) 和 [Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model) 中关于指令遵循、写作风格和验证的部分。这些资料用于明确路由、按读者需要组织文字，并按改动确定检查范围。
 
 20. <a id="credit-20"></a>OpenCode 贡献者。[AGENTS.md](https://github.com/anomalyco/opencode/blob/097a93e511e2cd7d4fbfc12e0623b721b02f23b9/AGENTS.md) 和 [unit-tests skill](https://github.com/anomalyco/opencode/blob/097a93e511e2cd7d4fbfc12e0623b721b02f23b9/.opencode/skills/unit-tests/SKILL.md)，查阅于 2026-10-24。**MIT**，Copyright (c) 2025 opencode。改编为 Ponytail 的抽象与校验判据，以及按需读取的测试成本 reference，`simplify-codebase` 也使用这些指导。改编时把 OpenCode 的 Bun 命令、Windows 专用建议、超时和重复运行次数换成使用它的项目自己的工具和预算。
+
+21. <a id="credit-21"></a>`scientific-computing-correctness` 中 floating-point decision reference 的来源，`scientific-library-review` 也使用这份指导。该 reference 为本合集编写，采用 **MIT** 许可证，将 construction error、evaluation error、conditioning、feasibility decision 和诊断成本联系起来。来源包括 [Goldberg 的 numerical-arithmetic tutorial](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html)、[Higham 关于 backward error 的文章](https://nhigham.com/2020/03/25/what-is-backward-error/)、[Dawson 关于 floating-point comparison 的文章](https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/)、[PEP 485](https://peps.python.org/pep-0485/)、Python 和 SciPy 的 API 文档，以及 AMOS 和 Arb 的原始文档。reference 在相关论述旁给出来源链接，并列出可进一步查询的 numerical resource 合集。来源查阅于 2026-10-29。
 
 各部分的条款见 [LICENSE.md](LICENSE.md)，来源与修改说明见 [NOTICE.md](plugins/research-skills/NOTICE.md)。
 

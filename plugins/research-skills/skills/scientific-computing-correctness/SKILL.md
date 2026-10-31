@@ -52,13 +52,13 @@ For paper-derived implementations, replications, proof-assistant formalizations,
   routine with an internal fidelity target. Before documenting such a
   construction as exact, measure the error of what it actually builds on small
   instances.
-- Derive acceptance thresholds from the intended quantity, method, or error
-  budget. Do not fit or widen them after observing failures merely to pass a
-  gate. Dependence on scale, dimension, or conditioning needs a derivation or
-  justified error model, and multiplying machine epsilon by a convenient size
-  is not a justification. Legitimate calibration and fitted scientific models
-  remain valid methods when their role and validation are explicit. They do
-  not become certified bounds by fitting the examples used to accept them.
+- Derive acceptance thresholds from the quantity, method or error budget,
+  with a justified model for scale, dimension and conditioning. Do not widen
+  them after failures merely to pass. Explicitly validated calibration and
+  fitted models remain legitimate, but fitting acceptance examples does not
+  certify a bound. For floating-point boundaries, inverse/forward checks, or
+  choices among reformulation, scaling and enclosing arithmetic, read
+  [floating-point decisions](references/floating-point-decisions.md).
 - Identify approximations that can materially affect the requested result. For
   an error-controlled claim, propagate defensible error or uncertainty through
   the affected consumers. Recording unused removed mass is not propagation.
@@ -139,7 +139,7 @@ alone do not justify deletion.
 Extra expensive or poorly scaling computation beyond the authorized algorithm
 or workload to validate, diagnose, or correct results requires explicit human
 approval before execution or inclusion in the default runtime path. This covers
-extra simulation, full-state operator applications, dense reference solves, and
+extra simulation, full-state applications, dense conditioning/reference solves, and
 growing evidence capture. Existing explicit approval at the same scope and
 ordinary cheap checks need no new gate, and a coordinator cannot provide
 missing human approval. [Resource accounting](references/resource-accounting.md)

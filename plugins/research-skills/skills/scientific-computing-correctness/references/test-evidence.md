@@ -32,12 +32,14 @@ defect, prefer it to a repeated random-seed scan.
 
 ## Numeric assertions
 
-Classify numeric assertions before writing them. Compare floating-point values
-numerically with a tolerance derived from the method and with explicit margin
-from decision boundaries. For APIs that combine absolute and relative
-tolerances, set both explicitly, so that an omitted library default neither
-defines nor dominates the effective acceptance window. Require exact text only
-when byte-level serialization or formatting is itself the contract.
+Classify numeric assertions before writing them. Use exact comparisons for
+represented identities or other exact contracts. For numerical approximations,
+derive tolerances from the method, the required error and the defect the test
+must detect. Give ordinary acceptance cases justified headroom while keeping
+deliberate boundary cases when they exercise the contract. For APIs that combine
+absolute and relative tolerances, set both explicitly, so that an omitted library
+default neither defines nor dominates the effective acceptance window. Require
+exact text only when byte-level serialization or formatting is itself the contract.
 
 ## Platform-dependent results
 

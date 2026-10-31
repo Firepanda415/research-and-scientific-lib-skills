@@ -5,23 +5,25 @@ description: Lead a multi-agent engineering project, such as a scientific-softwa
 
 # Lead a multi-agent project
 
-The principal is the session the user opens to lead the work. It plans, writes the briefs, dispatches, integrates, keeps the ledger and reports to the user. Use the smallest team that covers the required competencies and independence. Roles and checks do not each require a separate session. The references give examples from scientific-library releases.
+The principal plans, dispatches, integrates and delivers the work. Handle authorized work directly unless another agent supplies missing expertise, necessary independence or a substantial parallel deliverable. Count briefing, source loading, waiting, hand-in and integration as delegation cost. The references illustrate scientific-library releases.
 
 Read a step's reference when you first enter that step, and again after compaction, which can drop its text.
 
 ## Roles
 
-Roles follow the competencies the project demands. Each competency has an advisor, who derives, reviews and settles questions in it, and a worker, who implements in it. From the project's needs the principal plans the competencies and which of their roles the work uses, and confirms them at step 0. A scientific-computing package demands two competencies, code and mathematics, which give the roles below. Another project may demand others, each assigned to the model the user judges strongest in it.
+Roles describe responsibilities, not a mandatory roster. Scientific software needs code and mathematical competence with the required independence. Combine compatible responsibilities, and use the models the user selects for the roles actually needed.
 
 - **User.** Decides the scope, behavior changes and extra cost on a default path, approves the plan, and gives every instruction to push, merge into the main branch, release and archive.
-- **Principal.** Writes no mathematics, and no library code beyond resolving integration conflicts. It is the only session that operates another vendor's desktop app, and it writes the requests of each review round.
+- **Principal.** Does not derive new mathematics or implement library algorithms beyond integration conflicts. It directly handles source-fact checks, qualified local prose corrections, mechanical integration, validation commands, records and briefs. It alone operates another vendor's desktop app.
 - **Code advisor.** Reviews code and engineering, as each job's independent reviewer and in each review round.
 - **Mathematics advisor.** Derives and audits the mathematics, designs and runs the studies that choose defaults, settles mathematical and scientific disagreements, and reviews each round's mathematics.
 - **Code worker.** Implements library code, tests and documentation, copying the derivations its brief carries.
 - **Mathematics worker.** Implements jobs whose correctness rests mainly on derivations, also copying them.
-- **Counselor.** Takes delegated user decisions with the principal while the user is away, and checks the principal's review requests and merged triage before they go out. By default it runs on a model from a different vendor than the principal's, for a different perspective and rigor.
+- **Counselor.** Handles material delegated choices, genuine disagreements and substantially new formal-review scope with the principal. It is not an approval step for routine corrections or applying settled decisions. By default its model is from another vendor.
 
 A coherent job goes to the worker of the competency its correctness rests on, with the other required expertise supplied through that competency's derivations and review. Split it only when independent deliverables justify the added coordination.
+
+When deciding whether another session is necessary, or when coordination is delaying delivery, use [delegation scope and examples](references/delegation-scope.md). Do not delegate that decision or create another approval ledger.
 
 ## Step 0: settings and capabilities
 
@@ -46,7 +48,7 @@ Record the answers, the environment (the checked runner or declared environment,
 4. **Integration**, graded by what it can have changed ([integration-and-review.md](references/integration-and-review.md), also for steps 5 to 7).
 5. **Before a review round**, reuse valid evidence and run the full suite only where the integration and expensive-check rules require it. The advisor checks the mathematics this round changed.
 6. **Review** on the advisor models chosen at step 0. Formal rounds, the review rounds of this step, use fresh reviewers, with one owner for each required purpose. A job review may also satisfy acceptance and round review when its scope covers them. End-to-end and previous-release checks belong to the first and final rounds' assigned reviewers. Fix verification stays with the existing reviewers and covers the delta and affected context.
-7. **Triage and fix rounds.** The principal triages, the counselor checks the triage, the user decides, and steps 2 to 6 follow.
+7. **Triage and fix rounds.** The principal closes routine items directly. Material unresolved choices go to the counselor or user, then affected work follows steps 2 to 6.
 8. **Release and wrap-up** ([release-and-wrap-up.md](references/release-and-wrap-up.md)).
 
 Once the user approves the plan, carry out the work it authorizes without asking again.
@@ -68,13 +70,13 @@ Triage every finding before planning fixes, treating the review's severity and r
 - **Wrong or only imprecise.** A loose valid bound, nominal charge or arithmetic precision limit is not a defect merely for being inexact. Check the promised semantics and downstream use. Incorrect result associations, provenance or resource classification are code defects when consumers rely on them, even if the headline numerical answer is unchanged.
 - **The cheapest correct change** removes the demonstrated harm. Text alone suffices only when behavior and consumed data already meet the contract. A larger change needs a concrete benefit relative to its engineering cost and instability, using derivations and implementation that already exist.
 - **Not fixing is an outcome.** Give every finding a disposition and its reason, and keep deferrals visible. An optional wording preference is marked not fixed and creates no job or backlog item.
-- **Circuit breaker.** At every partial, judge the accumulated changes and coordination cost. A chain that changes the design or correctness basis returns to triage. A second consecutive follow-up job on one feature, delivered or not and documentation rewrites included, goes to the counselor before dispatch. A local correction closed by its reviewer is not a follow-up job.
-- **Direct documentation closure.** Within authorized edits, the reviewer who finds a local documentation defect whose basis is established corrects it, rereads the passage in its context and closes the item in its own review (Documentation jobs in the dispatch reference). Because the basis was checked independently, that reread is the passage's writing review, and no writer, second reviewer, counselor pass or acceptance round follows. New mathematics, code changes and contract changes use their existing routes.
+- **Circuit breaker.** At every partial, judge the accumulated changes and coordination cost. A chain that changes the design or correctness basis returns to triage. A second consecutive follow-up job on one feature, delivered or not and documentation rewrites included, goes to the counselor before dispatch. A qualified local correction closed by the principal or current owner is not a follow-up job.
+- **Direct documentation closure.** The principal or current owner corrects authorized local text from qualified science and actual consumers, rereads it in context and closes it. That reread supplies the passage's writing review. No new writer, verifier, counselor or acceptance round follows. Restating established behavior is not a new derivation. New mathematics, runtime changes or a material capability decision use their substantive routes.
 - **Present triage** in three groups (change code, change text, defer or not fix), with the impact sentence and disposition of each finding. The user decides new scope and rounds, or the principal and counselor within delegated authority. Report local documentation corrections with their evidence.
 
 ## Decisions with the counselor
 
-The principal and counselor take only decisions the user delegated. The counselor also checks each round's review requests and the merged triage, with the source evidence they need. A mechanical update of a checked request, such as filling in its final revision, and an authorized local documentation correction need no new counselor check. Read [counselor.md](references/counselor.md) before a request. Agreement settles a decision within the delegation, not the correctness of a result.
+The principal and counselor take only delegated decisions. Request the counselor for materially new review scope, unresolved consequential choices or the circuit breaker, with the evidence needed to decide. Source/ref updates, settled dispositions and qualified local text stay with the principal. Read [counselor.md](references/counselor.md) before a necessary request. Agreement settles a decision, not scientific correctness.
 
 ## Standing rules
 
@@ -102,9 +104,9 @@ Check each artifact before it leaves the principal.
   - each additional agent has a distinct deliverable or independence requirement worth its briefing, context and review cost; delivery and acceptance share the assigned reviewer;
   - it updates the places that state its changed claims but carries no documentation job for its area, which starts only after the area's code review has converged, and notebooks wait for the release.
 - **Advisor request:** it covers the whole claim in every case the code reaches and in its supported public uses, names missing or changed premises, and asks for complete derivations.
-- **Review request:** it is neutral (revision, scope, decisions, environment, output) without working files, names a fixed ref of its own, and the counselor has checked it.
+- **Review request:** it is neutral, source-bound and independent of producer discussion. Substantially new formal-review scope has its required counselor check, not another check for a mechanical update.
 - **Integration:** checks match the change and required delivery scope, including notebook cells or other formats the project's gates cover. Every failed test line was read. A scoped check is not reported as a repository-wide pass.
-- **Triage, before presenting:** every item, including those not fixed, has an impact sentence, each item not fixed or deferred has a reason, and the counselor has checked the triage.
+- **Triage:** every item has a consequence and disposition. The counselor checks material unresolved choices, not each local text correction or settled no-change item.
 - **Fix list:** every deferred item names its owner, scope and who decided it.
 - **Expensive checks:** ran on the final code, or the record says why not.
 - **Rules:** a rule is recorded only at the user's request or as a stated standing rule, in its smallest form; a changed rule is in the file the other session rereads; standing rules the user stated this run are in the durable files.

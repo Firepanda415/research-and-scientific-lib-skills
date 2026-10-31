@@ -1,6 +1,6 @@
 # The counselor
 
-Read before a request to the counselor: a decision on the user's behalf, a round's review requests, or a merged triage.
+Read before a necessary counselor request. Use one for a material delegated decision, substantially new formal-review scope, a genuine disagreement or the circuit breaker. The principal closes source-fact checks, qualified local text, mechanical request updates and application of settled decisions directly. A finding's label or an exported function without internal callers does not by itself require a counselor.
 
 ## Decisions on the user's behalf
 
@@ -12,9 +12,9 @@ Read before a request to the counselor: a decision on the user's behalf, a round
 
 ## Review requests and the merged triage
 
-The principal writes the requests of a review round and merges its findings, so the counselor supplies the independence that the implementing side cannot give itself.
+For substantially new formal-review scope or material unresolved triage choices, the counselor independently checks the principal's proposed scope and decisions.
 
-- Before the requests go out, the counselor reads them with the raw material and checks that each is self-contained: the operating rules (what to read first, the checked runner with its literal command words, the write and Git restrictions, workload limits, and that recorded outcomes are hypotheses to test), a fixed review ref of its own, the interfaces the review must exercise, one combined workflow, the interruption boundaries, a matched comparison protocol against the previous release, the output file, and a coverage-gaps section in the report. (NWQLib 0.99.1: one such check returned nine corrections, two of which would have invalidated the run: the checked runner resolved the named ref on every call, and the format tags contradicted the user's decision.)
-- Before fixes are dispatched, the counselor checks the merged triage against the reports and witnesses, confirms or changes dispositions, and names closure requirements for unresolved gaps. Code-fix verification returns to the assigned reviewers, as [integration-and-review.md](integration-and-review.md) says.
+- Before requests with substantially new formal-review scope go out, the counselor checks them against the relevant raw material and the request requirements in [integration-and-review.md](integration-and-review.md#the-review-round). The principal checks mechanical updates within settled scope. (NWQLib 0.99.1: one such check returned nine corrections, two of which would have invalidated the run: the checked runner resolved the named ref on every call, and the format tags contradicted the user's decision.)
+- Before a material new fix scope is dispatched, the counselor checks the unresolved choices against their witnesses and names the remaining closure requirements. Batch them rather than asking once per finding. Qualified local corrections need no new request. Code-fix verification returns to the assigned reviewers at its affected scope.
 - A second consecutive follow-up job on one feature goes to the counselor before dispatch, as the circuit breaker says, with the accumulated changes and cost. A local correction whose scientific basis cannot be established returns to triage.
-- Batch the requests and merged triage for the round. The counselor checks scope, alternatives, coverage and dispositions using the evidence needed to decide them; it does not commission another general technical or prose review. A mechanical update to an already checked request, such as filling its final revision, needs the principal's fact check. Return to the counselor when scope, coverage, authority, cost or the chosen disposition changes, or the circuit breaker applies. Record its duration and available usage in the existing ledger; independence has a cost and does not justify duplicating settled checks.
+- Batch necessary requests and give the counselor the decision, alternatives and minimum source context that can change it. Do not reload the project's full history or commission another general review. Return only for a material change to scope, authority, cost, capability or an unresolved disagreement, or when the circuit breaker applies. Record duration and available usage in the existing ledger. A routine textual qualification or corrected source reference does not restart this step.

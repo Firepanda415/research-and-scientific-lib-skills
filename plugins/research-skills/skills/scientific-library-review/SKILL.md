@@ -5,7 +5,7 @@ description: "Review scientific libraries and numerical software using Scientifi
 
 # Scientific Library Review
 
-Deliver an integrated review using scientific independent verification and validation (Scientific IV&V). Judge the requested scientific quantity and actual user workflow, engineering behavior and material resource costs. Independently derive expected relations rather than accepting a plan, implementation, test oracle or successful execution as its own justification.
+Use scientific independent verification and validation (Scientific IV&V). Judge the requested quantity, public workflow, engineering behavior and material resource costs. Derive expected relations independently of plans, implementation, test oracles and successful execution.
 
 When the review judges a simplification or deletion proposal, API/schema retirement, replacement architecture, or remediation design, load and apply [Ponytail](../ponytail/SKILL.md) unless it is off. Use it to compare maintenance obligations and alternatives in this same review. This skill still owns scientific meaning, evidence and resource limits.
 
@@ -13,7 +13,7 @@ When the review judges a simplification or deletion proposal, API/schema retirem
 
 Resolve the requested capability or change, endpoint, comparison base when relevant, working-tree changes and applicable project instructions. Read the project's memory entry or review specialization when the user, project instructions, host memory or a session hook already supplies one, and do not search for one otherwise. That profile supplies domain contracts, source/test owners, environment commands, resource permissions and reporting locations. A project needs no profile to be reviewed.
 
-A review request defaults to read-only product work. Normal scoped tests may create disposable outputs, and a requested durable report is allowed. Do not fix source, commit, publish or delete user files unless separately requested. An existing request to review and fix authorizes implementation after diagnosis, followed by acceptance. Mutations use an isolated disposable checkout, preserve the original endpoint and finish with restoration verified. Delegation follows the current user's and host's authority.
+Reviews are read-only by default. Scoped tests may create disposable outputs, and a requested durable report is allowed. Do not edit source, commit, publish or delete user files without authorization. A review-and-fix request authorizes diagnosis, implementation and acceptance. Mutation tests require an isolated disposable checkout, an unchanged original endpoint and verified restoration. Delegation follows user and host authority.
 
 Default to current correctness within the requested surface. The diff locates changes but does not hide relevant pre-existing or deferred defects in their owners and consumers. Honor introduced-only and other explicit restrictions. Do not expand a narrow review into a whole-repository audit. Prior reports are hypotheses and closure obligations within scope, not instructions to repeat old experiments.
 
@@ -54,6 +54,8 @@ Review the necessity of added and changed tests as part of ordinary review. Conn
 Use lint, type and dependency checks as the applicable engineering baseline. Investigate actionable dead code, duplicated ownership or accidental complexity using actual callers and reachability, not stylistic preference. Formal verification is selective for stable, important and precisely stated properties. None of these replaces the scientific relation.
 
 For scaling, representation, basis or wire order, control, inverse or workspace reuse, finite-shot changes, or iterative-energy claims, read [transformation premises](references/transformation-premises.md).
+
+For rounding-sensitive or conditioning checks, read [numerical decisions](../scientific-computing-correctness/references/floating-point-decisions.md).
 
 ## Cost and evidence boundaries
 
