@@ -13,9 +13,13 @@
 有几个 skill 的成本明显高于其他 skill：
 
 - `research-writing-style` 每次读取约 20k tokens。写作 hook 会把有其他人阅读的文档（例如论文、审稿报告、文档、README 和信件）以及为这类文档起草的文字交给这个 skill 起草、修改和审阅，所以产出这类文字的 skill 也会带上这部分成本。你自己看的笔记和报告、写给 agent 的文字，以及 commit 和 pull request 不走这条路线。代码注释和内部 docstring 使用一份不到 1k tokens 的独立 reference。会渲染成公开 API reference 的注释或 docstring 使用另一份不到 1k tokens 的 reference。两者各有简短的局部检查，都不加载完整写作流程。
-- `simplify-codebase` 连同它加载的 Ponytail skill 约占 8k，`quantum-computing-review` 和 `research-explainer-animation` 各约占 6k，`lead-multi-agent-project`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 23k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 5k）。`lead-multi-agent-project` 写 brief 时还会加载 `write-implementation-job-prompts`（约 4k），各阶段的 reference 文件在整个项目中合计再加约 15k。
+- `simplify-codebase` 连同它加载的 Ponytail skill 约占 8k，`quantum-computing-review` 和 `research-explainer-animation` 各约占 6k，`lead-multi-agent-project`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 23k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 5k）。`lead-multi-agent-project` 为派发的实现任务写 brief 时还会加载 `write-implementation-job-prompts`（约 4k），各阶段的 reference 文件在整个项目中合计再加约 15k。
 
-有些流程还会增加额外成本。每个 subagent 都会各自读取一份说明和材料，所以 `research-writing-style` 为篇幅较大的文档启动的独立 reviewer 会再加载一次这个 skill，`deep-code-review` 在实质性审查中可能会启动多个并行查找问题的 agent。`lead-multi-agent-project` 只为缺少的专业能力、必要独立性或值得并行的独立交付增加 session。正式 review 轮次使用选定 advisor 模型上的新 reviewer，默认两个。参谋处理实质未决选择和明显新增的 review 范围。已有依据的局部修正、机械整合与记录由主脑或当前 owner 完成。可兼任的审查角色由同一个 reviewer 承担，job 的 review 同时作为验收。`quantum-research-radar` 每次运行都会把最多五条检索路线的结果放进上下文。`research-explainer-animation` 还要在本地花计算时间合成语音和渲染视频。
+有些流程还会增加额外成本。每个 subagent 都会各自读取一份说明和材料，所以 `research-writing-style` 为篇幅较大的文档启动的独立 reviewer 会再加载一次这个 skill，`deep-code-review` 在实质性审查中可能会启动多个并行查找问题的 agent。
+
+`lead-multi-agent-project` 在开场计划里按会话逐条列出分工。主脑与代码或数学 worker 型号相同时，由主脑直接承担该项工作。两个 worker 使用不同型号，且需要两名独立 reviewer 和一位与主脑来自不同厂商的参议时，这样分工共有五个核心会话。主脑与两个 worker 的型号都不同时，完整配置为六个会话，各自在需要时启动。相关修正由原 reviewer 跟到验收。如果原 reviewer 参与了待审成果的制作、本次判断需要独立于先前结论，或用户、项目、宿主有明确要求，就换一名 reviewer。延后处理反馈或中断当前工作时，在原任务记录里留一行，让接手的 AI 知道何时处理反馈，或从哪里继续。只有用户明确要求时才为这些记录加载写作 skill。
+
+`quantum-research-radar` 每次运行都会把最多五条检索路线的结果放进上下文。`research-explainer-animation` 还要在本地花计算时间合成语音和渲染视频。
 
 如果只需要其中一部分，可以 clone 本仓库，让 agent 删除你不用的 skills，并按你的工作需要精简或拆分大的 skills，例如把很少用到的部分移到按需加载的 references 中。有些 skill 依赖其他 skill。写作 hook 指向 `research-writing-style` 和 `work-email`，多个代码类 skills 会加载 `ponytail` 并读取 `scientific-computing-correctness` 中的 reference 文件，`pre-submission-reviewer` 会读取 `benchmark-paper-template` 中的 checklist。除非同时修改用到它的地方，否则应保留这类 skill，删除某个 skill 后也请让 agent 检查 skill 之间的链接。然后按[安装](#安装)和[更新](#更新)中的说明从本地仓库安装。在 Codex 中也可以在 `/hooks` 里关闭写作 hook，见[停用或卸载](#停用或卸载)。
 
@@ -95,7 +99,7 @@ skill 名称后的数字是该 skill 每次使用时默认加载的 tokens，见
 | [library-example-notebooks](plugins/research-skills/skills/library-example-notebooks/SKILL.md) (~3k) | 编写或审阅科学软件库的示例 notebook 和教程，让读者在第一屏看到计算结果，以及如何换成自己的问题。 | [15](#credit-15) |
 | [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) (~4k) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | [12](#credit-12), [16](#credit-16) |
 | [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) (~8k) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据，也清理低价值测试和只为测试存在的生产代码。 | [4](#credit-4), [12](#credit-12), [16](#credit-16), [20](#credit-20) |
-| [lead-multi-agent-project](plugins/research-skills/skills/lead-multi-agent-project/SKILL.md) (~5k) | 以主脑身份带领多 agent 项目（例如科学软件发版），协调 advisor、worker、review 和参谋模型，从开始时的设置一直到发版。 | [15](#credit-15) |
+| [lead-multi-agent-project](plugins/research-skills/skills/lead-multi-agent-project/SKILL.md) (~5k) | 以主脑身份带领多 agent 项目，按所选模型分担实现或推导，安排独立审查与发版。 | [15](#credit-15) |
 | [write-implementation-job-prompts](plugins/research-skills/skills/write-implementation-job-prompts/SKILL.md) (~4k) | 将需求或审查结果整理为清晰、可执行的开发任务提示词。 | [12](#credit-12) |
 | [ponytail](plugins/research-skills/skills/ponytail/SKILL.md) (~5k) | 在保证科学准确性、科学家可读性、所需行为与资源约束的前提下，简化代码。 | [5](#credit-5), [12](#credit-12), [15](#credit-15), [16](#credit-16), [20](#credit-20) |
 | [ponytail-review](plugins/research-skills/skills/ponytail-review/SKILL.md) (<1k) | 审查代码变更，提出有依据的简化建议。 | [5](#credit-5) |
@@ -226,4 +230,4 @@ codex plugin marketplace remove research-skills
 
 ## 个人偏好
 
-写作风格、`research-explainer-animation` 的默认视觉与配音风格，以及 `quantum-research-radar` 的几部分按我的研究习惯设置。radar 的这几部分是它的[研究偏好](plugins/research-skills/skills/quantum-research-radar/references/user-research-profile.md)、[来源与检索词表](plugins/research-skills/skills/quantum-research-radar/references/source-and-query-map.md)中按研究偏好定制的检索词（Lane B）、中文[输出模板](plugins/research-skills/skills/quantum-research-radar/references/output-template.md)，以及[定时运行提示](plugins/research-skills/skills/quantum-research-radar/prompts/weekday-schedule-prompt.md)中的时区。除非用户或项目另有规定，`lead-multi-agent-project` 也按我的默认做法运行。它只通过桌面应用使用其他厂商的模型，采用自带的测试政策，advisor 线程压缩六次后换新线程。可以在请求中指定自己的偏好，也可以修改本地仓库后重新安装。radar 需要联网检索，或由你提供论文列表和论文，两者都没有时会停下，不会凭记忆写简报。
+写作风格、`research-explainer-animation` 的默认视觉与配音风格，以及 `quantum-research-radar` 的几部分按我的研究习惯设置。radar 的这几部分是它的[研究偏好](plugins/research-skills/skills/quantum-research-radar/references/user-research-profile.md)、[来源与检索词表](plugins/research-skills/skills/quantum-research-radar/references/source-and-query-map.md)中按研究偏好定制的检索词（Lane B）、中文[输出模板](plugins/research-skills/skills/quantum-research-radar/references/output-template.md)，以及[定时运行提示](plugins/research-skills/skills/quantum-research-radar/prompts/weekday-schedule-prompt.md)中的时区。除非用户或项目另有规定，`lead-multi-agent-project` 也按我的默认做法运行。它只通过桌面应用使用其他厂商的模型，采用自带的测试政策，单独负责推导或审查的会话，以及另一厂商应用中的会话，都在压缩六次后交接。可以在请求中指定自己的偏好，也可以修改本地仓库后重新安装。radar 需要联网检索，或由你提供论文列表和论文，两者都没有时会停下，不会凭记忆写简报。

@@ -1,7 +1,7 @@
 schema_version: '1.1'
 name: project-lead-triage
 description: 'Triage of nine review findings: three groups with impact sentences for every item, imprecision
-  is not a defect, mathematical clauses go to the advisor.'
+  is not a defect, new mathematical clauses need independent qualification.'
 tags:
 - quality
 - lead-multi-agent-project
@@ -57,14 +57,14 @@ graders:
     TypeError as printed, and F-7 is resume failing with a relative directory. The text below is a triage.
     PASS if F-5, F-6 and F-7 are all fixed now, in code or text, or F-5 is assigned to planned job J3
     whose refusal states the remedy. FAIL if any of them is deferred or dropped.'
-- name: math-clauses-to-advisor
+- name: math-clauses-qualified
   type: llm
   criteria: 'Context: F-5 proposes appending the remedy "reduce t or raise eps" to a refusal, and F-9
     proposes the text "requires at least N steps, because the count stopped at the limit". A remedy direction
-    and a causal clause about a count are mathematical statements, which the workflow sends to the mathematics
-    advisor before dispatch, or takes from an existing advisor derivation such as D-3. The text below
+    and a causal clause about a count are mathematical statements, which require a qualified
+    derivation before dependent work. A prior result such as D-3 can supply it if applicable. The text below
     is a triage. PASS if the triage does not dispatch the review''s wording for F-5 or for the causal
-    clause of F-9 as is, and instead routes them to the advisor or to applicable existing qualification
+    clause of F-9 as is, and instead routes them to the selected MATH producer for independent checking or to applicable existing qualification
     such as D-3. A local wording correction may proceed only if that evidence actually establishes the
     count or condition being described. FAIL if it treats a short qualifier as automatically correct
     or plans to apply either wording without checking its basis.'

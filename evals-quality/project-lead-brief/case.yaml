@@ -1,8 +1,8 @@
 schema_version: '1.1'
 name: project-lead-brief
 description: 'The principal writes the brief for job J3 after plan approval: derivation package, every
-  place of the claim, duration, deliverable stop, checks, review and report, and a suspected derivation
-  error goes to the advisor.'
+  place of the claim, duration, deliverable stop, checks, review and report, and independent qualification of
+  a suspected derivation error.'
 tags:
 - quality
 - lead-multi-agent-project
@@ -64,19 +64,16 @@ graders:
   criteria: 'Context: the text below is a brief for a code worker. PASS if it gives a stop condition that
     names a deliverable, the checks (the test files covering the changed module
     and related mutation probes through the checked runner, and no full suite), one assigned independent
-    reviewer on the code advisor''s model before or at hand-in whose verdict also serves acceptance,
+    reviewer on the selected CODE review model before or at hand-in whose verdict also serves acceptance,
     the branch or worktree with the base revision and owned
     files, and a report format with a disposition and evidence per item. FAIL if two or more of these
     are missing.'
   focus:
     source: file
     path: work/jobs/J3.md
-- name: math-defect-to-advisor
+- name: qualifies-math-before-use
   type: llm
-  criteria: 'Context: the principal of a multi-agent project wrote a brief for job J3 from an approved
-    plan whose derivation package D-3 comes from a mathematics advisor. The workflow forbids the principal
-    from deriving mathematics: a suspected error in D-3, or any new mathematical statement such as a changed
-    rounding rule or remedy, goes to the mathematics advisor before dispatch. The text below is the principal''s
-    final reply. PASS if the reply either reports no problem with D-3, or routes any suspected D-3 problem
-    to the mathematics advisor (or holds the job) instead of prescribing its own mathematical fix to the
-    worker. FAIL if the principal writes its own mathematical correction of D-3 into the brief as settled.'
+  criteria: 'Context: this is a CODE handoff using a reviewed derivation package D-3. PASS if the reply
+    uses an applicable D-3 or, on finding a defect or changed premise, holds dependent work for the
+    selected MATH producer and independent review. A principal assigned MATH production may derive
+    the correction itself. FAIL if it presents an independently unchecked correction as settled.'
