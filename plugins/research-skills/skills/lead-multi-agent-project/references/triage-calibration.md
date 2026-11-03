@@ -1,6 +1,6 @@
 # Triage calibration
 
-Read before each triage and its fix briefs. Judge findings against the current public contract, actual consumers and the user's decisions. Consult the project's recorded cases when they resolve a current uncertainty. The historical examples below illustrate those distinctions.
+Read before each triage and its fix briefs. Judge findings against the review basis, the current public contract, actual consumers and the user's decisions. Consult the project's recorded cases when they resolve a current uncertainty. The historical examples below illustrate those distinctions.
 
 ## Looked serious, were minor
 
@@ -10,6 +10,7 @@ Each fails the three questions: no wrong result, no blocked user, no wrong decis
 - A verification gap was reported as 0 after 2^60 was added to the objective, a precision limit of binary64.
 - Two rounded budget fields summed to 8.67e-19 more than the total.
 - A NaN appeared in a private helper proven unreachable through supported entry points.
+- A review called it a bug that the quantum linear solver failed after the matrix alone was multiplied, or divided, by 10^300 with the right-hand side unchanged. No user poses that system.
 - Notebook text differed slightly from the behavior. That is a text item for the release step.
 
 ## Were important
@@ -29,7 +30,7 @@ Separate public reachability from internal use. A documented argument combinatio
 
 ## Settings, limits and guards
 
-Determine the intended scale, default and promised precision before refining a safety limit. A coarse admission charge may need a useful remedy direction rather than a byte-exact retry value. Extra precision machinery needs a current contract or user benefit. Conversely, a supported edge case is not dismissed merely for being unusual. Adjusting a default or widening an allowed workload follows the user's resource authority.
+Determine the intended scale, default and promised precision before refining a safety limit. A coarse admission charge may need a useful remedy direction rather than a byte-exact retry value. Extra precision machinery needs a current contract or user benefit. Conversely, a supported edge case is not dismissed merely for being unusual. Judge unusual against the review basis: an extreme input its users pose can expose a defect, including through intermediates, but a failure only on input they never pose is no defect and needs no guard or test unless the basis says otherwise. Adjusting a default or widening an allowed workload follows the user's resource authority.
 
 A suggested correction is a hypothesis, including one from the principal or counselor. Check its premises against the code and intended contract before commissioning a derivation or implementation.
 

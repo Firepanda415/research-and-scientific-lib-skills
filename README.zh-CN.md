@@ -13,11 +13,11 @@
 有几个 skill 的成本明显高于其他 skill：
 
 - `research-writing-style` 每次读取约 20k tokens。写作 hook 会把有其他人阅读的文档（例如论文、审稿报告、文档、README 和信件）以及为这类文档起草的文字交给这个 skill 起草、修改和审阅，所以产出这类文字的 skill 也会带上这部分成本。你自己看的笔记和报告、写给 agent 的文字，以及 commit 和 pull request 不走这条路线。代码注释和内部 docstring 使用一份不到 1k tokens 的独立 reference。会渲染成公开 API reference 的注释或 docstring 使用另一份不到 1k tokens 的 reference。两者各有简短的局部检查，都不加载完整写作流程。
-- `simplify-codebase` 连同它加载的 Ponytail skill 约占 8k，`quantum-computing-review` 和 `research-explainer-animation` 各约占 6k，`lead-multi-agent-project`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 23k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 5k）。`lead-multi-agent-project` 为派发的实现任务写 brief 时还会加载 `write-implementation-job-prompts`（约 4k），各阶段的 reference 文件在整个项目中合计再加约 15k。
+- `simplify-codebase` 连同它加载的 Ponytail skill 约占 8k，`quantum-computing-review` 和 `research-explainer-animation` 各约占 6k，`lead-multi-agent-project`、`scientific-computing-correctness` 和 `scientific-library-review` 各约占 5k。其中几个在做特定检查时还会读取更多 reference 文件。仅 `quantum-computing-review` 的审稿手册就有约 23k tokens，该 skill 只读审稿需要的章节。Code review、scientific computing 和 implementation handoff 类 skills 在实现、优化或判断设计时还会加载 Ponytail（约 5k）。`lead-multi-agent-project` 为派发的实现任务写 brief 时还会加载 `write-implementation-job-prompts`（约 4k），各阶段的 reference 文件在整个项目中合计再加约 16k。
 
 有些流程还会增加额外成本。每个 subagent 都会各自读取一份说明和材料，所以 `research-writing-style` 为篇幅较大的文档启动的独立 reviewer 会再加载一次这个 skill，`deep-code-review` 在实质性审查中可能会启动多个并行查找问题的 agent。
 
-`lead-multi-agent-project` 在开场计划里按会话逐条列出分工。主脑与代码或数学 worker 型号相同时，由主脑直接承担该项工作。两个 worker 使用不同型号，且需要两名独立 reviewer 和一位与主脑来自不同厂商的参议时，这样分工共有五个核心会话。主脑与两个 worker 的型号都不同时，完整配置为六个会话，各自在需要时启动。相关修正由原 reviewer 跟到验收。如果原 reviewer 参与了待审成果的制作、本次判断需要独立于先前结论，或用户、项目、宿主有明确要求，就换一名 reviewer。延后处理反馈或中断当前工作时，在原任务记录里留一行，让接手的 AI 知道何时处理反馈，或从哪里继续。只有用户明确要求时才为这些记录加载写作 skill。
+`lead-multi-agent-project` 在开场计划里按会话逐条列出分工，最后一条说明项目服务谁、它最基本的逻辑，以及对这些用户来说什么算缺陷。worker 和 reviewer 都遵循这一审查基准，主脑从项目记忆中取它，只有记忆里完全没有时才询问用户。主脑与代码或数学 worker 型号相同时，由主脑直接承担该项工作。两个 worker 使用不同型号，且需要两名独立 reviewer 和一位与主脑来自不同厂商的参议时，这样分工共有五个核心会话。主脑与两个 worker 的型号都不同时，完整配置为六个会话，各自在需要时启动。相关修正由原 reviewer 跟到验收。如果原 reviewer 参与了待审成果的制作、本次判断需要独立于先前结论，或用户、项目、宿主有明确要求，就换一名 reviewer。延后处理反馈或中断当前工作时，在原任务记录里留一行，让接手的 AI 知道何时处理反馈，或从哪里继续。只有用户明确要求时才为这些记录加载写作 skill。
 
 `quantum-research-radar` 每次运行都会把最多五条检索路线的结果放进上下文。`research-explainer-animation` 还要在本地花计算时间合成语音和渲染视频。
 
@@ -103,7 +103,7 @@ skill 名称后的数字是该 skill 每次使用时默认加载的 tokens，见
 | [write-implementation-job-prompts](plugins/research-skills/skills/write-implementation-job-prompts/SKILL.md) (~4k) | 将需求或审查结果整理为清晰、可执行的开发任务提示词。 | [12](#credit-12) |
 | [ponytail](plugins/research-skills/skills/ponytail/SKILL.md) (~5k) | 在保证科学准确性、科学家可读性、所需行为与资源约束的前提下，简化代码。 | [5](#credit-5), [12](#credit-12), [15](#credit-15), [16](#credit-16), [20](#credit-20) |
 | [ponytail-review](plugins/research-skills/skills/ponytail-review/SKILL.md) (<1k) | 审查代码变更，提出有依据的简化建议。 | [5](#credit-5) |
-| [ponytail-audit](plugins/research-skills/skills/ponytail-audit/SKILL.md) (<1k) | 以精简的只读审查报告列出整个仓库中可以删除或简化的代码。 | [5](#credit-5) |
+| [ponytail-audit](plugins/research-skills/skills/ponytail-audit/SKILL.md) (~1k) | 以精简的只读审查报告列出整个仓库中可以删除或简化的代码。 | [5](#credit-5) |
 | [ponytail-debt](plugins/research-skills/skills/ponytail-debt/SKILL.md) (<1k) | 汇总代码中标记的简化取舍，以及需要重新处理这些取舍的条件。 | [5](#credit-5) |
 | [ponytail-gain](plugins/research-skills/skills/ponytail-gain/SKILL.md) (<1k) | 展示 Ponytail 原项目的历史基准测试结果。 | [5](#credit-5) |
 | [ponytail-help](plugins/research-skills/skills/ponytail-help/SKILL.md) (~1k) | 查看 Ponytail 的调用方式、级别、关闭和更新方法。 | [5](#credit-5) |

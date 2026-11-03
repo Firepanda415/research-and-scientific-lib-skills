@@ -7,7 +7,7 @@ description: "Review code read-only for domain correctness, engineering, tests a
 
 ## Review contract
 
-Deliver one integrated review of domain/scientific correctness, engineering quality, and resource cost, grounded in realistic use of the relevant public entries and their downstream consumers. Trace actual affected call chains across file and worker boundaries. Complete relevant verification before the first final report; local passing tests are scoped evidence, and independent evidence must support the claimed user-visible behavior and scientific meaning.
+Deliver one integrated review of domain/scientific correctness, engineering quality, and resource cost, grounded in realistic use of the relevant public entries and their downstream consumers. Take whom the code serves and the inputs they or untrusted sources supply from project guidance or memory, or infer them from its documentation, and state that review basis in the report. Trace actual affected call chains across file and worker boundaries. Complete relevant verification before the first final report; local passing tests are scoped evidence, and independent evidence must support the claimed user-visible behavior and scientific meaning.
 
 When judging a simplification or deletion proposal, API retirement, replacement architecture, or remediation design, load and apply [Ponytail](../ponytail/SKILL.md) unless it is off. Use it for the design tradeoff within this review, with this skill's correctness and evidence requirements. It does not authorize fixes or a second audit.
 
@@ -113,8 +113,11 @@ For every candidate:
 6. Reject speculative or non-actionable candidates and record why. An intentional
    behavior needs a contract-level defect before it is a finding. An unreachable
    failure scenario is not a runtime bug, but proven dead code/plumbing can be
-   actionable maintenance work. A previous deferral changes scheduling, not
-   whether a demonstrated current issue belongs in the review.
+   actionable maintenance work. A failure only on input outside the review
+   basis is no finding either; input that crosses a trust boundary, such as
+   network data, uploaded files or another party's archive, is inside it. A
+   previous deferral changes scheduling, not whether a demonstrated current
+   issue belongs in the review.
 
 Classify impact, origin, evidence strength, and closure state separately. An old
 issue need not be a blocker to qualify. Static maintenance findings must not be

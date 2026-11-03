@@ -89,7 +89,7 @@ at that owner instead of patching the same symptom in each caller.
 ## Rules
 
 - Add interfaces, factories, classifications, configuration, or compatibility paths only for a current requirement. A helper must remove meaningful duplication, isolate a complex boundary, or name an operation that makes the caller easier to understand. A single-use helper can express a scientific concept, but having a caller alone does not justify a wrapper. Keep intermediate quantities when they expose units, assumptions, or the derivation. A display of entries users define themselves, such as custom gate names, shows them as they are, because users know what their own entries mean.
-- Validate unknown values at the boundary responsible for their validity, then pass the established guarantees inward. Repeat a check only when a new boundary, mutation, or transformation can invalidate its guarantee. Type annotations alone provide no runtime guarantee. Preserve scientific domain checks, including dimensions and finite values where required.
+- Validate unknown values at the boundary responsible for their validity, then pass the established guarantees inward. Repeat a check only when a new boundary, mutation, or transformation can invalidate its guarantee. Type annotations alone provide no runtime guarantee. Preserve scientific domain checks, including dimensions and finite values where required. Handle the inputs the code's users supply, including their plausible mistakes and anything crossing a trust boundary, and add no handling for inputs they never supply.
 - Keep error handling when it addresses a concrete failure or adds actionable context, preserving the cause. Automatic recovery needs a mechanism that can help, an acceptance condition, a stopping condition, and a justified cost. For scientific dependency failures, follow [dependency recovery](../scientific-computing-correctness/references/dependency-recovery.md).
 - No boilerplate, no scaffolding "for later", later can scaffold for itself.
 - Deletion over addition. Boring over clever, clever is what someone decodes at 3am.
@@ -207,7 +207,8 @@ the review of a correctness or review skill that also applies.
   Helpers remove meaningful duplication, isolate complex boundaries or clarify
   operations. Intermediate quantities keep the computation understandable.
 - Each validation has an owning boundary. Repeated checks protect a guarantee
-  that can actually be invalidated, and required scientific checks remain.
+  that can actually be invalidated, and required scientific checks remain. No
+  added handling serves only inputs the code's users never supply.
 - After a removal, no reference, stub, `removed` or `no longer` comment, or
   absence test remains without a stated reason.
 - The final test set uses existing coverage where sufficient and independent

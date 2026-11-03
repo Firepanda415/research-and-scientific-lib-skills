@@ -11,7 +11,7 @@ when they test different invariants.
 | --- | --- | --- | --- |
 | Scope and endpoint | Which current behavior is being reviewed, and what comparison, rules, and exclusions govern it? | Base, endpoint, merge base when relevant, status, diff inventory, applicable instructions, endpoint versus explicitly introduced-only scope | Always, parent-owned |
 | Prior-finding closure | What current evidence resolves or keeps open each in-scope earlier issue? | Closure ledger, original falsifier or static proof, accepted/deferred decisions, current result, evidence-deletion check | Remediation or follow-up review |
-| Domain and semantic correctness | Does the computation preserve the intended quantity, state, ordering, units, and decision meaning? | First-principles or independent oracle plus adversarial and boundary cases | Numerical, scientific, financial, protocol, compiler, or other domain-heavy logic |
+| Domain and semantic correctness | Does the computation preserve the intended quantity, state, ordering, units, and decision meaning? | First-principles or independent oracle plus adversarial and boundary cases within the review basis | Numerical, scientific, financial, protocol, compiler, or other domain-heavy logic |
 | Shared owner and cross-layer contract | Does one fact have one owner across producers, callers, sibling paths, records, serialization, reports, and docs? | Callsite inventory, legal states and relations, nondefault value traced end to end | Shared helpers, schemas, lifecycle fields, common status vocabulary |
 | Maintainability and unnecessary structure | Which unused inputs, dead branches, duplicate state, setup helpers, or serialization layers impose a concrete update burden? | Relevant def-use and caller inventory, actual consumers, behavior-preserving deletion/consolidation direction | Substantive review of owned helpers, adapters, records, tests, or abstractions, including unchanged siblings |
 | State and event lifecycle | Are planned, constructed, submitted, executed, completed, validated, and reported events distinct and ordered correctly? | Event witness independent of metadata plus zero/nonzero and partial/full cases | Stateful workflows, jobs, accounting, caching, retries, resources |
@@ -92,7 +92,7 @@ body. Summarize only applicable categories, without forcing a finding into each:
 
 | Category | What the evidence establishes |
 | --- | --- |
-| Direct domain/scientific correctness | A valid input produces the wrong intended quantity, convention, decision, or claimed guarantee |
+| Direct domain/scientific correctness | An input within the review basis produces the wrong intended quantity, convention, decision, or claimed guarantee |
 | Execution and resource accounting | Requested work, observed events, or published costs disagree or admit invalid values |
 | Validation and reproducibility | Oracles, harnesses, reports, or missing provenance cannot support the claimed evidence |
 | API and workflow behavior | Supported inputs, options, serialization, or entrypoints fail their contract |

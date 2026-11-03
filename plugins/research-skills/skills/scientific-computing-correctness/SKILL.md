@@ -7,7 +7,7 @@ description: "Implement, debug, optimize or independently validate scientific co
 
 ## First principle
 
-Start from the intended scientific contract and realistic use of the relevant public entry, including representative valid inputs and options. Trace the affected quantity through the actual call chain to the results, decisions, reports, and costs its consumers receive. Locate the first divergence and correct its owner before stacking patches around symptoms. Preserve scientific invariants when optimizing or simplifying.
+Start from the intended scientific contract and the problems its users pose through the relevant public entry, including representative valid inputs and options. Trace the affected quantity through the actual call chain to the results, decisions, reports, and costs its consumers receive. Locate the first divergence and correct its owner before stacking patches around symptoms. Preserve scientific invariants when optimizing or simplifying.
 
 Connect worker-local checks to that user-facing relation, base completion on integrated behavior with independent scientific evidence, and revise obsolete or unjustified tests to match the established contract. Use existing evidence, source reasoning, and the smallest discriminating check needed, without rerunning every end-to-end workload.
 
@@ -157,8 +157,8 @@ claims, and how to count extra work and phrase the request.
 - Before implementing a behavior or accepting an existing implementation, state
   the property a test must check and the independent source of the expected
   result. At the same time, define the falsifier by asking what ordinary,
-  adversarial, boundary, mixed-interaction, or cross-layer case could make
-  every local check pass while the scientific conclusion is wrong.
+  adversarial, boundary, mixed-interaction, or cross-layer case among the
+  problems users pose could make every local check pass while the scientific conclusion is wrong.
 - Use an independent oracle with a different failure mode, such as a
   specification, a first-principles derivation, a reference implementation, or
   a known-good case. Two consumers of the same builder prove consistency,

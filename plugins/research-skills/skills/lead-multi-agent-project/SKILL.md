@@ -33,11 +33,11 @@ At the start of each run, use the settings the user gave for this run and ask fo
 - the decisions the user keeps, how to notify them and, for a release, its version and destinations;
 - the channel for another vendor's model: its visible desktop app by default, or a command-line tool if the user chooses it.
 
-Once selected, give the user a short opening brief in bullets, one per actual role session. Put combined roles on one bullet. Each bullet names the role, model, reasoning level, work it owns and when it joins. Include this in the plan's opening, without a separate approval step.
+Once selected, give the user a short opening brief in bullets, one per actual role session. Put combined roles on one bullet. Each bullet names the role, model, reasoning level, work it owns and when it joins. A last bullet gives the review basis from project memory: whom the project serves, its basic logic and what is a defect for them. Ask only if project memory has none. Include this in the plan's opening, without a separate approval step.
 
 Verify access to the selected sessions and cross-vendor channel before planning. Use host capability information where available. If a necessary session must be opened by the user, ask when it is needed. Report access limits early. Read [other-vendor-app.md](references/other-vendor-app.md) before the first cross-vendor request.
 
-Record these choices, the checked runner or declared environment, worktree rules, memory and working directories, and the user's standing instructions in the project's existing records.
+Record these choices, the review basis, the checked runner or declared environment, worktree rules, memory and working directories, and the user's standing instructions in the project's existing records.
 
 ## Order of the work
 
@@ -65,7 +65,7 @@ Check the basis of bounds, ranges, guarantees, equivalences, windows, tolerances
 Triage every finding before planning fixes, treating the review's severity and remedy as inputs. Read [triage-calibration.md](references/triage-calibration.md) before each triage.
 
 - **Three questions.** Does the finding produce a wrong result, block a user who follows the documentation, or lead a user to a wrong decision?
-- **An impact sentence** names a supported user path and what goes wrong. Establish reachability from the public contract and actual consumers, not only internal callers. An uncommon valid input can still expose a defect. Unsupported hypothetical use alone does not establish one.
+- **An impact sentence** names a supported user path and what goes wrong. Establish reachability from the public contract and actual consumers, not only internal callers. An uncommon input within the review basis can still expose a defect. Unsupported hypothetical use alone does not establish one.
 - **Wrong or only imprecise.** A loose valid bound, nominal charge or arithmetic precision limit is not a defect merely for being inexact. Check the promised semantics and downstream use. Incorrect result associations, provenance or resource classification are code defects when consumers rely on them, even if the headline numerical answer is unchanged.
 - **The cheapest correct change** removes the demonstrated harm. Text alone suffices only when behavior and consumed data already meet the contract. A larger change needs a concrete benefit relative to its engineering cost and instability, using derivations and implementation that already exist.
 - **Not fixing is an outcome.** Give every finding a disposition and its reason, and keep deferrals visible. An optional wording preference is marked not fixed and creates no job or backlog item.
@@ -87,7 +87,7 @@ The principal and counselor take only delegated decisions. Request the counselor
 - **Rule changes.** Update the file the affected session rereads and tell its owner.
 - **Clock.** Read the clock in the command that records a decision, at the time it is taken.
 - **Environment.** Run every interpreter, test, lint and documentation command through the project's checked runner (a wrapper that pins the interpreter and revision) or in its declared environment, and carry that command into every brief.
-- **Records.** The principal keeps current rules, revision, active jobs, decisions and evidence owners in the shared project record. Link dated history separately and preserve outstanding obligations at handoff. Record measured duration and available usage in their existing home. Check the actual size of context sent to agents. Edit records with file tools and keep them under version control at boundaries.
+- **Records.** The principal keeps current rules, revision, active jobs, decisions and evidence owners in the shared project record. Link dated history separately and preserve outstanding obligations at handoff. Check the actual size of context sent to agents. Edit records with file tools and keep them under version control at boundaries.
 - **Feedback and interruptions.** While producing a batch, limit concurrent work that needs the principal's attention. Handle immediate feedback directly. For a delayed item, leave one line in its job entry with next action, when due and report location. Prioritize a blocked dependency or invalidated premise. Before switching, note where to resume and the next step. At batch boundaries, integration and handoff, reconcile outstanding jobs with their expected reports. Clear temporary entries once resolved or resumed and keep the disposition with the job. AI agents read internal job records, handoffs and these temporary notes directly. Use brief facts, actions and paths. Load `research-writing-style` for these records only at the user’s explicit request.
 
 ## Checks
@@ -104,7 +104,7 @@ Check each artifact before it leaves the principal.
   - each additional agent has a distinct deliverable or independence requirement worth its briefing, context and review cost; delivery and acceptance share the assigned reviewer;
   - it updates the places that state its changed claims but carries no documentation job for its area, which starts only after the area's code review has converged, and notebooks wait for the release.
 - **Derivation request:** covers the claim in every reachable case and supported public use, names missing or changed premises and asks for a complete derivation.
-- **Review request:** the reviewer is independent of the producer and has the original requirements, relevant source and evidence. Substantially new formal-review scope has its counselor check.
+- **Review request:** the reviewer is independent of the producer and has the original requirements, review basis, relevant source and evidence. Substantially new formal-review scope has its counselor check.
 - **Integration:** checks match the change and required delivery scope, including notebook cells or other formats the project's gates cover. Every failed test line was read. A scoped check is not reported as a repository-wide pass.
 - **Triage:** every item has a consequence and disposition. The counselor checks material unresolved choices, not each local text correction or settled no-change item.
 - **Fix list:** every deferred item names its owner, scope and who decided it.

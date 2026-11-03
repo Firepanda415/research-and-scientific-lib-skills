@@ -33,7 +33,9 @@ Same as ponytail-review:
 ## Hunt
 
 Look for dead flags, duplicate state, unused flexibility, unnecessary forwarding,
-or custom code replaced by an existing suitable facility. Trace consumers,
+custom code replaced by an existing suitable facility, or handling for input the
+code's users never supply. Checks for their plausible mistakes or for input
+crossing a trust boundary stay, and so do documented refusals users rely on. Trace consumers,
 dynamic registration, ownership, public contracts, and retained evidence before
 calling a candidate redundant. File size, caller count, or visual similarity is
 only a lead; a small wrapper may own a meaningful boundary, and a helper or

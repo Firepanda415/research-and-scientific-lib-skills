@@ -15,7 +15,9 @@ Read the authorizing request, live contract, owners, callers, and tests. Before
 choosing edits or checks, state the affected relation: admitted input meanings
 and representations, the consuming operation or lifecycle that decides legality,
 and the expected result or forbidden work. A reported reproducer witnesses that
-relation; it does not define its whole domain. Trace the actual transformation
+relation; it does not define its whole domain. Admitted inputs are those the
+project's users supply, from its guidance or memory; a reproducer whose input
+lies outside them justifies no new handling. Trace the actual transformation
 to its consumer, including any later conversion or rewrite that can undo the fix.
 
 When the handoff requires choosing an implementation structure, simplification, or code/API retirement, load and apply [Ponytail](../ponytail/SKILL.md) unless it is off. Carry the active level or off state to the implementation agent. Merely transferring a fully settled edit does not need another design pass.
@@ -49,7 +51,7 @@ Usually include:
 
 - the concrete problem, desired behavior, and relevant baseline or artifact;
 - the existing owner and affected paths, with genuine scope limits;
-- the scoped relation, relevant representation/operation distinctions, and material exclusions;
+- the scoped relation, the users and inputs it serves, relevant representation/operation distinctions, and material exclusions;
 - for new behavior as well as fixes, the property each requested test checks and the independent source of its expected result, such as a specification, derivation, reference implementation, or known-good case;
 - separating counterexample (for a fix, a regression check that fails on the pre-change code and passes after the fix), legal-preservation evidence (inputs that must keep working) or forbidden-work evidence, and project-required checks;
 - expected deliverables and the actual action boundary.

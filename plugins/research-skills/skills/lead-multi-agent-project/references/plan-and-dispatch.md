@@ -34,6 +34,7 @@ The principal works its own batch from the plan, using its scope, evidence and a
 
 - the environment and the checked runner, with the interpreter and its version, the base revision and the test command;
 - one verification rule, taken from the plan's verification policy;
+- the review basis from step 0. The worker handles input within it, adds no guard or test for input outside it, and lists in its report any assigned item that rests on such input;
 - the repository's operating, attribution and write restrictions;
 - the qualified derivations the CODE worker copies verbatim, including when documenting existing code. For a missing relation or unmatched premise, send its consuming path to the principal for MATH work and independent review. If mid-job messaging is unavailable, leave the question in the agreed request file and name it in the report. Continue work that does not depend on the answer;
 - the plan's test policy. The witness before and after a fix is its regression evidence, and a permanent test is added only where the policy admits it; a test needed only during development carries the temporary marker. Before deleting or trimming a test, the worker checks against the mutation results that it is not the only detector of some probe;
@@ -52,7 +53,7 @@ For delegated work, also specify:
 - the completion criteria and the report format;
 - a stop condition that names a deliverable, not an open-ended process.
 
-Time estimates use measured durations for comparable jobs, including briefing, review, integration and correction work. At job boundaries inspect accumulated coordination and available usage, especially when the user raises cost. Use existing records. Distinguish elapsed time, cumulative model usage and concurrent capacity. Report the measurement window and classification basis, label mixed-role sessions as mixed, and separate cached input from new input. Token counts do not establish subscription usage, price or savings from a workflow change.
+Time estimates use measured durations for comparable jobs, including briefing, review, integration and correction work. Record measured duration and available usage in their existing home. At job boundaries inspect accumulated coordination and available usage, especially when the user raises cost. Use existing records. Distinguish elapsed time, cumulative model usage and concurrent capacity. Report the measurement window and classification basis, label mixed-role sessions as mixed, and separate cached input from new input. Token counts do not establish subscription usage, price or savings from a workflow change.
 
 Every report gives dispositions, evidence paths and unresolved obligations with their owners. Cite the diff for changed text and quote a sentence only when its wording matters to a finding. A fix brief records the principal's decision on each finding, and its report gives one disposition per finding: fixed, fixed differently with a reason, or not a defect with counterevidence. Reuse common rules and current evidence owners rather than copying the project's history into each brief or report.
 
