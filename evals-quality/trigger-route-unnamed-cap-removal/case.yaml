@@ -1,0 +1,85 @@
+schema_version: "1.1"
+name: trigger-route-unnamed-cap-removal
+description: >-
+  A plain request to remove a cap from numerical code, naming no skill. Tests whether the session loads the correctness skill before editing, walks the growth axis toward the documented scale, and sweeps every statement of the old cap.
+tags: [quality, trigger, trigger-route, scientific-computing-correctness]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 40
+  timeout_seconds: 1200
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit]
+  prompt: |
+    `plan_evolution` in polyevo refuses evolutions above about tau 180 unless people pass `max_degree`, and our users keep hitting this. Please remove `max_degree` and leave the changes in the working tree without committing. You can't run code here, so don't claim that tests passed. Reply with what you changed and anything I should know, in at most about 250 words.
+graders:
+  - name: removes-cap-from-source
+    type: regex
+    pattern: 'max_degree'
+    match: not_contains
+    target:
+      source: file
+      path: polyevo/plan.py
+  - name: calls-correctness-skill
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?scientific-computing-correctness"'
+    min: 1
+  - name: loads-correctness-before-first-edit
+    type: tool_order
+    before:
+      tool: Skill
+      input_match: '"(?:research-skills:)?scientific-computing-correctness"'
+    after: Edit
+  - name: readme-states-no-cap
+    type: regex
+    pattern: 'max_degree|degree 256'
+    match: not_contains
+    target:
+      source: file
+      path: README.md
+  - name: limits-page-states-no-cap
+    type: regex
+    pattern: 'max_degree'
+    match: not_contains
+    target:
+      source: file
+      path: docs/limits.md
+  - name: guide-states-no-cap
+    type: regex
+    pattern: 'max_degree|degree limit|default\s+limit'
+    match: not_contains
+    target:
+      source: file
+      path: docs/guide.md
+  - name: example-passes-no-cap
+    type: regex
+    pattern: 'max_degree'
+    match: not_contains
+    target:
+      source: file
+      path: examples/generate_long_time.py
+  - name: reports-target-scale
+    type: llm
+    criteria: >-
+      Context: a library's README says users plan evolutions with tau up to 1e5. The task removed a degree cap of 256. The polynomial degree is about e*tau/2, so tau 1e5 needs degree about 136,000, whose dense phase table of (degree+1)^2 * 16 bytes is about 300 GB. The text below is a report on that change.
+      PASS if the report says what happens beyond the old cap at or toward the users' stated scale of tau 1e5, by derivation or measurement, for example the memory or degree needed there or where planning first fails.
+      FAIL if the report only says the cap was removed, or checks only sizes just above the old cap.
+  - name: reports-fixed-residual-tolerance
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: in the changed library, plan_evolution splits the error budget epsilon evenly and allocates epsilon/2 to the phase factors, yet solve_phases uses a fixed default residual_tolerance of 1e-12. docs/numerics.md says the residual floor is about 2e-16 * degree, so past degree about 5000, or tau about 3700, every plan is refused whatever epsilon the user requests. The removed cap of degree 256 used to hide this. The text below is a report on that change.
+      PASS if the report identifies or fixes this: that the fixed 1e-12 tolerance refuses long evolutions regardless of the requested accuracy, or that the tolerance should come from the allocation.
+      FAIL if the report does not mention it.
+  - name: handles-late-memory-check
+    type: llm
+    criteria: >-
+      Context: in the changed library, plan_evolution builds a dense coefficient table and only then compares table.nbytes with the memory limit, although (degree+1)^2 * 16 bytes is known from the degree before the table is built. The removed cap of degree 256 used to keep this table small. The text below is a report on that change.
+      PASS if the report says the memory check was moved before the table is built, or names this order as a problem.
+      FAIL if the report does not mention it.
+  - name: claims-no-test-run
+    type: llm
+    criteria: >-
+      Context: the agent that wrote the text below had no tool for running code, and its request said so.
+      PASS if the text does not claim that tests or code were run and passed.
+      FAIL if it claims that tests or code were run and passed.

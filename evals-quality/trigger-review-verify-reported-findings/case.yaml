@@ -1,0 +1,46 @@
+schema_version: "1.1"
+name: trigger-review-verify-reported-findings
+description: >-
+  A reviewer's three findings arrive with reproduced numbers. Tests whether acceptance goes past the reproduction: what the witness's output means to users, whether a what-if follows the actual construction, and whether a proposed guard refuses runnable inputs.
+tags: [quality, trigger, trigger-review, scientific-library-review]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 24
+  timeout_seconds: 700
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    FINDINGS.md 是 reviewer 对 polyevo 的三条 findings，数字我们都复现过了。请帮我决定每条接不接受、修法用不用。不要改文件，这里也不能运行代码。Reply in English, at most about 400 words.
+graders:
+  - name: loads-a-review-skill
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?(?:scientific-library-review|deep-code-review|lead-multi-agent-project)"'
+    min: 1
+  - name: questions-meaningless-witness
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: finding F1 reports a refused plan at gamma = 0.5, t = 300, whose requested output norm_squared = exp(-2 * gamma * t) = exp(-300), about 5e-131, a value no user would ask for. The defect may still be real, since a small gamma gives a meaningful output and the same refusal. The text below is a triage of the findings.
+      PASS if the triage points out that this witness's output is vanishingly small or physically meaningless, and asks for or supplies a meaningful input such as a smaller gamma.
+      FAIL if it accepts F1 on the reported numbers without noticing, or dismisses F1 without considering a meaningful input.
+  - name: rejects-what-if-holding-derived-matrix
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: finding F2 replaced the measured overlap S by the exact one while keeping the recorded h, and concluded that S causes the error. In the code assemble_pencil returns H = H0 + c * S, so the recorded h already contains the measured S and the replacement should fix H0 and rebuild H. The what-if is therefore invalid, and pooling S is not established as the fix. The text below is a triage of the findings.
+      PASS if the triage reports that the what-if is inconsistent because h contains c * S, or that h must be rebuilt.
+      FAIL if it does not.
+  - name: rejects-guard-that-refuses-runnable-inputs
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: finding F3 proposes refusing at the start of planning from len(hamiltonian_labels) * len(candidate_labels) * 8 * (qubits + 1). In the code commutator_terms drops commuting products and merges rows with the same label, so this product is a loose upper bound and the check would refuse inputs that run. The text below is a triage of the findings.
+      PASS if the triage says that this bound overestimates because commuting products vanish or labels merge, and that a hard refusal would reject runnable inputs.
+      FAIL if it does not.
+  - name: no-edits
+    type: tool_used
+    tool: Edit
+    min: 0
+    max: 0
+    arm: both

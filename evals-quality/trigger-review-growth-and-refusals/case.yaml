@@ -1,0 +1,65 @@
+schema_version: "1.1"
+name: trigger-review-growth-and-refusals
+description: >-
+  Read-only release review of a small numerical library whose latest commit removed a degree cap. Tests whether a review walks the growth axis to the documented scale, classifies refusals, follows stated remedies, compares estimates and labels with the code, and searches for statements the removal left behind.
+tags: [quality, trigger, trigger-review, scientific-library-review]
+context:
+  scaffold_script: scaffold.sh
+execution:
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    我们下周发布 polyevo 1.3。最新的提交（HEAD~1..HEAD）去掉了默认的 degree 上限，让长时间演化能规划。请 review 这个库，看能不能发布。不要改文件，这里也不能运行代码，所以不要声称跑过测试。Reply in English, most important findings first, at most about 700 words.
+graders:
+  - name: loads-scientific-library-review
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?scientific-library-review"'
+    min: 1
+  - name: walks-growth-axis
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a library's README says users plan evolutions with tau up to 1e5, and the reviewed commit removed a degree cap of 256. Degree is about e*tau/2. Planning stays fine a little above the old cap, starts to be refused near degree 5000 (tau about 3700) by a fixed phase tolerance, and at tau 1e5 needs a dense table of about 300 GB. The text below is a review of that library.
+      PASS if the review states the behavior at more than one size up to or toward tau 1e5, for example what happens at tau 1e3, 1e4 and 1e5, or the tau at which planning first fails and what the top of the range needs.
+      FAIL if it discusses only one size or gives no scale at all.
+  - name: finds-fixed-tolerance-unrelated-to-accuracy
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: in the reviewed library plan_evolution allocates epsilon/2 to the phase factors, but solve_phases uses a fixed default residual_tolerance of 1e-12. docs/numerics.md gives a residual floor of about 2e-16 * degree, so past degree about 5000 every plan is refused whatever epsilon the user asks for, and the error message says to lower epsilon, which does not help. The text below is a review of that library.
+      PASS if the review reports that this fixed tolerance refuses valid long evolutions independently of the requested accuracy, or that it ignores the error allocation.
+      FAIL if it does not report this.
+  - name: finds-exact-comparison-of-computed-bands
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: in the reviewed library build_evolution_encoding first verifies np.array_equal(matrix, matrix.conj().T), then round-trips the first column through FFT and requires bands[b] == conj(bands[size-b]) exactly. Rounding makes that comparison fail on larger exactly Hermitian matrices, so a valid input is refused with advice to symmetrize it, which it already is. The only test uses 8 points. The text below is a review of that library.
+      PASS if the review reports that this exact comparison of computed values can refuse an exactly Hermitian input, or that the proved Hermiticity should be carried forward.
+      FAIL if it does not report this.
+  - name: finds-remedy-dead-end
+    type: llm
+    criteria: >-
+      Context: in the reviewed library Run.submit charges exposure and records a job as "uncertain" before checking the payload size. When the size check fails it raises LimitError telling the user to call extend_limits and submit again, but the next submit raises RunFailed because the last job is "uncertain". No request was sent. The text below is a review of that library.
+      PASS if the review reports that following this message's remedy cannot work, or that a job never sent is recorded as uncertain, or that the check should run before the charge.
+      FAIL if it does not report any of these.
+  - name: finds-estimate-and-labels
+    type: llm
+    criteria: >-
+      Context: in the reviewed library forecast reports circuit_bytes as 64 * degree with interpretation "exact", while build_circuit's docstring says each block expands to about six instructions of about 400 bytes, about 2400 bytes per block. It also reports logical_depth as a serial sum of gate depths labeled "exact" with the premise "logical dependency schedule", although each block's two gates act on separate registers and so run in parallel. The text below is a review of that library.
+      PASS if the review reports that circuit_bytes badly underestimates memory or that logical_depth is not exact, including a wrong "exact" label on either.
+      FAIL if it reports neither.
+  - name: finds-statements-left-behind
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: the reviewed commit removed the max_degree parameter and its default of 256 from the code only. Five places still state it: README.md (limited to degree 256, pass max_degree), docs/limits.md (the max_degree row and the advice to raise it), docs/guide.md (prose saying plans stop at the degree limit, with an example passing max_degree=1200), examples/generate_long_time.py (passes max_degree=1200, which now raises TypeError) and CHANGELOG.md (no entry for the removal). The text below is a review of that library.
+      PASS if the review names at least four of these five places as stale or broken.
+      FAIL if it names fewer.
+  - name: no-edits
+    type: tool_used
+    tool: Edit
+    min: 0
+    max: 0
+    arm: both
