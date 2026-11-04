@@ -52,6 +52,7 @@ test('writing routing reaches sessions and subagents with stdin open', async () 
         path.join('references', 'api-docstrings.md'), path.join('references', 'code-comments.md')]
         .map(file => path.join(root, 'skills', 'research-writing-style', file)),
       path.join(root, 'skills', 'work-email', 'SKILL.md'),
+      path.join(root, 'skills', 'scientific-computing-correctness', 'SKILL.md'),
     ];
     for (const file of routed) {
       assert.ok(fs.existsSync(file), `missing routed file ${file}`);
@@ -60,6 +61,7 @@ test('writing routing reaches sessions and subagents with stdin open', async () 
     assert.match(context, /a document whose readers include people other than the user and agents/);
     assert.match(context, /When the readers are unclear, treat the text as the user's own/);
     assert.match(context, /code comments, docstrings, commit messages and pull-request descriptions/);
+    assert.match(context, /Before the first edit that can change what scientific or numerical code computes/);
   }
   const invalid = spawnSync(process.execPath, [script, 'InvalidEvent'], { encoding: 'utf8' });
   assert.equal(invalid.status, 1);

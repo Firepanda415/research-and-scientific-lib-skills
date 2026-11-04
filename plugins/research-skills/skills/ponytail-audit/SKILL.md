@@ -57,6 +57,7 @@ that result within the inspected scope without implying general ship approval.
 
 Scope: simplification findings. Every proposed cut must preserve required
 behavior, scientific accuracy, security, and resource constraints; route unrelated
-defects to a normal review. Keep the smallest independent evidence protecting
-current obligations, without a fixed test count. Lists findings, applies nothing.
+defects to a normal review. Removing a cap or guard also exposes the scaling it
+hid, so check, within approved cost, what now runs toward the target scale. Keep
+the smallest independent evidence protecting current obligations, without a fixed test count. Lists findings, applies nothing.
 One-shot.

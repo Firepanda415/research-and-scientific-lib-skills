@@ -7,7 +7,7 @@ description: Lead a multi-agent engineering project, such as a scientific-softwa
 
 The principal plans, dispatches, integrates and delivers the work. Handle authorized work directly unless another agent supplies missing expertise, necessary independence or a substantial parallel deliverable. Count briefing, source loading, waiting, hand-in and integration as delegation cost. The references illustrate scientific-library releases.
 
-Read each reference when its step applies. After compaction, reload guidance lost from the current context.
+Read each reference when its step applies, and reload lost guidance after compaction.
 
 ## Roles
 
@@ -85,8 +85,8 @@ The principal and counselor take only delegated decisions. Request the counselor
 - **Session continuity.** Keep each active owner for related batches, questions and corrections. When an owner has ended or reached a user, project or host limit, hand off its current task. For separate derivation and review sessions, and for chats in the other vendor's app, hand off after six compactions by default. The user sets the principal's handoff point, preferably a job boundary. A principal already compacted by earlier work hands off at the first boundary.
 - **Handoff.** Name this skill, the current revision and rules, active jobs, next actions, open decisions and evidence links. The successor verifies them against live state and reads history only to resolve a current uncertainty. Keep later-step obligations in that step's checklist.
 - **Rule changes.** Update the file the affected session rereads and tell its owner.
-- **Clock.** Read the clock in the command that records a decision, at the time it is taken.
-- **Environment.** Run every interpreter, test, lint and documentation command through the project's checked runner (a wrapper that pins the interpreter and revision) or in its declared environment, and carry that command into every brief.
+- **Clock.** Read the clock in the command recording a decision.
+- **Environment.** Run every interpreter, test, lint and documentation command through the project's checked runner or in its declared environment, and carry that command into every brief.
 - **Records.** The principal keeps current rules, revision, active jobs, decisions and evidence owners in the shared project record. Link dated history separately and preserve outstanding obligations at handoff. Check the actual size of context sent to agents. Edit records with file tools and keep them under version control at boundaries.
 - **Feedback and interruptions.** While producing a batch, limit concurrent work that needs the principal's attention. Handle immediate feedback directly. For a delayed item, leave one line in its job entry with next action, when due and report location. Prioritize a blocked dependency or invalidated premise. Before switching, note where to resume and the next step. At batch boundaries, integration and handoff, reconcile outstanding jobs with their expected reports. Clear temporary entries once resolved or resumed and keep the disposition with the job. AI agents read internal job records, handoffs and these temporary notes directly. Use brief facts, actions and paths. Load `research-writing-style` for these records only at the user’s explicit request.
 
@@ -96,6 +96,7 @@ Check each artifact before it leaves the principal.
 
 - **Plan, before approval:** triage came first, each foreseeable mathematical claim has an independently checked or still-applicable qualified derivation, and the plan names its critical path and independent lines.
 - **Brief, before dispatch, inherited briefs included:**
+  - it names the skills the recipient invokes first;
   - the mathematical claims the recipient relies on are qualified, including claims with changed premises;
   - every place that states each changed claim is listed;
   - a fix of a public contract, or one a review names, shows a detector that fails before the fix, kept in the suite only where the test policy admits it;
@@ -104,7 +105,7 @@ Check each artifact before it leaves the principal.
   - each additional agent has a distinct deliverable or independence requirement worth its briefing, context and review cost; delivery and acceptance share the assigned reviewer;
   - it updates the places that state its changed claims but carries no documentation job for its area, which starts only after the area's code review has converged, and notebooks wait for the release.
 - **Derivation request:** covers the claim in every reachable case and supported public use, names missing or changed premises and asks for a complete derivation.
-- **Review request:** the reviewer is independent of the producer and has the original requirements, review basis, relevant source and evidence. Substantially new formal-review scope has its counselor check.
+- **Review request:** the reviewer is independent of the producer and has the original requirements, review basis, relevant source and evidence. Exclusions follow what users pose, not input magnitude. Substantially new formal-review scope has its counselor check.
 - **Integration:** checks match the change and required delivery scope, including notebook cells or other formats the project's gates cover. Every failed test line was read. A scoped check is not reported as a repository-wide pass.
 - **Triage:** every item has a consequence and disposition. The counselor checks material unresolved choices, not each local text correction or settled no-change item.
 - **Fix list:** every deferred item names its owner, scope and who decided it.

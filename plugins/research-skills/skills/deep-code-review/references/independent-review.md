@@ -34,7 +34,9 @@ required.
   reviewed surfaces, checks run, and residual uncertainty. They do not edit,
   plan fixes, or approve their own findings.
 - Pass finders the review basis, so their adversarial and boundary cases stay
-  within the inputs it covers.
+  within the inputs it covers. State exclusions by whether users pose an input,
+  not by how extreme its numbers are, because an exclusion by magnitude hides
+  failures on problems users do pose.
 - For executable checks, pass finders the verified absolute interpreter or
   required runner, working directory, and exact relevant commands. Their
   handoff returns the commands actually run and the applicable revision/import

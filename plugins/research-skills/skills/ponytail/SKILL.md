@@ -74,7 +74,8 @@ Distinguish removing an unused implementation from deliberately retiring a
 working capability. The latter carries the user's authority and, for a
 scientific capability, a mathematical or scientific reason such as an order of
 accuracy or error bound, a bias, a broken invariance, a measured failure or a
-better alternative.
+better alternative. Removing a cap or guard also exposes the scaling it hid, so
+check, within approved cost, what now runs toward the target scale.
 
 Read the relevant implementation and callers before choosing a fix. Widen the
 trace when a shared owner or scientific transformation can affect other paths.

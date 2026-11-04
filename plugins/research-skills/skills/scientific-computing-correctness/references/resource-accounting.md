@@ -43,12 +43,32 @@ work, its cost and frequency, its effect on results, and a recommendation.
   limit, the amount already counted, the amount requested, and the minimum
   needed, all taken from the current state, and every remedy, such as the
   constructor argument or the method that extends an open run.
-- Before an admission check relies on a work or memory law, derive the law as
-  an upper bound and compare it with traced execution over varied inputs.
-  Report the range of the law's ratio to the measurement. A ratio below one on
-  any traced input refutes the bound. Say where the law overestimates most and
-  why, for example a memory bound that cannot anticipate how much truncation
-  will remove.
+- Before an admission check relies on a work or memory law, compare it, within
+  approved cost, with traced execution over varied inputs and at two or more sizes
+  where the dominant allocation dominates, measuring memory in a fresh process.
+  Report the range of the law's ratio to the measurement and judge it by both
+  failures: admitting work that exhausts the resource, and refusing work that
+  would run. A ratio below one refutes a law stated as an upper bound. A coarse
+  estimate is judged against the factor the project accepts, so a small difference
+  near a limit is no defect, and one low by an order of magnitude is a defect
+  however it is labeled. Say where the law overestimates most and why, for example
+  a memory bound that cannot anticipate how much truncation will remove. A bound
+  far above what posed inputs reach can size a stage or warn, but does not refuse,
+  because it rejects runnable inputs. A limit the user declares as hard, such as a
+  paid budget, may refuse on a stated upper bound.
+- Label each reported quantity by what produced it. `exact` needs a comparison
+  with the emitted artifact on a case that separates it from the alternatives,
+  such as a serial sum against a depth on disjoint gates, or an upper bound
+  against the count after classification. A declared size is an estimate until
+  it is observed. State the population a count covers.
+- Removing a cap or changing a default extends what users can reach, including
+  the cost the cap hid. Before that change lands, walk the route along its
+  users' growth axes toward the documented or reported target scale, without full
+  execution where possible, such as its users' size, time, precision and
+  conditioning. Planning can itself be expensive, so a step beyond approved cost
+  stays unrun, with its forecast in the report. A check at one size just
+  above the old cap shows only that the cap is gone. Move a known-size check ahead
+  of the work it guards, and record the scale reached and what stopped it.
 - Revisit a deferred item when new measurements or an expanded workload
   invalidate its rationale. Record the cost, owner, and revisit condition.
   Increasing the affected footprint requires remeasurement or a justified bound

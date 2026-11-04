@@ -9,9 +9,9 @@ description: "Implement, debug, optimize or independently validate scientific co
 
 Start from the intended scientific contract and the problems its users pose through the relevant public entry, including representative valid inputs and options. Trace the affected quantity through the actual call chain to the results, decisions, reports, and costs its consumers receive. Locate the first divergence and correct its owner before stacking patches around symptoms. Preserve scientific invariants when optimizing or simplifying.
 
-Connect worker-local checks to that user-facing relation, base completion on integrated behavior with independent scientific evidence, and revise obsolete or unjustified tests to match the established contract. Use existing evidence, source reasoning, and the smallest discriminating check needed, without rerunning every end-to-end workload.
+Base completion on integrated behavior with independent scientific evidence, and revise obsolete or unjustified tests to match the established contract. Use existing evidence and the smallest discriminating check, without rerunning every end-to-end workload.
 
-Discarding information does not by itself justify a stronger claim or greater certainty. Improvements from denoising, estimation, or aggregation need their own mathematical or empirical justification.
+Discarding information does not justify a stronger claim. Improvements from denoising, estimation or aggregation need their own mathematical or empirical justification.
 
 No document establishes mathematical or numerical truth by assertion, nor does a derivation supplied by another agent or model. Check the steps that later work depends on with a small independent numerical or symbolic calculation. When a plan, policy, framework, constants registry, review report, or earlier AI-authored summary could change the scientific decision, or when the project designates an implementation of record or frozen evidence, read [project records](references/project-records.md).
 
@@ -30,11 +30,10 @@ State the dimensions relevant to the task explicitly before implementation:
   or lifecycle fact.
 - execution completion and scientific validation as separate states. A
   user-authorized experimental or hardware-facing mode may preserve raw output
-  without error control. Execution success does not imply that scientific
-  validation passed, that the computation converged, or that its error is
-  controlled. Any estimate or downstream decision not protected by a justified
-  bound remains empirically assessed or unvalidated, not certified. An
-  experimental estimate may still drive an operational decision.
+  without error control. Execution success does not show validation, convergence
+  or controlled error. An estimate or decision without a justified bound remains
+  empirically assessed or unvalidated, not certified, and may still drive an
+  operational decision.
 - the canonical owner, downstream decision, allowed uncertainty, and evidence
   artifact.
 - the legal states and relations between fields, including combinations of
@@ -53,9 +52,9 @@ For paper-derived implementations, replications, proof-assistant formalizations,
   construction as exact, measure the error of what it actually builds on small
   instances.
 - Derive acceptance thresholds from the quantity, method or error budget,
-  with a justified model for scale, dimension and conditioning. Do not widen
-  them after failures merely to pass. Explicitly validated calibration and
-  fitted models remain legitimate, but fitting acceptance examples does not
+  with a justified model for scale, dimension and conditioning. A forecast and
+  the stage it predicts share one error allocation. Explicitly validated
+  calibration and fitted models remain legitimate, but fitting acceptance examples does not
   certify a bound. For floating-point boundaries, inverse/forward checks, or
   choices among reformulation, scaling and enclosing arithmetic, read
   [floating-point decisions](references/floating-point-decisions.md).
@@ -72,17 +71,19 @@ For paper-derived implementations, replications, proof-assistant formalizations,
   machinery or reject usable experimental output merely because no proof exists.
 - Coefficient size alone does not determine relevance to a state, observable,
   cancellation, or later decision. Use the bound in the consumer's frame.
+- Carry a fact proved about the input through transforms that preserve it,
+  charging any projection error, and re-establish it at trust boundaries, rather
+  than re-detecting it by exact comparison of computed values.
 - Keep an internal numerical guard, such as a condition-number gate, only while
   it matches a failure mechanism of the current formulation. A documented
   rejection that users rely on is a public contract and changes only as one.
-  After a reformulation, reproduce the mechanism a guard targets before keeping,
-  tuning or trusting it, and locate the actual source of any remaining error, because a
-  gate kept from an earlier formulation can reject valid inputs while missing
-  the real error.
+  After a reformulation, reproduce the mechanism a guard targets before keeping
+  or tuning it, because a gate kept from an earlier formulation can reject valid
+  inputs while missing the real error.
 - Combining exact and sampled contributions needs a valid uncertainty model
-  for any certified result. Preserve the raw estimate and provenance when a
-  variance-like estimate is negative. Clipping it to zero does not establish
-  zero uncertainty or certified success.
+  for a certified result. Keep a negative variance-like estimate and its
+  provenance, because clipping it to zero establishes neither zero uncertainty
+  nor success.
 - If evidence cannot support the advertised guarantee, leave that guarantee
   unresolved or narrow the claim. Reject an input or value at the first owner
   that knows the violated method premise or quantity definition. A value
@@ -90,31 +91,27 @@ For paper-derived implementations, replications, proof-assistant formalizations,
   inconclusive. A signed estimator's raw value can legitimately fall outside
   that domain. Assess evidence sufficiency only for admissible values. A roundoff-to-zero
   adjustment covers roundoff only, not sampling or model inconsistency, needs a
-  stated scale-aware tolerance, and keeps the raw value. Never convert unknown, `not_run`, `not_evaluated`,
-  `not_applicable`, or suppressed evidence into zero, false, or passed.
+  stated scale-aware tolerance, and keeps the raw value.
 
 ## Ownership and cross-layer consistency
 
 - Give each scientific fact, status vocabulary, and lifecycle transition one
   semantic owner. Trace every producer, transform, caller, sibling path, and
   consumer before changing a shared owner, including extension implementations
-  written against a documented protocol. Targeted tests can miss those
-  implementations, so a change to an entry point they all pass through
-  runs the project's standard full test suite before integration.
+  written against a documented protocol, which targeted tests can miss.
 - Document each formula or numerical rule the work adds or changes where
   the project keeps derivations, linked from the definition, and otherwise in
   the docstring or a comment above the definition, with the derivation steps a
   reader needs, its assumptions, its error bound when it has one, and its
   source with a stable identifier. Copy a derivation made elsewhere, such as in
-  a report or another agent's answer, into the code or existing algorithm
-  documentation, because such records may not last. Owners sharing a
+  a report, into the code or algorithm documentation, because such records may
+  not last. Owners sharing a
   derivation name each other, and a test asserting a derived bound names the
   owner that derives it. When documenting existing code, derive each step,
   and report one that contradicts the derivation as a finding rather than
   inventing a reason for it.
-- Treat code, equations, documentation, structured results, human reports, and
-  generated artifacts as representations of the same scoped claim. A contract
-  change migrates all of them together.
+- Code, equations, documentation, structured results, reports and generated
+  artifacts represent the same claim, so a contract change migrates them together.
 
 When a change touches a public record or its fields, a relation between counts
 or populations, interacting options, a reuse key, cache or dependency
@@ -127,33 +124,29 @@ For dependency exceptions, numerical failures or proposed recovery, read [depend
 
 When a change affects resource use, material cost growth, memory exhaustion,
 worsening scaling, and inaccurate resource claims are acceptance concerns,
-ranked by the user's priorities and measured impact alongside scientific
-defects rather than deferred as cleanup. A justified
+ranked by measured impact alongside scientific defects. A justified
 accuracy or capability gain may require more resources, and the report states
 that tradeoff. Keep expensive checks, dense reference constructions, repeated
 scans, copies, and diagnostic serialization out of hot loops unless the
 algorithm requires them. Reducing cost must preserve the scientific quantity,
-error control, and required evidence. Small coefficients or large raw outputs
-alone do not justify deletion.
+error control, and required evidence.
 
 Extra expensive or poorly scaling computation beyond the authorized algorithm
 or workload to validate, diagnose, or correct results requires explicit human
 approval before execution or inclusion in the default runtime path. This covers
 extra simulation, full-state applications, dense conditioning/reference solves, and
-growing evidence capture. Existing explicit approval at the same scope and
-ordinary cheap checks need no new gate, and a coordinator cannot provide
-missing human approval. [Resource accounting](references/resource-accounting.md)
-covers the resource envelope, stored evidence, declared limits and resource
-claims, and how to count extra work and phrase the request.
+growing evidence capture. Approval at the same scope and ordinary cheap checks
+need no new gate, and a coordinator cannot provide missing human approval. Read
+[resource accounting](references/resource-accounting.md) before setting a
+declared limit, an admission law or a resource claim, or asking for approval.
+Removing a cap or changing a default extends what users reach, so walk the route
+toward the documented or reported target scale as it describes.
 
 ## Verification
 
-- For scientific IV&V (independent verification and validation) of a
-  specified computation or result, independently assess its mathematical
+- For scientific IV&V of a specified computation or result, independently assess its mathematical
   premises and expected behavior, not just agreement with the implementation
-  or its tests. Trace representative
-  public workflows through actual execution, raw evidence and material resource
-  behavior.
+  or its tests.
 - Before implementing a behavior or accepting an existing implementation, state
   the property a test must check and the independent source of the expected
   result. At the same time, define the falsifier by asking what ordinary,
@@ -162,61 +155,67 @@ claims, and how to count extra work and phrase the request.
 - Use an independent oracle with a different failure mode, such as a
   specification, a first-principles derivation, a reference implementation, or
   a known-good case. Two consumers of the same builder prove consistency,
-  not correctness. When a change alters an assertion or expected value, name
-  the independent relation that justifies the new expectation.
+  not correctness.
 - Keep acceptance oracles in development verification unless their production
   role is explicitly justified and authorized. An agreement test does not
   authorize full reference recomputation or exact-decision equality in a hot
-  loop. Fix the numerical owner and reuse existing results before proposing
-  more work. Do not satisfy an accuracy failure merely by installing a
+  loop. Do not satisfy an accuracy failure merely by installing a
   veto and changing the test to expect termination.
 - Leave the smallest test set that protects a current scientific, resource,
-  provenance, lifecycle, public-input, or serialization obligation. Temporary
-  migration and implementation-shape checks do not become permanent tests.
+  provenance, lifecycle, public-input, or serialization obligation.
   When adding or changing tests or numeric assertions, or when a result varies
   across platforms, read [test evidence](references/test-evidence.md).
-- Before classifying a failure or reporting a measured result, confirm the
-  interpreter, dependency versions and import origin the project declares (or
-  those actually used when none is declared).
 - A green build, regenerated notebook, mutation kill, or full test suite proves
-  only the invariants its checks can falsify. Use an additional independent
-  pass when unresolved scientific risk warrants it, and do not rerun settled
-  checks or large experiments without a new evidential need.
+  only the invariants its checks can falsify. Add an independent pass when
+  scientific risk warrants it, and rerun settled checks only for new evidence.
 
 When work aims to close earlier scientific-review findings, read and
 apply [remediation closure](references/remediation-closure.md) before editing.
-Ordinary scientific-computing tasks do not need it.
 
 ## Review before completion
 
-Before reporting implementation or validation work, check the final diff and
-draft report against these items, and against the review of any other applied
-skill such as Ponytail, in one pass separate from writing them. The pass
-repeats no verification the work already did and adds no runs beyond the
-checks the task requires. Fix what fails within scope and recheck only what
-changed.
+Before committing a behavior change or reporting implementation or validation
+work, check the diff and draft report against these items, and against the review
+of any other applied skill such as Ponytail, in one pass separate from writing
+them. The pass repeats no verification the work already did and adds no runs
+beyond the checks the task requires. Fix what fails within scope and recheck
+only what changed.
 
 - Each claim in the report or documentation, such as fixed, verified, exact,
   unchanged, absent or unknown, rests on evidence that applies to the final
   revision, new or reused, and was checked in the context the claim names.
   Otherwise the claim is removed or marked unverified.
-- Each new or changed formula or numerical rule is documented at its
-  definition or linked from there, with its derivation, assumptions and
-  source, and its error bound when it has one.
-- Each new or changed test names its independent expected relation, and a
-  fix's regression check failed on the pre-change code.
+- Each new or changed formula or numerical rule is documented as the ownership
+  section requires.
+- Each new or changed test or expected value names its independent relation, and
+  a fix's regression check failed on the pre-change code.
 - No tolerance, threshold or cap was widened after a failure without a
-  derivation, and no unknown, not-run or suppressed evidence became zero,
-  false or passed.
+  derivation, and no unknown, not-run, not-applicable or suppressed evidence
+  became zero, false or passed.
+- Each refusal, tolerance or cap added or newly reached has one of these causes:
+  a premise the input really violates, a declared or physical limit, the requested
+  accuracy or error allocation, the precision the result needs, or a documented
+  contract. Following its stated remedy leads past it, shown by derivation when
+  running is costly.
+- The report of a removed cap, changed default or newly reachable route gives the
+  largest size reached along its users' growth axes and what stopped it.
+- A known-size check runs before the work it guards. An admission estimate stays
+  within the factor the project accepts, and a bound far above what posed inputs
+  reach does not refuse unless the user declared the limit hard. A label such as
+  exact or upper bound matches the emitted artifact.
+- For a removed or changed option, default, constant, formula or count, its old
+  name, old value and the words describing it were searched through docstrings,
+  guides, examples, generated sources, project registries, test names and release
+  notes, and each hit states the current behavior.
 - An entry point that extension implementations pass through was checked
   against them, and the full test suite ran before integration or is named as
   outstanding for whoever integrates.
 - The default runtime path gained no extra expensive computation without
   approval, and resource comparisons use matched workloads.
 - Each measured value or test result names the command, interpreter, dependency
-  versions, import origin where it matters, and revision that produced it,
-  separately executed test runs are reported separately rather than as one
-  total, and each status label comes with the quantities that decide it.
+  versions, import origin where it matters, and revision that produced it, all
+  confirmed against the project's declaration before a failure is classified.
+  Separately executed runs are reported separately rather than as one total.
 
 ## Completion
 
@@ -229,6 +228,4 @@ decide it, each with its scope, and mark which values the implementation under
 test produced and which came from independent checks.
 
 For unexpected results, long computations or slow experiment cycles, read
-[scientific diagnostics](references/scientific-diagnostics.md). Use
-`stress-test-baselines` for comparison design or assessment, and the relevant
-writing or review skill for manuscript-only work.
+[scientific diagnostics](references/scientific-diagnostics.md).

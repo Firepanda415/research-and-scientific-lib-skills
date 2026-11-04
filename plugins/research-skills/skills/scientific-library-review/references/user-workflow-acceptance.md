@@ -36,7 +36,11 @@ defaults, removed options and claims that changed code no longer supports.
 For failure or empty states, assess whether the user can understand what happened
 and identify a valid next step. Preserve the original failure identity and useful
 context. Guidance must not silently add retries, change scientific inputs or
-promote an exploratory result into a certified one.
+promote an exploratory result into a certified one. Check a refusal's stated
+remedy on the same input, by derivation when running is costly. Advice the input
+already satisfies, a retry that repeats the same refusal, or a state that cannot
+continue is a defect in the message or the route. A later stage reaching its own
+limit is not a defect of this remedy.
 
 Probe limits and caps at values a user would set. A finding that needs a cap far
 below its default, such as a byte limit of a few thousand bytes against a default

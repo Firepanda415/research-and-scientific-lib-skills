@@ -50,6 +50,7 @@ one prevents execution.
 Usually include:
 
 - the concrete problem, desired behavior, and relevant baseline or artifact;
+- the skills the implementer invokes as its first action and whose completion review it runs before each behavior-changing commit, such as `scientific-computing-correctness` for scientific code, because naming a skill as guidance has not caused agents to load it;
 - the existing owner and affected paths, with genuine scope limits;
 - the scoped relation, the users and inputs it serves, relevant representation/operation distinctions, and material exclusions;
 - for new behavior as well as fixes, the property each requested test checks and the independent source of its expected result, such as a specification, derivation, reference implementation, or known-good case;
@@ -70,10 +71,10 @@ permanent test for each review comment. Existing evidence may cover several fixe
 When the job removes or replaces something, state the end state. Code, tests,
 documentation and configuration describe only the surviving behavior, including
 any compatibility path or migration the project still owes its users. A
-one-time search for the old names within the job's edit surface then finds
-references only in that surviving behavior and in history records such as
-changelogs, migration notes, attributions and dated logs. The implementer lists
-any hits outside that surface. Request a
+one-time search for the old names, the old values and the words describing them
+within the job's edit surface then finds references only in that surviving
+behavior and in history records such as changelogs, migration notes, attributions
+and dated logs. The implementer lists any hits outside that surface. Request a
 note about the removal only with a stated reason the item must stay absent, and
 a permanent absence test only when a product, security, or compatibility
 contract requires the absence or the user explicitly asks for one. The commit
@@ -109,6 +110,13 @@ When the job changes an entry point that every plugin or extension
 implementation passes through, acceptance includes the tests of that extension
 protocol and the project's standard full test suite before integration, because
 targeted tests can miss extensions the job's own paths do not exercise.
+
+When the job removes a cap, changes a default or adds a refusal, acceptance walks
+the route along its users' growth axes toward the documented or reported target
+scale, without full execution where possible, and checks that following the
+refusal's stated remedy leads past it, by derivation when running is costly.
+A test at one size just above the old cap is not enough. A step beyond approved
+cost stays unrun, with its forecast in the report.
 
 For scientific changes, state which assumptions, numeric conventions, error
 criteria, and output semantics must hold. Test small analytical or trusted

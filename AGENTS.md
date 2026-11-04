@@ -13,6 +13,17 @@ from individual incidents, with at most one short example. Put topic-specific
 detail in references, state when to read them, and keep required checks in the
 skill's review section.
 
+A rule that must fire belongs in a `SKILL.md` review section or evidence table,
+worded as an event, an action and its evidence, because agents rarely open
+references and a brief that names a skill does not load it. In the Claude Code
+transcripts of one project from 2026-10-25 to 2026-11-03, counted from tool-call
+requests, 1 of 44 transcripts that edited source read `resource-accounting.md`
+and 2 of 33 library reviews read `user-workflow-acceptance.md`. Two implementation
+sessions told to use `scientific-computing-correctness` made about 2,300 code edits
+without loading it, while the writing skill the hook routes was loaded 31 times in
+them. When `SKILL.md` is at its limit, pay for a new rule by removing what another
+item, skill or reference already covers.
+
 Keep each `SKILL.md` at most 16,000 characters, enforced by
 `scripts/check-package.py`. Claude Code's [skill lifecycle documentation](https://code.claude.com/docs/en/skills#skill-content-lifecycle)
 specifies 5,000 tokens per invoked skill after compaction and 25,000 shared across
@@ -43,7 +54,9 @@ changed files, or scale their previous counts by the change in characters, and
 update every token figure in both READMEs, including the totals and the figures
 repeated in the Context cost bullets, and check which skills those bullets name.
 
-Follow `README.md` for installation on the requested host. Install the single
+Follow `README.md` for installation on the requested host. A request to reinstall
+that names no host means both, through `scripts/install-claude.py` and
+`scripts/install-local.py`. Install the single
 `research-skills@research-skills` plugin, including every skill and the writing
 hook, without a separate Ponytail plugin. Let Codex manage hook trust without
 bypassing or manufacturing it.

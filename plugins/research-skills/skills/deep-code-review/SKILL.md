@@ -110,7 +110,11 @@ For every candidate:
 5. Merge candidates that share one first divergence and remedy. Preserve
    distinct downstream failures only when they require different action or
    materially different verification.
-6. Reject speculative or non-actionable candidates and record why. An intentional
+6. Reproducing a witness's number does not verify the candidate. State what the
+   output it exercises means to the users in the review basis, rebuild what is
+   derived from any component a what-if replaces, and try a proposed fix or guard
+   on the preservation case or mark it unverified.
+7. Reject speculative or non-actionable candidates and record why. An intentional
    behavior needs a contract-level defect before it is a finding. An unreachable
    failure scenario is not a runtime bug, but proven dead code/plumbing can be
    actionable maintenance work. A failure only on input outside the review
@@ -145,8 +149,19 @@ coverage record, and report that it was not independent. Look for:
   documentation-insensitive syntax comparison, can bound this sweep;
 - new expensive calls, caps or changed defaults on the runtime path, including
   valid work a new or unchanged cap now rejects;
+- behavior along the users' growth axes, such as input size, duration or
+  precision. Walk each affected public path toward the documented or reported
+  target scale, without full execution where possible, because tests at one small
+  size miss the next doubling. A step beyond approved cost stays unrun, with its
+  forecast in the report. A refusal needs one of these causes, and any other is a
+  defect: a premise the input really violates, a declared or physical limit, the
+  requested accuracy, the precision the result needs, or a documented contract.
+  Following its stated remedy leads past it, shown by derivation when running is
+  costly;
 - one fact represented differently across code, schema, report, documentation,
-  example, generated artifact, or CI;
+  example, generated artifact, or CI. From the diff, list removed names, constants,
+  defaults and formulas, then search those surfaces for each, including prose that
+  describes them without naming them;
 - unchecked semantic equivalents or lifecycle distinctions hidden by defaults,
   fixed fixture spelling, copied expectations, or a shared test-selection assumption;
 - engineering areas not represented by the numerical findings, or mathematical

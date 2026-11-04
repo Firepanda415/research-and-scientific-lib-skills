@@ -54,7 +54,9 @@ and resource consequences of every proposed deletion; independent defects may
 be routed to a normal review. Preserve numerical conventions, optimized kernels,
 required boundary validation, and sufficient independent evidence. Handling
 added for input the code's users never supply is a `delete:` finding, unlike
-checks for their plausible mistakes or for input crossing a trust boundary. A test's
+checks for their plausible mistakes or for input crossing a trust boundary.
+Removing a cap or guard also exposes the scaling it hid, so check, within approved
+cost, what now runs toward the target scale. A test's
 value depends on the failure it detects, not its count or syntax; recommend
 removal only when its obligation is obsolete or adequately covered elsewhere.
 Does not apply the fixes, only lists them. One-shot.
