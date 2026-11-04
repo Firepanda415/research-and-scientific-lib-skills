@@ -1,8 +1,18 @@
 # Test evidence
 
 Read this reference when adding or changing tests or numeric assertions, when
-deciding whether a test needs a failure demonstration, or when a result varies
-across platforms or dependency versions.
+deciding whether a test needs a failure demonstration, when reporting a test,
+suite or CI result, or when a result varies across platforms or dependency
+versions.
+
+## Reporting results
+
+Report each test, suite or CI result with its invocation, revision or verified
+identical tree, environment, and pass, failure and skip counts. Separately
+executed batches are not one run, and repeated runs are not added together. A
+result belongs to the revision it ran on and applies elsewhere only when its
+source, dependencies, inputs, selections and actual consumers still support the
+claim. A successful retry does not erase the failed attempt before it.
 
 ## Failure demonstrations
 

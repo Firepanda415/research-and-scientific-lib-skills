@@ -71,8 +71,7 @@ For paper-derived implementations, replications, proof-assistant formalizations,
   machinery or reject usable experimental output merely because no proof exists.
 - Coefficient size alone does not determine relevance to a state, observable,
   cancellation, or later decision. Use the bound in the consumer's frame.
-- Carry a fact proved about the input through transforms that preserve it,
-  charging any projection error, and re-establish it at trust boundaries, rather
+- Carry a fact proved about the input through transforms that preserve it, rather
   than re-detecting it by exact comparison of computed values.
 - Keep an internal numerical guard, such as a condition-number gate, only while
   it matches a failure mechanism of the current formulation. A documented
@@ -129,7 +128,8 @@ accuracy or capability gain may require more resources, and the report states
 that tradeoff. Keep expensive checks, dense reference constructions, repeated
 scans, copies, and diagnostic serialization out of hot loops unless the
 algorithm requires them. Reducing cost must preserve the scientific quantity,
-error control, and required evidence.
+error control, and required evidence. Small coefficients or large raw outputs
+alone do not justify deletion.
 
 Extra expensive or poorly scaling computation beyond the authorized algorithm
 or workload to validate, diagnose, or correct results requires explicit human
@@ -159,12 +159,16 @@ toward the documented or reported target scale as it describes.
 - Keep acceptance oracles in development verification unless their production
   role is explicitly justified and authorized. An agreement test does not
   authorize full reference recomputation or exact-decision equality in a hot
-  loop. Do not satisfy an accuracy failure merely by installing a
+  loop. Fix the numerical owner and reuse existing results before proposing
+  more work. Do not satisfy an accuracy failure merely by installing a
   veto and changing the test to expect termination.
 - Leave the smallest test set that protects a current scientific, resource,
   provenance, lifecycle, public-input, or serialization obligation.
   When adding or changing tests or numeric assertions, or when a result varies
   across platforms, read [test evidence](references/test-evidence.md).
+- Before classifying a failure or reporting a measured result, confirm the
+  interpreter, dependency versions and import origin the project declares (or
+  those actually used when none is declared).
 - A green build, regenerated notebook, mutation kill, or full test suite proves
   only the invariants its checks can falsify. Add an independent pass when
   scientific risk warrants it, and rerun settled checks only for new evidence.
@@ -190,31 +194,30 @@ only what changed.
 - Each new or changed test or expected value names its independent relation, and
   a fix's regression check failed on the pre-change code.
 - No tolerance, threshold or cap was widened after a failure without a
-  derivation, and no unknown, not-run, not-applicable or suppressed evidence
-  became zero, false or passed.
+  derivation, and no unknown, not-run, not-evaluated, not-applicable or suppressed
+  evidence became zero, false or passed.
 - Each refusal, tolerance or cap added or newly reached has one of these causes:
   a premise the input really violates, a declared or physical limit, the requested
   accuracy or error allocation, the precision the result needs, or a documented
   contract. Following its stated remedy leads past it, shown by derivation when
   running is costly.
-- The report of a removed cap, changed default or newly reachable route gives the
-  largest size reached along its users' growth axes and what stopped it.
-- A known-size check runs before the work it guards. An admission estimate stays
-  within the factor the project accepts, and a bound far above what posed inputs
-  reach does not refuse unless the user declared the limit hard. A label such as
-  exact or upper bound matches the emitted artifact.
-- For a removed or changed option, default, constant, formula or count, its old
-  name, old value and the words describing it were searched through docstrings,
-  guides, examples, generated sources, project registries, test names and release
-  notes, and each hit states the current behavior.
+- The report of a removed cap or changed default gives the largest size reached
+  along its users' growth axes and what stopped it.
+- A known-size check runs before the work it guards. A count charged against a
+  hard limit is an upper bound. Another admission estimate stays within the factor
+  the project accepts, and a bound far above what posed inputs reach does not refuse
+  unless the user declared the limit hard. A label such as exact or upper bound
+  matches the emitted artifact.
+- A removed or changed option, default, constant, formula or count was searched
+  by its old name, old value and the words describing it through docstrings, guides,
+  examples, generated sources, project registries, test names and release notes.
 - An entry point that extension implementations pass through was checked
   against them, and the full test suite ran before integration or is named as
   outstanding for whoever integrates.
 - The default runtime path gained no extra expensive computation without
   approval, and resource comparisons use matched workloads.
 - Each measured value or test result names the command, interpreter, dependency
-  versions, import origin where it matters, and revision that produced it, all
-  confirmed against the project's declaration before a failure is classified.
+  versions, import origin where it matters, and revision that produced it.
   Separately executed runs are reported separately rather than as one total.
 
 ## Completion
@@ -228,4 +231,5 @@ decide it, each with its scope, and mark which values the implementation under
 test produced and which came from independent checks.
 
 For unexpected results, long computations or slow experiment cycles, read
-[scientific diagnostics](references/scientific-diagnostics.md).
+[scientific diagnostics](references/scientific-diagnostics.md). Use
+`stress-test-baselines` for comparison design or assessment.
