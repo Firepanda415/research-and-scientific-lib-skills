@@ -4,6 +4,8 @@ Use for a requested implementer job series. Preserve the plan's required outcome
 and split work where there is a real dependency or an independently reviewable
 change. Do not create a series merely because a task has several steps.
 
+A job covers its complete authorized outcome, including routine caller, test, documentation and generated-output consequences under the project's stage gates. A progress checkpoint does not end that authority. Report dependencies, independent-review gates, changed premises, scope/authority gaps and resource limits that block completion, and leave unaffected authorized work available to the owner. Do not turn ordinary completion work into a fresh dispatch merely because it produces another artifact.
+
 ## Principal responsibility and consultation
 
 The principal owns the integrated design and acceptance. User goals and explicit

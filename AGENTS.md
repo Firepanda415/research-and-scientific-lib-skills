@@ -42,7 +42,8 @@ Both READMEs give each skill's default load in the Skills table as the Claude
 tokens of its `SKILL.md` and of the references it reads by default, measured on
 Claude Opus 5.5, rounded to the nearest thousand and shown as `<1k` below 1,000. The counted references are `durable-prose.md` and `prose-review.md` for
 `research-writing-style`, `coverage-and-consequence.md` for
-`quantum-computing-review`, `user-research-profile.md` for `quantum-research-radar`,
+`quantum-computing-review`, `reporting-findings.md` for `scientific-library-review`,
+`user-research-profile.md` for `quantum-research-radar`,
 `production-pipeline.md` and `house-style.md` for `research-explainer-animation`,
 and Ponytail's `SKILL.md` for `simplify-codebase`. Every other skill counts its
 `SKILL.md` only. The Context cost sections give the skill listing (one line per

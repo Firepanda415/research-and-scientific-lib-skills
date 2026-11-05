@@ -1,8 +1,8 @@
 # Decide whether another agent helps
 
-Read when choosing a new session or when coordination is delaying delivery. Delegate when missing expertise, required independence or a substantial parallel deliverable justifies briefing, repeated source loading, worktree preparation, waiting, hand-in and integration. Make this judgment directly, without another agent, approval form or mandatory ledger entry.
+Read when choosing a new session or when coordination is delaying delivery. The assigned worker or reviewer session performs its own work. Before adding a subagent, state what necessary expertise, independence or substantial parallel deliverable the assigned sessions cannot provide effectively. Weigh that need against briefing, repeated source loading, worktree preparation, waiting, hand-in and integration, within user and host authority. A specialist skill's delegation default does not itself establish the need. Make this judgment directly, without another agent or approval form.
 
-Routine source inspection, applying a qualified derivation, local text corrections, mechanical integration, established checks and records usually stay with the principal or current owner. Before escalating, identify what remains unresolved:
+Routine work stays with its assigned owner. The principal handles source inspection, local text corrections, mechanical integration, established checks and records. Applying a qualified derivation in code and fixing code remain with the CODE worker, including the principal only when it also holds that role. Before escalating, identify what remains unresolved:
 
 - Merge established meanings when edits overlap. A textual overlap alone does not establish a scientific disagreement.
 - Check public uses and existing decisions before treating an unused internal path or a stale option description as a capability choice. Describe accepted behavior and record compatibility consequences in change notes. An unresolved loss of useful public capability needs a substantive decision.

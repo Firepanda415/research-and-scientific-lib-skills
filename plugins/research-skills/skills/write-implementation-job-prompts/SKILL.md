@@ -29,6 +29,10 @@ can be part of an authorized fix unless the user imposed a closed edit surface.
 Only impose per-file whitelists, formal authority maps, or a stop-before-edit rule
 when the project or request actually requires them.
 
+Assign a complete owned outcome with its routine caller, test, prose and generated-output updates under the project's stage gates. A checkpoint reports progress without revoking authority to continue. When a dependency, required independent review, changed premise, scope/authority or resource limit blocks work, report it and continue unaffected authorized work.
+
+Keep runtime-message edits with the assigned code owner. Trace consumers for computation, control flow, contract, saved-identity and format effects. A qualified correction with none of these effects stays in the current job. Identity or format changes belong in the implementation delta and any required review. Check existing text-sensitive tests and registered probes for stale matches. Computation and contract changes keep their substantive checks.
+
 Separate production algorithm work from acceptance-only evidence. A requirement
 to compare against an independent oracle in a test does not authorize adding
 that computation to the runtime loop. Carry explicit human approval for extra
@@ -129,7 +133,7 @@ Distinguish byte-stable artifacts, intentional semantic changes, and numeric
 tolerance checks. Specify new values only after obtaining them from the intended
 reference. Do not regenerate unrelated expensive artifacts for appearance.
 
-Use the project's supported toolchain and ensure checks import the target checkout when shadowed installations are possible. When project instructions require revision checks or prescribe a wrapper command for running code, such as one that checks the environment or revision, carry the actual checkout, revision, and invocation into the handoff. Resolve required guidance and executable paths from current project instructions before dispatch, rather than copying historical commands or inventing missing environment rules.
+Use the project's supported toolchain and ensure checks import the target checkout when shadowed installations are possible. A validation-tool handoff includes a small authorized run against the target interface in the same job, or names the missing input or execution permission and the execution owner. When project instructions require revision checks or prescribe a wrapper command for running code, such as one that checks the environment or revision, carry the actual checkout, revision, and invocation into the handoff. Resolve required guidance and executable paths from current project instructions before dispatch, rather than copying historical commands or inventing missing environment rules.
 
 Do not game a scan by hiding its matches. Reuse the project's existing gates and
 show their actual results. Run deliberate breakages and any required mutation
@@ -150,6 +154,7 @@ the report's leftovers.
 
 Apply these checks to the clauses the job actually contains:
 
+- If the recipient follows the brief exactly, no routine authorized work remains solely because the brief invents a return boundary. Any necessary partial hand-in states what blocks completion and what can continue.
 - Back claimed current values, counts, and artifact differences with live
   measurements or an independent reference. Distinguish target outcomes from
   observed results; do not guess empirical expectations. Check a factual clause

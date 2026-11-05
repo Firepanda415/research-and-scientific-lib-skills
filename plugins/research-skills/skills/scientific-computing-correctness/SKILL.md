@@ -42,6 +42,8 @@ State the dimensions relevant to the task explicitly before implementation:
 Do not promote an observed floating-point pattern, sampled maximum, measured
 diagnostic, or passing regression into an exact theorem or certified bound.
 
+When full assessment is impractical, compute reliable, decision-relevant components, combine cheap qualified relations, and expose dependencies and gaps. Partial evidence is not a total guarantee. Added assessment needs a decision benefit within authorized cost. A sufficient condition alone cannot widen the accuracy contract or add a new default veto.
+
 For paper-derived implementations, replications, proof-assistant formalizations, or equation/representation changes, read [source-to-code fidelity](references/source-fidelity.md) before accepting the transformation.
 
 ## Approximation and decision safety
@@ -73,12 +75,7 @@ For paper-derived implementations, replications, proof-assistant formalizations,
   cancellation, or later decision. Use the bound in the consumer's frame.
 - Carry a fact proved about the input through transforms that preserve it, rather
   than re-detecting it by exact comparison of computed values.
-- Keep an internal numerical guard, such as a condition-number gate, only while
-  it matches a failure mechanism of the current formulation. A documented
-  rejection that users rely on is a public contract and changes only as one.
-  After a reformulation, reproduce the mechanism a guard targets before keeping
-  or tuning it, because a gate kept from an earlier formulation can reject valid
-  inputs while missing the real error.
+- When keeping or changing an internal numerical guard, read [repair the mechanism](references/floating-point-decisions.md#repair-the-mechanism) and establish its basis in the current formulation.
 - Combining exact and sampled contributions needs a valid uncertainty model
   for a certified result. Keep a negative variance-like estimate and its
   provenance, because clipping it to zero establishes neither zero uncertainty
@@ -98,17 +95,7 @@ For paper-derived implementations, replications, proof-assistant formalizations,
   semantic owner. Trace every producer, transform, caller, sibling path, and
   consumer before changing a shared owner, including extension implementations
   written against a documented protocol, which targeted tests can miss.
-- Document each formula or numerical rule the work adds or changes where
-  the project keeps derivations, linked from the definition, and otherwise in
-  the docstring or a comment above the definition, with the derivation steps a
-  reader needs, its assumptions, its error bound when it has one, and its
-  source with a stable identifier. Copy a derivation made elsewhere, such as in
-  a report, into the code or algorithm documentation, because such records may
-  not last. Owners sharing a
-  derivation name each other, and a test asserting a derived bound names the
-  owner that derives it. When documenting existing code, derive each step,
-  and report one that contradicts the derivation as a finding rather than
-  inventing a reason for it.
+- Before adding, changing or documenting a formula, read [formula documentation](references/project-records.md#documenting-formulas). Keep its derivation, assumptions, error bound and stable source at the definition or linked algorithm documentation.
 - Code, equations, documentation, structured results, reports and generated
   artifacts represent the same claim, so a contract change migrates them together.
 
@@ -130,6 +117,8 @@ scans, copies, and diagnostic serialization out of hot loops unless the
 algorithm requires them. Reducing cost must preserve the scientific quantity,
 error control, and required evidence. Small coefficients or large raw outputs
 alone do not justify deletion.
+
+Before changing resource controls, distinguish capacity-only limits from explicit resource-aware policies. Capacity-only failures must not become inapplicability or silently alter scientific choices. Establish scientific equivalence for identical inputs under varied sufficient capacities.
 
 Extra expensive or poorly scaling computation beyond the authorized algorithm
 or workload to validate, diagnose, or correct results requires explicit human
@@ -216,6 +205,7 @@ only what changed.
   outstanding for whoever integrates.
 - The default runtime path gained no extra expensive computation without
   approval, and resource comparisons use matched workloads.
+  Capacity-only limits preserve scientific choices. Partial evidence keeps its scope.
 - Each measured value or test result names the command, interpreter, dependency
   versions, import origin where it matters, and revision that produced it.
   Separately executed runs are reported separately rather than as one total.

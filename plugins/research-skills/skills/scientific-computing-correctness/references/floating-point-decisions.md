@@ -42,6 +42,13 @@ Choose precision or verification work by whether it can change the requested dec
 
 ### Repair the mechanism
 
+- Keep an internal numerical guard, such as a condition-number gate, only while
+  it matches a failure mechanism of the current formulation. A documented
+  rejection that users rely on is a public contract and changes only as one.
+  After a reformulation, reproduce the mechanism a guard targets before keeping
+  or tuning it, because a gate kept from an earlier formulation can reject valid
+  inputs while missing the real error.
+
 - **Cancellation:** derive an equivalent form that preserves the small information. Consider factoring, rationalizing, positive sums, `log1p`/`expm1`, or reconstruction from the nearer endpoint. Check every branch's domain and later operations; a stable primitive cannot restore information already rounded away. Exact-real equivalence supports the reformulation, but the actual evaluation still needs accuracy evidence. [Goldberg, Cancellation](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html).
 - **Range:** when intermediates overflow or underflow before a later rescaling, keep a scaled or log representation through that composition. Use specialized scaled functions when their contract matches. Account for signs, zeros, subnormals and final conversion; scaling does not fix intrinsic conditioning or make an unrepresentable output representable. The usual small relative-error model needs qualification near underflow. [Python math functions](https://docs.python.org/3/library/math.html); [scaled Bessel example](https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.ive.html).
 - **Special functions:** separate mathematical validity, numerical-method range/termination, returned representation and achieved precision. A finite value or absent warning is not an error enclosure. A precision-loss diagnostic is not automatically unusability under a numerical contract. Inspect the exact method/version before adopting a range guard. [AMOS `ZBESI` prologue](https://netlib.org/amos/zbesi.f).

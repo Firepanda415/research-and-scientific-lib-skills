@@ -71,6 +71,8 @@ Net effect: maintenance concepts removed minus replacement or migration machiner
 
 Prove cut boundaries below file granularity when the candidate shares an artifact with surviving consumers. Account for candidate-exclusive selectors, members, fields, keys, registry entries, generated fragments, and fixtures without disturbing the surviving owners.
 
+Before approving grouped test deletions, verify each replacement assertion and parameter case against the combined planned edits. The named keeper must survive every group's cuts. Two deletions cannot justify each other by citing tests both groups will remove.
+
 Do not classify a candidate as unused while real consumers exist or dynamic reachability remains unresolved. Assess deliberate capability retirement separately, with its alternatives, lost behavior, migration consequences, and the authority needed for removal. Keep or downgrade a candidate when it remains necessary for a current requirement, merely relocates complexity, falls outside scope, removes no meaningful obligation, or lacks a check that could expose an incorrect cut.
 
 Rank confidence separately from benefit. A high-value guess does not outrank a smaller proved cut.

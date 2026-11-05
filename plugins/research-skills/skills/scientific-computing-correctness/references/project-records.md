@@ -27,3 +27,19 @@ evidence. Produce results of record with the designated implementation, and use
 an independent implementation only to validate them. Write regenerated evidence
 beside frozen evidence rather than over it. Replacing either requires the
 user's decision.
+
+## Documenting formulas
+
+Read before adding or changing a formula or numerical rule, or documenting an existing one.
+
+- Document each formula or numerical rule the work adds or changes where
+  the project keeps derivations, linked from the definition, and otherwise in
+  the docstring or a comment above the definition, with the derivation steps a
+  reader needs, its assumptions, its error bound when it has one, and its
+  source with a stable identifier. Copy a derivation made elsewhere, such as in
+  a report, into the code or algorithm documentation, because such records may
+  not last. Owners sharing a
+  derivation name each other, and a test asserting a derived bound names the
+  owner that derives it. When documenting existing code, derive each step,
+  and report one that contradicts the derivation as a finding rather than
+  inventing a reason for it.

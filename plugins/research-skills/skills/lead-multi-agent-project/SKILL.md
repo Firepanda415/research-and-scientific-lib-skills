@@ -5,44 +5,44 @@ description: Lead a multi-agent engineering project, such as a scientific-softwa
 
 # Lead a multi-agent project
 
-The principal plans, dispatches, integrates and delivers the work. Handle authorized work directly unless another agent supplies missing expertise, necessary independence or a substantial parallel deliverable. Count briefing, source loading, waiting, hand-in and integration as delegation cost. The references illustrate scientific-library releases.
+The principal carries out the plan through planning, dispatch, coordination, integration, acceptance and delivery. "Implement the plan" assigns this leadership responsibility. Production follows the selected worker roles. Count briefing, source loading, waiting, hand-in and integration as delegation cost.
 
 Read each reference when its step applies, and reload lost guidance after compaction.
 
 ## Roles
 
-The user selects the models for this run. For scientific software, assign CODE and MATH production and review separately.
+Before starting, map the user's roles to models and sessions. Specific assignments govern who produces the work. For scientific software, assign CODE and MATH production and review separately.
 
 - **User.** Approves the plan, scope and behavior changes, extra default-path costs, and each push, main-branch merge, release and archive.
-- **Principal.** Owns planning, integration, checks, shared records and delivery. When its model matches the selected CODE or MATH worker model, it takes that worker's job in its own session. It alone operates another vendor's desktop app.
+- **Principal.** Owns planning, integration, checks, records and delivery. By default it also takes the worker role with the same model, not merely vendor, unless the user assigns a separate session. Verify and record the overlap before production. Other production and substantive fixes, including integration fixes, go to their workers. It alone operates another vendor's desktop app.
 - **CODE worker.** Implements code, tests and associated documentation from qualified derivations.
 - **MATH worker.** Derives new results, states premises and cases, and designs and runs authorized studies of defaults.
-- **CODE and MATH reviewers.** Independently check engineering and public workflows, or derivations and their use in the implementation. Assign each required review to a session independent of the producer, including when the principal produced the work.
+- **CODE and MATH reviewers.** Check engineering and public workflows, or derivations and their implementation. Default to one independent reviewer in a separate session per actual worker, including a principal with a worker role. Keep the pairing through fixes and acceptance. User allocations override the count, with coverage assigned for every worker.
 - **Counselor.** Uses a model from a different vendor than the principal. Joins when a delegated choice remains material, a disagreement needs resolution, formal-review scope is substantially new or the circuit breaker applies.
 
-With distinct CODE and MATH worker models and both reviews required, a match gives five core sessions: principal and matching worker together, counselor, matching reviewer, other worker and other reviewer. If neither model matches, each worker has its own session, giving six. Compare the model itself, not just its vendor. Start each session when its work is needed.
+Count actual workers, not the allowed maximum. Start sessions as needed. Distinguish concurrent activity from total sessions. Pin reviewed revisions and pause the corresponding workers' changes in that scope. Assign interfaces and integrated workflows to existing reviewers on a common revision.
 
-Any role may delegate within user and host authority for missing expertise, necessary independence or a substantial independent deliverable worth its setup. The delegating owner collects and checks the result. Use [delegation scope](references/delegation-scope.md) when the benefit is unclear or coordination is delaying delivery.
+One worker or reviewer is one session doing its own work, without subagents by default, even if a specialist skill suggests them. Before adding one, state the necessary expertise, independence or substantial parallel deliverable the assigned sessions cannot provide effectively, within user and host authority. Its owner checks the result. Use [delegation scope](references/delegation-scope.md) when the benefit is unclear.
 
 ## Step 0: settings and opening brief
 
-At the start of each run, use the settings the user gave for this run and ask for any missing choices before planning:
+Use the user's settings and existing role assignments. Ask only for choices still missing:
 
 - the model and reasoning level for each worker, reviewer and the cross-vendor counselor (the current session is the principal);
-- which reviewers cover formal rounds: both by default, or one if the user chooses and assigns it the required coverage;
+- the actual worker sessions, their paired reviewers and formal-round coverage, within the user's concurrency limits;
 - the decisions the user keeps, how to notify them and, for a release, its version and destinations;
 - the channel for another vendor's model: its visible desktop app by default, or a command-line tool if the user chooses it.
 
-Once selected, give the user a short opening brief in bullets, one per actual role session. Put combined roles on one bullet. Each bullet names the role, model, reasoning level, work it owns and when it joins. A last bullet gives the review basis from project memory: whom the project serves, its basic logic and what is a defect for them. Ask only if project memory has none. Include this in the plan's opening, without a separate approval step.
+Open the plan with one bullet per actual session: role, model, reasoning level, work, worker/reviewer pairing and start trigger. Combine overlapping roles. End with the review basis from project memory: whom the project serves, its basic logic and what is a defect for them. Ask only if memory has none. No separate approval is needed.
 
-Verify access to the selected sessions and cross-vendor channel before planning. Use host capability information where available. If a necessary session must be opened by the user, ask when it is needed. Report access limits early. Read [other-vendor-app.md](references/other-vendor-app.md) before the first cross-vendor request.
+Verify selected-model access before dispatch. Report limits without substituting models. Ask for user setup when needed. Read [other-vendor-app.md](references/other-vendor-app.md) before the first cross-vendor request.
 
-Record these choices, the review basis, the checked runner or declared environment, worktree rules, memory and working directories, and the user's standing instructions in the project's existing records.
+Record the settings, review basis, runner or environment, worktree rules, memory and working directories, and standing instructions in existing project records.
 
 ## Order of the work
 
 1. **Plan** ([plan-and-dispatch.md](references/plan-and-dispatch.md)). Triage first. Reuse qualified results and have the MATH worker derive foreseeable new claims for independent review. Identify the critical path and worthwhile parallel work. The user approves the plan before implementation.
-2. **Assign work** (same reference). The principal does its own batch from the approved plan and acceptance criteria. Write briefs for work being handed to another session. Parallel jobs own disjoint files or, in a fix round, named disjoint regions. Develop code first, assemble its documentation once its code review converges, and write notebooks at release.
+2. **Assign work** (same reference). Assign complete outcomes under the approved roles and stage gates, including routine caller, test, text and output updates. Parallel jobs own disjoint files or, in fix rounds, named disjoint regions. Develop code first, assemble documentation after code review converges, and write notebooks at release.
 3. **Implement.** The CODE worker applies qualified derivations and updates every place stating a changed claim. Assign independent review to the batch, with the same verdict serving hand-in and acceptance within its coverage.
 4. **Integrate** with checks graded by what the change can affect ([integration-and-review.md](references/integration-and-review.md), also for steps 5 to 7).
 5. **Before review**, reuse valid evidence and run the full suite where the integration and expensive-check rules require it. The MATH reviewer checks changed mathematics with its consuming code.
@@ -51,6 +51,8 @@ Record these choices, the review basis, the checked runner or declared environme
 8. **Release and wrap up** ([release-and-wrap-up.md](references/release-and-wrap-up.md)).
 
 Once the user approves the plan, carry out the work it authorizes.
+
+Checkpoints report progress. When a dependency, review, changed premise, scope/authority or resource limit blocks work, report it and continue unaffected authorized work. Before a continuation, identify what existing authority could not finish.
 
 ## Producing and qualifying mathematics
 
@@ -69,8 +71,8 @@ Triage every finding before planning fixes, treating the review's severity and r
 - **Wrong or only imprecise.** A loose valid bound, nominal charge or arithmetic precision limit is not a defect merely for being inexact. Check the promised semantics and downstream use. Incorrect result associations, provenance or resource classification are code defects when consumers rely on them, even if the headline numerical answer is unchanged.
 - **The cheapest correct change** removes the demonstrated harm. Text alone suffices only when behavior and consumed data already meet the contract. A larger change needs a concrete benefit relative to its engineering cost and instability, using derivations and implementation that already exist.
 - **Not fixing is an outcome.** Give every finding a disposition and its reason, and keep deferrals visible. An optional wording preference is marked not fixed and creates no job or backlog item.
-- **Circuit breaker.** At each partial, assess accumulated changes and coordination cost. Re-triage a chain that changes the design or correctness basis. Before a second consecutive follow-up job on one feature, consult the counselor. Count completed jobs and documentation rewrites. Qualified local corrections closed by the principal or current owner create no job.
-- **Direct documentation closure.** The principal or current owner corrects authorized local text from qualified science and actual consumers, then rereads it in context. This completes the passage’s writing review. Route new mathematics, runtime changes and material capability choices to their respective owners.
+- **Circuit breaker.** At each partial, assess accumulated changes, returns and coordination cost, even in one job. Consolidate local returns with the current owner before redispatch. Re-triage a chain that changes design or correctness basis. Before a second consecutive follow-up job on one feature, consult the counselor, counting completed jobs and documentation rewrites. Qualified local closure creates no job.
+- **Direct documentation closure.** The principal or current owner closes authorized local text from qualified science and actual consumers, then rereads it for writing review. Runtime messages stay with the CODE owner. Identity or format effects need its paired review. New mathematics and material capability choices go to their owners.
 - **Present triage** as code changes, text changes and deferred or closed items. Include each impact and disposition, with evidence for local corrections. The user decides new scope and rounds, or the principal and counselor within delegated authority.
 
 ## Decisions with the counselor
@@ -88,7 +90,7 @@ The principal and counselor take only delegated decisions. Request the counselor
 - **Clock.** Read the clock in the command recording a decision.
 - **Environment.** Run every interpreter, test, lint and documentation command through the project's checked runner or in its declared environment, and carry that command into every brief.
 - **Records.** The principal keeps current rules, revision, active jobs, decisions and evidence owners in the shared project record. Link dated history separately and preserve outstanding obligations at handoff. Check the actual size of context sent to agents. Edit records with file tools and keep them under version control at boundaries.
-- **Feedback and interruptions.** While producing a batch, limit concurrent work that needs the principal's attention. Handle immediate feedback directly. For a delayed item, leave one line in its job entry with next action, when due and report location. Prioritize a blocked dependency or invalidated premise. Before switching, note where to resume and the next step. At batch boundaries, integration and handoff, reconcile outstanding jobs with their expected reports. Clear temporary entries once resolved or resumed and keep the disposition with the job. AI agents read internal job records, handoffs and these temporary notes directly. Use brief facts, actions and paths. Load `research-writing-style` for these records only at the user’s explicit request.
+- **Feedback and interruptions.** Before switching, record the resume point and next action. Keep delayed feedback with its job and reconcile open jobs at batch, integration and handoff boundaries. On deferral or interruption read [continuity rules](references/plan-and-dispatch.md#feedback-and-interruptions).
 
 ## Checks
 
@@ -101,8 +103,8 @@ Check each artifact before it leaves the principal.
   - every place that states each changed claim is listed;
   - a fix of a public contract, or one a review names, shows a detector that fails before the fix, kept in the suite only where the test policy admits it;
   - the checks are the covering test files and probes, with no full suite;
-  - its stop condition names a deliverable;
-  - each additional agent has a distinct deliverable or independence requirement worth its briefing, context and review cost; delivery and acceptance share the assigned reviewer;
+  - its stop condition names a complete scoped deliverable or a justified dependency, review, authority or resource boundary;
+  - the session does its own work, any subagent has a justified need within authority, and delivery and acceptance share its reviewer;
   - it updates the places that state its changed claims but carries no documentation job for its area, which starts only after the area's code review has converged, and notebooks wait for the release.
 - **Derivation request:** covers the claim in every reachable case and supported public use, names missing or changed premises and asks for a complete derivation.
 - **Review request:** the reviewer is independent of the producer and has the original requirements, review basis, relevant source and evidence. Exclusions follow what users pose, not input magnitude. Substantially new formal-review scope has its counselor check.
@@ -111,4 +113,4 @@ Check each artifact before it leaves the principal.
 - **Fix list:** every deferred item names its owner, scope and who decided it.
 - **Expensive checks:** ran on the final code, or the record says why not.
 - **Rules:** a rule is recorded only at the user's request or as a stated standing rule, in its smallest form; a changed rule is in the file the other session rereads; standing rules the user stated this run are in the durable files.
-- **Opening brief:** one bullet per actual role session gives its model, reasoning level, responsibility and trigger.
+- **Opening brief:** sessions have models, reasoning levels, responsibilities, reviewer pairings and triggers. Role overlaps match the user's selections. Total sessions and concurrent activity are distinct.
