@@ -56,7 +56,7 @@ Checkpoints report progress. When a dependency, review, changed premise, scope/a
 
 ## Producing and qualifying mathematics
 
-Check the basis of bounds, ranges, guarantees, equivalences, windows, tolerances, work and byte counts, conditions, causal claims, rejections and remedies, and numerical algorithms with exact arithmetic or scaling.
+Check the basis of bounds, ranges, guarantees, equivalences, windows, tolerances, hard-limit counts, conditions, causal claims, rejections and remedies, and numerical algorithms with exact arithmetic or scaling.
 
 - The MATH worker (including a matching principal) owns new claims, changed premises and unsupported reasoning. This includes cost conventions, coverage arguments and reconciliation of conflicting results. Other producers identify the missing relation, premise and consuming path, batch related questions for that owner and continue independent work.
 - The MATH reviewer independently checks new or revised derivations before approval of the plan that relies on them or before dependent implementation if discovered later. Give the reviewer the original problem, constraints, derivation and primary evidence so it can challenge the premise and conclusion. Check actual consuming branches when the code exists.

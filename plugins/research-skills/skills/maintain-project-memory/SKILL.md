@@ -78,7 +78,10 @@ that names the condition ending it, rather than as a project convention.
 ## Reconcile rather than append
 
 Choose whether each relevant record needs an addition, correction, replacement
-link or removal. Decisions and evidence may be marked historical. Remove
+link or removal. Before adding or changing a rule, search the project's entry
+records for rules that say otherwise and settle them in the same update, because
+a later session may read the older one first. Decisions and evidence may be
+marked historical. Remove
 superseded operating guidance in active entries (routes, commands, environment
 names, conventions, branch or revision status, job states, retired gates)
 rather than relabeling or inverting it, and do not reimport it. When a removed
