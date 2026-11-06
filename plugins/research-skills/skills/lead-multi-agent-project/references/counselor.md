@@ -2,6 +2,8 @@
 
 Read before a necessary counselor request. Use one for a material delegated decision, substantially new formal-review scope, a genuine disagreement or the circuit breaker. The principal closes source-fact checks, qualified local text, mechanical request updates and application of settled decisions directly. A finding's label or an exported function without internal callers does not by itself require a counselor.
 
+Every request opens with the review basis and follows the principal's triage. A finding closed on that basis reaches the counselor only on new evidence or a material dispute about the closure. A counselor's statement that users could write an input needs the same link to a use, and a stopping point keeps no class of failure, such as a silent or regressed one, as a defect without one.
+
 ## Decisions on the user's behalf
 
 - The principal writes its proposed decision with the evidence and the alternatives as a request file and sends it to the counselor with the raw material: the reviews and their witnesses, the pinned worktree and the recorded decisions. It asks for the residual limits of the losing option as well, so that the record shows what was given up. (NWQLib 0.99.1: the counselor agreed with the principal's direction, found in it an omission that three reviews had not seen, and wrote the specification.)

@@ -16,7 +16,7 @@ The plan contains:
 
 Make each job a complete owned outcome, with its necessary caller, test, prose and generated-output updates under the stage gates below. Sequence its stages inside the assignment. A checkpoint can unblock another owner without ending this owner's authorized work. Split a stage into another job only when a real dependency, independent review or ownership boundary requires the handoff.
 
-Triage comes first: decide what will be built or fixed before anything is derived. The MATH worker supplies each foreseeable derivation or identifies the qualified result that covers it. A derivation gives each step and premise, covers every case the code can reach, and supplies text and code that can be copied without further derivation. For each item the plan lists every place that states it, such as docstrings, the guide, a constants registry, a mathematics document and notebook text. Missing derivations are not left to the implementer or a later stage.
+Triage comes first: decide what will be built or fixed before anything is derived. The MATH worker supplies each foreseeable derivation or identifies the qualified result that covers it. A derivation gives each step and premise, covers every case within the review basis that the code can reach, states the domain it leaves out, and supplies text and code that can be copied without further derivation. For each item the plan lists every place that states it, such as docstrings, the guide, a constants registry, a mathematics document and notebook text. Missing derivations are not left to the implementer or a later stage.
 
 An independent MATH reviewer checks new or changed derivations, and the CODE reviewer checks the engineering. Reuse a qualified verdict rather than commissioning the review again for the plan. The user approves the plan before dispatch.
 
@@ -36,7 +36,7 @@ The principal works within its assigned roles from the plan's scope, evidence an
 
 - the environment and the checked runner, with the interpreter and its version, the base revision and the test command;
 - one verification rule, taken from the plan's verification policy;
-- the review basis from step 0. The worker handles input within it, adds no guard or test for input outside it, and lists in its report any assigned item that rests on such input;
+- the review basis from step 0. The worker handles input within it, adds no guard or test for input outside it, and lists in its report any assigned item that rests on such input, which the principal then closes;
 - the repository's operating, attribution and write restrictions, and the one-session-per-worker rule. The recipient performs its own assignment, with no subagents by default. Any necessary exception follows the role and delegation rules in `SKILL.md`;
 - the skills the worker invokes as its first action, such as `scientific-computing-correctness`, and that it runs the completion review before each behavior-changing commit, because naming a skill as guidance has not caused agents to load it;
 - the qualified derivations the CODE worker copies verbatim, including when documenting existing code. For a missing relation or unmatched premise, send its consuming path to the principal for MATH work and independent review. If mid-job messaging is unavailable, leave the question in the agreed request file and name it in the report. Continue work that does not depend on the answer;
@@ -103,7 +103,7 @@ Batch findings that need another owner. The responsible reviewer's local correct
 ## Delegating a derivation
 
 - A worker's request file gives the relation, where it is used, what is known and what the worker suspects.
-- The principal's request gives the context, the exact relation in the code, what is measured, what is needed, the limits on computation and on the repository, and the answer file to write. It covers the whole claim in every case the code reaches, not only the part in question, and for each problem found asks for the complete derivation of the correct statement. Give the MATH worker a pinned snapshot worktree on its own branch with the checked runner so that the revision stays fixed.
+- The principal's request gives the context, the exact relation in the code, what is measured, what is needed, the limits on computation and on the repository, and the answer file to write. It opens with the review basis and covers the whole claim in every case within it that the code reaches, not only the part in question, and for each problem found asks for the complete derivation of the correct statement. A counterexample outside the basis narrows the claim's stated domain and opens no fix. A condition given as sufficient is not necessary until the answer says so. Give the MATH worker a pinned snapshot worktree on its own branch with the checked runner so that the revision stays fixed.
 
 ## Hand-in
 

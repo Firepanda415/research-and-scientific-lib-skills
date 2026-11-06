@@ -28,7 +28,9 @@ Rejecting a proposed remedy does not close the underlying defect. An
 `intentional decision`, an `out of scope` disposition and
 any deferral of a reported finding require explicit authority from the user, a
 maintainer or an already authoritative project contract. The user's request may
-already set that scope. Without such authority the item stays `open`. Ask for
+already set that scope. A review basis is such a contract: a finding whose use it
+does not establish takes `out of scope` with that reason, which opens no work and
+says nothing about its numbers. Without such authority the item stays `open`. Ask for
 the specific decision and continue the independent authorized work. A runtime
 or public-record finding remains open when documentation only acknowledges it.
 
