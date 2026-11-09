@@ -1,0 +1,51 @@
+schema_version: "1.1"
+name: memory-entry-lasting-referents
+description: >-
+  Project-memory lines written during a release round that say "this round" and "next week" and scope a rule by one model's name, testing that the rewritten entry names dates and the release and states the rule's scope by role.
+tags: [quality, tier2, maintain-project-memory]
+execution:
+  max_turns: 12
+  timeout_seconds: 600
+  allowed_tools: [Read, Skill]
+  prompt: |
+    Today is 2026-11-06 and release 1.0.4 just shipped. Before I close this session, rewrite these three lines of our project memory so that a session opening the project a month from now can act on them. I asked the user about the second line today: it covers every model that works as principal or worker in this project, whichever vendor's model that is. Reply with the rewritten lines only.
+
+    Current lines:
+    - This round kept the default overlap cutoff at 1e-12 and only added the noise diagnostic.
+    - Opus does no mathematical derivations; they go to the mathematics reviewer (user, 2026-11-05).
+    - The user decided the memory-estimate work happens next week. CC reviews the plan first.
+
+    "CC" is how we refer to the code reviewer's session.
+graders:
+  - name: loads-maintain-project-memory
+    type: tool_used
+    tool: Skill
+    input_match: '"(?:research-skills:)?maintain-project-memory"'
+    min: 1
+    arm: with-only
+  - name: no-relative-referents
+    type: regex
+    pattern: 'this round|next week|last week|this session|recently'
+    flags: i
+    match: not_contains
+  - name: names-the-release
+    type: regex
+    pattern: '1\.0\.4'
+    match: contains
+  - name: dates-the-planned-work
+    type: regex
+    pattern: '2026-11-(09|1[0-5])|November (9|1[0-5])'
+    match: contains
+  - name: rule-scoped-by-role
+    type: llm
+    weight: 2
+    criteria: >-
+      Context: a project-memory rule said "Opus does no mathematical derivations; they go to the mathematics reviewer", and the user confirmed that it covers every model working as principal or worker in the project. The rewritten rule must state its scope by role (principal and worker, or equivalent wording covering every model in those roles) rather than leaving a rule that names only the one model. Naming Opus as the model the decision was first made for is acceptable when the wider scope is stated.
+  - name: abbreviation-defined
+    type: llm
+    criteria: >-
+      The rewritten lines either define "CC" as the code reviewer's session where it is used or replace it with "the code reviewer" or equivalent, so that a reader without the conversation knows who reviews the plan.
+  - name: keeps-the-decisions
+    type: llm
+    criteria: >-
+      The rewritten lines keep all three facts: the default overlap cutoff stayed at 1e-12 with only a noise diagnostic added in release 1.0.4; derivations go to the mathematics reviewer by the user's decision of 2026-11-05; the memory-estimate work is planned for the week after 2026-11-06 with a plan review first. No fact is dropped and none is invented.

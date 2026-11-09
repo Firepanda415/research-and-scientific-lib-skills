@@ -1,7 +1,8 @@
 # Acceptance from the user's workflow
 
 Use when the reviewed change affects examples, notebooks, reports, error messages
-or the ability to complete a public task. Judge the intended audience: a scientist
+or the ability to complete a public task, and for the first-contact walk of a
+release or a whole library below. Judge the intended audience: a scientist
 may need precise terminology, equations and provenance. Do not replace necessary
 technical terms with vague language or assume every user is a beginner.
 
@@ -46,6 +47,37 @@ Probe limits and caps at values a user would set. A finding that needs a cap far
 below its default, such as a byte limit of a few thousand bytes against a default
 of gigabytes, is an observation, not a defect, and a remedy for such a cap needs
 only the right direction.
+
+## First contact with the public surface
+
+Use when the review covers a release or the library as a whole, or the change
+adds public names, options or returned objects. A review scoped to a diff sees
+each addition and not their sum, so read the surface as a newcomer following the
+first documented steps, with a few small scripts on the smallest documented
+example:
+
+- Display each object the workflow returns, as a notebook's last line and with
+  `print`. A default dump of nested records or identifiers hides what the user
+  built.
+- Start from a problem and ask the library which methods accept it, then omit
+  the method. The answer or the error names the candidates the library already
+  knows.
+- List what the method namespace and a result offer to completion, and count the
+  entries a user never calls.
+- Read a method's options from its signature, then set each option on a route
+  that does not read it. It is refused, or it changes neither the result nor
+  its identity.
+- Run the first resource or accuracy query the quickstart shows. An example that
+  introduces a capability returns a result for its own input.
+- Give a documented problem type to a method that declines it. The refusal names
+  the entry that accepts it when the library has one.
+- Check that documented extension examples import only public names.
+
+Report each observation with the documented task it belongs to, and give totals
+where growth is the finding, such as the number of options or exported names.
+(In November 2026 such a walk of one released library took minutes and found a
+34,000-character default display of a plan, 82 names in one import namespace and
+nine options accepted on routes that never read them.)
 
 ## Evidence and completion
 

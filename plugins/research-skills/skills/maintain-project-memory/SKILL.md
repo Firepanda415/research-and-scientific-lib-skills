@@ -58,7 +58,9 @@ Retain confirmed, nontrivial facts that could change a future decision:
   location and limits. Record a later unresolved finding alongside earlier
   acceptance when their scopes differ; neither erases the other.
 - Unresolved work and user-approved deferrals, with the remaining question and
-  the next action only when actually known and authorized.
+  the next action only when actually known and authorized. Index the decisions
+  that wait on the user in one place that points to each owner, because a
+  session working alone stops at every one it meets.
 
 Prefer a short causal note and evidence link. Do not record routine typos,
 repeated principles, transient progress or an unverified hypothesis as a lesson.
@@ -74,6 +76,13 @@ it, or when the user explicitly asks to keep it out. An item removed only
 because it is no longer needed leaves nothing to record. Record a temporary
 arrangement, such as a workaround awaiting an upstream fix, as current status
 that names the condition ending it, rather than as a project convention.
+
+Write each entry to stay correct after its work ends. Name the date, version,
+revision or work package in place of “this round” or “next week”, which lose
+their referent when the round closes. Scope a rule by role or property. When
+the user's decision names a model or tool, record whether it extends to others,
+and absent that read it as binding every model in the role. Define a project
+abbreviation where the entry first uses it.
 
 ## Reconcile rather than append
 
@@ -140,7 +149,9 @@ outside that scope.
 
 Check that the updated entry reaches the current owners, referenced evidence and
 protected artifacts exist where claimed, superseded instructions no longer steer
-new work, and unresolved obligations remain visible. Check that each user
+new work, and unresolved obligations remain visible. Search the changed records
+for relative time words and for rules scoped by a model or tool name, and give
+each its referent or scope. Check that each user
 decision, approved rule and kept capability from the work reached its owner. A
 decision recorded only in a temporary report or the conversation is lost to
 later sessions, which may then propose the rejected option again. Before recording an
@@ -153,7 +164,8 @@ task, such as a running job or an unfinished proof, belongs to
 
 For a substantial reorganization, consider a bounded cold-start handoff check:
 give a fresh session the entry and a realistic next task, then inspect whether
-it finds the right owners, evidence limits and action boundaries. Use delegation
+it finds the right owners, evidence limits, action boundaries and where its
+changes go. Use delegation
 only when available and authorized; otherwise inspect the same path locally. A
 delegate should load the project instructions a new session would, receive
 only the entry and the task, and report which instruction sources it had. Some
