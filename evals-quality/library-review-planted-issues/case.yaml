@@ -23,6 +23,12 @@ graders:
     input_match: 'skills/scientific-library-review/SKILL\.md'
     min: 1
     arm: with-only
+  - name: reads-user-workflow-acceptance
+    type: tool_used
+    tool: Read
+    input_match: 'scientific-library-review/references/user-workflow-acceptance\.md'
+    min: 1
+    arm: with-only
   - name: finds-mitigation-sign-error
     type: llm
     weight: 2

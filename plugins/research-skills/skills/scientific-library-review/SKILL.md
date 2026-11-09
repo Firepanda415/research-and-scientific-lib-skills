@@ -22,9 +22,10 @@ Default to current correctness within the requested surface. The diff locates ch
 Trace representative valid public inputs and options through the selected method, actual execution, requested output, downstream decisions and saved/read-back result where applicable. Inspect shared owners and sibling paths when they can change the relation. When responsibility moves between owners or a shared contract changes, inventory the callers and existing tests that assert the old contract, including extension implementations written against a documented protocol. A passing new test selection does not show that existing tests still match it.
 
 When examples, notebooks, reports, error messages or public task completion are
-affected, read [user workflow acceptance](references/user-workflow-acceptance.md).
-Check what the intended user can actually do and understand, alongside the
-scientific relation; do not expand an unrelated kernel review into a usability audit.
+affected, or for a release or whole-library review, read
+[user workflow acceptance](references/user-workflow-acceptance.md). Check what the
+intended user can do and understand; do not expand an unrelated kernel review into
+a usability audit.
 
 State the relevant domain, dimensions, signs, units, basis, ordering, normalization, approximation, uncertainty and allowed access representation. Establish invalid inputs separately from insufficient evidence. A missing certificate does not make an otherwise legal exploratory result invalid. Preserve raw evidence and distinguish execution completion, empirical accuracy, established error bounds and formal proof.
 
