@@ -65,8 +65,8 @@ example:
 - List what the method namespace and a result offer to completion, and count the
   entries a user never calls.
 - Read a method's options from its signature, then set each option on a route
-  that does not read it. It is refused, or it changes neither the result nor
-  its identity.
+  that does not read it. It is refused, or it is documented as having no effect
+  there and leaves the result unchanged.
 - Run the first resource or accuracy query the quickstart shows. An example that
   introduces a capability returns a result for its own input.
 - Give a documented problem type to a method that declines it. The refusal names
