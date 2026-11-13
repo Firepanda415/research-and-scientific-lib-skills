@@ -7,7 +7,7 @@
 3. Hidden assumptions and derivation chains
 4. Mathematical and physical interpretations
 5. Markdown study-note formatting
-6. Operator, RWA, and Hamiltonian-reduction templates
+6. Operator, RWA, Hamiltonian-reduction, and paper-walkthrough templates
 7. Quality checklist
 
 ## When to use
@@ -16,6 +16,7 @@ Key judgment points once the skill is triggered:
 
 - The user says the knowledge gap may be large, or asks for hidden assumptions: insert a prerequisite block before deriving anything.
 - The user asks whether a Hamiltonian is hardware-native or only an effective Hamiltonian: label the status of every equation explicitly.
+- For a paper explanation or timed talk, use Template D and the parent skill's source-location and Hamiltonian-to-circuit requirements. Integrate the needed explanations into the requested sequence.
 - For requested Markdown study notes, use the relevant parts of the note structure and keep them copy-paste safe. Ordinary questions should receive a direct answer at the requested depth.
 
 ---
@@ -564,6 +565,32 @@ This step is an exact operator identity / a definition / an effective approximat
 ...
 ```
 
+### Template D: Paper walkthrough or timed talk
+
+For each selected step, supply the following in the order the audience needs them:
+
+```markdown
+**Step: purpose and presentation time. Source: verified page and equation/figure/table.**
+
+State the claim to explain.
+
+Define the objects and write the relevant expression, with its terms labeled by role.
+Show the operation or assumption connecting it to the next expression.
+Explain the physical meaning at this point in the sequence.
+
+If a correction is implemented, show its Hamiltonian, desired exponential,
+and actual gate sequence with parameter choices and execution order.
+
+Identify exactly which states, trajectories, or circuits the result compares.
+Connect the displayed observable, error, or resource count to those objects.
+```
+
+Use a locator table when several expressions occur on different pages. Its columns
+are the expression being explained, source page and label, and whether the displayed
+expression is quoted, reorganized, or derived. For example, an equation obtained by
+applying Hamilton's equations to a numbered Hamiltonian is a derivation from that
+equation, not another occurrence of the numbered equation.
+
 ---
 
 ## Quality checklist
@@ -582,3 +609,6 @@ Before finalizing an answer, check:
 10. Is there no raw `|n\rangle` inside Markdown tables?
 11. Is there a minimal memory version?
 12. If the user asks for Markdown notes, is the output copy-paste safe for the target renderer?
+13. Can the reader identify every term, compared object, and intermediate operation without supplying a missing inference?
+14. Do page and equation pointers identify the actual source expression, with reconstructed equations labeled separately?
+15. Does each explained correction have its Hamiltonian-to-gate mapping inside the step where the audience needs it?
