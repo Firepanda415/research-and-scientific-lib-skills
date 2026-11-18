@@ -67,6 +67,11 @@ repeated principles, transient progress or an unverified hypothesis as a lesson.
 Keep hypotheses and proposals visibly provisional when they are useful to retain.
 A concrete incident may illustrate a general mechanism; it does not justify a
 universal restriction, permanent test, new runtime check or recurring experiment.
+When a recorded rule is violated again and the violation is decidable from
+source, text or a command line without running the computation, propose a static
+check at the tool that already sees it (a linter rule, a count the suite compares
+with a declared value, the project's runner or a commit hook), with the fix in
+its message, and reduce the prose to a pointer once it lands.
 
 Write entries as current guidance. Before adding or rewriting a rule, identify
 the mistake a later session would make without it, and leave out a rule that
