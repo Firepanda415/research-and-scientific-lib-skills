@@ -1,7 +1,7 @@
 schema_version: '1.1'
 name: project-lead-step0
-description: 'Principal start in the user''s own words: the skill loads and asks the step 0 settings before
-  planning or dispatching.'
+description: 'Principal start in the user''s own words: the skill loads, the first reply states or asks
+  every step 0 setting, and nothing is sent or dispatched before the settings are answered.'
 tags:
 - quality
 - lead-multi-agent-project
@@ -39,19 +39,21 @@ graders:
 - name: asks-step0-settings
   type: llm
   criteria: 'Context: the user asked the assistant, the session they opened, to act as the principal agent
-    of a multi-agent release of a small scientific library. The workflow requires asking the user, before
-    planning or dispatching, for six groups of settings: (1) the model and reasoning level assigned to the required workers and independent reviewers;
+    of a multi-agent release of a small scientific library. The workflow requires the first reply to state
+    six groups of settings, asking the user where no choice or default exists: (1) the model and reasoning level assigned to the required workers and independent reviewers;
     (2) which reviewers cover formal rounds, both by default or one if chosen; (3) the cross-vendor counselor model and reasoning level; (4) the
     decisions the user keeps and how to notify the user; (5) how models of another vendor are reached,
     such as a desktop app or a command-line tool; (6) for a release, which this is, the version and its
     destinations, such as a repository, a package index, a documentation site and an archive. The principal''s own model is the session''s and is not
-    asked. The text below is the assistant''s reply. PASS if each group is addressed using settings given for this run or asking for missing choices. FAIL if
-    a group is missing, if the reply assumes specific models instead of asking, or if it asks which model
+    asked. The text below is the assistant''s reply. PASS if each group is addressed by a setting given for this run, a stated default or a
+    question to the user; a model or reasoning level the reply proposes and asks the user to confirm counts as asked. FAIL if
+    a group is missing, if the reply adopts specific models without putting them to the user, or if it asks which model
     the principal itself should use.'
 - name: waits-before-dispatch
   type: llm
   criteria: 'Context: the assistant is the principal agent at the start of a multi-agent release and has
-    not yet received the user''s settings. The text below is its reply. PASS if the reply waits for those
-    settings before writing briefs, dispatching jobs or deriving mathematics; reading the plan and pointing
-    out what it still lacks is fine. FAIL if it writes briefs, dispatches work or derives mathematics
-    itself before the settings are answered.'
+    not yet received the user''s settings. The text below is its reply. PASS if the reply sends no brief
+    or request, dispatches no job and derives no mathematics itself before those settings are answered;
+    reading and triaging the plan, editing the plan file, checking a formula on an example, and drafting
+    a brief or request that the reply says is not sent are fine. FAIL if it sends a brief or request,
+    dispatches work or derives mathematics itself before the settings are answered.'
