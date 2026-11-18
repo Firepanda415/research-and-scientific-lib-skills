@@ -8,10 +8,9 @@ The principal, not the reviewer, decides whether a bug is worth fixing, from whe
 
 A contrast: off-center Gaussian wells, which the release notes said now plan, gave an all-zero table, and so did the same wells written out with the same parameters. Both stay findings, one problem in two forms. `exp(-800*x)*exp(400*y)*exp(400*z)`, defended only as "a product of Boltzmann factors", closes however silent and reproducible it is.
 
-## Two tests for every finding
+## Wrong or only imprecise
 
-- **Wrong or only imprecise.** A loose valid bound, nominal charge or arithmetic precision limit is not a defect merely for being inexact. Check the promised semantics and downstream use. Incorrect result associations, provenance or resource classification are code defects when consumers rely on them, even if the headline numerical answer is unchanged.
-- **The cheapest correct change** removes the demonstrated harm. Text alone suffices only when behavior and consumed data already meet the contract. A larger change needs a concrete benefit relative to its engineering cost and instability, using derivations and implementation that already exist.
+A loose valid bound, nominal charge or arithmetic precision limit is not a defect merely for being inexact. Check the promised semantics and downstream use. Incorrect result associations, provenance or resource classification are code defects when consumers rely on them, even if the headline numerical answer is unchanged.
 
 ## Looked serious, were minor
 
