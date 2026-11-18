@@ -26,6 +26,7 @@ Load only relevant references:
 
 Apply these points while designing. Before delivery, once the figure is rendered, check it yourself at its intended size against the points that show there, as a step after production, and fix what fails. An audit applies them to each supplied figure.
 
+- For an interactive figure, open the final file or page in its intended viewer and try the controls readers will use. For example, after switching data series, check the plotted series, legend and any displayed values against the selected source data.
 - Trace plotted values, transformations, and selections to data or explicitly labeled illustrative inputs. Never alter data to improve appearance.
 - Use meaningful axes, units, scales, and ranges. Bars generally need their length baseline at zero; use a point or line plot when a focused nonzero range is scientifically useful. Show breaks or clipping explicitly.
 - Show uncertainty or distributions when they bear on the claim, and label the statistic, sample unit, and number of independent runs. Do not run extra simulations merely to decorate a plot with error bars.
