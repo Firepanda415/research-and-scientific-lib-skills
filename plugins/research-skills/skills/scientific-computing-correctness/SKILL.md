@@ -7,9 +7,9 @@ description: "Implement, debug, optimize or independently validate scientific co
 
 ## First principle
 
-Start from the intended scientific contract and the problems its users pose through the relevant public entry, including representative valid inputs and options. Trace the affected quantity through the actual call chain to the results, decisions, reports, and costs its consumers receive. Locate the first divergence and correct its owner before stacking patches around symptoms. Preserve scientific invariants when optimizing or simplifying.
+Start from the intended scientific contract and the problems its users pose through the relevant public entry, including representative valid inputs and options. Trace the affected quantity through the actual call chain to the results, decisions, reports, and costs its consumers receive. Locate the first divergence and correct its owner rather than patching symptoms. Preserve scientific invariants when optimizing or simplifying.
 
-Base completion on integrated behavior with independent scientific evidence, and revise obsolete or unjustified tests to match the established contract. Use existing evidence and the smallest discriminating check, without rerunning every end-to-end workload.
+Base completion on integrated behavior with independent scientific evidence, and revise obsolete or unjustified tests to match the established contract. Use existing evidence and the smallest discriminating check, not every end-to-end workload.
 
 Discarding information does not justify a stronger claim. Improvements from denoising, estimation or aggregation need their own mathematical or empirical justification.
 
@@ -21,7 +21,7 @@ End implementation or validation work with the [review before completion](#revie
 
 ## Scientific contract
 
-State the dimensions relevant to the task explicitly before implementation:
+State the dimensions relevant to the task before implementation:
 
 - the intended quantity and its domain, assumptions, units, frame, sign,
   ordering, and convention.
@@ -51,11 +51,11 @@ For paper-derived implementations, replications, proof-assistant formalizations,
 - An exact path must not silently discard, threshold, round, clip, or substitute
   nonzero information, including inside a dependency call such as a synthesis
   routine with an internal fidelity target. Before documenting such a
-  construction as exact, measure the error of what it actually builds on small
+  construction as exact, measure the error of what it builds on small
   instances.
 - Derive acceptance thresholds from the quantity, method or error budget,
   with a justified model for scale, dimension and conditioning. A forecast and
-  the stage it predicts share one error allocation. Explicitly validated
+  the stage it predicts share one error allocation. Validated
   calibration and fitted models remain legitimate, but fitting acceptance examples does not
   certify a bound. For floating-point boundaries, inverse/forward checks, or
   choices among reformulation, scaling and enclosing arithmetic, read
@@ -70,7 +70,7 @@ For paper-derived implementations, replications, proof-assistant formalizations,
 - Exploratory computations may use empirical convergence checks or heuristics
   without a formal bound, stating their basis and limitations and
   distinguishing operational termination from established convergence. Do not add certificate
-  machinery or reject usable experimental output merely because no proof exists.
+  machinery or reject usable experimental output because no proof exists.
 - Coefficient size alone does not determine relevance to a state, observable,
   cancellation, or later decision. Use the bound in the consumer's frame.
 - Carry a fact proved about the input through transforms that preserve it, rather
@@ -95,7 +95,7 @@ For paper-derived implementations, replications, proof-assistant formalizations,
   semantic owner. Trace every producer, transform, caller, sibling path, and
   consumer before changing a shared owner, including extension implementations
   written against a documented protocol, which targeted tests can miss.
-- Before adding, changing or documenting a formula, read [formula documentation](references/project-records.md#documenting-formulas). Keep its derivation, assumptions, error bound and stable source at the definition or linked algorithm documentation.
+- Before adding, changing or documenting a formula, read [formula documentation](references/project-records.md#documenting-formulas). Keep its derivation, symbols, assumptions, error bound and a source its readers can open at the definition or linked algorithm documentation, never a plan, handoff or review label.
 - Code, equations, documentation, structured results, reports and generated
   artifacts represent the same claim, so a contract change migrates them together.
 
@@ -118,7 +118,7 @@ algorithm requires them. Reducing cost must preserve the scientific quantity,
 error control, and required evidence. Small coefficients or large raw outputs
 alone do not justify deletion.
 
-Before changing resource controls, distinguish capacity-only limits from explicit resource-aware policies. Capacity-only failures must not become inapplicability or silently alter scientific choices. Establish scientific equivalence for identical inputs under varied sufficient capacities.
+Before changing resource controls, distinguish capacity-only limits from resource-aware policies. Capacity-only failures must not become inapplicability or silently alter scientific choices. Establish scientific equivalence for identical inputs under varied sufficient capacities.
 
 Extra expensive or poorly scaling computation beyond the authorized algorithm
 or workload to validate, diagnose, or correct results requires explicit human
@@ -136,7 +136,7 @@ toward the documented or reported target scale as it describes.
 - For scientific IV&V of a specified computation or result, independently assess its mathematical
   premises and expected behavior, not just agreement with the implementation
   or its tests.
-- Before implementing a behavior or accepting an existing implementation, state
+- Before implementing a behavior or accepting an implementation, state
   the property a test must check and the independent source of the expected
   result. At the same time, define the falsifier by asking what ordinary,
   adversarial, boundary, mixed-interaction, or cross-layer case among the
@@ -146,10 +146,10 @@ toward the documented or reported target scale as it describes.
   a known-good case. Two consumers of the same builder prove consistency,
   not correctness.
 - Keep acceptance oracles in development verification unless their production
-  role is explicitly justified and authorized. An agreement test does not
+  role is justified and authorized. An agreement test does not
   authorize full reference recomputation or exact-decision equality in a hot
   loop. Fix the numerical owner and reuse existing results before proposing
-  more work. Do not satisfy an accuracy failure merely by installing a
+  more work. Do not satisfy an accuracy failure by installing a
   veto and changing the test to expect termination.
 - Leave the smallest test set that protects a current scientific, resource,
   provenance, lifecycle, public-input, or serialization obligation.
@@ -157,13 +157,13 @@ toward the documented or reported target scale as it describes.
   across platforms, read [test evidence](references/test-evidence.md).
 - Before classifying a failure or reporting a measured result, confirm the
   interpreter, dependency versions and import origin the project declares (or
-  those actually used when none is declared).
+  those used when none is declared).
 - A green build, regenerated notebook, mutation kill, or full test suite proves
   only the invariants its checks can falsify. Add an independent pass when
   scientific risk warrants it, and rerun settled checks only for new evidence.
 
-When work aims to close earlier scientific-review findings, read and
-apply [remediation closure](references/remediation-closure.md) before editing.
+When work aims to close earlier scientific-review findings, read
+[remediation closure](references/remediation-closure.md) before editing.
 
 ## Review before completion
 
@@ -179,7 +179,7 @@ only what changed.
   revision, new or reused, and was checked in the context the claim names.
   Otherwise the claim is removed or marked unverified.
 - Each new or changed formula or numerical rule is documented as the ownership
-  section requires.
+  section requires, and no code or message cites a plan, handoff or review label.
 - Each new or changed test or expected value names its independent relation, and
   a fix's regression check failed on the pre-change code.
 - No tolerance, threshold or cap was widened after a failure without a
@@ -208,7 +208,7 @@ only what changed.
   Capacity-only limits preserve scientific choices. Partial evidence keeps its scope.
 - Each measured value or test result names the command, interpreter, dependency
   versions, import origin where it matters, and revision that produced it.
-  Separately executed runs are reported separately rather than as one total.
+  Separately executed runs are reported separately, not as one total.
 
 ## Completion
 
