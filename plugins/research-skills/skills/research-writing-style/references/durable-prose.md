@@ -82,6 +82,8 @@ Boldface, icons, arrows, and emoji need a communicative purpose. Keep meaningful
 
 Review clusters of stock language such as “delve,” “tapestry,” “pivotal,” “seamless,” “robust,” “comprehensive,” “unlock,” and “valuable insights.” In Chinese, look for unsupported uses of “赋能,” “多维度,” “全方位,” “深度融合,” “闭环,” “抓手,” “保驾护航,” and “具有重要意义.” Delete or replace the phrase for a specific defect such as vagueness, hype, redundancy, or a false relationship. Do not use a frequency list as a universal blacklist. “Robust control,” “statistical significance,” and a defined closed loop are ordinary technical concepts.
 
+Remove a compound label coined for the occasion, such as “selection-only keeper table.” Name the object the reader already knows, or state the relation with plain verbs and prepositions. Keep an established term of the field and a term the document defines.
+
 Use active voice when the actor matters and is known. Passive voice is appropriate when the operation or object is the point. Never supply an unknown actor merely to make a sentence active. A brief label, heading, or UI instruction need not be a complete sentence.
 
 Remove duplicated hedges while keeping the exact scope of uncertainty. “May,” “under these assumptions,” confidence intervals, inference labels, and warranted legal or safety qualifications can be essential. Do not strengthen a claim to make it sound decisive.

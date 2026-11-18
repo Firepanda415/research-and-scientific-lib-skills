@@ -5,7 +5,7 @@ description: Lead a multi-agent engineering project, such as a scientific-softwa
 
 # Lead a multi-agent project
 
-The principal carries out the plan through planning, dispatch, coordination, integration, acceptance and delivery. "Implement the plan" assigns this leadership responsibility. Production follows the selected worker roles. Count briefing, source loading, waiting, hand-in and integration as delegation cost.
+The principal carries out the plan through planning, dispatch, coordination, integration, acceptance and delivery. "Implement the plan" assigns this leadership responsibility. Count briefing, source loading, waiting, hand-in and integration as delegation cost.
 
 Read each reference when its step applies, and reload lost guidance after compaction.
 
@@ -52,7 +52,7 @@ Record the settings, review basis, runner or environment, worktree rules, memory
 7. **Triage and fix** below, returning affected work to its owner.
 8. **Release and wrap up** ([release-and-wrap-up.md](references/release-and-wrap-up.md)).
 
-Once the user approves the plan, carry out the work it authorizes.
+Once the user approves the plan, carry out the work it authorizes. Ask the user for a decision only after finishing authorized work that makes it concrete and reviewable, so their answer is the last step.
 
 Checkpoints report progress. When a dependency, review, changed premise, scope/authority or resource limit blocks work, report it and continue unaffected authorized work. Before a continuation, identify what existing authority could not finish.
 
@@ -105,7 +105,7 @@ Check each artifact before it leaves the principal.
   - a fix of a public contract, or one a review names, shows a detector that fails before the fix, kept in the suite only where the test policy admits it;
   - the checks are the covering test files and probes, with no full suite;
   - its stop condition names a complete scoped deliverable or a justified dependency, review, authority or resource boundary;
-  - it carries no documentation job for its area, which starts only after the area's code review has converged, and notebooks wait for the release.
+  - it carries no documentation job before its area's code review converges and no notebook before the release.
 - **Derivation request:** carries the review basis, covers the claim in every reachable case and supported public use within it, names missing or changed premises and asks for a complete derivation. A counterexample outside it narrows the claim's stated domain and opens no fix.
 - **Review request:** the reviewer is independent of the producer and has the original requirements, review basis, relevant source and evidence. Exclusions follow what users pose, not input magnitude. A review of fixes covers only accepted problems, their legal forms, changed consumers and new regressions. Substantially new formal-review scope has its counselor check.
 - **Integration:** checks match the change and required delivery scope, including notebook cells or other formats the project's gates cover. Every failed test line was read. A scoped check is not reported as a repository-wide pass.
@@ -113,4 +113,4 @@ Check each artifact before it leaves the principal.
 - **Fix list:** every deferred item names its owner, scope and who decided it.
 - **Expensive checks:** ran on the final code, or the record says why not.
 - **Rules:** a rule is recorded only at the user's request or as a stated standing rule, in its smallest form; standing rules the user stated this run are in the durable files.
-- **Opening brief:** every step 0 setting is stated or asked. Sessions have models, reasoning levels, responsibilities, reviewer pairings and triggers. Role overlaps match the user's selections.
+- **Opening brief:** every step 0 setting is stated or asked, each session bullet is complete, and role overlaps match the user's selections.

@@ -73,7 +73,9 @@ check at the tool that already sees it (a linter rule, a count the suite compare
 with a declared value, the project's runner or a commit hook), with the fix in
 its message, and reduce the prose to a pointer once it lands.
 
-Write entries as current guidance. Before adding or rewriting a rule, identify
+Write entries as current guidance. People read these files as well as agents,
+so keep normal spacing between words, numbers and code, as in `pandas 3.0.5`.
+Before adding or rewriting a rule, identify
 the mistake a later session would make without it, and leave out a rule that
 prevents none. A removed or rejected option belongs in memory only inside the
 decision that excluded it, with the reason and any condition for reconsidering

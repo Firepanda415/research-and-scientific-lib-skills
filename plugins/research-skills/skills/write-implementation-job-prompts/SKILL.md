@@ -66,6 +66,8 @@ choosing a smaller implementation; a named example set is not a closed edit or
 support boundary. Include only distinctions that can change the outcome, without
 requiring arbitrary coercions, all Cartesian tests, or a new validation framework. Use
 [job-prompt-template.md](references/job-prompt-template.md) only as a drafting aid.
+A person may read the prompt and the agent's messages, so keep them legible, with
+normal spaces between words and numbers.
 
 For a correction, state what supersedes the old instruction and why, using
 [correction-prompt-template.md](references/correction-prompt-template.md) when

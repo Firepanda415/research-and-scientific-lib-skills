@@ -88,12 +88,12 @@ skill 名称后的数字是该 skill 每次使用时默认加载的 tokens，见
 | [stress-test-baselines](plugins/research-skills/skills/stress-test-baselines/SKILL.md) (~2k) | 设计公平的基线比较、消融实验和稳健性检查。 | [15](#credit-15) |
 | [write-research-log](plugins/research-skills/skills/write-research-log/SKILL.md) (~1k) | 记录研究进展、实验观察、假设与预测。 | — |
 | [research-watchdog-protocol](plugins/research-skills/skills/research-watchdog-protocol/SKILL.md) (~1k) | 跟进长时间运行的任务，并在新会话中接续进行中的研究。 | — |
-| [maintain-project-memory](plugins/research-skills/skills/maintain-project-memory/SKILL.md) (~3k) | 整理 project memory，保留 decision rationale、可复用经验与 evidence 范围，支持后续 session 接续工作。 | [6](#credit-6), [7](#credit-7), [12](#credit-12), [15](#credit-15) |
+| [maintain-project-memory](plugins/research-skills/skills/maintain-project-memory/SKILL.md) (~3k) | 整理 project memory，保留 decision rationale、可复用经验与 evidence 范围，支持后续 session 接续工作。 | [6](#credit-6), [7](#credit-7), [12](#credit-12), [15](#credit-15), [22](#credit-22) |
 | [quantum-research-radar](plugins/research-skills/skills/quantum-research-radar/SKILL.md) (~4k) | 生成中文量子研究简报和针对某一主题的近期工作扫描，关注量子计算与人工智能等相关方向。 | — |
 | [physics-from-math-explainer](plugins/research-skills/skills/physics-from-math-explainer/SKILL.md) (~2k) | 从数学出发解释物理，补充物理直觉，讲清符号和约定。 | — |
 | [tech-paper-template](plugins/research-skills/skills/tech-paper-template/SKILL.md) (~1k) | 组织技术论文的论点、引言和章节结构。 | [1](#credit-1) |
 | [benchmark-paper-template](plugins/research-skills/skills/benchmark-paper-template/SKILL.md) (~1k) | 规划或评估自己的基准测试论文，包括评估缺口、构建、测量设计和结论，不限领域。 | [1](#credit-1) |
-| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) (~20k) | 起草、编辑和对抗性审阅有其他人阅读的文档（包括科学软件库的指南和 API reference），交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10), [12](#credit-12), [15](#credit-15), [17](#credit-17), [19](#credit-19) |
+| [research-writing-style](plugins/research-skills/skills/research-writing-style/SKILL.md) (~20k) | 起草、编辑和对抗性审阅有其他人阅读的文档（包括科学软件库的指南和 API reference），交付前强制 review，也支持只审不改。 | [3](#credit-3), [8](#credit-8), [9](#credit-9), [10](#credit-10), [12](#credit-12), [15](#credit-15), [17](#credit-17), [19](#credit-19), [22](#credit-22) |
 | [work-email](plugins/research-skills/skills/work-email/SKILL.md) (<1k) | 修改简短工作邮件或消息的语法，或按你给的要点起草，保持事实、请求和语气不变。 | — |
 | [figure-designer](plugins/research-skills/skills/figure-designer/SKILL.md) (~1k) | 设计论文插图、方法示意图和可复现的数据图表。 | [1](#credit-1), [15](#credit-15) |
 | [research-explainer-animation](plugins/research-skills/skills/research-explainer-animation/SKILL.md) (~6k) | 为论文和代码制作带配音和字幕的讲解动画，画面与旁白中的数字都可追溯到原始来源，交付前逐帧检查。 | — |
@@ -105,8 +105,8 @@ skill 名称后的数字是该 skill 每次使用时默认加载的 tokens，见
 | [library-example-notebooks](plugins/research-skills/skills/library-example-notebooks/SKILL.md) (~3k) | 编写或审阅科学软件库的示例 notebook 和教程，让读者在第一屏看到计算结果，以及如何换成自己的问题。 | [15](#credit-15) |
 | [deep-code-review](plugins/research-skills/skills/deep-code-review/SKILL.md) (~4k) | 审查代码的领域正确性、工程实现、测试与资源开销。科学软件库使用 `scientific-library-review`。 | [12](#credit-12), [16](#credit-16) |
 | [simplify-codebase](plugins/research-skills/skills/simplify-codebase/SKILL.md) (~8k) | 找出并移除代码中的多余复杂性，保护既有行为与必要的验证证据，也清理低价值测试和只为测试存在的生产代码。 | [4](#credit-4), [12](#credit-12), [16](#credit-16), [20](#credit-20) |
-| [lead-multi-agent-project](plugins/research-skills/skills/lead-multi-agent-project/SKILL.md) (~5k) | 以主脑身份带领多 agent 项目，按所选模型分担实现或推导，安排独立审查与发版。 | [15](#credit-15) |
-| [write-implementation-job-prompts](plugins/research-skills/skills/write-implementation-job-prompts/SKILL.md) (~5k) | 将需求或审查结果整理为清晰、可执行的开发任务提示词。 | [12](#credit-12) |
+| [lead-multi-agent-project](plugins/research-skills/skills/lead-multi-agent-project/SKILL.md) (~5k) | 以主脑身份带领多 agent 项目，按所选模型分担实现或推导，安排独立审查与发版。 | [15](#credit-15), [22](#credit-22) |
+| [write-implementation-job-prompts](plugins/research-skills/skills/write-implementation-job-prompts/SKILL.md) (~5k) | 将需求或审查结果整理为清晰、可执行的开发任务提示词。 | [12](#credit-12), [22](#credit-22) |
 | [ponytail](plugins/research-skills/skills/ponytail/SKILL.md) (~5k) | 在保证科学准确性、科学家可读性、所需行为与资源约束的前提下，简化代码。 | [5](#credit-5), [12](#credit-12), [15](#credit-15), [16](#credit-16), [20](#credit-20) |
 | [ponytail-review](plugins/research-skills/skills/ponytail-review/SKILL.md) (~1k) | 审查代码变更，提出有依据的简化建议。 | [5](#credit-5) |
 | [ponytail-audit](plugins/research-skills/skills/ponytail-audit/SKILL.md) (~1k) | 以精简的只读审查报告列出整个仓库中可以删除或简化的代码。 | [5](#credit-5) |
@@ -171,6 +171,8 @@ skill 名称后的数字是该 skill 每次使用时默认加载的 tokens，见
 20. <a id="credit-20"></a>OpenCode 贡献者。[AGENTS.md](https://github.com/anomalyco/opencode/blob/097a93e511e2cd7d4fbfc12e0623b721b02f23b9/AGENTS.md) 和 [unit-tests skill](https://github.com/anomalyco/opencode/blob/097a93e511e2cd7d4fbfc12e0623b721b02f23b9/.opencode/skills/unit-tests/SKILL.md)，查阅于 2026-10-24。**MIT**，Copyright (c) 2025 opencode。改编为 Ponytail 的抽象与校验判据，以及按需读取的测试成本 reference，`simplify-codebase` 也使用这些指导。改编时把 OpenCode 的 Bun 命令、Windows 专用建议、超时和重复运行次数换成使用它的项目自己的工具和预算。
 
 21. <a id="credit-21"></a>`scientific-computing-correctness` 中 floating-point decision reference 的来源，`scientific-library-review` 也使用这份指导。该 reference 为本合集编写，采用 **MIT** 许可证，将 construction error、evaluation error、conditioning、feasibility decision 和诊断成本联系起来。来源包括 [Goldberg 的 numerical-arithmetic tutorial](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html)、[Higham 关于 backward error 的文章](https://nhigham.com/2020/03/25/what-is-backward-error/)、[Dawson 关于 floating-point comparison 的文章](https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/)、[PEP 485](https://peps.python.org/pep-0485/)、Python 和 SciPy 的 API 文档，以及 AMOS 和 Arb 的原始文档。reference 在相关论述旁给出来源链接，并列出可进一步查询的 numerical resource 合集。来源查阅于 2026-10-29。
+
+22. <a id="credit-22"></a>三条规则的来源。`lead-multi-agent-project` 在完成已授权且能让决定具体化的工作之后才请用户做决定。`research-writing-style` 的 references 把临时自造的复合标签换成它所指的对象。`maintain-project-memory` 和 `write-implementation-job-prompts` 要求人可能读到的文字保持正常空格。OpenAI。[Using GPT-6](https://developers.openai.com/api/docs/guides/latest-model/gpt-6-astra.md) 中关于 initiative and follow-through、writing style 和 subagent delegation 的部分，查阅于 2026-11-17。其中的示例 prompt 要求模型在请求批准之前先完成已授权的工作，避免自造的复合标签，并让 agent 之间的消息清晰可读。这些规则由本项目编写，在 `durable-prose.md` 中采用 **CC BY-SA 4.0**，在其余文件中采用 **MIT** license，不包含来源的文字。
 
 各部分的条款见 [LICENSE.md](LICENSE.md)，来源与修改说明见 [NOTICE.md](plugins/research-skills/NOTICE.md)。
 
