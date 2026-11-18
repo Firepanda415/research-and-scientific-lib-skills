@@ -98,7 +98,7 @@ at that owner instead of patching the same symptom in each caller.
 - Minimize the change after satisfying the actual scientific and engineering contract. Do not trade required behavior or performance for a smaller diff.
 - Complete the authorized task. Resolve routine choices from context, and ask only when a missing fact materially changes the result or authority. Follow-through the change implies needs no separate approval within the authorized workload, such as refreshing generated metadata after a version bump, re-executing affected notebooks, updating stale tests or docs, and removing build outputs the change made stale.
 - Choose algorithms by their relevant failure modes and resource costs, not by line count.
-- Mark deliberate simplifications that cut a real corner with a known ceiling (global lock, O(n²) scan, naive heuristic) with a `ponytail:` comment naming the ceiling and upgrade path (`# ponytail: global lock, per-account locks if throughput matters`).
+- Mark deliberate simplifications that cut a real corner with a known ceiling (global lock, O(n²) scan, naive heuristic) with a `shortcut:` comment, or the project's own marker for this, naming the ceiling and upgrade path (`# shortcut: global lock, per-account locks if throughput matters`). The marker names no skill or tool, because the code outlives them.
 
 ## Output
 
@@ -217,7 +217,7 @@ the review of a correctness or review skill that also applies.
   stays in the report when the test would protect no current obligation.
 - Error handling adds useful context or applicable recovery. Automatic recovery
   has justified cost and explicit acceptance and stopping conditions.
-- A deliberate shortcut with a known ceiling carries a `ponytail:` comment.
+- A deliberate shortcut with a known ceiling carries a `shortcut:` comment.
 
 ## Boundaries
 

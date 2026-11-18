@@ -45,7 +45,7 @@ follows changed failure modes rather than a fixed test count.
 | **ponytail** | `$ponytail` | Simplest code that keeps the required behavior, accuracy and readability. |
 | **ponytail-review** | `$ponytail-review` | Review a diff for justified simplifications that preserve its contracts. |
 | **ponytail-audit** | `$ponytail-audit` | Whole-repo audit of removable complexity and its consequences. |
-| **ponytail-debt** | `$ponytail-debt` | Harvest `ponytail:` shortcut comments into a tracked ledger. |
+| **ponytail-debt** | `$ponytail-debt` | Harvest `shortcut:` comments into a tracked ledger. |
 | **ponytail-gain** | `$ponytail-gain` | Historical upstream benchmark scoreboard, not validation of this customized fork. |
 | **ponytail-help** | `$ponytail-help` | This card. |
 

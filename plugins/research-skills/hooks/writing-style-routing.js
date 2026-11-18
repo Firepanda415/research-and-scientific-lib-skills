@@ -2,7 +2,7 @@
 
 const path = require('node:path');
 
-// ponytail: the event is a fixed command argument so an open stdin cannot stall startup.
+// The event is a fixed command argument so an open stdin cannot stall startup.
 const event = process.argv[2];
 if (!['SessionStart', 'SubagentStart'].includes(event)) {
   process.stderr.write('Expected SessionStart or SubagentStart.\n');

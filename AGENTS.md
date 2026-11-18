@@ -8,6 +8,12 @@ Keep skills reusable across projects. Project-specific paths, document layout,
 environment commands, and work-in-progress state belong in the project's own
 guidance, which skills read when needed.
 
+Whatever a skill has an agent write into a user's repository, such as a comment
+marker, a file name, a message or generated documentation, names no skill, plugin,
+agent or model. The repository outlives them, and the people who maintain it may
+use none of them. For this reason the comment that marks a deliberate shortcut
+is `shortcut:` here, where upstream Ponytail writes `ponytail:`.
+
 Extend an existing rule when it already covers the issue. Generalize lessons
 from individual incidents, with at most one short example. Put topic-specific
 detail in references, state when to read them, and keep required checks in the
