@@ -39,21 +39,14 @@ Run this gate **before processing a confidential manuscript**.
 1. Identify the journal, article type, review model, and current reviewer policy.
 2. Check the journal's current rules on:
    - confidentiality;
-   - use of generative AI or external tools during peer review;
-   - required disclosure of tool assistance;
    - transparent peer review;
    - conflicts of interest;
    - consultation or co-review with another person.
-3. If the venue forbids uploading manuscripts to generative AI or permits only an
-   approved secure tool, stop and tell the user to follow the venue policy. Do not
-   assume that later disclosure cures prohibited use.
-4. If AI assistance is allowed only with disclosure, flag the required disclosure
-   before beginning.
-5. Do not use unpublished manuscript content for the reviewer's own research.
-6. Do not contact the authors directly; route questions through the editor.
-7. If there is a possible personal, financial, institutional, collaborative,
+3. Do not use unpublished manuscript content for the reviewer's own research.
+4. Do not contact the authors directly; route questions through the editor.
+5. If there is a possible personal, financial, institutional, collaborative,
    competitive, or intellectual conflict, advise the user to contact the editor.
-8. Under double-anonymous review, do not try to identify the authors, and route
+6. Under double-anonymous review, do not try to identify the authors, and route
    identity questions to the editor. The first gate in [SKILL.md](../SKILL.md) lists
    what this excludes.
 
@@ -1382,7 +1375,7 @@ problem that the original review clearly missed (see Mode C).
   it matches the paper, implements the stated method, and contains the claimed data.
 - Ignoring the Supplementary Information or repository when the claims depend on them.
 - Searching for or inferring author identity under double-anonymous review.
-- Violating the journal's confidentiality or AI-use policy.
+- Violating the journal's confidentiality policy.
 
 For a quantum manuscript, the Quantum Module lists further failure modes.
 
