@@ -115,7 +115,7 @@ For a computational manuscript, do this **before** writing any claim that code, 
 configs, or implementation details are missing. A repository is also evidence about the
 method itself, not only about reproducibility.
 
-Under double-anonymous review, skip every identity-seeking step in this section. Make no search for the repository or the manuscript, do not attribute a repository or dataset to its owner, and do not record or use an identity that an opened link reveals. The first gate in [SKILL.md](../SKILL.md) states the full rule. In `confidential-no-egress` mode, open an author-supplied link only when venue policy permits reviewers to access such links with the tools in use. Otherwise record the link as present but not inspected, so that the human reviewer can inspect it.
+Under double-anonymous review, skip every identity-seeking step in this section. Make no search for the repository or the manuscript, do not attribute a repository or dataset to its owner, and do not record or use an identity that an opened link reveals. The first gate in [SKILL.md](../SKILL.md) states the full rule. In `confidential-no-egress` mode, an author-supplied link may be opened, because opening it sends no manuscript material. Record a link that cannot be opened as present but not inspected, so that the human reviewer can inspect it.
 
 ### 1. Actively discover repository and data links
 
