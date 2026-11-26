@@ -33,16 +33,21 @@ them. When `SKILL.md` is at its limit, move a topic's detail verbatim to a refer
 read at that step, and propose the move first because it changes the default load.
 
 Keep each `SKILL.md` at most 16,000 characters, enforced by
-`scripts/check-package.py`. Claude Code's [skill lifecycle documentation](https://code.claude.com/docs/en/skills#skill-content-lifecycle)
-specifies 5,000 tokens per invoked skill after compaction and 25,000 shared across
-re-attached skills. Its [glossary](https://platform.claude.com/docs/en/about-claude/glossary)
-gives about 3.5 English characters per token for models before Claude 4.7 and says
-later models produce about 30 percent more tokens for the same text. On Claude Opus
-5.5 the four largest `SKILL.md` files, at 15,914 to 15,977 characters, measured
-4,724 to 4,892 tokens, so the limit stays about 2 to 6 percent below 5,000 tokens.
-Both sources were checked and the files measured on 2026-10-22. If these figures
-change, update this paragraph and `MAX_SKILL_CHARS` together, and remeasure the
-README figures when the tokenizer changes.
+`scripts/check-package.py`. The limit follows from how the hosts load a skill and
+keep it after compaction, checked on 2026-11-26. Claude Code's [skill lifecycle documentation](https://code.claude.com/docs/en/skills#skill-content-lifecycle)
+says that after compaction it re-attaches each invoked skill up to 5,000 tokens,
+within 25,000 tokens shared by all of them and filled from the most recently
+invoked. Claude Code 2.1.331 estimates these tokens as characters divided by four,
+so a skill is kept up to about 20,000 characters, the shared budget holds about
+100,000, and a skill that does not fit the remaining budget is dropped whole. Six
+skills of 16,000 characters fit that budget, and of 18,000 only five would. Codex
+has no skill tool. Its agent reads the file with a shell command, and Codex removes
+the middle of long command output, so a longer file loses more of its middle.
+Antigravity reads up to 46,080 bytes per call. In context a `SKILL.md` at the limit
+costs about 4,900 tokens on Claude Opus 5.5, where the four largest files, at 15,914
+to 15,977 characters, measured 4,724 to 4,892 tokens on 2026-10-22. If a host
+changes these mechanisms, update this paragraph and `MAX_SKILL_CHARS` together, and
+remeasure the README figures when the tokenizer changes.
 
 Both READMEs give each skill's default load in the Skills table as the Claude
 tokens of its `SKILL.md` and of the references it reads by default, measured on
@@ -72,8 +77,15 @@ bypassing or manufacturing it.
 Append new hook handlers and matcher groups without reordering existing entries.
 Codex keys trust by event, matcher group, and handler index, and hashes the
 registration fields `command`, `matcher`, `timeout`, `statusMessage`, and `async`.
-Script bodies are outside that hash. Changes to registration fields or handler
-order require a release note telling users to trust the hooks again in `/hooks`.
+A second hash covers every file of the installed plugin except Python bytecode,
+`.venv` and `.egg-info` (Codex 0.169.0-alpha.11, `plugin_trust.rs` and
+`plugin_fingerprint.rs` under `codex-rs/hooks/src/engine/`, read 2026-11-26). Codex
+recomputes it before each run and skips the hook when it differs from the approved
+one. An install that changes any plugin file therefore turns the hooks off until the
+user trusts them again in `/hooks`, and so does a file that appears in the installed
+folder later, such as `.DS_Store`. Tell the user to trust the hooks after every
+reinstall. Changes to registration fields or handler order also require a release
+note telling users to trust the hooks again in `/hooks`.
 
 Preserve upstream notices and license boundaries in `LICENSE.md`. Keep
 `README.md` and `README.zh-CN.md` in sync, including every skill and its source.

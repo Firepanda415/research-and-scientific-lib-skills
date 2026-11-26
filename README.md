@@ -50,6 +50,10 @@ After every install or update, open `/hooks` in the Codex CLI and trust the rese
 
 If you already have the standalone Ponytail plugin, remove it through Codex’s plugin manager so that its hooks and duplicate Ponytail skills do not run alongside this plugin.
 
+**In Codex, add the line below to `~/.codex/AGENTS.md` so that the agent reads every skill file in full.** The agent reads a skill file with a shell command, and Codex removes the middle of long command output, so a long `SKILL.md` can reach the agent with part of it missing. The line belongs in `~/.codex/AGENTS.md` because Codex loads that file in every session, whereas the writing hook, the plugin's own way to give standing instructions, does not run after an install or update until its entries are trusted again.
+
+> Read every skill file you use in full, including the reference files it sends you to. Give the read enough output budget for the whole file or read it in two line ranges, and when the output carries a truncation warning, read the missing lines before applying the file.
+
 ### Claude Code
 
 With a current Claude Code version, Python 3, and Node.js on your `PATH`, run this command from the checkout's root:

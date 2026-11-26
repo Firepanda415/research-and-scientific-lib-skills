@@ -48,6 +48,10 @@ codex plugin add research-skills@research-skills
 
 每次安装或更新后，在 Codex CLI 打开 `/hooks`，信任 research-skills 的钩子。钩子获得信任前，写作路由不会运行。然后新建会话，如果应用没有刷新，请重启应用。详情见 [Codex 钩子信任说明](https://learn.chatgpt.com/docs/hooks#review-and-trust-hooks)。如果已安装独立的 Ponytail 插件，请通过 Codex 的插件管理器移除它，以免它的钩子和重复的 Ponytail skills 与本插件同时运行。
 
+**在 Codex 中，请把下面这段话加到 `~/.codex/AGENTS.md`，让 agent 把每个 skill 文件完整读完。** agent 用 shell 命令读取 skill 文件，而 Codex 会删去过长命令输出的中间部分，所以较长的 `SKILL.md` 到达 agent 时可能缺少一部分。这段话放在 `~/.codex/AGENTS.md` 中，是因为 Codex 在每个会话中都会加载这个文件，而写作钩子作为插件自身下达常驻指示的途径，在每次安装或更新后要等重新获得信任才会运行。
+
+> 读取用到的每个 skill 文件时要完整读完，包括它指向的 reference 文件。给读取留足输出额度，或者按行分两段读取。输出带有截断提示时，先补读缺失的行，再按文件内容执行。
+
 ### Claude Code
 
 使用当前版本的 Claude Code，并确保 Python 3 和 Node.js 已加入 `PATH`。在本地仓库根目录运行：

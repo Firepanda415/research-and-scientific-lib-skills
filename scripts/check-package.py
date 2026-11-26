@@ -41,14 +41,20 @@ WRITING_HOOKS = {
     "SubagentStart": [{"hooks": [writing_handler("SubagentStart")]}],
 }
 WRITING_HOOK_FILES = {"hooks.json", "writing-style-routing.js"}
-# Claude Code keeps only the first 5,000 tokens of an invoked skill after compaction
-# (https://code.claude.com/docs/en/skills#skill-content-lifecycle, checked 2026-10-22).
-# Claude 4.7 and later models use more tokens per character than the glossary's 3.5
-# (https://platform.claude.com/docs/en/about-claude/glossary). On Claude Opus 5.5 the
-# four largest SKILL.md files (15,914-15,977 characters) measured 4,724-4,892 tokens on
-# 2026-10-22, so the limit stays a few percent below 5,000 tokens. AGENTS.md records
-# the same limit, sources and measurement.
+# After compaction Claude Code re-attaches invoked skills within 5,000 tokens each and
+# 25,000 in total (https://code.claude.com/docs/en/skills#skill-content-lifecycle), and
+# version 2.1.331 estimates a token as four characters. Six skills of 16,000 characters
+# then survive together, and of 18,000 only five. Codex reads the file with a shell
+# command and removes the middle of long output, so a longer file loses more. Checked
+# 2026-11-26. AGENTS.md records the same limit and its basis.
 MAX_SKILL_CHARS = 16_000
+# Past 10,000 characters Claude Code replaces a hook's additionalContext with a file
+# path and a preview (https://code.claude.com/docs/en/hooks), and Codex does the same
+# past 2,500 tokens of four bytes (codex-rs/hooks/src/output_spill.rs, 0.169.0-alpha.11).
+# The text carries the installed plugin root in each path it names, so the check renders
+# it for a root of HOOK_ROOT_ALLOWANCE characters.
+MAX_HOOK_TEXT_BYTES = 10_000
+HOOK_ROOT_ALLOWANCE = 120
 
 
 def strip_code(markdown):
@@ -84,11 +90,28 @@ def relative_links(doc):
             yield link, target
 
 
-def check_claude_staging(root, package, names):
-    """Build the Claude package offline and check its contents."""
-    spec = importlib.util.spec_from_file_location("install_claude", root / "scripts/install-claude.py")
+def load_installer(root, name):
+    """Import one of the installer scripts, whose file names are not module names."""
+    spec = importlib.util.spec_from_file_location(name.replace("-", "_"), root / f"scripts/{name}.py")
     installer = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(installer)
+    return installer
+
+
+def check_hook_text(root, package):
+    """Check that the rendered hook text fits the hosts' limit on hook output."""
+    installer = load_installer(root, "install-antigravity")
+    text = installer.render_routing_rules(package, Path("/" + "r" * (HOOK_ROOT_ALLOWANCE - 1)))
+    size = len(text.encode("utf-8"))
+    assert size <= MAX_HOOK_TEXT_BYTES, (
+        f"hook text is {size} bytes at a {HOOK_ROOT_ALLOWANCE}-character plugin root, over "
+        f"{MAX_HOOK_TEXT_BYTES}. Claude Code and Codex would replace it with a preview.")
+    return size
+
+
+def check_claude_staging(root, package, names):
+    """Build the Claude package offline and check its contents."""
+    installer = load_installer(root, "install-claude")
     with tempfile.TemporaryDirectory() as temp:
         staged = (Path(temp) / "research-skills").resolve()
         manifest = installer.build_package(package, staged)
@@ -122,9 +145,7 @@ def check_claude_staging(root, package, names):
 
 def check_antigravity_staging(root, package, names):
     """Build the Antigravity package offline and check its manifest, skills, and routing rules."""
-    spec = importlib.util.spec_from_file_location("install_antigravity", root / "scripts/install-antigravity.py")
-    installer = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(installer)
+    installer = load_installer(root, "install-antigravity")
     with tempfile.TemporaryDirectory() as temp:
         staged = (Path(temp) / "research-skills").resolve()
         manifest = installer.build_package(package, staged)
@@ -215,6 +236,7 @@ def main():
     assert hooks == WRITING_HOOKS, f"hooks.json must register only the writing route: {hooks}"
     hook_files = {p.name for p in (package / "hooks").iterdir() if p.name != ".DS_Store"}
     assert hook_files == WRITING_HOOK_FILES, f"hook files: {sorted(hook_files)}"
+    hook_bytes = check_hook_text(root, package)
     subprocess.run(
         [sys.executable, str(skill_root / "quantum-research-radar/scripts/package_check.py")],
         check=True,
@@ -230,7 +252,8 @@ def main():
             sys.exit(f"Release check failed: {message}")
         print(f"Warning: {message}")
     print(f"Package OK: {len(names)} skills, both README catalogues synced, relative links, notices, "
-          f"{len(hooks)} hook events (writing route only)")
+          f"{len(hooks)} hook events (writing route only), hook text {hook_bytes} of "
+          f"{MAX_HOOK_TEXT_BYTES} bytes at a {HOOK_ROOT_ALLOWANCE}-character plugin root")
     print(f"Claude staging OK: {claude_skills} skills, {claude_events} hook events, version {claude_version}")
     print(f"Antigravity staging OK: {agy_skills} skills, rules/AGENTS.md, version {agy_version}")
 
