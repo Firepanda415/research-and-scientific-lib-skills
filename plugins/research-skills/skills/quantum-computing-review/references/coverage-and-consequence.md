@@ -30,7 +30,7 @@ Use these checks when the corresponding mechanism carries a claim:
   energy ratio needs particular scrutiny; a standard approximation ratio with a meaningful
   zero need not be shift-invariant. Check denominators, sign, zero, reference construction,
   and cross-instance aggregation where they affect the conclusion.
-- **Finite-shot decoder gate.** Identify the exact decoder, the correlations it retains, and
+- **Finite-shot decoder gate.** Identify the exact decoder, the correlations it preserves, and
   its shot scaling. When an exact product distribution is used, define $p_k$ as the modal
   probability of block $k$ and check the joint modal probability
   $p_{\mathrm{joint}}=\prod_k p_k$ before treating the most frequent global bitstring as a

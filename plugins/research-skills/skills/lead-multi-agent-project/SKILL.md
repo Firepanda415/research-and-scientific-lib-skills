@@ -44,7 +44,7 @@ Record the settings, review basis, runner or environment, worktree rules, memory
 ## Order of the work
 
 1. **Plan** ([plan-and-dispatch.md](references/plan-and-dispatch.md)). Triage first. Have the MATH worker derive foreseeable new claims for independent review. Identify the critical path and worthwhile parallel work. The user approves the plan before implementation.
-2. **Assign work** (same reference). Assign complete outcomes under the approved roles and stage gates, including routine caller, test, text and output updates. Parallel jobs own disjoint files or, in fix rounds, named disjoint regions. Develop code first, assemble documentation after code review converges, and write notebooks at release.
+2. **Assign work** (same reference). Assign complete outcomes under the approved roles and stage gates, including routine caller, test, text and output updates. Parallel jobs own disjoint files or, in fix rounds, named disjoint regions. Develop code first, then documentation after code review converges, then by default notebooks at release.
 3. **Implement.** The CODE worker copies qualified derivations verbatim, derives none and updates every place stating a changed claim. Assign independent review to the batch.
 4. **Integrate** with checks graded by what the change can affect ([integration-and-review.md](references/integration-and-review.md), also for steps 5 to 7).
 5. **Before review**, reuse valid evidence and run the full suite where the integration and expensive-check rules require it.
@@ -105,7 +105,7 @@ Check each artifact before it leaves the principal.
   - a fix of a public contract, or one a review names, shows a detector that fails before the fix, kept in the suite only where the test policy admits it;
   - the checks are the covering test files and probes, with no full suite;
   - its stop condition names a complete scoped deliverable or a justified dependency, review, authority or resource boundary;
-  - it carries no documentation job before its area's code review converges and no notebook before the release.
+  - it carries no documentation job before its area's code review converges and no notebook before its stage.
 - **Derivation request:** carries the review basis, covers the claim in every reachable case and supported public use within it, names missing or changed premises and asks for a complete derivation. A counterexample outside it narrows the claim's stated domain and opens no fix.
 - **Review request:** the reviewer is independent of the producer and has the original requirements, review basis, relevant source and evidence. Exclusions follow what users pose, not input magnitude. A review of fixes covers only accepted problems, their legal forms, changed consumers and new regressions. Substantially new formal-review scope has its counselor check.
 - **Integration:** checks match the change and required delivery scope, including notebook cells or other formats the project's gates cover. Every failed test line was read. A scoped check is not reported as a repository-wide pass.

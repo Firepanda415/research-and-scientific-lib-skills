@@ -72,15 +72,20 @@ def parse_iso_date(value: Any, field: str, allow_empty: bool = False) -> date | 
 
 
 ARXIV_NEW_STYLE = r"(\d{4}\.\d{4,5})(?:v\d+)?"
+ARXIV_OLD_STYLE = r"([a-z-]+(?:\.[a-z]{2})?/\d{7})(?:v\d+)?"
 DOI_FORMS = (
-    re.compile(r"^doi:\s*(.*)$", re.I),
-    re.compile(r"^(?:https?://)?(?:[\w-]+\.)*doi\.org/(.*)$", re.I),
-    re.compile(r"^(10\.\d{4,9}/.*)$"),
+    re.compile(r"^doi:\s*(10\.\d{4,9}/[^\s?#]+)(?:[?#].*)?$", re.I),
+    re.compile(r"^(?:https?://)?(?:[\w-]+\.)*doi\.org/(10\.\d{4,9}/[^\s?#]+)(?:[?#].*)?$", re.I),
+    re.compile(r"^(10\.\d{4,9}/[^\s?#]+)(?:[?#].*)?$"),
 )
-ARXIV_DOI = re.compile(rf"^10\.48550/arxiv\.{ARXIV_NEW_STYLE}$")
-ARXIV_ID = re.compile(rf"^(?:arxiv:\s*)?{ARXIV_NEW_STYLE}(?:\s*\[[^\]]*\])?$", re.I)
+ARXIV_DOI = re.compile(rf"^10\.48550/arxiv\.(?:{ARXIV_NEW_STYLE}|{ARXIV_OLD_STYLE})$", re.I)
+ARXIV_ID = re.compile(
+    rf"^(?:(?:arxiv:\s*){ARXIV_OLD_STYLE}|(?:arxiv:\s*)?{ARXIV_NEW_STYLE}|(?P<bare_old>{ARXIV_OLD_STYLE}))(?:\s*\[[^\]]*\])?$",
+    re.I,
+)
 ARXIV_URL = re.compile(
-    rf"^(?:https?://)?(?:www\.|export\.)?arxiv\.org/(?:abs|pdf|html)/{ARXIV_NEW_STYLE}(?:\.pdf)?/?(?:[?#].*)?$", re.I
+    rf"^(?:https?://)?(?:www\.|export\.)?arxiv\.org/(?:abs|pdf|html)/(?:{ARXIV_NEW_STYLE}|{ARXIV_OLD_STYLE})(?:\.pdf)?/?(?:[?#].*)?$",
+    re.I,
 )
 
 
@@ -93,11 +98,18 @@ def canonicalize_paper_id(value: str) -> str:
         if doi:
             body = doi.group(1).strip().lower()
             arxiv_doi = ARXIV_DOI.match(body)
-            return f"arxiv:{arxiv_doi.group(1)}" if arxiv_doi else f"doi:{body}"
+            if arxiv_doi:
+                ident = arxiv_doi.group(1) or arxiv_doi.group(2)
+                return f"arxiv:{ident.lower()}"
+            return f"doi:{body}"
     arxiv = ARXIV_ID.match(raw) or ARXIV_URL.match(raw)
     if arxiv:
-        return f"arxiv:{arxiv.group(1)}"
+        ident = next(group for group in arxiv.groups() if group is not None)
+        ident = re.sub(r"v\d+$", "", ident, flags=re.I)
+        return f"arxiv:{ident.lower()}"
     lowered = raw.lower()
+    if lowered in {"doi:", "arxiv:"} or re.match(r"^https?://(?:[\w-]+\.)*doi\.org/?$", lowered):
+        return ""
     if lowered.startswith("title:"):
         return "title:" + " ".join(lowered[len("title:"):].split())
     return lowered
@@ -163,8 +175,8 @@ def validate_record(record: Any) -> list[str]:
     first_public = dates.get("first_public_date")
     if first_seen and last_seen and first_seen > last_seen:
         errors.append("first_seen_on must not be after last_seen_on")
-    if first_public and last_seen and first_public > last_seen:
-        errors.append("first_public_date must not be after last_seen_on")
+    if first_public and last_seen and (first_public - last_seen).days > 1:
+        errors.append("first_public_date must not be more than 1 day after last_seen_on")
 
     lists = {field: validate_string_list(record.get(field), field, errors) for field in LIST_FIELDS}
     covered_dates: list[date] = []
@@ -230,6 +242,9 @@ def validate_records(records: dict[str, dict[str, Any]]) -> list[str]:
     return failures
 
 
+MAX_BACKUPS = 20
+
+
 def write_ledger(
     path: Path,
     records: dict[str, dict[str, Any]],
@@ -242,6 +257,9 @@ def write_ledger(
         target_dir.mkdir(parents=True, exist_ok=True)
         stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
         shutil.copy2(path, target_dir / f"{path.name}.{stamp}.bak")
+        backups = sorted(target_dir.glob(f"{path.name}.*.bak"))
+        for stale in backups[:-MAX_BACKUPS]:
+            stale.unlink(missing_ok=True)
     temp_name: str | None = None
     try:
         with tempfile.NamedTemporaryFile(
@@ -272,7 +290,10 @@ def cmd_init(args: argparse.Namespace) -> int:
     records: dict[str, dict[str, Any]] = {}
     if args.seed:
         seed = Path(args.seed).expanduser()
-        records = read_ledger(seed)
+        records = {
+            paper_id: {**record, "paper_id": paper_id}
+            for paper_id, record in read_ledger(seed).items()
+        }
         failures = validate_records(records)
         if failures:
             raise ValueError("invalid seed: " + "; ".join(failures))

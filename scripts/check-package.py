@@ -6,6 +6,7 @@ import importlib.util
 import json
 from pathlib import Path
 import re
+import subprocess
 import sys
 import tempfile
 from urllib.parse import unquote, urlsplit
@@ -19,6 +20,13 @@ from package_version import base_version, content_digest
 
 CLAUDE_TOP_LEVEL = {".claude-plugin", "LICENSE.md", "LICENSES", "NOTICE.md", "PONYTAIL-LICENSE",
                     "benchmarks", "hooks", "skills"}
+ANTIGRAVITY_TOP_LEVEL = {"plugin.json", "LICENSE.md", "LICENSES", "NOTICE.md", "PONYTAIL-LICENSE",
+                         "benchmarks", "rules", "skills"}
+ANTIGRAVITY_ALLOWED_FIELDS = {
+    "name", "description", "logo", "suggestedPrompts", "displayName",
+    "version", "author", "homepage", "repository", "disabled",
+}
+SKIPPED_DOC_DIRS = {".git", ".venv", "venv", "node_modules", "__pycache__", ".claude", ".gemini"}
 
 
 def writing_handler(event):
@@ -43,11 +51,30 @@ WRITING_HOOK_FILES = {"hooks.json", "writing-style-routing.js"}
 MAX_SKILL_CHARS = 16_000
 
 
+def strip_code(markdown):
+    """Remove fenced code blocks (backticks or tildes) and inline code spans."""
+    out = []
+    marker = None
+    fence_re = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
+    for line in markdown.splitlines():
+        m = fence_re.match(line)
+        if marker is None:
+            if m:
+                marker = m.group(1)
+                continue
+            out.append(re.sub(r"(`+)([^`\n]+?)\1", "", line))
+        elif m and m.group(1)[0] == marker[0] and len(m.group(1)) >= len(marker) and not m.group(2).strip():
+            marker = None
+    return "\n".join(out)
+
+
 def relative_links(doc):
     """Yield (link, target) for literal Markdown file links, not code examples or placeholders."""
-    prose = re.sub(r"```.*?```", "", doc.read_text(), flags=re.S)
+    prose = strip_code(doc.read_text())
     for link in re.findall(r"\]\(([^\n)]+)\)", prose):
         link = link.strip().strip("<>")
+        if " " in link and (link.endswith('"') or link.endswith("'")):
+            link = link.split(None, 1)[0].strip("<>")
         if "{{" in link or urlsplit(link).scheme or link.startswith("#"):
             continue
         target = unquote(link.split("#", 1)[0])
@@ -93,6 +120,39 @@ def check_claude_staging(root, package, names):
         return len(staged_skills), len(WRITING_HOOKS), manifest["version"]
 
 
+def check_antigravity_staging(root, package, names):
+    """Build the Antigravity package offline and check its manifest, skills, and routing rules."""
+    spec = importlib.util.spec_from_file_location("install_antigravity", root / "scripts/install-antigravity.py")
+    installer = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(installer)
+    with tempfile.TemporaryDirectory() as temp:
+        staged = (Path(temp) / "research-skills").resolve()
+        manifest = installer.build_package(package, staged)
+        staged_skills = {p.parent.name for p in (staged / "skills").glob("*/SKILL.md")}
+        assert staged_skills == names, (
+            f"Antigravity skill set drift: extra {sorted(staged_skills - names)}, "
+            f"missing {sorted(names - staged_skills)}")
+        top = {p.name for p in staged.iterdir()}
+        assert top == ANTIGRAVITY_TOP_LEVEL, f"Antigravity package layout: {sorted(top)}"
+        assert set(manifest) <= ANTIGRAVITY_ALLOWED_FIELDS, (
+            f"Unsupported Antigravity plugin.json fields: {sorted(set(manifest) - ANTIGRAVITY_ALLOWED_FIELDS)}")
+        rules = (staged / "rules/AGENTS.md").read_text()
+        assert not rules.startswith("---\n"), "Antigravity plugin rules/AGENTS.md must not carry frontmatter"
+        assert len(rules.encode("utf-8")) <= 24_000, "Antigravity rules/AGENTS.md exceeds 24 KB limit"
+        assert str(staged / "skills/research-writing-style/SKILL.md") in rules
+        assert str(staged / "skills/scientific-computing-correctness/SKILL.md") in rules
+        for doc in staged.rglob("*.md"):
+            if doc.name == "AGENTS.md" and doc.parent.name == "rules":
+                continue
+            for link, target in relative_links(doc):
+                resolved = (doc.parent / target).resolve()
+                assert resolved.is_relative_to(staged) and resolved.exists(), (
+                    f"Antigravity package link escapes or is missing in {doc.relative_to(staged)}: {link}")
+        base = base_version(package)
+        assert re.fullmatch(re.escape(base) + r"\+antigravity\.[0-9a-f]{16}", manifest["version"]), manifest["version"]
+        return len(staged_skills), manifest["version"]
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--release", action="store_true",
@@ -131,11 +191,20 @@ def main():
             if prompt:
                 assert f"${name}" in prompt, f"stale UI invocation: {ui}"
     assert names and "ponytail" in names and "rethink-design" in names
+    table_entries = {}
     for doc in (root / "README.md", root / "README.zh-CN.md"):
-        catalog = re.findall(r"\]\(plugins/research-skills/skills/([^/]+)/SKILL.md\)", doc.read_text())
+        rows = re.findall(
+            r"^\|\s*\[([a-z0-9-]+)\]\(plugins/research-skills/skills/\1/SKILL\.md\)\s*\(([^)]+)\)\s*\|[^|]+\|\s*([^|]+?)\s*\|$",
+            doc.read_text(),
+            flags=re.M,
+        )
+        catalog = [row[0] for row in rows]
         assert set(catalog) == names and len(catalog) == len(names), f"catalog drift: {doc}"
+        table_entries[doc.name] = [(r[0], r[1], r[2].strip()) for r in rows]
+    assert table_entries["README.md"] == table_entries["README.zh-CN.md"], (
+        "README.md and README.zh-CN.md skill order, token labels, or Credits differ")
     for doc in root.rglob("*.md"):
-        if ".git" in doc.parts:
+        if SKIPPED_DOC_DIRS.intersection(doc.relative_to(root).parts):
             continue
         assert not re.search(r"/Users/[^/]+/|/home/[^/]+/", doc.read_text()), f"machine-specific path: {doc}"
         for link, target in relative_links(doc):
@@ -146,7 +215,13 @@ def main():
     assert hooks == WRITING_HOOKS, f"hooks.json must register only the writing route: {hooks}"
     hook_files = {p.name for p in (package / "hooks").iterdir() if p.name != ".DS_Store"}
     assert hook_files == WRITING_HOOK_FILES, f"hook files: {sorted(hook_files)}"
+    subprocess.run(
+        [sys.executable, str(skill_root / "quantum-research-radar/scripts/package_check.py")],
+        check=True,
+        stdout=subprocess.DEVNULL,
+    )
     claude_skills, claude_events, claude_version = check_claude_staging(root, package, names)
+    agy_skills, agy_version = check_antigravity_staging(root, package, names)
     expected_version = f"{base}+codex.{content_digest(package)}"
     if manifest["version"] != expected_version:
         message = (f"plugin.json version {manifest['version']} does not match the content version "
@@ -154,9 +229,10 @@ def main():
         if args.release:
             sys.exit(f"Release check failed: {message}")
         print(f"Warning: {message}")
-    print(f"Package OK: {len(names)} skills, both README catalogues, relative links, notices, "
+    print(f"Package OK: {len(names)} skills, both README catalogues synced, relative links, notices, "
           f"{len(hooks)} hook events (writing route only)")
     print(f"Claude staging OK: {claude_skills} skills, {claude_events} hook events, version {claude_version}")
+    print(f"Antigravity staging OK: {agy_skills} skills, rules/AGENTS.md, version {agy_version}")
 
 
 if __name__ == "__main__":

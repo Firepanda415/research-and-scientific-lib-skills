@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Report which research-skills skills recent Claude Code and Codex sessions loaded.
+"""Report which research-skills skills recent Claude Code, Codex, and Antigravity sessions loaded.
 
-The report reads the local transcripts of both hosts, including archived Codex
+The report reads the local transcripts of all three hosts, including archived Codex
 sessions, and calls no model. A skill counts as loaded when a Skill call names
 it or a file read or shell command names its installed SKILL.md. Instructions
 that a hook injects do not count. The "named" column counts sessions whose
@@ -39,17 +39,27 @@ import time
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 HOME = pathlib.Path.home()
 NAMES = sorted(p.parent.name for p in (ROOT / "plugins/research-skills/skills").glob("*/SKILL.md"))
-INSTALLED = re.compile(r"plugins/cache/research-skills/research-skills/([^/\s\"']+)/skills/([a-z0-9-]+)/SKILL\.md")
-REFERENCE = re.compile(r"plugins/cache/research-skills/research-skills/([^/\s\"']+)/skills/([a-z0-9-]+)/references/([\w.-]+\.md)")
+INSTALLED = re.compile(
+    r"(?:plugins/cache/research-skills/research-skills/([^/\s\"']+)"
+    r"|\.gemini/config/plugins/(research-skills))"
+    r"/skills/([a-z0-9-]+)/SKILL\.md"
+)
+REFERENCE = re.compile(
+    r"(?:plugins/cache/research-skills/research-skills/([^/\s\"']+)"
+    r"|\.gemini/config/plugins/(research-skills))"
+    r"/skills/([a-z0-9-]+)/references/([\w.-]+\.md)"
+)
 NAMED = re.compile(r"\b(" + "|".join(map(re.escape, NAMES)) + r")/SKILL\.md")
 CLAUDE_READERS = {"Read", "Bash"}
 CODEX_CALLS = {"function_call", "custom_tool_call", "local_shell_call"}
+AGY_READERS = {"read_file", "run_command"}
 CACHES = [HOME / ".claude/plugins/cache/research-skills/research-skills",
           HOME / ".codex/plugins/cache/research-skills/research-skills"]
 # --cost converts characters to tokens per host, at ratios measured for this plugin's
 # Markdown from the context growth after single-file reads on 2026-10-22. Claude: about
 # 3.2 characters per token on Claude Opus 5.5, as AGENTS.md records for the README
 # figures. Codex: about 4.8, pooled over the writing files read in recent sessions.
+# Antigravity has no measured ratio, so --cost reports none for it.
 CHARS_PER_TOKEN = {"Claude Code": 3.2, "Codex": 4.8}
 
 
@@ -68,10 +78,32 @@ def text_of(content):
     return " ".join(block.get("text", "") for block in content or [] if isinstance(block, dict))
 
 
+def _agy_version():
+    manifest = HOME / ".gemini/config/plugins/research-skills/plugin.json"
+    if manifest.is_file():
+        try:
+            return json.loads(manifest.read_text(errors="ignore")).get("version") or "antigravity"
+        except ValueError:
+            pass
+    return "antigravity"
+
+
+AGY_VERSION = _agy_version()
+
+
+def _unpack_installed(matches):
+    return {(v1 or AGY_VERSION, name) for v1, _, name in matches if name in NAMES}
+
+
+def _unpack_refs(matches):
+    return {(v1 or AGY_VERSION, skill, ref) for v1, _, skill, ref in matches if skill in NAMES}
+
+
 def claude_session(path):
     project = path.relative_to(HOME / ".claude/projects").parts[0]
+    home_slug = re.sub(r"[^A-Za-z0-9]", "-", str(HOME)) + "-"
     session = {"subagent": "subagents" in path.parts, "loads": set(), "reads": set(), "refs": set(), "named": set(), "prompt": "",
-               "project": project.removeprefix(str(HOME).replace("/", "-") + "-")}
+               "project": project.removeprefix(home_slug)}
     for entry in entries(path):
         content = (entry.get("message") or {}).get("content")
         if entry.get("type") == "user" and not session["prompt"]:
@@ -88,8 +120,9 @@ def claude_session(path):
                     if prefix in ("", "research-skills") and name in NAMES:
                         session["loads"].add(name)
                 elif tool in CLAUDE_READERS:
-                    session["reads"].update(INSTALLED.findall(json.dumps(args)))
-                    session["refs"].update(REFERENCE.findall(json.dumps(args)))
+                    blob = json.dumps(args)
+                    session["reads"].update(_unpack_installed(INSTALLED.findall(blob)))
+                    session["refs"].update(_unpack_refs(REFERENCE.findall(blob)))
             elif block.get("type") == "text":
                 session["named"].update(NAMED.findall(block.get("text", "")))
     return session
@@ -110,16 +143,34 @@ def codex_session(path):
             continue
         kind = payload.get("type")
         if kind in CODEX_CALLS:
-            call = [payload.get("arguments"), payload.get("input"), payload.get("action")]
-            session["reads"].update(INSTALLED.findall(json.dumps(call)))
-            session["refs"].update(REFERENCE.findall(json.dumps(call)))
+            blob = json.dumps([payload.get("arguments"), payload.get("input"), payload.get("action")])
+            session["reads"].update(_unpack_installed(INSTALLED.findall(blob)))
+            session["refs"].update(_unpack_refs(REFERENCE.findall(blob)))
         elif kind == "message":
             text = text_of(payload.get("content"))
             if payload.get("role") == "assistant":
                 session["named"].update(NAMED.findall(text))
             elif payload.get("role") == "user" and not session["prompt"] \
-                    and "<environment_context>" not in text and "AGENTS.md" not in text[:200]:
+                    and "<environment_context>" not in text and not text.lstrip().startswith("# AGENTS.md instructions"):
                 session["prompt"] = ("parent task: " if session["subagent"] else "") + " ".join(text.split())
+    return session
+
+
+def antigravity_session(path):
+    conv_id = path.parents[2].name
+    session = {"subagent": False, "loads": set(), "reads": set(), "refs": set(), "named": set(), "prompt": "", "project": conv_id[:8]}
+    for entry in entries(path):
+        if entry.get("type") == "USER_INPUT" and not session["prompt"]:
+            raw = str(entry.get("content", ""))
+            m = re.search(r"<USER_REQUEST>\s*(.*?)\s*</USER_REQUEST>", raw, re.S)
+            session["prompt"] = " ".join((m.group(1) if m else raw).split())
+        elif entry.get("type") == "PLANNER_RESPONSE":
+            session["named"].update(NAMED.findall(str(entry.get("content", ""))))
+            for call in entry.get("tool_calls") or []:
+                if isinstance(call, dict) and call.get("name") in AGY_READERS:
+                    blob = json.dumps(call.get("args"))
+                    session["reads"].update(_unpack_installed(INSTALLED.findall(blob)))
+                    session["refs"].update(_unpack_refs(REFERENCE.findall(blob)))
     return session
 
 
@@ -127,6 +178,10 @@ def codex_session(path):
 def chars(version, relative):
     """Characters of a skill file: the installed version while it is cached, else the checkout's."""
     if version:
+        if "+antigravity." in version or version == "antigravity":
+            agy_path = HOME / ".gemini/config/plugins/research-skills/skills" / relative
+            if agy_path.is_file():
+                return len(agy_path.read_text(errors="ignore"))
         for cache in CACHES:
             path = cache / version / "skills" / relative
             if path.is_file():
@@ -171,15 +226,17 @@ def main():
     args = parser.parse_args()
     cutoff = time.time() - args.days * 86400
     hosts = (("Claude Code", [HOME / ".claude/projects"], claude_session),
-             ("Codex", [HOME / ".codex/sessions", HOME / ".codex/archived_sessions"], codex_session))
+             ("Codex", [HOME / ".codex/sessions", HOME / ".codex/archived_sessions"], codex_session),
+             ("Antigravity", [HOME / ".gemini/antigravity/brain"], antigravity_session))
     for host, roots, read in hosts:
         sessions, versions = [], collections.Counter()
         for path in recent(roots, cutoff):
+            if host == "Antigravity" and path.name != "transcript.jsonl":
+                continue
             try:
                 s = read(path)
             except OSError:
                 continue
-            versions.update({version for version, _ in s["reads"]} | {version for version, _, _ in s["refs"]})
             if args.plugin_version:
                 keep = lambda version: version.startswith(args.plugin_version)
                 s["reads"] = {(version, name) for version, name in s["reads"] if keep(version)}
@@ -187,6 +244,7 @@ def main():
                 s["loads"] = {name for _, name in s["reads"]}
             else:
                 s["loads"] |= {name for _, name in s["reads"]}
+            versions.update({version for version, _ in s["reads"]} | {version for version, _, _ in s["refs"]})
             sessions.append(s)
         used = [s for s in sessions if s["loads"]]
         print(f"{host}, last {args.days:g} days: {len(sessions)} sessions "
@@ -203,7 +261,9 @@ def main():
             print(f"  {'skill':32} {'main':>5} {'subagent':>9} {'named':>6}")
         for name in rows:
             print(f"  {name:32} {loads[name, False]:5d} {loads[name, True]:9d} {named[name]:6d}")
-        if args.cost:
+        if args.cost and host not in CHARS_PER_TOKEN:
+            print("  no measured characters-per-token ratio for this host, so no cost estimate")
+        elif args.cost:
             ratio = CHARS_PER_TOKEN[host]
             tokens = collections.defaultdict(list)
             for s in sessions:

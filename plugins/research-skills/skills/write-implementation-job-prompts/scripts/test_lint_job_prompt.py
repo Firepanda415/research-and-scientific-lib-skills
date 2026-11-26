@@ -385,6 +385,39 @@ Allowed: new test modules and callers your overlap audit lists.
             any("unless the job depends on a specific host's tools" in m for m in messages(text))
         )
 
+    def test_quoted_html_and_typed_code_fences_are_not_angle_placeholders(self) -> None:
+        text = (
+            "# T\n\nReport deviations.\n\n```bash\n"
+            "grep \"<title>\" docs/index.html\n```\n\n```ts\n"
+            "const id = (<T>(x: T) => x);\n```\n"
+        )
+        self.assertFalse(any("angle-bracket" in m for m in messages(text)))
+
+    def test_untagged_fence_is_checked_as_shell(self) -> None:
+        text = "# T\n\nReport deviations.\n\n```\npython -m pytest\n```\n"
+        self.assertTrue(any("bare `python`" in m for m in messages(text)))
+
+    def test_python_code_fence_braces_and_inline_dates_do_not_false_positive(self) -> None:
+        text = (
+            "# T\n\nCompare `tests/goldens/2026-01-01.json` and report deviations.\n\n"
+            "```python\nTEMPLATE = \"{{API_KEY}}\"\n```\n"
+        )
+        self.assertEqual(messages(text), [])
+
+    def test_negated_inline_python_allowed_and_env_prefixed_python_caught(self) -> None:
+        negated = "# T\n\nNever run `python -m pytest`; use `.venv/bin/python -m pytest`. Report deviations.\n"
+        self.assertEqual(messages(negated), [])
+        env_prefixed = "# T\n\nReport deviations.\n\n```bash\nPYTHONPATH=src python -m pytest\n```\n"
+        self.assertTrue(any("bare `python`" in m for m in messages(env_prefixed)))
+
+    def test_final_line_formatting_caveat_does_not_negate_token_instruction(self) -> None:
+        text = (
+            "# T\n\nEnd with DONE as the literal final line. "
+            "The literal final line must not have trailing spaces. Report deviations.\n\n"
+            "```text\nDONE\n```\n"
+        )
+        self.assertEqual(messages(text, instruction_token="DONE"), [])
+
 
 class CommandLineTests(unittest.TestCase):
     def run_linter(self, *args: str, stdin: str = "") -> subprocess.CompletedProcess[str]:

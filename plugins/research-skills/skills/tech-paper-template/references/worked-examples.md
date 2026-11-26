@@ -33,7 +33,7 @@ contribution is a new inference-time mechanism (MCTS search).
 | Limitation 1 | Single-pass prompting fails on complex multi-table JOIN queries |
 | Limitation 2 | Fine-tuning on each schema is expensive and does not generalise |
 | Key Idea | Use Monte Carlo Tree Search at inference time to explore SQL candidates and score them via execution feedback |
-| Challenge 1 | SQL candidate space is combinatorial; naive search is intractable |
+| Challenge 1 | Combinatorial SQL candidate space makes naive search intractable |
 | Challenge 2 | No trained critic is available for inference-time reward |
 | Methodology topic sentence | Alpha-SQL combines structured MCTS search over SQL parse trees with self-supervised reward from execution feedback |
 | Module A | MCTS-guided SQL generation with learned expansion priors |
@@ -61,7 +61,7 @@ Operator-graph search is transplanted from NAS to agent workflows.
 
 | Stage | Content |
 |---|---|
-| Research background | LLM agents for code generation; HumanEval and MBPP benchmarks; recent work on agent workflows |
+| Research background | LLM agents for code generation, HumanEval and MBPP benchmarks, and recent work on agent workflows |
 | Limitation 1 | Prompt engineering alone yields brittle workflows |
 | Limitation 2 | Single-agent architectures do not capture operator composition |
 | Limitation 3 | Hand-designed workflows do not generalise across task families |
@@ -93,7 +93,7 @@ New problem or setting. The goal carries the narrative.
 
 | Stage | Content |
 |---|---|
-| Research background | Instruction tuning of LLMs; data quality beats quantity; recent work on iterative data selection |
+| Research background | Instruction tuning of LLMs, where data quality outweighs quantity, and recent work on iterative data selection |
 | Limitation 1 | Non-iterative selection does not adapt to model evolution |
 | Limitation 2 | Iterative methods require expensive full-dataset inference per round |
 | Key Idea / Our Goal | (Goal) Iterative data selection without any additional inference overhead. (Key Idea) Use the training loss already computed inside the fine-tuning loop as a zero-overhead utility signal |

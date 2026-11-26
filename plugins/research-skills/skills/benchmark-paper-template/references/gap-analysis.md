@@ -34,7 +34,7 @@ Existing benchmarks measure capability X but completely ignore related capabilit
 ### Pattern B: Assumption Violation
 Existing benchmarks share an implicit assumption that does not hold in real-world scenarios.
 
-> **nvBench 2.0 example**: The benchmarks examined assume each natural language query maps to exactly one correct visualization. In practice, real queries are inherently ambiguous, "show sales trends" could reasonably produce a line chart, bar chart, or area chart. Current benchmarks penalize valid alternative interpretations.
+> **nvBench 2.0 example**: The benchmarks examined assume each natural language query maps to exactly one correct visualization. In practice, real queries are inherently ambiguous, so "show sales trends" could reasonably produce a line chart, bar chart, or area chart. Current benchmarks penalize valid alternative interpretations.
 
 ### Pattern C: Evaluation Granularity Mismatch
 Existing evaluation is too coarse to diagnose specific failure modes.
@@ -61,9 +61,9 @@ Investigate a missing answer when it affects the claimed value or validity; an i
 Draft a concise gap statement. For an assumption-violation contribution, name the closest cited benchmarks for the task and what they measure, the assumption they share, why that assumption fails for the target question, the capability or regime that therefore goes unmeasured, and what can go wrong for a method that scores well on the existing benchmarks.
 
 The useful properties are:
-- **Specific**, names the exact blind spot, not a vague "limitation"
-- **Supported**, accurately describes relevant existing work
-- **Consequential**, explains the scientific or practical effect of resolving the gap
+- **Specific**: names the exact blind spot rather than a vague "limitation"
+- **Supported**: accurately describes relevant existing work
+- **Consequential**: explains the scientific or practical effect of resolving the gap
 
 ## Derive Research Questions
 

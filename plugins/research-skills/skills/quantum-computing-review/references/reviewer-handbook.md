@@ -582,7 +582,7 @@ Record the gate privately:
 ```text
 Sampled object and factorization status:
 Decoder:
-Correlations retained or discarded:
+Correlations preserved or discarded:
 Shots and selected-output probability:
 Scaling verdict:
 Structure-aware alternative checked:
@@ -623,7 +623,7 @@ $x_{\bar S}$ be the current outside assignment. Distinguish:
   F^{\mathrm{cond}}_S(z;x_{\bar S})=F(z,x_{\bar S}),
   $$
 
-  which retains the effect of cross-boundary terms after the outside variables are fixed.
+  which preserves the effect of cross-boundary terms after the outside variables are fixed.
 
 Check which objective the local solver actually optimizes, which objective the aggregation
 rule evaluates, and whether dropped cross-boundary terms change the ranking of local proposals.
@@ -1248,7 +1248,7 @@ Illustrative phrasings of this register, to adapt to each comment:
 - “This comparison does not yet isolate...”
 - “Please distinguish X from Y...”
 - “A structure-aware comparison is required because...”
-- “This does not make the method useless; it changes the supported claim from X to Y.”
+- “The method remains useful in regime X, and the present evidence supports the narrower claim Y.”
 - “The overlap appears to concern inherited and cited infrastructure rather than reused
   numerical evidence.”
 

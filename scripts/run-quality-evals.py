@@ -32,12 +32,24 @@ GRADER_TYPES = {"regex", "tool_used", "tool_order", "file_exists", "llm"}
 
 
 def remove_section(text, heading):
-    """Delete a Markdown section from its heading to the next heading of the same or a higher level."""
+    """Delete a Markdown section from its heading to the next heading of the same or a higher level outside code fences."""
     level = len(heading) - len(heading.lstrip("#"))
     lines = text.split("\n")
     start = lines.index(heading)
-    end = next((i for i in range(start + 1, len(lines))
-                if re.match(r"#{1,%d} " % level, lines[i])), len(lines))
+    marker = None
+    end = len(lines)
+    fence_re = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
+    for i in range(start + 1, len(lines)):
+        m = fence_re.match(lines[i])
+        if marker is None:
+            if m:
+                marker = m.group(1)
+                continue
+            if re.match(r"#{1,%d} " % level, lines[i]):
+                end = i
+                break
+        elif m and m.group(1)[0] == marker[0] and len(m.group(1)) >= len(marker) and not m.group(2).strip():
+            marker = None
     return "\n".join(lines[:start] + lines[end:])
 
 
@@ -64,9 +76,9 @@ def check_cases(evals, skills):
         case, where = yaml.safe_load(path.read_text()), path.parent.name
         assert set(case) <= CASE_KEYS and case.get("name") == where, f"{where}: case fields or name"
         assert str(case["schema_version"]).split(".")[0] == "1", f"{where}: schema_version"
-        context = case.get("context", {})
+        context = case.get("context") or {}
         assert set(context) <= CONTEXT_KEYS, f"{where}: context fields"
-        for relative in [context.get("scaffold_script")] + context.get("add_dirs", []):
+        for relative in [context.get("scaffold_script")] + (context.get("add_dirs") or []):
             assert relative is None or (path.parent / relative).exists(), f"{where}: missing {relative}"
         execution = case["execution"]
         assert set(execution) <= EXECUTION_KEYS and execution["prompt"].strip(), f"{where}: execution"
@@ -82,7 +94,12 @@ def check_cases(evals, skills):
                 assert grader.get("path"), f"{where}: {grader['name']} needs path"
             if grader["type"] == "regex":
                 re.compile(grader["pattern"])
-            for skill in re.findall(r"research-skills:\)\?([a-z0-9-]+)", grader.get("input_match", "")):
+            input_match = grader.get("input_match", "")
+            for group in re.findall(r"research-skills:\)\?(?:\(\?:)?([a-z0-9-|]+)", input_match):
+                for skill in group.split("|"):
+                    if skill:
+                        assert skill in skills, f"{where}: unknown skill {skill}"
+            for skill in re.findall(r"skills/([a-z0-9-]+)/SKILL\\\.md", input_match):
                 assert skill in skills, f"{where}: unknown skill {skill}"
         names.append(where)
     assert names, f"no case.yaml under {evals}"
@@ -112,12 +129,13 @@ def main():
     args = parser.parse_args()
     if args.run and (args.max_cost_usd is None or args.results_dir is None):
         parser.error("--run requires --max-cost-usd and --results-dir")
-    claude = shutil.which(args.claude_bin) or args.claude_bin
-    results = args.results_dir.resolve() if args.results_dir else None
-
+    if not 1 <= args.concurrency <= 8:
+        parser.error("--concurrency must be between 1 and 8")
     spec = importlib.util.spec_from_file_location("install_claude", ROOT / "scripts/install-claude.py")
     installer = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(installer)
+    claude = installer.resolve_claude_bin(args.claude_bin)
+    results = args.results_dir.resolve() if args.results_dir else None
     stage = Path(tempfile.mkdtemp(prefix="research-skills-quality-")).resolve()
     try:
         if results and results.is_relative_to(stage):
@@ -149,11 +167,13 @@ def main():
         try:
             help_text = subprocess.run([claude, "plugin", "eval", "--help"],
                                        check=True, capture_output=True, text=True).stdout
+            missing = [flag for flag in command if flag.startswith("--") and re.search(rf"(?<!\w){re.escape(flag)}(?!\w)", help_text) is None]
+            if missing:
+                sys.exit(f"{claude} plugin eval does not list {missing}")
         except (OSError, subprocess.CalledProcessError):
-            sys.exit(f"`{claude} plugin eval --help` failed. Pass --claude-bin /path/to/claude.")
-        missing = [flag for flag in command if flag.startswith("--") and flag not in help_text]
-        if missing:
-            sys.exit(f"{claude} plugin eval does not list {missing}")
+            if args.run:
+                sys.exit(f"`{claude} plugin eval --help` failed. Pass --claude-bin /path/to/claude.")
+            print(f"Warning: could not verify `plugin eval` flags via `{claude}` (dry run).")
 
         print(f"Staged {len(names)} cases and {len(skills)} skills in {plugin}, variant {args.variant or 'none'}")
         print(f"Sessions under test: {args.model} with CLAUDE_CODE_EFFORT_LEVEL={args.effort}. Judge: {args.judge_model}.")

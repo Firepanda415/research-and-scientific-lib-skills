@@ -17,8 +17,13 @@ REQUIRED_PATHS = {
     "agents/openai.yaml",
     "data/briefing-history.seed.jsonl",
     "data/briefing-history.schema.json",
+    "examples/accepted-quantum-ai-evidence-patterns.md",
+    "examples/lean-qec-example.md",
+    "examples/rejected-quantum-ai-examples.md",
     "references/coverage-ledger-schema.md",
+    "references/expected-unexpected-rubric.md",
     "references/output-template.md",
+    "references/quantum-ai-quality-gate.md",
     "references/selection-policy.md",
     "references/source-and-query-map.md",
     "references/user-research-profile.md",
@@ -68,6 +73,10 @@ CANONICAL_ID_CASES = {
     "arXiv:2401.12345 [quant-ph]": "arxiv:2401.12345",
     "https://arxiv.org/abs/2401.12345?context=quant-ph": "arxiv:2401.12345",
     "https://arxiv.org/html/2401.12345v2": "arxiv:2401.12345",
+    "https://doi.org/10.1103/PhysRevLett.130.010601?utm_source=x#sec": "doi:10.1103/physrevlett.130.010601",
+    "https://arxiv.org/abs/quant-ph/0101001v2": "arxiv:quant-ph/0101001",
+    "arXiv:quant-ph/0101001": "arxiv:quant-ph/0101001",
+    "quant-ph/0101001": "arxiv:quant-ph/0101001",
     "2607.00001": "arxiv:2607.00001",
     "title:Foo  Bar": "title:foo bar",
     "github.com/Example/Tool@v1.2": "github.com/example/tool@v1.2",
@@ -97,6 +106,9 @@ def check_canonicalization(ledger_tool: Path) -> None:
             fail(f"canonicalize_paper_id({raw!r}) returned {once!r}, expected {expected!r}")
         if canonicalize(once) != once:
             fail(f"canonicalize_paper_id is not idempotent for {raw!r}")
+    for invalid in ("doi:", "https://doi.org/", "arxiv:"):
+        if canonicalize(invalid) != "":
+            fail(f"canonicalize_paper_id({invalid!r}) must return empty string")
 
 
 def ledger_command(ledger_tool: Path, *args: str) -> subprocess.CompletedProcess[str]:
@@ -167,6 +179,19 @@ def check_upsert_semantics(ledger_tool: Path, ledger: Path) -> None:
     if missing_status.returncode != 1 or "new records require --status" not in missing_status.stderr:
         fail("a new record without --status must be rejected")
 
+    # UTC mailing date +1 day ahead of America/Los_Angeles local date must be accepted.
+    run_checked(
+        [
+            sys.executable, str(ledger_tool), *common,
+            "--paper-id", "arxiv:2601.00004",
+            "--title", "UTC Mailing Offset Probe",
+            "--canonical-url", "https://arxiv.org/abs/2601.00004",
+            "--first-public-date", "2026-09-06",
+            "--date", "2026-09-05",
+            "--status", "candidate",
+        ]
+    )
+
 
 def main() -> int:
     root = Path(__file__).resolve().parents[1]
@@ -184,12 +209,14 @@ def main() -> int:
     if not re.search(r"^description:\s*.+$", frontmatter, re.M):
         fail("SKILL.md frontmatter is missing a description")
 
-    metadata = (root / "agents" / "openai.yaml").read_text(encoding="utf-8")
-    for key in ("display_name", "short_description", "default_prompt"):
-        if not re.search(rf"^\s+{key}:\s*\"[^\"]+\"\s*$", metadata, re.M):
-            fail(f"agents/openai.yaml is missing quoted {key}")
-    if not re.search(r"^\s+default_prompt:\s*\"[^\"]*\$quantum-research-radar", metadata, re.M):
-        fail("default_prompt must mention $quantum-research-radar")
+    openai_yaml = root / "agents" / "openai.yaml"
+    if openai_yaml.exists():
+        metadata = openai_yaml.read_text(encoding="utf-8")
+        for key in ("display_name", "short_description", "default_prompt"):
+            if not re.search(rf"^\s+{key}:\s*\"[^\"]+\"\s*$", metadata, re.M):
+                fail(f"agents/openai.yaml is missing quoted {key}")
+        if not re.search(r"^\s+default_prompt:\s*\"[^\"]*\$quantum-research-radar", metadata, re.M):
+            fail("default_prompt must mention $quantum-research-radar")
 
     linked_paths = re.findall(r"`((?:references|data|examples|prompts|scripts)/[^`]+)`", skill)
     for rel in sorted(set(linked_paths)):

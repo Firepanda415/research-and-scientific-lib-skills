@@ -49,23 +49,25 @@ follows changed failure modes rather than a fixed test count.
 | **ponytail-gain** | `$ponytail-gain` | Historical upstream benchmark scoreboard, not validation of this customized fork. |
 | **ponytail-help** | `$ponytail-help` | This card. |
 
-In Codex, mention a skill with its `$` form from the table. Some Codex
-surfaces also accept `@` mentions, such as `@ponytail lite`. In
-Claude Code, invoke a skill as `/research-skills:<skill>`, for example
-`/research-skills:ponytail lite`. A plain-language request works on both hosts.
+In Codex, mention a skill with its `$` form from the table (some Codex surfaces
+also accept `@` mentions, such as `@ponytail lite`). In Claude Code, invoke a
+skill as `/research-skills:<skill>`, for example `/research-skills:ponytail lite`.
+In Antigravity and on any host, plain-language requests (such as "use ponytail
+lite" or "run ponytail-audit") activate the matching skill.
 
 ## Deactivate
 
-Say "stop ponytail" or "normal mode", or use `$ponytail off` in Codex or
-`/research-skills:ponytail off` in Claude Code. Ponytail then
+Say "stop ponytail" or "normal mode" on any host, or use `$ponytail off` in Codex
+or `/research-skills:ponytail off` in Claude Code. Ponytail then
 stays off until you ask for it again in this conversation, which turns it back
 on at `full` unless you name another level.
 
 ## Update
 
-To update, follow the repository README. A local checkout reinstalls with
-scripts/install-local.py for Codex and scripts/install-claude.py for Claude
-Code. Start a new task or session afterwards.
+To update from a local checkout, follow the repository README: run
+`scripts/install-local.py` for Codex, `scripts/install-claude.py` for Claude
+Code, and `scripts/install-antigravity.py` for Antigravity, then start a new
+task or session.
 
 ## More
 

@@ -14,11 +14,11 @@ Before analyzing a confidential manuscript:
 1. Identify the journal, article type, review model (such as single-anonymous, double-anonymous, or open), and current official reviewer policy.
 2. Confirm the manuscript's public status before any manuscript-specific web search.
 3. Default to `confidential-no-egress` when public status or permission is unclear.
-4. Requires an approved environment that is unavailable.
+4. Stop if the venue requires an approved environment that is unavailable.
 
 If the review model is double-anonymous, do not attempt to identify the authors. Do not search for the manuscript's title, authors, or preprint, even to establish public status, and do not attribute a repository or dataset to its owner. Public status then stays unconfirmed unless the editor, the venue, or the user states it. Assess same-group overlap only from material the editor supplied or self-citations visible in the manuscript, and route identity questions to the editor. If an identity appears incidentally, for example in an opened link, a permitted literature search, or a signed response letter, do not record, use, or pursue it. Tell the user where author identity was exposed, without repeating it, so they can inform the editor when the venue requires it.
 
-`confidential-no-egress` forbids sending an unpublished title, author list, project acronym, unique phrase, excerpt, figure, equation, supplementary code or data, or attachment to an external service. An external service is any tool that sends material off the machine, such as web search, URL fetching, an online converter or code runner, or another AI service. Once the first gate clears this assistance, the assistant session and the subagents it starts are not external services under this mode, but any tool they call that sends material off the machine is. Author-supplied repository and data links follow the link rule under the artifact and confidentiality rules below. Journal-policy lookup may use the journal name and public policy pages. The user remains responsible for conflict-of-interest disclosure and the final review.
+`confidential-no-egress` forbids sending an unpublished title, author list, project acronym, unique phrase, excerpt, figure, equation, supplementary code or data, or attachment to an external service. An external service is any tool that sends material off the machine, such as web search, URL fetching, an online converter or code runner, or another AI service. Once the first gate clears, the assistant session and the subagents it starts are not external services under this mode, but any tool they call that sends material off the machine is. Author-supplied repository and data links follow the link rule under the artifact and confidentiality rules below. Journal-policy lookup may use the journal name and public policy pages. The user remains responsible for conflict-of-interest disclosure and the final review.
 
 Pass the established confidentiality mode with its definition (the forbidden-egress list, what counts as an external service, and the author-supplied link rule), the venue-policy status, and any double-anonymous restriction to every helper and subagent brief, including any literature-retrieval skill such as `upgrade-research-inputs`. A mode name alone does not tell a helper what it may send. Helper retrieval remains inside the same boundary, and delegation does not grant permission to send manuscript material elsewhere.
 
@@ -129,5 +129,5 @@ For a full review, check the applicable items below. A focused question or publi
 - every substantive report comment is locatable and actionable;
 - the output matches the requested depth without hiding decision-relevant uncertainty;
 - the recommendation follows from centrality, fixability, evidence, and venue standard;
-- unverified facts and user-attested policy facts remain explicit;
+- unverified facts and policy facts supplied by the user remain explicit;
 - the human reviewer accepts responsibility for the final report.

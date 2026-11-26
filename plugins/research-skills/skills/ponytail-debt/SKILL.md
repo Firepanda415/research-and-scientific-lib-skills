@@ -12,10 +12,9 @@ still hold `ponytail:` comments, and the scan collects those too.
 
 ## Scan
 
-Search the repo for comment markers, skipping `.git`, `node_modules`, `build`,
-and `dist` directories. Use ripgrep when available:
+Search repository source files for comment markers, skipping `.git`, `.agents`, `.claude`, `.gemini`, `node_modules`, `.venv`, `venv`, `.tox`, `__pycache__`, `build`, `dist`, `target`, and skill documentation (`SKILL.md`). Use ripgrep when available:
 
-`rg -n --hidden --glob '!**/.git/**' --glob '!**/node_modules/**' --glob '!**/build/**' --glob '!**/dist/**' '(#|//) ?(shortcut|ponytail):' .`
+`rg -n --hidden --glob '!**/.git/**' --glob '!**/.agents/**' --glob '!**/.claude/**' --glob '!**/.gemini/**' --glob '!**/node_modules/**' --glob '!**/.venv/**' --glob '!**/venv/**' --glob '!**/.tox/**' --glob '!**/__pycache__/**' --glob '!**/build/**' --glob '!**/dist/**' --glob '!**/target/**' --glob '!**/SKILL.md' '(#|//|--|/\*|<!--)[ \t]*(shortcut|ponytail):' .`
 
 Without `rg`, run `git grep -nE --untracked` or the host's search tool with the
 same pattern and exclusions. Add the comment prefixes of the repository's
@@ -23,8 +22,7 @@ languages to the pattern, such as `!` for Fortran or `%` for MATLAB and LaTeX.
 Where the project uses its own marker for deliberate shortcuts, search for that
 marker as well.
 
-Each hit is one ledger row. The comment prefix keeps prose that merely mentions
-the convention out of the ledger.
+Each hit in actual source code (excluding documentation examples that illustrate the marker convention) is one ledger row.
 
 ## Output
 

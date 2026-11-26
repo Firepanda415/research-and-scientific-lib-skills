@@ -142,7 +142,7 @@ The validator requires canonical unique IDs, all required fields, absolute HTTP(
 Return a machine-readable ledger delta, for example:
 
 ```json
-{"paper_id":"arxiv:YYMM.NNNNN","action":"upsert","covered_on":"YYYY-MM-DD","coverage_level":"brief","tags":["Fresh"],"context":"weekday_brief_YYYY-MM-DD"}
+{"paper_id":"arxiv:YYMM.NNNNN","action":"upsert","status":"covered","title":"...","canonical_url":"https://arxiv.org/abs/YYMM.NNNNN","covered_on":["YYYY-MM-DD"],"coverage_level":"brief","tags":["Fresh"],"coverage_contexts":["weekday_brief_YYYY-MM-DD"],"selection_reason":"..."}
 ```
 
 Do not claim the ledger was updated when it was not.

@@ -1,6 +1,6 @@
 # Maintaining this collection
 
-Edit the `research-skills` Codex and Claude Code plugin in
+Edit the `research-skills` Codex, Claude Code, and Antigravity plugin in
 `plugins/research-skills/`, including its skills, references, scripts, and writing
 hook. Installed plugin caches are not source files.
 
@@ -50,7 +50,6 @@ Claude Opus 5.5, rounded to the nearest thousand and shown as `<1k` below 1,000.
 `research-writing-style`, `coverage-and-consequence.md` for
 `quantum-computing-review`, `reporting-findings.md` for `scientific-library-review`,
 `user-research-profile.md` for `quantum-research-radar`,
-`production-pipeline.md` and `house-style.md` for `research-explainer-animation`,
 and Ponytail's `SKILL.md` for `simplify-codebase`. Every other skill counts its
 `SKILL.md` only. The Context cost sections give the skill listing (one line per
 skill with its qualified name and description, as Claude Code lists them), the hook
@@ -64,10 +63,10 @@ update every token figure in both READMEs, including the totals and the figures
 repeated in the Context cost bullets, and check which skills those bullets name.
 
 Follow `README.md` for installation on the requested host. A request to reinstall
-that names no host means both, through `scripts/install-claude.py` and
-`scripts/install-local.py`. Install the single
-`research-skills@research-skills` plugin, including every skill and the writing
-hook, without a separate Ponytail plugin. Let Codex manage hook trust without
+that names no host means all three supported hosts, through `scripts/install-local.py` (Codex),
+`scripts/install-claude.py` (Claude Code), and `scripts/install-antigravity.py` (Antigravity).
+Install the single `research-skills` plugin, including every skill and the writing
+route, without a separate Ponytail plugin. Let Codex manage hook trust without
 bypassing or manufacturing it.
 
 Append new hook handlers and matcher groups without reordering existing entries.

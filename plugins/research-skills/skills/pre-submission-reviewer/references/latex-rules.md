@@ -66,7 +66,7 @@ Artificial Intelligence~\cite{xxxx, yyyy, zzzz}
 
 Rule L2: follow the venue's citation package and style.
 
-Rule L3: verify bibliographic fields against the source and the venue requirements. Journal, preprint, software, and conference entries need different metadata; DBLP is one possible source, not an authority for every field.
+Rule L3: verify bibliographic fields against the source and the venue requirements. Journal, preprint, software, and conference entries need different metadata; DBLP is one possible source, not an authority for every field. Print a web address the reader needs with `\url`. `\href` shows only its link text, and under hyperref's `hidelinks` option nothing marks that text as a link.
 
 ## 4. Labels and references
 
@@ -102,8 +102,10 @@ screenshots, and some dense heatmaps. Verify adequate resolution at
 final size and keep annotations vector when practical; a PDF wrapper
 does not make an embedded bitmap vector.
 
-Rule L9: always reference the figure or table in prose before it
-appears. "Figure 2 shows..." is the canonical pattern.
+Rule L9: always reference every figure or table in prose before or where it
+appears. Prefer leading with the substantive claim and placing the reference
+inline, as in ``...the error drops by half (Fig.~\ref{fig:err}),'' or use
+``Figure~\ref{fig:err} shows...'' when introducing an overview display.
 
 ## 6. Equations
 
@@ -123,8 +125,8 @@ Rule L13: distinguish the three dash types. Whether authored prose
 uses em dashes, and what replaces them, follows the punctuation rules
 in `research-writing-style`.
 
-- Hyphen `-`: compound adjectives (high-efficiency, zero-shot).
-- En-dash `--`: number ranges (pages 10--15, 2024--2026).
+- Hyphen `-`: compound modifiers (high-efficiency, native-assisted, state-dependent).
+- En-dash `--`: numeric ranges (pages 10--15, 2024--2026) and symmetric coordinate pairs (oscillator--qubit, kinetic--potential).
 - Em-dash `---`: semantic break.
 
 ## 8. Revision conventions

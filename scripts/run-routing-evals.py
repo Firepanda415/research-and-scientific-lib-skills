@@ -38,7 +38,6 @@ def check_cases(evals, skills):
         assert "Skill" in execution["allowed_tools"], f"{where}: Skill must be an allowed tool"
         graders = case["graders"]
         assert len({g["name"] for g in graders}) == len(graders), f"{where}: duplicate grader names"
-        expected = []
         graded_skills = set()
         for grader in graders:
             assert set(grader) <= GRADER_KEYS, f"{where}: grader fields {sorted(grader)}"
@@ -52,8 +51,7 @@ def check_cases(evals, skills):
                     f"{where}: {grader['name']} must set min 0, max 0 and arm both")
             else:
                 assert grader["min"] == 1 and "arm" not in grader, f"{where}: {grader['name']} must set min 1"
-                expected.append(match[1])
-        assert expected, f"{where}: expected at least one required skill"
+        assert graded_skills, f"{where}: expected at least one graded skill"
         names.append(where)
     assert names, f"no case.yaml under {evals}"
     return names
@@ -71,12 +69,11 @@ def main():
     args = parser.parse_args()
     if args.run and (args.max_cost_usd is None or args.results_dir is None):
         parser.error("--run requires --max-cost-usd and --results-dir")
-    claude = shutil.which(args.claude_bin) or args.claude_bin
-    results = args.results_dir.resolve() if args.results_dir else None
-
     spec = importlib.util.spec_from_file_location("install_claude", ROOT / "scripts/install-claude.py")
     installer = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(installer)
+    claude = installer.resolve_claude_bin(args.claude_bin)
+    results = args.results_dir.resolve() if args.results_dir else None
     stage = Path(tempfile.mkdtemp(prefix="research-skills-evals-")).resolve()
     try:
         if results and results.is_relative_to(stage):
@@ -97,11 +94,13 @@ def main():
         try:
             help_text = subprocess.run([claude, "plugin", "eval", "--help"],
                                        check=True, capture_output=True, text=True).stdout
+            missing = [flag for flag in command if flag.startswith("--") and re.search(rf"(?<!\w){re.escape(flag)}(?!\w)", help_text) is None]
+            if missing:
+                sys.exit(f"{claude} plugin eval does not list {missing}")
         except (OSError, subprocess.CalledProcessError):
-            sys.exit(f"`{claude} plugin eval --help` failed. Pass --claude-bin /path/to/claude.")
-        missing = [flag for flag in command if flag.startswith("--") and flag not in help_text]
-        if missing:
-            sys.exit(f"{claude} plugin eval does not list {missing}")
+            if args.run:
+                sys.exit(f"`{claude} plugin eval --help` failed. Pass --claude-bin /path/to/claude.")
+            print(f"Warning: could not verify `plugin eval` flags via `{claude}` (dry run).")
 
         print(f"Staged {len(names)} cases and {len(skills)} skills in {plugin}")
         print("Warning: --trust-plugin skips the first-use trust prompt for the staged plugin.")

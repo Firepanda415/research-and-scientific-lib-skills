@@ -12,7 +12,7 @@ The plan contains:
 - the jobs, split by module so that parallel jobs own disjoint files, each with its worker session, paired independent reviewer and completion criteria. Count actual workers, within the user's maximum, and name any principal/worker overlap by the selected model;
 - the critical path and which independent deliverables justify parallel work after counting coordination and integration time;
 - the verification policy and the test policy;
-- what each notebook will show. The notebooks themselves are written in the release step.
+- what each notebook will show. By default the notebooks themselves are written in the release step, and a project whose workflow sets another stage follows it.
 
 Make each job a complete owned outcome, with its necessary caller, test, prose and generated-output updates under the stage gates below. Sequence its stages inside the assignment. A checkpoint can unblock another owner without ending this owner's authorized work. Split a stage into another job only when a real dependency, independent review or ownership boundary requires the handoff.
 

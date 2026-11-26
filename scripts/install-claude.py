@@ -51,11 +51,28 @@ def build_package(source, staged):
     return manifest
 
 
+def resolve_claude_bin(requested):
+    found = shutil.which(requested)
+    if found:
+        return found
+    if requested == "claude":
+        for candidate in ("/opt/homebrew/bin/claude", "/usr/local/bin/claude",
+                          str(Path.home() / ".local/bin/claude")):
+            if Path(candidate).is_file():
+                return candidate
+        desktop_root = Path.home() / "Library/Application Support/Claude/claude-code"
+        if desktop_root.is_dir():
+            matches = sorted(desktop_root.glob("*/*/claude.app/Contents/MacOS/claude"))
+            if matches:
+                return str(matches[-1])
+    return requested
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--claude-bin", default="claude", help="Claude Code executable")
     args = parser.parse_args()
-    claude = shutil.which(args.claude_bin) or args.claude_bin
+    claude = resolve_claude_bin(args.claude_bin)
     print(f"Using Claude Code CLI: {claude}", flush=True)
     try:
         subprocess.run([claude, "--version"], check=True)

@@ -24,6 +24,24 @@ def remove_local_junk(package):
     return len(junk)
 
 
+def resolve_codex_bin(requested):
+    found = shutil.which(requested)
+    if found:
+        return found
+    if requested == "codex":
+        for candidate in (
+            "/opt/homebrew/bin/codex",
+            "/usr/local/bin/codex",
+            str(Path.home() / ".local/bin/codex"),
+            str(Path.home() / ".codex/plugins/.plugin-appserver/codex-cli/bin/codex"),
+            "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+            "/Applications/Codex.app/Contents/Resources/codex",
+        ):
+            if Path(candidate).is_file():
+                return candidate
+    return None
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--prepare-only", action="store_true",
@@ -32,7 +50,7 @@ def main():
     args = parser.parse_args()
     codex = None
     if not args.prepare_only:
-        codex = shutil.which(args.codex_bin)
+        codex = resolve_codex_bin(args.codex_bin)
         if codex is None:
             sys.exit(f"Codex CLI not found: {args.codex_bin}. Pass --codex-bin /path/to/codex.")
     root = Path(__file__).resolve().parents[1]

@@ -62,24 +62,20 @@ For example:
 ```markdown
 ## 1. Conclusion
 
-For a static single mode with no pump, in the rotating frame of $H_0=\omega N$, RWA reduces to the rule:
-
-$$
-(a^\dagger)^r a^s \mapsto \text{keep only if } r=s.
-$$
+For a static single oscillator mode with no pump, transforming into the frame rotating at the mode frequency keeps only number-conserving terms that create and annihilate equal numbers of excitations.
 ```
 
-Then immediately state the limitation:
+Then state the scope boundary in words before introducing symbols and equations:
 
 ```markdown
-The general criterion is not $r=s$ but whether the term is slow, or resonant, in the chosen rotating frame.
+The general rotating-wave criterion is whether a term oscillates slowly (near resonance) in the chosen rotating frame, rather than excitation-number conservation alone.
 ```
 
 ---
 
 ### 2. Define all variables before using them
 
-Before any formula, define every symbol that appears in it.
+Before writing the symbolic formula (`$(a^\dagger)^r a^s$` under `$H_0=\omega N$`), define every symbol that appears in it.
 
 Use compact tables:
 
@@ -453,16 +449,18 @@ Avoid:
 ```markdown
 ## 1. Conclusion
 
+State the exact operator relation or effective approximation in plain words first, without undefined symbols.
+
+## 2. Variables and target formula
+
+| Symbol | Meaning |
+|---|---|
+
 $$
 \text{target identity}
 $$
 
 This step is an exact operator identity / a definition / an effective approximation.
-
-## 2. Variables
-
-| Symbol | Meaning |
-|---|---|
 
 ## 3. Check on a basis
 

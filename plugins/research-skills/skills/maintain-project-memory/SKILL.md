@@ -13,11 +13,14 @@ future work, rather than a transcript of activity.
 
 An owner is the authoritative record for a fact or decision. The project entry
 is the record a new session reads first, such as a per-project memory index
-the host provides or the project's agent instruction file. When none
-exists, use a location the user or the project's instructions name, and
-otherwise propose a location and its readers before creating the entry,
-because the location decides who sees it, for example every collaborator of a
-shared repository. Read the user's request, the existing project entry and
+the host provides or the project's agent instruction file (`AGENTS.md`,
+`CLAUDE.md`, `GEMINI.md`, or `.agents/rules/`). Per-conversation host workspace
+or brain artifact folders are scoped to one conversation and do not serve as
+cross-session project memory unless promoted to a repository or persistent
+memory location. When none exists, use a location the user or the project's
+instructions name, and otherwise propose a location and its readers before
+creating the entry, because the location decides who sees it, for example every
+collaborator of a shared repository. Read the user's request, the existing project entry and
 the records relevant to the
 update. Verify important current claims against live source, configuration,
 decisions or evidence. Follow replacement links when old paths have moved; a

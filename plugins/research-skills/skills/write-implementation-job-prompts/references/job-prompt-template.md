@@ -3,26 +3,28 @@
 Use the fields that make the actual job executable; delete irrelevant sections.
 For a small fix, the same information can fit in a few bullets. This is a
 drafting aid, not a required contract schema.
-Copy the text inside the block, fill every retained field, and remove
+Copy the text inside the block, fill every kept field, and remove
 the surrounding instructions and fence from the delivered prompt.
 
 ```text
-Problem and desired result:
+# {{CONCISE_JOB_TITLE}}
+
+## Problem and desired result
 {{CONCRETE_TRIGGER_CURRENT_BEHAVIOR_AND_DESIRED_RESULT}}
 
-Current evidence:
+## Current evidence
 {{LIVE_REVISION_OR_ARTIFACT_DEFINING_OWNER_AND_REPRODUCER_OR_FALSIFIER}}
 
-Scope and constraints:
-{{AUTHORIZED_WORK_EXCLUSIONS_AND_AFFECTED_INVARIANTS}}
+## Scope and constraints
+{{FIRST_ACTION_SKILLS_AUTHORIZED_WORK_EXCLUSIONS_AND_AFFECTED_INVARIANTS}}
 
-Implementation:
+## Implementation
 {{EXISTING_OWNER_AND_NECESSARY_SOLUTION_BOUNDARY}}
 
-Acceptance:
+## Acceptance
 {{BEHAVIOR_OR_NUMERIC_RELATION_CHECKED_EXPECTED_RESULT_SOURCE_DETECTION_EVIDENCE_COMMANDS_ENVIRONMENT_AND_REQUIRED_GATES}}
 
-Delivery:
+## Delivery
 {{REQUESTED_ARTIFACTS_VALIDATION_EVIDENCE_DEVIATIONS_AND_ACTION_BOUNDARY}}
 ```
 

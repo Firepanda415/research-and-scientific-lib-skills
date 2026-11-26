@@ -16,16 +16,19 @@ from pathlib import Path
 
 @dataclass(frozen=True)
 class Finding:
+    """A single linter finding."""
+
     level: str
     message: str
 
 
-FENCE_RE = re.compile(r"^\s*(`{3,}|~{3,})")
+OPEN_FENCE_RE = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
 PLACEHOLDER_RE = re.compile(r"\{\{[A-Z0-9_]+\}\}")
 ANGLE_PLACEHOLDER_RE = re.compile(r"(?<![\w:])<(?:your-)?[A-Za-z][A-Za-z0-9_-]*>")
-INLINE_CODE_RE = re.compile(r"(?<!`)`([^`\n]+)`(?!`)")
+INLINE_CODE_RE = re.compile(r"(`+)([^`\n]+?)\1")
 BARE_PYTHON_RE = re.compile(
-    r"(?:^|[;&|]\s*)\s*(?:\$\s+)?python3?\s+\S"
+    r"(?:^|[;&|]\s*|\(\s*|(?:[A-Za-z_][A-Za-z0-9_]*=\S+\s+)+"
+    r"|\b(?:env|timeout\s+\S+)\s+)\s*(?:\$\s+)?python3?\s+\S"
 )
 MASKED_EXIT_RE = re.compile(
     r"(;|\|\|)\s*echo\b[^;\n]*\$\?\s*(?:#.*)?$"
@@ -45,34 +48,55 @@ NEGATED_INLINE_COMMAND_RE = re.compile(
     re.IGNORECASE,
 )
 DATE_STAMP_RE = re.compile(r"\b20\d{2}-\d{2}-\d{2}\b")
-AGENT_NAME_RE = re.compile(r"\b(?:Claude|Codex|Anthropic|ChatGPT|Copilot|GPT-\d)\b")
+AGENT_NAME_RE = re.compile(
+    r"\b(?:Claude|Codex|Anthropic|ChatGPT|Copilot|GPT-\d|Gemini|Antigravity|Cursor|Windsurf)\b"
+)
 SHELL_FENCE_LANGUAGES = {"", "bash", "console", "sh", "shell", "zsh"}
+TEMPLATE_EXEMPT_FENCE_LANGUAGES = {
+    "yaml", "yml", "json", "jinja", "jinja2", "html", "mustache", "handlebars", "python", "py", "js", "ts"
+}
+QUOTED_STRING_RE = re.compile(r"\"(?:\\.|[^\"\\])*\"|'(?:\\.|[^'\\])*'")
+
+
+def _is_closing_fence(line: str, marker: str) -> bool:
+    match = OPEN_FENCE_RE.match(line)
+    if not match:
+        return False
+    candidate, trailing = match.group(1), match.group(2)
+    return candidate[0] == marker[0] and len(candidate) >= len(marker) and not trailing.strip()
 
 
 def _outside_fences(
     text: str,
     *,
     include_blockquotes: bool = False,
+    include_template_fences: bool = False,
 ) -> tuple[str, bool]:
     """Return prose outside Markdown fences and whether fences are balanced."""
     output: list[str] = []
     marker: str | None = None
+    keep_fence = False
     for line in text.splitlines():
-        match = FENCE_RE.match(line)
-        if match:
-            candidate = match.group(1)
-            if marker is None:
-                marker = candidate
-            elif candidate[0] == marker[0] and len(candidate) >= len(marker):
-                marker = None
-            output.append("")
-            continue
-        if marker is None and (
-            include_blockquotes or not line.lstrip().startswith(">")
-        ):
-            output.append(line)
+        if marker is None:
+            match = OPEN_FENCE_RE.match(line)
+            if match:
+                marker = match.group(1)
+                info = match.group(2).strip().split(maxsplit=1)
+                language = info[0].casefold() if info else ""
+                keep_fence = include_template_fences and language not in TEMPLATE_EXEMPT_FENCE_LANGUAGES
+                output.append("")
+                continue
+            if include_blockquotes or not line.lstrip().startswith(">"):
+                output.append(line)
+            else:
+                output.append("")
         else:
-            output.append("")
+            if _is_closing_fence(line, marker):
+                marker = None
+                keep_fence = False
+                output.append("")
+            else:
+                output.append(line if keep_fence else "")
     return "\n".join(output), marker is None
 
 
@@ -86,19 +110,19 @@ def _fenced_lines(
     marker: str | None = None
     include = False
     for number, line in enumerate(text.splitlines(), start=1):
-        match = FENCE_RE.match(line)
-        if match:
-            candidate = match.group(1)
-            if marker is None:
-                marker = candidate
-                info = line[match.end() :].strip().split(maxsplit=1)
+        if marker is None:
+            match = OPEN_FENCE_RE.match(line)
+            if match:
+                marker = match.group(1)
+                info = match.group(2).strip().split(maxsplit=1)
                 language = info[0].casefold() if info else ""
                 include = not shell_only or language in SHELL_FENCE_LANGUAGES
-            elif candidate[0] == marker[0] and len(candidate) >= len(marker):
-                marker = None
-                include = False
             continue
-        if marker is not None and include:
+        if _is_closing_fence(line, marker):
+            marker = None
+            include = False
+            continue
+        if include:
             out.append((number, line))
     return out
 
@@ -108,10 +132,15 @@ def _inline_code_spans(prose: str) -> list[tuple[int, str, str]]:
     out: list[tuple[int, str, str]] = []
     for number, line in enumerate(prose.splitlines(), start=1):
         out.extend(
-            (number, match.group(1), line[: match.start()])
+            (number, match.group(2), line[: match.start()])
             for match in INLINE_CODE_RE.finditer(line)
         )
     return out
+
+
+def _strip_inline_code(prose: str) -> str:
+    """Replace inline code spans with spaces of equal length so line numbers stay exact."""
+    return INLINE_CODE_RE.sub(lambda m: " " * len(m.group(0)), prose)
 
 
 def _headings(prose: str, level: int) -> list[str]:
@@ -137,13 +166,17 @@ def lint_prompt(
     findings: list[Finding] = []
     prose, fences_balanced = _outside_fences(text)
     quoted_prose, _ = _outside_fences(text, include_blockquotes=True)
+    placeholder_surface, _ = _outside_fences(
+        text, include_blockquotes=True, include_template_fences=True
+    )
+    plain_prose = _strip_inline_code(prose)
 
     if not text.strip():
         return [Finding("ERROR", "prompt is empty")]
     if not fences_balanced:
         findings.append(Finding("ERROR", "unbalanced Markdown code fence"))
 
-    placeholders = sorted(set(PLACEHOLDER_RE.findall(text)))
+    placeholders = sorted(set(PLACEHOLDER_RE.findall(placeholder_surface)))
     if placeholders:
         sample = ", ".join(placeholders[:3])
         suffix = " ..." if len(placeholders) > 3 else ""
@@ -205,7 +238,7 @@ def lint_prompt(
             token_pattern = re.compile(
                 rf"(?<![A-Za-z0-9_]){re.escape(token)}(?![A-Za-z0-9_])"
             )
-            occurrences = len(token_pattern.findall(text))
+            occurrences = len(token_pattern.findall(prose))
             if occurrences != 1:
                 findings.append(
                     Finding(
@@ -221,9 +254,10 @@ def lint_prompt(
                 flags=re.IGNORECASE,
             )
             negated_final_line = re.compile(
-                rf"(?:\b(?:must|shall|should|does|do)\s+not\s+"
+                rf"(?:{token_pattern.pattern}\s+\b(?:must|shall|should|is|does|do)\s+not\s+"
                 rf"(?:be\s+)?(?:the\s+)?{final_line}|"
-                rf"{final_line}\s+\b(?:must|shall|should|is|does)\s+not\b)",
+                rf"{final_line}\s+\b(?:must|shall|should|is|does|do)\s+not\s+"
+                rf"(?:be\s+)?{token_pattern.pattern}\b)",
                 flags=re.IGNORECASE,
             )
             negated_reverse_instruction = re.compile(
@@ -247,7 +281,8 @@ def lint_prompt(
 
     fenced_lines = _fenced_lines(text, shell_only=True)
     for index, (number, line) in enumerate(fenced_lines):
-        placeholders = ANGLE_PLACEHOLDER_RE.findall(line)
+        unquoted_line = QUOTED_STRING_RE.sub("", line)
+        placeholders = ANGLE_PLACEHOLDER_RE.findall(unquoted_line)
         if placeholders:
             findings.append(
                 Finding(
@@ -292,10 +327,12 @@ def lint_prompt(
                 )
 
     inline_spans = _inline_code_spans(prose)
-    command_fragments = fenced_lines + [
-        (number, fragment) for number, fragment, _prefix in inline_spans
+    command_fragments = [(number, fragment, "") for number, fragment in fenced_lines] + [
+        (number, fragment, prefix) for number, fragment, prefix in inline_spans
     ]
-    for number, fragment in command_fragments:
+    for number, fragment, prefix in command_fragments:
+        if prefix and NEGATED_INLINE_COMMAND_RE.search(prefix):
+            continue
         if BARE_PYTHON_RE.search(fragment):
             findings.append(
                 Finding(
@@ -323,7 +360,7 @@ def lint_prompt(
 
     series_marker = re.search(
         r"\b(?:job[- ]series|serial jobs?|(?-i:Change Set[ \t]+(?:[A-Z]|\d+)))\b",
-        prose,
+        plain_prose,
         flags=re.IGNORECASE,
     )
     if series_marker:
@@ -369,10 +406,11 @@ def lint_prompt(
                 )
             )
 
-    if re.search(r"\btargeted (?:test )?batter(?:y|ies)\b", prose, re.IGNORECASE):
+    if re.search(r"\btargeted (?:test )?batter(?:y|ies)\b", plain_prose, re.IGNORECASE):
         if not re.search(
             r"\b(?:closure (?:job|owner|gate)|full (?:suite|battery) "
-            r"(?:owner|in this job|runs? in this job|is run here|before handoff))\b",
+            r"(?:owner|in this job|runs? in this job|is run here|before handoff"
+            r"|at integration))\b",
             prose,
             flags=re.IGNORECASE,
         ):
@@ -385,22 +423,22 @@ def lint_prompt(
             )
 
     if kind == "job":
-        date_match = DATE_STAMP_RE.search(prose)
+        date_match = DATE_STAMP_RE.search(plain_prose)
         if date_match:
             findings.append(
                 Finding(
                     "WARNING",
-                    f"line {_line_number(prose, date_match.start())}: date stamp "
+                    f"line {_line_number(plain_prose, date_match.start())}: date stamp "
                     "in job prompt prose: state current requirements and identify "
                     "versions by revision rather than date",
                 )
             )
-    agent_match = AGENT_NAME_RE.search(prose)
+    agent_match = AGENT_NAME_RE.search(plain_prose)
     if agent_match:
         findings.append(
             Finding(
                 "WARNING",
-                f"line {_line_number(prose, agent_match.start())}: agent or "
+                f"line {_line_number(plain_prose, agent_match.start())}: agent or "
                 "process name in prompt prose; avoid naming agents or sessions "
                 "unless the job depends on a specific host's tools or a carried "
                 "rule names them, such as an authorship rule",
@@ -442,24 +480,27 @@ def lint_prompt(
         ),
     }
     for pattern, message in risky_patterns.items():
-        match = re.search(pattern, prose, flags=re.IGNORECASE)
+        match = re.search(pattern, plain_prose, flags=re.IGNORECASE)
         if match:
             findings.append(
-                Finding("WARNING", f"line {_line_number(prose, match.start())}: {message}")
+                Finding(
+                    "WARNING",
+                    f"line {_line_number(plain_prose, match.start())}: {message}",
+                )
             )
 
-    open_test_surface = re.search(r"\bnew test modules?\b", prose, re.IGNORECASE)
+    open_test_surface = re.search(r"\bnew test modules?\b", plain_prose, re.IGNORECASE)
     closed_test_surface = re.search(
         r"\b(?:no new test modules?|(?:do not|must not) add (?:any )?new test "
         r"modules?|new test modules? (?:are )?(?:forbidden|not allowed))\b",
-        prose,
+        plain_prose,
         re.IGNORECASE,
     )
     if open_test_surface and not closed_test_surface:
         findings.append(
             Finding(
                 "WARNING",
-                f"line {_line_number(prose, open_test_surface.start())}: if the "
+                f"line {_line_number(plain_prose, open_test_surface.start())}: if the "
                 "project limits which test files a job may add, replace 'new test "
                 "modules' with the permitted test paths",
             )

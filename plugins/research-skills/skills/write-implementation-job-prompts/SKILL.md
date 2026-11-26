@@ -114,7 +114,8 @@ evidence.
 
 When the job changes an entry point that every plugin or extension
 implementation passes through, acceptance includes the tests of that extension
-protocol and the project's standard full test suite before integration, because
+protocol and the project's standard full test suite before integration, run in
+the job or named as outstanding for whoever integrates, because
 targeted tests can miss extensions the job's own paths do not exercise.
 
 When the job removes a cap, changes a default or adds a refusal, acceptance walks
