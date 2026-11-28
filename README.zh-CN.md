@@ -6,6 +6,17 @@
 
 **在 Codex、Claude Code 和 Antigravity 中，插件都提供全部 30 个 skills（包括按个人习惯修改的 Ponytail 编码模式）以及写作与科学代码路由规则。**
 
+## 让 agent 在改变任务前征得同意
+
+假设你要求 agent 用同一批 100 个案例比较两种方法。第一种方法跑完了全部案例，第二种在 8 个案例上运行失败。只比较两种方法都成功的 92 个案例，回答的问题就变成了“两种方法都成功时，哪一种表现更好”。agent 应报告这 8 个失败案例，并在改用其余 92 个案例作比较前征得你的同意。
+
+我建议把下面这段写成跨项目的个人指令。即使任务没有用到任何 skill，这条约定也适用。Codex 用户可将它写入 `~/.codex/AGENTS.md`，Claude Code 用户可在 `~/.claude/rules/` 下新建一个 Markdown 文件，Antigravity 用户可写入 `~/.gemini/GEMINI.md`。各工具加载个人指令的方式见官方说明。[Codex](https://developers.openai.com/codex/guides/agents-md/) · [Claude Code](https://code.claude.com/docs/en/memory#user-level-rules) · [Antigravity](https://antigravity.google/docs/rules/)
+
+> 按我的原目标、明确指定的方法和验收标准执行。你可以拒绝。如果某项要求无法满足，请直接指出是哪一项、原因是什么，以及这会影响哪部分结果。如果替代方案会改变目标、指定方法、数据范围或验收标准，请在执行前说明差异，并取得我的明确同意。其余已授权且不受影响的工作可以继续。交付时，标明任何偏离、未完成或未验证的部分，并为关键完成声明给出可核查的依据。
+
+- OpenAI 的 GPT-5 论文介绍了一种安全训练方法。直接完成请求可以得到奖励，请求受限时提供有用的替代方案也可以。图 2 的例子里，模型先说明自己拒绝的是哪一部分，然后才提供其他帮助。要把某次科研任务中擅自更换方法的行为归因于这种训练，还需要来自该次任务的证据。[From Hard Refusals to Safe-Completions，第 2.2 节及图 2](https://cdn.openai.com/pdf/be60c07b-6bc2-4f54-bcee-4141e1d6c69a/gpt-5-safe_completions.pdf)
+- 在另一项研究中，研究者要求模型答完后逐项报告自己遵守或遗漏了哪些指令。模型披露了原回答没有提到的部分遗漏，但也可能察觉不到自己的错误。在据此下结论前，可以把模型的报告与原要求和实际记录对照，例如核对运行输出中究竟有哪些案例失败。[Training LLMs for Honesty via Confessions，第 2–3 页及图 1](https://cdn.openai.com/pdf/6216f8bc-187b-4bbb-8932-ba7c40c5553d/confessions_paper.pdf#page=2)
+
 ## 上下文成本
 
 安装插件后，每个会话在使用任何 skill 之前就占用约 6k tokens。其中约 4k 是 30 个 skills 的名称和描述，各宿主都会把它们留在上下文中用于选择 skill，见 [Claude Code](https://code.claude.com/docs/en/skills) 和 [Codex](https://learn.chatgpt.com/docs/build-skills) 的 skill 文档。约 2k 是写作与科学代码的路由说明。在 Codex 和 Claude Code 中由启动 hook 提供，每个 subagent 也会收到一份，在 Antigravity 中由插件的 `rules/AGENTS.md` 提供。skill 的完整说明只在使用时加载，之后一直留在对话中。[技能一览](#技能一览)表格中 skill 名称后的数字是该 skill 每次使用时默认加载的 tokens，包括它的 `SKILL.md` 和默认读取的 reference 文件。只在部分任务中用到的 reference 文件会在此基础上增加。这些数字是 2026 年 10 月在 Claude Opus 5.5 上实测的 token 数，这些文件约每 3.2 个英文字符一个 token，少于 Anthropic 在[术语表](https://platform.claude.com/docs/en/about-claude/glossary)中给 Claude 4.7 之前模型的 3.5 个。此后修改过的文件，其数字按字符数变化从实测值换算。Claude Code 读取文件时给每行加行号，每行约多 2 个 token。根据 2026 年 10 月 Codex 使用记录的测量，写作 skill 的文件在 Codex 中约少用三分之一的 tokens。
